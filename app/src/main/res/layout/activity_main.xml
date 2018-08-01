@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#ffffff"></FrameLayout>
+
+
+    <com.chaychan.library.BottomBarLayout
+        android:id="@+id/bbl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:background="@drawable/main_tab_bg"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.chaychan.library.BottomBarItem
+            android:id="@+id/ll_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:iconHeight="17dp"
+            app:iconNormal="@mipmap/home_nor"
+            app:iconSelected="@mipmap/home_sel"
+            app:iconWidth="17dp"
+            app:itemMarginTop="5dp"
+            app:itemText="首页"
+            app:itemTextSize="11sp"
+            app:textColorNormal="#FF333333"
+            app:textColorSelected="#FF5FBFE3" />
+
+        <com.chaychan.library.BottomBarItem
+            android:id="@+id/ll_mall"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:iconHeight="17dp"
+            app:iconNormal="@mipmap/mall_nor"
+            app:iconSelected="@mipmap/mall_sel"
+            app:iconWidth="17dp"
+            app:itemMarginTop="5dp"
+            app:itemText="商城"
+            app:itemTextSize="11sp"
+            app:textColorNormal="#FF333333"
+            app:textColorSelected="#FF5FBFE3" />
+
+        <com.chaychan.library.BottomBarItem
+            android:id="@+id/ll_found"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:iconHeight="17dp"
+            app:iconNormal="@mipmap/find_nor"
+            app:iconSelected="@mipmap/find_sel"
+            app:iconWidth="17dp"
+            app:itemMarginTop="5dp"
+            app:itemText="发现"
+            app:itemTextSize="11sp"
+            app:textColorNormal="#FF333333"
+            app:textColorSelected="#FF5FBFE3" />
+
+        <com.chaychan.library.BottomBarItem
+            android:id="@+id/ll_appointment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:iconHeight="17dp"
+            app:iconNormal="@mipmap/appointment_nor"
+            app:iconSelected="@mipmap/appointment_sel"
+            app:iconWidth="17dp"
+            app:itemMarginTop="5dp"
+            app:itemText="预约"
+            app:itemTextSize="11sp"
+            app:textColorNormal="#FF333333"
+            app:textColorSelected="#FF5FBFE3" />
+
+        <com.chaychan.library.BottomBarItem
+            android:id="@+id/ll_my"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:iconHeight="17dp"
+            app:iconNormal="@mipmap/my_nor"
+            app:iconSelected="@mipmap/my_sel"
+            app:iconWidth="17dp"
+            app:itemMarginTop="5dp"
+            app:itemText="我的"
+            app:itemTextSize="11sp"
+            app:textColorNormal="#FF333333"
+            app:textColorSelected="#FF5FBFE3" />
+    </com.chaychan.library.BottomBarLayout>
+
+</LinearLayout>
