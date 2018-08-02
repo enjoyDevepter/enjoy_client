@@ -16,14 +16,11 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -91,14 +88,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     TagAdapter adapter;
 
     @Inject
-    List<String> specList;
-
-    @Inject
     ImageLoader mImageLoader;
-
-    @Inject
-    GoodsDetailsResponse response;
-
 
     private Mobile mobile = new Mobile();
     private WebViewClient mClient = new WebViewClient() {
@@ -179,7 +169,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     }
 
     @Override
-    public void updateUI() {
+    public void updateUI(GoodsDetailsResponse response) {
         imagesB.setImages(response.getImages());
         //banner设置方法全部调用完毕时最后调用
         imagesB.start();
@@ -226,24 +216,24 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     }
 
     private void showSpec() {
-        specLayoutV.startAnimation(AnimationUtil.show());
-        specLayoutV.setVisibility(View.VISIBLE);
-
-
-        mImageLoader.loadImage(this,
-                ImageConfigImpl
-                        .builder()
-                        .url(response.getGoods().getImage())
-                        .imageView(spceImageIV)
-                        .build());
-
-        spceNameTV.setText(response.getGoods().getName());
-        spcePriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
-        spceIDTV.setText(response.getGoods().getMerchId());
-        specList.add("500ML");
-        specList.add("1000ML");
-        specList.add("1500ML");
-        speceflowLayout.setAdapter(adapter);
+//        specLayoutV.startAnimation(AnimationUtil.show());
+//        specLayoutV.setVisibility(View.VISIBLE);
+//
+//
+//        mImageLoader.loadImage(this,
+//                ImageConfigImpl
+//                        .builder()
+//                        .url(response.getGoods().getImage())
+//                        .imageView(spceImageIV)
+//                        .build());
+//
+//        spceNameTV.setText(response.getGoods().getName());
+//        spcePriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
+//        spceIDTV.setText(response.getGoods().getMerchId());
+//        specList.add("500ML");
+//        specList.add("1000ML");
+//        specList.add("1500ML");
+//        speceflowLayout.setAdapter(adapter);
 
     }
 

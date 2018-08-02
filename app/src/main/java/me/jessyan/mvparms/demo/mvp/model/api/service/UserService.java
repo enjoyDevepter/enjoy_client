@@ -19,9 +19,16 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.User;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.AddressListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DelAddressRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAddressRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import retrofit2.Retrofit;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -40,4 +47,13 @@ public interface UserService {
     @Headers({HEADER_API_VERSION})
     @GET("/users")
     Observable<List<User>> getUsers(@Query("since") int lastIdQueried, @Query("per_page") int perPage);
+
+    @POST("gateway")
+    Observable<AddressListResponse> getAddressList(@Body AddressListRequest request);
+
+    @POST("gateway")
+    Observable<BaseResponse> updateAddress(@Body ModifyAddressRequest request);
+
+    @POST("gateway")
+    Observable<BaseResponse> delAddrss(@Body DelAddressRequest request);
 }

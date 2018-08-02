@@ -14,14 +14,14 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.contract.AddAddressContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAddressRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
 @ActivityScope
-public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Model, GoodsDetailsContract.View> {
+public class AddAddressPresenter extends BasePresenter<AddAddressContract.Model, AddAddressContract.View> {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -30,12 +30,9 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
     Application mApplication;
     @Inject
     ImageLoader mImageLoader;
-    @Inject
-    GoodsDetailsResponse response;
-
 
     @Inject
-    public GoodsDetailsPresenter(GoodsDetailsContract.Model model, GoodsDetailsContract.View rootView) {
+    public AddAddressPresenter(AddAddressContract.Model model, AddAddressContract.View rootView) {
         super(model, rootView);
     }
 
@@ -48,25 +45,21 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
         this.mApplication = null;
     }
 
-    public void getGoodsDetails(String goodsId, String merchId) {
+    public void addAddress() {
 
-        GoodsDetailsRequest request = new GoodsDetailsRequest();
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setCity(String.valueOf(cache.get("city")));
-        request.setCounty(String.valueOf(cache.get("county")));
-        request.setProvince(String.valueOf(cache.get("province")));
+        ModifyAddressRequest request = new ModifyAddressRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setCmd(204);
+        request.setToken(String.valueOf(cache.get("token")));
 
-        request.setGoodsId(goodsId);
-        request.setMerchId(merchId);
-        mModel.getGoodsDetails(request)
+        mModel.addAddress(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<GoodsDetailsResponse>() {
+                .subscribe(new Consumer<BaseResponse>() {
                     @Override
-                    public void accept(GoodsDetailsResponse response) throws Exception {
+                    public void accept(BaseResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            GoodsDetailsPresenter.this.response = response;
-                            mRootView.updateUI(response);
+                            mRootView.killMyself();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

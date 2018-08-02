@@ -49,7 +49,12 @@
         <activity android:name=".mvp.ui.activity.CityActivity" />
         <activity android:name=".mvp.ui.activity.SearchActivity" />
         <activity android:name=".mvp.ui.activity.SearchResultActivity" />
-        <activity android:name=".mvp.ui.activity.GoodsDetailsActivity"></activity>
+        <activity android:name=".mvp.ui.activity.GoodsDetailsActivity" />
+        <activity android:name=".mvp.ui.activity.TaoCanActivity" />
+        <activity android:name=".mvp.ui.activity.TaoCanDetailsActivity" />
+        <activity android:name=".mvp.ui.activity.PayResultActivity" />
+        <activity android:name=".mvp.ui.activity.AddAddressActivity" />
+        <activity android:name=".mvp.ui.activity.AddressListActivity"></activity>
     </application>
 
 </manifest>
