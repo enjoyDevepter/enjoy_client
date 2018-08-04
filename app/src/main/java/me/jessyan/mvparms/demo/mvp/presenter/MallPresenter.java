@@ -41,6 +41,8 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
     @Inject
     List<Goods> mGoods;
     @Inject
+    List<Category> categories;
+    @Inject
     GoodsListAdapter mAdapter;
 
     @Inject
@@ -64,7 +66,6 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
             mRootView.refreshNaviTitle((List<Category>) cache.get("category"));
             return;
         }
-
         SimpleRequest request = new SimpleRequest();
         request.setCmd(401);
         mModel.getCategory(request)
@@ -74,8 +75,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                     @Override
                     public void accept(CategoryResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            mRootView.refreshNaviTitle(sortCategory(response.getGoodsCategoryList()))
-                            ;
+                            mRootView.refreshNaviTitle(sortCategory(response.getGoodsCategoryList()));
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -83,16 +83,21 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                 });
     }
 
-    public void getGoodsList(String secondCategoryId, String categoryId) {
+    public void getGoodsList() {
         GoodsListRequest request = new GoodsListRequest();
-
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-
         request.setProvince(String.valueOf(cache.get("province")));
-        request.setProvince(String.valueOf(cache.get("city")));
-        request.setProvince(String.valueOf(cache.get("county")));
-        request.setCategoryId(categoryId);
-        request.setSecondCategoryId(secondCategoryId);
+        request.setCity(String.valueOf(cache.get("city")));
+        request.setCounty(String.valueOf(cache.get("county")));
+        request.setCategoryId((String) mRootView.getCache().get("categoryId"));
+        request.setSecondCategoryId((String) (mRootView.getCache().get("secondCategoryId")));
+
+        if (!ArmsUtils.isEmpty(String.valueOf(mRootView.getCache().get("orderByField")))) {
+            GoodsListRequest.OrderBy orderBy = new GoodsListRequest.OrderBy();
+            orderBy.setField((String) mRootView.getCache().get("orderByField"));
+            orderBy.setAsc((Boolean) mRootView.getCache().get("orderByAsc"));
+            request.setOrderBy(orderBy);
+        }
 
         mModel.getGoodsList(request)
                 .subscribeOn(Schedulers.io())
@@ -101,6 +106,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                     @Override
                     public void accept(GoodsListResponse response) throws Exception {
                         if (response.isSuccess()) {
+                            mGoods.clear();
                             mGoods.addAll(response.getGoodsList());
                             mAdapter.notifyDataSetChanged();
                         } else {
@@ -138,6 +144,8 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
         }
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         cache.put("category", categories);
+        this.categories.clear();
+        this.categories.addAll(categories.get(0).getCatagories());
         return categories;
     }
 

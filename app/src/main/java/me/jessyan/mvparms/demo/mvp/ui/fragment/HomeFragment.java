@@ -44,6 +44,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.GoodSummary;
 import me.jessyan.mvparms.demo.mvp.model.entity.Module;
 import me.jessyan.mvparms.demo.mvp.model.entity.NaviInfo;
 import me.jessyan.mvparms.demo.mvp.presenter.HomePresenter;
+import me.jessyan.mvparms.demo.mvp.ui.activity.AddressListActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CityActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HomeArticleAdapter;
@@ -103,7 +104,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         banner.setIndicatorGravity(BannerConfig.CENTER);
 
         mPresenter.updateHomeInfo();
-
     }
 
     @Override
@@ -247,6 +247,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.message:
+                ArmsUtils.startActivity(AddressListActivity.class);
                 break;
             case R.id.city:
                 ArmsUtils.startActivity(CityActivity.class);

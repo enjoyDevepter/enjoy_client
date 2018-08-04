@@ -112,8 +112,8 @@ public class GoodsListRequest extends BaseRequest {
                 '}';
     }
 
-    public class OrderBy {
-        private String field;
+    public static class OrderBy {
+        private String field = "";
         private boolean asc;
 
         public String getField() {

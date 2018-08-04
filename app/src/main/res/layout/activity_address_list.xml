@@ -7,9 +7,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/city_title_bg"
+        android:background="@drawable/title_bg"
         android:orientation="horizontal">
-
 
         <LinearLayout
             android:id="@+id/back"
@@ -53,7 +52,8 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="@android:color/transparent" />
 
     <TextView
         android:id="@+id/add_address"

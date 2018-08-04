@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -14,30 +16,36 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
+import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.app.utils.AnimationUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerGoodsDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.GoodsDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.GoodsDetailsPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
 
+import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> implements GoodsDetailsContract.View, View.OnClickListener {
+public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> implements GoodsDetailsContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TagFlowLayout.OnTagClickListener {
 
     @BindView(R.id.back)
     View backV;
@@ -57,14 +65,18 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     TextView nameTV;
     @BindView(R.id.price)
     TextView priceTV;
-    @BindView(R.id.sale)
-    TextView saleTV;
+    @BindView(R.id.saleCount)
+    TextView saleCountTV;
     @BindView(R.id.promotion_name)
     TextView promotionTV;
-    @BindView(R.id.sales_promotion)
+    @BindView(R.id.promotion)
     View promotionInfosV;
     @BindView(R.id.spec)
     View specV;
+    @BindView(R.id.mask_pro)
+    View maskProV;
+    @BindView(R.id.mask_spec)
+    View maskSpecV;
     @BindView(R.id.goods_spec)
     TextView goodSpecTV;
     @BindView(R.id.image_count)
@@ -73,6 +85,8 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     View specLayoutV;
     @BindView(R.id.promotion_layout)
     View promLayoutV;
+    @BindView(R.id.promotion_content)
+    View promotionContentV;
     @BindView(R.id.spec_image)
     ImageView spceImageIV;
     @BindView(R.id.spec_name)
@@ -83,12 +97,17 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     TextView spceIDTV;
     @BindView(R.id.specs)
     TagFlowLayout speceflowLayout;
-
+    @BindView(R.id.promotionCV)
+    RecyclerView promotionCV;
     @Inject
     TagAdapter adapter;
-
     @Inject
     ImageLoader mImageLoader;
+    @Inject
+    GoodsPromotionAdapter promotionAdapter;
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+
 
     private Mobile mobile = new Mobile();
     private WebViewClient mClient = new WebViewClient() {
@@ -123,6 +142,8 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         specLayoutV.setOnClickListener(this);
         promLayoutV.setOnClickListener(this);
         promotionInfosV.setOnClickListener(this);
+        maskProV.setOnClickListener(this);
+        maskSpecV.setOnClickListener(this);
         imagesB.setImageLoader(new GlideImageLoader());
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
         tabLayout.addTab(tabLayout.newTab().setText("商品详情"));
@@ -131,8 +152,12 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         detailWV.addJavascriptInterface(mobile, "mobile");
         detailWV.setWebViewClient(mClient);
 
-//        mPresenter.getGoodsDetails(savedInstanceState.getString("goodsId"), savedInstanceState.getString("merchId"));
-        mPresenter.getGoodsDetails("180719173530010072", "180719173530010074");
+        ArmsUtils.configRecyclerView(promotionCV, mLayoutManager);
+        promotionCV.setAdapter(promotionAdapter);
+        promotionAdapter.setOnItemClickListener(this);
+        speceflowLayout.setAdapter(adapter);
+
+        speceflowLayout.setOnTagClickListener(this);
     }
 
 
@@ -179,8 +204,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
 
         nameTV.setText(response.getGoods().getName());
         priceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
-        priceTV.setText(String.valueOf(response.getGoods().getSales()));
-        promotionTV.setText(String.valueOf(response.getPromotionList().get(0).getTitle()));
+        saleCountTV.setText(String.valueOf(response.getGoods().getSales()));
         goodSpecTV.setText(response.getGoods().getGoodsSpecValues());
         detailWV.loadData(response.getGoods().getMobileDetail(), "text/html", null);
     }
@@ -197,29 +221,50 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 break;
             case R.id.buy:
                 break;
-            case R.id.sales_promotion:
-                promLayoutV.startAnimation(AnimationUtil.show());
-                promLayoutV.setVisibility(View.VISIBLE);
+            case R.id.promotion:
+                showPro(true);
                 break;
             case R.id.spec:
-                showSpec();
+                showSpec(true);
                 break;
-            case R.id.spec_layout:
-                specLayoutV.startAnimation(AnimationUtil.dismiss());
-                specLayoutV.setVisibility(View.GONE);
+            case R.id.mask_pro:
+                showPro(false);
                 break;
-            case R.id.promotion_layout:
-                promLayoutV.startAnimation(AnimationUtil.dismiss());
-                promLayoutV.setVisibility(View.GONE);
+            case R.id.mask_spec:
+                showSpec(false);
                 break;
         }
     }
 
+    private void showSpec(boolean show) {
+        if (show) {
+            maskSpecV.setVisibility(View.VISIBLE);
+            maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
+            specLayoutV.setVisibility(View.VISIBLE);
+            specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_butom_in));
+        } else {
+            maskSpecV.setVisibility(View.GONE);
+            maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_out));
+            specLayoutV.setVisibility(View.GONE);
+            specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_buttom_out));
+        }
+    }
+
+    private void showPro(boolean show) {
+        if (show) {
+            maskProV.setVisibility(View.VISIBLE);
+            maskProV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
+            promLayoutV.setVisibility(View.VISIBLE);
+            promLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_butom_in));
+        } else {
+            maskProV.setVisibility(View.GONE);
+            maskProV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_out));
+            promLayoutV.setVisibility(View.GONE);
+            promLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_buttom_out));
+        }
+    }
+
     private void showSpec() {
-//        specLayoutV.startAnimation(AnimationUtil.show());
-//        specLayoutV.setVisibility(View.VISIBLE);
-//
-//
 //        mImageLoader.loadImage(this,
 //                ImageConfigImpl
 //                        .builder()
@@ -235,6 +280,30 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
 //        specList.add("1500ML");
 //        speceflowLayout.setAdapter(adapter);
 
+    }
+
+    @Override
+    public void onItemClick(View view, int viewType, Object data, int position) {
+        switch (viewType) {
+            case R.layout.goods_promotion_item:
+                List<GoodsDetails.Promotion> promotionList = promotionAdapter.getInfos();
+                for (int i = 0; i < promotionList.size(); i++) {
+                    GoodsDetails.Promotion p = promotionList.get(i);
+                    p.setCheck(i == position ? p.isCheck() ? false : true : false);
+                }
+                promotionContentV.setVisibility(View.VISIBLE);
+                promotionTV.setText(promotionList.get(position).getTitle());
+                promotionAdapter.notifyDataSetChanged();
+                showPro(false);
+                break;
+        }
+    }
+
+
+    @Override
+    public boolean onTagClick(View view, int position, FlowLayout parent) {
+        view.setSelected(true);
+        return false;
     }
 
     private class Mobile {

@@ -26,6 +26,7 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressEditListAdapter;
 
 /**
  * ================================================
@@ -44,13 +45,47 @@ public class AddressEditListItemHolder extends BaseHolder<Address> {
     TextView phoneTV;
     @BindView(R.id.address)
     TextView addressTV;
+    @BindView(R.id.edit)
+    View editV;
+    @BindView(R.id.delete)
+    View deleteV;
+    @BindView(R.id.def)
+    View delV;
+    @BindView(R.id.check)
+    View checkV;
 
-    public AddressEditListItemHolder(View itemView) {
+    private AddressEditListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
+
+    public AddressEditListItemHolder(View itemView, AddressEditListAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
+        editV.setOnClickListener(this);
+        deleteV.setOnClickListener(this);
+        delV.setOnClickListener(this);
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (null != onChildItemClickLinstener) {
+            switch (view.getId()) {
+                case R.id.edit:
+                    onChildItemClickLinstener.onChildItemClick(view, AddressEditListAdapter.ViewName.EDIT, getAdapterPosition());
+                    return;
+                case R.id.delete:
+                    onChildItemClickLinstener.onChildItemClick(view, AddressEditListAdapter.ViewName.DELETE, getAdapterPosition());
+                    return;
+                case R.id.def:
+                    onChildItemClickLinstener.onChildItemClick(view, AddressEditListAdapter.ViewName.CHECK, getAdapterPosition());
+                    return;
+            }
+        }
+        super.onClick(view);
     }
 
     @Override
     public void setData(Address address, int position) {
+        Observable.just(address.getIsDefaultIn())
+                .subscribe(s -> checkV.setSelected("1".equals(s) ? true : false));
         Observable.just(address.getAddress())
                 .subscribe(s -> nameTV.setText(s));
         Observable.just(address.getPhone())

@@ -108,23 +108,25 @@ public class CityActivity extends BaseActivity<CityPresenter> implements CityCon
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
                 switch (Integer.valueOf(area.getType())) {
                     case 2: // province
-                        cache.put("province", area.getCode());
+                        cache.put("province", area.getId());
                         break;
                     case 3: // city
                         cache.put("city", area.getCode());
                         for (ExtendedNode<Area> node : nodeList) {
                             if (area.getParentId().equals(node.data.getId())) {
-                                cache.put("province", node.data.getCode());
+                                cache.put("province", node.data.getId());
+                                break;
                             }
                         }
                         break;
                     case 4: // county
-                        cache.put("county", area.getCode());
+                        cache.put("county", area.getId());
                         for (ExtendedNode<Area> node : nodeList) {
                             for (ExtendedNode<Area> child : node.getSons()) {
                                 if (area.getParentId().equals(child.data.getId())) {
-                                    cache.put("city", child.data.getCode());
-                                    cache.put("province", node.data.getCode());
+                                    cache.put("city", child.data.getId());
+                                    cache.put("province", node.data.getId());
+                                    break;
                                 }
                             }
                         }

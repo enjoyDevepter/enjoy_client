@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="98dp"
+    android:background="#FFFFFFFF"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
@@ -63,10 +64,11 @@
         android:orientation="horizontal">
 
         <View
+            android:id="@+id/check"
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/address_check_bg" />
+            android:background="@drawable/check_bg" />
 
         <TextView
             android:layout_width="0dp"
@@ -90,7 +92,7 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/del"
+            android:id="@+id/delete"
             android:layout_width="53dp"
             android:layout_height="24dp"
             android:layout_marginRight="15dp"

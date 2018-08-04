@@ -33,7 +33,11 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
             if (parent.getChildAdapterPosition(view) == layoutManager.getItemCount() - 1) {
                 outRect.bottom = topBottom;
             }
-            outRect.top = topBottom;
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = 0;
+            } else {
+                outRect.top = topBottom;
+            }
             outRect.left = leftRight;
             outRect.right = leftRight;
         } else {

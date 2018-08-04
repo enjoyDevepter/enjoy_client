@@ -28,7 +28,7 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
     View backV;
     @BindView(R.id.county_chocie)
     View choiceV;
-    @BindView(R.id.name)
+    @BindView(R.id.contact)
     EditText nameET;
     @BindView(R.id.tel)
     EditText phoneET;
@@ -58,7 +58,7 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        titleTV.setText("联系信息");
+        titleTV.setText("收货信息");
         confirmV.setOnClickListener(this);
         backV.setOnClickListener(this);
         choiceV.setOnClickListener(this);

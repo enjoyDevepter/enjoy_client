@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -8,6 +10,9 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.zhy.view.flowlayout.TagAdapter;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -15,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -32,11 +38,20 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
     ImageLoader mImageLoader;
     @Inject
     GoodsDetailsResponse response;
-
-
+    @Inject
+    List<GoodsDetails.Promotion> promotionList;
+    @Inject
+    List<GoodsDetails.GoodsSpecValue> goodsSpecValues;
+    @Inject
+    TagAdapter adapter;
     @Inject
     public GoodsDetailsPresenter(GoodsDetailsContract.Model model, GoodsDetailsContract.View rootView) {
         super(model, rootView);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    void onCreate() {
+        getGoodsDetails(mRootView.getActivity().getIntent().getStringExtra("goodsId"), mRootView.getActivity().getIntent().getStringExtra("merchId"));
     }
 
     @Override
@@ -66,6 +81,11 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                     public void accept(GoodsDetailsResponse response) throws Exception {
                         if (response.isSuccess()) {
                             GoodsDetailsPresenter.this.response = response;
+                            promotionList.clear();
+                            promotionList.addAll(response.getPromotionList());
+                            goodsSpecValues.clear();
+                            goodsSpecValues.addAll(response.getGoodsSpecValueList());
+                            adapter.notifyDataChanged();
                             mRootView.updateUI(response);
                         } else {
                             mRootView.showMessage(response.getRetDesc());

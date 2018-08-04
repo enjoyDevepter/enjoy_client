@@ -51,7 +51,7 @@ public class AddressListModule {
 
     @ActivityScope
     @Provides
-    List<Address> provideUserList() {
+    List<Address> provideAddressList() {
         return new ArrayList<>();
     }
 

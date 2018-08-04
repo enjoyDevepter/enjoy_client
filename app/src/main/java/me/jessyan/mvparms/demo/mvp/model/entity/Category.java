@@ -11,6 +11,7 @@ public class Category {
     private String name;
     private String parentId;
     private String busType;
+    private boolean choice;
 
     private List<Category> catagories;
 
@@ -46,6 +47,13 @@ public class Category {
         this.parentId = parentId;
     }
 
+    public boolean isChoice() {
+        return choice;
+    }
+
+    public void setChoice(boolean choice) {
+        this.choice = choice;
+    }
 
     public List<Category> getCatagories() {
         return catagories;
@@ -62,6 +70,7 @@ public class Category {
                 ", name='" + name + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", busType='" + busType + '\'' +
+                ", choice=" + choice +
                 ", catagories=" + catagories +
                 '}';
     }

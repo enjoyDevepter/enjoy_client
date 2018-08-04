@@ -1,5 +1,7 @@
 package me.jessyan.mvparms.demo.di.module;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -17,7 +19,9 @@ import dagger.Provides;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.GoodsDetailsModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
 
 
 @Module
@@ -54,12 +58,12 @@ public class GoodsDetailsModule {
 
     @ActivityScope
     @Provides
-    TagAdapter provideSerachAdapter(List<String> list) {
-        return new TagAdapter<String>(list) {
+    TagAdapter provideSerachAdapter(List<GoodsDetails.GoodsSpecValue> list) {
+        return new TagAdapter<GoodsDetails.GoodsSpecValue>(list) {
             @Override
-            public View getView(FlowLayout parent, int position, String s) {
-                TextView tv = (TextView) LayoutInflater.from(ArmsUtils.getContext()).inflate(R.layout.search_hot_item, null, false);
-                tv.setText(s);
+            public View getView(FlowLayout parent, int position, GoodsDetails.GoodsSpecValue s) {
+                TextView tv = (TextView) LayoutInflater.from(ArmsUtils.getContext()).inflate(R.layout.goods_spec_item, null, false);
+                tv.setText(s.getSpecValueName());
                 return tv;
             }
         };
@@ -67,8 +71,26 @@ public class GoodsDetailsModule {
 
     @ActivityScope
     @Provides
-    List<String> provideHotList() {
+    List<GoodsDetails.GoodsSpecValue> provideGoodSpecList() {
         return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    RecyclerView.LayoutManager provideLayoutManager() {
+        return new LinearLayoutManager(view.getActivity(), LinearLayoutManager.VERTICAL, false);
+    }
+
+    @ActivityScope
+    @Provides
+    List<GoodsDetails.Promotion> providePromotionList() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    GoodsPromotionAdapter providePromotionAdapter(List<GoodsDetails.Promotion> list) {
+        return new GoodsPromotionAdapter(list);
     }
 
 

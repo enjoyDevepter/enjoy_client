@@ -255,6 +255,15 @@ public class GoodsDetails {
         private String title;
         private String type;
         private String typeDesc;
+        private boolean check;
+
+        public boolean isCheck() {
+            return check;
+        }
+
+        public void setCheck(boolean check) {
+            this.check = check;
+        }
 
         public String getId() {
             return id;
@@ -304,6 +313,7 @@ public class GoodsDetails {
                     ", title='" + title + '\'' +
                     ", type='" + type + '\'' +
                     ", typeDesc='" + typeDesc + '\'' +
+                    ", check=" + check +
                     '}';
         }
     }

@@ -9,7 +9,7 @@ public class Address {
     private String county;
     private String address;
     private String city;
-    private String isDefaultIn;
+    private String isDefaultIn = "0";
     private String phone;
     private String receiverName;
     private String zipcode;

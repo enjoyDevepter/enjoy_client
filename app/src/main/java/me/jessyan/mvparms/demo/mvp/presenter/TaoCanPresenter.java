@@ -54,6 +54,7 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
     }
 
     public void getTaoCan() {
+
     }
 
 }

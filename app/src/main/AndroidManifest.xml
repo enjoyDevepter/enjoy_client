@@ -54,7 +54,7 @@
         <activity android:name=".mvp.ui.activity.TaoCanDetailsActivity" />
         <activity android:name=".mvp.ui.activity.PayResultActivity" />
         <activity android:name=".mvp.ui.activity.AddAddressActivity" />
-        <activity android:name=".mvp.ui.activity.AddressListActivity"></activity>
+        <activity android:name=".mvp.ui.activity.AddressListActivity" />
     </application>
 
 </manifest>

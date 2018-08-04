@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
@@ -22,11 +23,12 @@ import me.jessyan.mvparms.demo.mvp.contract.AddressListContract;
 import me.jessyan.mvparms.demo.mvp.presenter.AddressListPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressEditListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class AddressListActivity extends BaseActivity<AddressListPresenter> implements AddressListContract.View, View.OnClickListener {
+public class AddressListActivity extends BaseActivity<AddressListPresenter> implements AddressListContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, AddressEditListAdapter.OnChildItemClickLinstener {
 
     @BindView(R.id.back)
     View backV;
@@ -68,6 +70,10 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
         titleTV.setText("收货地址");
         ArmsUtils.configRecyclerView(contentRV, mLayoutManager);
         contentRV.setAdapter(addressListAdapter);
+        addressEditListAdapter.setOnChildItemClickLinstener(this);
+        addressEditListAdapter.setOnItemClickListener(this);
+        addressListAdapter.setOnItemClickListener(this);
+
     }
 
 
@@ -106,9 +112,11 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
                 killMyself();
                 break;
             case R.id.edit:
+                addV.setVisibility(View.VISIBLE);
+                contentRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
                 contentRV.setAdapter(addressEditListAdapter);
                 break;
-            case R.id.add:
+            case R.id.add_address:
                 ArmsUtils.startActivity(AddAddressActivity.class);
                 break;
         }
@@ -117,5 +125,25 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
     @Override
     public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public void onChildItemClick(View v, AddressEditListAdapter.ViewName viewname, int position) {
+        switch (viewname) {
+            case EDIT:
+                ArmsUtils.startActivity(AddAddressActivity.class);
+                break;
+            case DELETE:
+                mPresenter.delAddress(addressEditListAdapter.getInfos().get(position).getId(), position);
+                break;
+            case CHECK:
+                mPresenter.refreshList(position);
+                break;
+        }
+    }
+
+    @Override
+    public void onItemClick(View view, int viewType, Object data, int position) {
+        mPresenter.refreshList(position);
     }
 }

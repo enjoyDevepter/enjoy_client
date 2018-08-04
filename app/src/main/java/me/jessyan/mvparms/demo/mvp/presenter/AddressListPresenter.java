@@ -53,7 +53,17 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        getAddressList();
+//        getAddressList();
+        for (int i = 0; i < 3; i++) {
+            Address address = new Address();
+            address.setAddress("ajfdksjfsljfsljfslfjs");
+            address.setPhone("123112313");
+            address.setReceiverName("测试");
+            if (i == 0) {
+                address.setIsDefaultIn("1");
+            }
+            addressList.add(address);
+        }
     }
 
     @Override
@@ -110,4 +120,14 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                 });
     }
 
+    public void refreshList(int position) {
+        for (int i = 0; i < addressList.size(); i++) {
+            if (i == position) {
+                addressList.get(i).setIsDefaultIn("1");
+            } else {
+                addressList.get(i).setIsDefaultIn("0");
+            }
+        }
+        addressEditListAdapter.notifyDataSetChanged();
+    }
 }

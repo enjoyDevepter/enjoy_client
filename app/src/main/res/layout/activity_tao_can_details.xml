@@ -197,7 +197,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
-            android:background="@drawable/city_title_bg"
+            android:background="@drawable/title_bg"
             android:orientation="horizontal"
             android:visibility="invisible">
 

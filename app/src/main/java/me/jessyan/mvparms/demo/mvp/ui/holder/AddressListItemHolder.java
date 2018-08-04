@@ -16,6 +16,7 @@
 package me.jessyan.mvparms.demo.mvp.ui.holder;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import com.jess.arms.base.DefaultAdapter;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 
@@ -56,7 +58,16 @@ public class AddressListItemHolder extends BaseHolder<Address> {
         Observable.just(address.getPhone())
                 .subscribe(s -> phoneTV.setText(String.valueOf(s)));
         Observable.just(address.getAddress())
-                .subscribe(s -> addressTV.setText(String.valueOf(s)));
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        if ("1".equals(address.getIsDefaultIn())) {
+                            addressTV.setText(Html.fromHtml("<font color=\"#5FBFE3\">[默认地址]</font>地址：" + s));
+                        } else {
+                            addressTV.setText("地址: " + s);
+                        }
+                    }
+                });
     }
 
 

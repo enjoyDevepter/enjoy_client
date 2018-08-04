@@ -72,7 +72,7 @@ public abstract class DefaultAdapter<T> extends RecyclerView.Adapter<BaseHolder<
             @Override
             public void onViewClick(View view, int position) {
                 if (mOnItemClickListener != null && mInfos.size() > 0) {
-                    mOnItemClickListener.onItemClick(view, viewType, mInfos.get(position), position);
+                    mOnItemClickListener.onItemClick(view, getLayoutId(viewType), mInfos.get(position), position);
                 }
             }
         });

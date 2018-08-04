@@ -12,7 +12,9 @@ import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.MallContract;
 import me.jessyan.mvparms.demo.mvp.model.MallModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.Category;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
 
 
@@ -56,8 +58,26 @@ public class MallModule {
 
     @ActivityScope
     @Provides
+    List<Category> provideCategories() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
     GoodsListAdapter provideGoodsListAdapter(List<Goods> goods) {
         return new GoodsListAdapter(goods);
     }
+
+    @ActivityScope
+    @Provides
+    GoodsFilterSecondAdapter provideFilterSecondAdapter(List<Category> categories) {
+        return new GoodsFilterSecondAdapter(categories);
+    }
+
+//    @ActivityScope
+//    @Provides
+//    GoodsFilterThirdAdapter provideFilterThirdAdapter(List<Category> categories) {
+//        return new GoodsFilterThirdAdapter(categories);
+//    }
 
 }

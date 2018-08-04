@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="34dp"
+    android:background="@drawable/fileter_thrid_bg"
+    android:gravity="center_vertical">
+
+    <View
+        android:id="@+id/check"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginLeft="17dp"
+        android:background="@drawable/check_bg" />
+
+    <TextView
+        android:layout_width="34dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/goods_off_bg"
+        android:gravity="center"
+        android:text="满减"
+        android:textColor="#FFFF0000"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:text="满399元减80元"
+        android:textColor="#FF333333"
+        android:textSize="12sp" />
+</LinearLayout>

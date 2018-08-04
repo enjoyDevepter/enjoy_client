@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="38dp"
-        android:background="@drawable/city_title_bg"
+        android:background="@drawable/title_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -37,7 +37,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="38dp"
-        android:background="@drawable/city_title_bg"
+        android:background="@drawable/title_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -66,7 +66,7 @@
         android:id="@+id/county_chocie"
         android:layout_width="match_parent"
         android:layout_height="38dp"
-        android:background="@drawable/city_title_bg"
+        android:background="@drawable/title_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -101,7 +101,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="38dp"
-        android:background="@drawable/city_title_bg"
+        android:background="@drawable/title_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
