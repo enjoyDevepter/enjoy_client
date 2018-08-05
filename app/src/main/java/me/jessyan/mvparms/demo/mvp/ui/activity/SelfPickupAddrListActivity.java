@@ -12,62 +12,53 @@ import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.di.component.DaggerPayResultComponent;
-import me.jessyan.mvparms.demo.di.module.PayResultModule;
-import me.jessyan.mvparms.demo.mvp.contract.PayResultContract;
-import me.jessyan.mvparms.demo.mvp.presenter.PayResultPresenter;
+import me.jessyan.mvparms.demo.di.component.DaggerSelfPickupAddrListComponent;
+import me.jessyan.mvparms.demo.di.module.SelfPickupAddrListModule;
+import me.jessyan.mvparms.demo.mvp.contract.SelfPickupAddrListContract;
+import me.jessyan.mvparms.demo.mvp.presenter.SelfPickupAddrListPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class PayResultActivity extends BaseActivity<PayResultPresenter> implements PayResultContract.View, View.OnClickListener {
+public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListPresenter> implements SelfPickupAddrListContract.View, View.OnClickListener {
 
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
     TextView titleTV;
-    @BindView(R.id.order_center)
-    TextView orderCenterTV;
-    @BindView(R.id.order_detail)
-    TextView orderDetailTV;
-    @BindView(R.id.pay_img)
-    View payImg;
-    @BindView(R.id.price_status)
-    TextView payStatus;
-    @BindView(R.id.pay_result_info)
-    View payResultInfoV;
-    @BindView(R.id.success)
-    View successV;
-    @BindView(R.id.fail)
-    View failV;
-    @BindView(R.id.retry)
-    View retryV;
-    @BindView(R.id.fail_order_detail)
-    View failOrderV;
+    @BindView(R.id.district)
+    TextView districtV;
+    @BindView(R.id.district_layout)
+    View districtLayoutV;
+    @BindView(R.id.store)
+    TextView storeV;
+    @BindView(R.id.store_layout)
+    View storeLayoutV;
+    @BindView(R.id.confirm)
+    View confirmV;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
-        DaggerPayResultComponent //如找不到该类,请编译一下项目
+        DaggerSelfPickupAddrListComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .payResultModule(new PayResultModule(this))
+                .selfPickupAddrListModule(new SelfPickupAddrListModule(this))
                 .build()
                 .inject(this);
     }
 
     @Override
     public int initView(Bundle savedInstanceState) {
-        return R.layout.activity_pay_result; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+        return R.layout.activity_self_pickup_addr_list; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        titleTV.setText("支付成功");
+        titleTV.setText("自提地址");
         backV.setOnClickListener(this);
-        orderCenterTV.setOnClickListener(this);
-        orderDetailTV.setOnClickListener(this);
-        retryV.setOnClickListener(this);
-        failOrderV.setOnClickListener(this);
+        districtV.setOnClickListener(this);
+        storeV.setOnClickListener(this);
+        confirmV.setOnClickListener(this);
     }
 
 
@@ -105,13 +96,11 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
             case R.id.back:
                 killMyself();
                 break;
-            case R.id.order_center:
+            case R.id.district_layout:
                 break;
-            case R.id.order_detail:
+            case R.id.store_layout:
                 break;
-            case R.id.retry:
-                break;
-            case R.id.fail_order_detail:
+            case R.id.confirm:
                 break;
         }
     }

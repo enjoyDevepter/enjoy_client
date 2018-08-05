@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title" />
+
+
+    <LinearLayout
+        android:id="@+id/district_layout"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="所在区域："
+            android:textColor="#FF000000"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/district"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textColor="#FF000000"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="9dp"
+            android:layout_marginRight="15dp"
+            android:background="@mipmap/more_right" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/store_layout"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="选择店铺："
+            android:textColor="#FF000000"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/store"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textColor="#FF000000"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="9dp"
+            android:layout_marginRight="15dp"
+            android:background="@mipmap/more_right" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/confirm"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/order_confirm_btn_bg"
+        android:gravity="center"
+        android:text="确认"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp" />
+</LinearLayout>

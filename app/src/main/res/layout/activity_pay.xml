@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title" />
+
+    <LinearLayout
+        android:id="@+id/district_layout"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:background="@drawable/title_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="订单编号: "
+            android:textColor="#FF666666"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/order_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:text="SP1234212310000000"
+            android:textColor="#FF666666"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/order_goods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/title_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
+            android:text="支付金额"
+            android:textColor="#FF666666"
+            android:textSize="12sp" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/price_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="4dp"
+                android:text="￥"
+                android:textColor="#FF666666"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_toRightOf="@id/price_tag"
+                android:text="228.00"
+                android:textColor="#FF666666"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/title_bg"
+            android:text="请选择支付方式"
+            android:textColor="#FF666666"
+            android:textSize="12sp" />
+
+
+        <LinearLayout
+            android:id="@+id/pay_for_zfb"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_marginLeft="15dp"
+                android:background="@mipmap/pay_zfb" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:text="支付宝支付"
+                android:textColor="#FF333333"
+                android:textSize="12sp" />
+
+            <View
+                android:id="@+id/zfb"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/check_bg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pay_for_wx"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_marginLeft="15dp"
+                android:background="@mipmap/pay_wx" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:text="微信支付"
+                android:textColor="#FF333333"
+                android:textSize="12sp" />
+
+            <View
+                android:id="@+id/wx"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/check_bg" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="订单已生成，请在12小时内完成支付"
+        android:textColor="#FF666666"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/confirm"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/order_confirm_btn_bg"
+        android:gravity="center"
+        android:text="确认支付"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp" />
+
+
+</LinearLayout>

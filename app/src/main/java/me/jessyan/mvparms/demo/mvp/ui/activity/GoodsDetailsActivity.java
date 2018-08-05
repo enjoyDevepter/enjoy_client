@@ -299,10 +299,10 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         }
     }
 
-
     @Override
     public boolean onTagClick(View view, int position, FlowLayout parent) {
         view.setSelected(true);
+        showSpec(false);
         return false;
     }
 

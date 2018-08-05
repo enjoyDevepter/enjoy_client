@@ -12,62 +12,54 @@ import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.di.component.DaggerPayResultComponent;
-import me.jessyan.mvparms.demo.di.module.PayResultModule;
-import me.jessyan.mvparms.demo.mvp.contract.PayResultContract;
-import me.jessyan.mvparms.demo.mvp.presenter.PayResultPresenter;
+import me.jessyan.mvparms.demo.di.component.DaggerPayComponent;
+import me.jessyan.mvparms.demo.di.module.PayModule;
+import me.jessyan.mvparms.demo.mvp.contract.PayContract;
+import me.jessyan.mvparms.demo.mvp.presenter.PayPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class PayResultActivity extends BaseActivity<PayResultPresenter> implements PayResultContract.View, View.OnClickListener {
+public class PayActivity extends BaseActivity<PayPresenter> implements PayContract.View, View.OnClickListener {
 
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
     TextView titleTV;
-    @BindView(R.id.order_center)
-    TextView orderCenterTV;
-    @BindView(R.id.order_detail)
-    TextView orderDetailTV;
-    @BindView(R.id.pay_img)
-    View payImg;
-    @BindView(R.id.price_status)
-    TextView payStatus;
-    @BindView(R.id.pay_result_info)
-    View payResultInfoV;
-    @BindView(R.id.success)
-    View successV;
-    @BindView(R.id.fail)
-    View failV;
-    @BindView(R.id.retry)
-    View retryV;
-    @BindView(R.id.fail_order_detail)
-    View failOrderV;
+    @BindView(R.id.pay_for_zfb)
+    View zfbPay;
+    @BindView(R.id.zfb)
+    View zfbV;
+    @BindView(R.id.pay_for_wx)
+    View wxPay;
+    @BindView(R.id.wx)
+    View wxV;
+    @BindView(R.id.confirm)
+    View confirmV;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
-        DaggerPayResultComponent //如找不到该类,请编译一下项目
+        DaggerPayComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .payResultModule(new PayResultModule(this))
+                .payModule(new PayModule(this))
                 .build()
                 .inject(this);
     }
 
     @Override
     public int initView(Bundle savedInstanceState) {
-        return R.layout.activity_pay_result; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+        return R.layout.activity_pay; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        titleTV.setText("支付成功");
+        titleTV.setText("立即支付");
         backV.setOnClickListener(this);
-        orderCenterTV.setOnClickListener(this);
-        orderDetailTV.setOnClickListener(this);
-        retryV.setOnClickListener(this);
-        failOrderV.setOnClickListener(this);
+        confirmV.setOnClickListener(this);
+        zfbPay.setOnClickListener(this);
+        wxPay.setOnClickListener(this);
+        zfbV.setSelected(true);
     }
 
 
@@ -103,16 +95,29 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
-                killMyself();
                 break;
-            case R.id.order_center:
+            case R.id.pay_for_zfb:
+                if (!zfbV.isSelected()) {
+                    changeToWX(false);
+                }
                 break;
-            case R.id.order_detail:
+            case R.id.pay_for_wx:
+                if (!wxV.isSelected()) {
+                    changeToWX(true);
+                }
                 break;
-            case R.id.retry:
-                break;
-            case R.id.fail_order_detail:
+            case R.id.confirm:
+                if (zfbV.isSelected()) {
+
+                } else {
+
+                }
                 break;
         }
+    }
+
+    private void changeToWX(boolean wxPay) {
+        wxV.setSelected(wxPay);
+        zfbV.setSelected(!wxPay);
     }
 }

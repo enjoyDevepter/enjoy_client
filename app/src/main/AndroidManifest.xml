@@ -55,6 +55,11 @@
         <activity android:name=".mvp.ui.activity.PayResultActivity" />
         <activity android:name=".mvp.ui.activity.AddAddressActivity" />
         <activity android:name=".mvp.ui.activity.AddressListActivity" />
+        <activity android:name=".ConfirmOrderActivity" />
+        <activity android:name=".CouponActivity" />
+        <activity android:name=".SelfPickupAddrListActivity" />
+        <activity android:name=".ChoiceStoreActivity" />
+        <activity android:name=".PayActivity"></activity>
     </application>
 
 </manifest>

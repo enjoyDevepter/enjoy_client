@@ -6,12 +6,14 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HotRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HotResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
@@ -41,4 +43,6 @@ public interface MainService {
     @POST("gateway")
     Observable<GoodsDetailsResponse> getGoodsDetails(@Body GoodsDetailsRequest request);
 
+    @POST("gateway")
+    Observable<StoresListResponse> getStores(@Body StoresListRequest request);
 }
