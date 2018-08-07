@@ -94,7 +94,8 @@
         android:gravity="center"
         android:text="加入购物车"
         android:textColor="#FFFFFFFF"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/buy"
@@ -108,7 +109,8 @@
         android:gravity="center"
         android:text="立即购物"
         android:textColor="#FFFFFFFF"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="gone" />
 
 </RelativeLayout>
 

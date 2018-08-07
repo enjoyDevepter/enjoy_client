@@ -5,6 +5,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/back"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/goods_detail_title_bg"
+            android:gravity="center">
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="13dp"
+                android:background="@mipmap/back" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/share"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="right|top"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/goods_detail_title_bg"
+            android:gravity="center">
+
+            <View
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:background="@mipmap/share" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,39 +80,6 @@
                     android:text="1/2"
                     android:textColor="#FFFFFFFF"
                     android:textSize="13sp" />
-
-                <LinearLayout
-                    android:id="@+id/back"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/goods_detail_title_bg"
-                    android:gravity="center">
-
-                    <View
-                        android:layout_width="8dp"
-                        android:layout_height="13dp"
-                        android:background="@mipmap/back" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/share"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_gravity="right|top"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/goods_detail_title_bg"
-                    android:gravity="center">
-
-                    <View
-                        android:layout_width="13dp"
-                        android:layout_height="13dp"
-                        android:background="@mipmap/share" />
-                </LinearLayout>
-
             </FrameLayout>
 
             <LinearLayout
@@ -297,36 +308,73 @@
                 android:layout_marginTop="15dp" />
 
 
+            <LinearLayout
+                android:id="@+id/spec_close"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:background="@mipmap/close_black" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/spec_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/spec_image"
                 android:layout_marginLeft="12dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@id/spec_close"
                 android:layout_toRightOf="@id/spec_image"
                 android:lines="2"
-                android:text="【超级水宝宝】拯救沙漠肌 还原水润嫩滑 让肌肤喝饱水"
                 android:textColor="#FF000000"
                 android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/spec_price"
+
+            <LinearLayout
+                android:id="@+id/spce_price_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/spec_name"
                 android:layout_below="@id/spec_name"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="2dp"
                 android:layout_marginTop="10dp"
-                android:text="￥228.00"
-                android:textColor="#FFFF0000"
-                android:textSize="12sp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="3dp"
+                    android:text="￥"
+                    android:textColor="#FFFF0000"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/spec_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:textColor="#FFFF0000"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/spec_id_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/spec_price"
-                android:layout_below="@id/spec_price"
+                android:layout_alignLeft="@id/spce_price_layout"
+                android:layout_below="@id/spce_price_layout"
                 android:layout_marginTop="10dp"
                 android:text="商品编号："
                 android:textColor="#FF666666"
@@ -336,7 +384,7 @@
                 android:id="@+id/spec_goods_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/spec_price"
+                android:layout_below="@id/spce_price_layout"
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/spec_id_info"
                 android:textColor="#FF666666"
@@ -349,7 +397,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/spec_image"
                 android:layout_below="@id/spec_image"
-                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:text="选择规格"
                 android:textColor="#FF666666"
@@ -404,13 +451,21 @@
                 android:textColor="#FF666666"
                 android:textSize="13sp" />
 
-            <View
-                android:layout_width="7dp"
-                android:layout_height="7dp"
+            <LinearLayout
+                android:id="@+id/promotion_close"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
-                android:background="@mipmap/close_black" />
+                android:gravity="center">
+
+                <View
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:background="@mipmap/close_black" />
+
+            </LinearLayout>
+
 
             <View
                 android:id="@+id/divide"
@@ -433,29 +488,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:orientation="horizontal"
-            android:visibility="invisible">
-
-            <LinearLayout
-                android:id="@+id/back_home"
-                android:layout_width="40dp"
-                android:layout_height="47dp"
-                android:gravity="center">
-
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="17dp"
-                    android:background="@mipmap/back" />
-
-            </LinearLayout>
-
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

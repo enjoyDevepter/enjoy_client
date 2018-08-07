@@ -1,12 +1,16 @@
 package me.jessyan.mvparms.demo.mvp.model.api.service;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.CartListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HotRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.CartListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
@@ -45,4 +49,12 @@ public interface MainService {
 
     @POST("gateway")
     Observable<StoresListResponse> getStores(@Body StoresListRequest request);
+
+    @POST("gateway")
+    Observable<CartListResponse> getGoodsOfCart(@Body CartListRequest request);
+
+    @POST("gateway")
+    Observable<BaseResponse> addGoodsToCart(@Body AddGoodsToCartRequest request);
+
+
 }

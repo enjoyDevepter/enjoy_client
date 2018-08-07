@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:background="@drawable/title_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/cart_goods_off_bg"
+            android:gravity="center"
+            android:text="满减"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/promotion_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:text="已购满288元，已减80"
+            android:textColor="#FF333333"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/goods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/buttom"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/goods_off_bg"
+            android:gravity="center"
+            android:text="满减"
+            android:textColor="#FFFF0000"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/promotion_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:text="已购满288元，已减80"
+            android:textColor="#FF333333"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+</LinearLayout>
+

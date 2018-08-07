@@ -21,8 +21,11 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
@@ -44,6 +47,7 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
     List<GoodsDetails.GoodsSpecValue> goodsSpecValues;
     @Inject
     TagAdapter adapter;
+
     @Inject
     public GoodsDetailsPresenter(GoodsDetailsContract.Model model, GoodsDetailsContract.View rootView) {
         super(model, rootView);
@@ -67,9 +71,9 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
 
         GoodsDetailsRequest request = new GoodsDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setCity(String.valueOf(cache.get("city")));
-        request.setCounty(String.valueOf(cache.get("county")));
-        request.setProvince(String.valueOf(cache.get("province")));
+        request.setCity((String) (cache.get("city")));
+        request.setCounty((String) (cache.get("county")));
+        request.setProvince((String) (cache.get("province")));
 
         request.setGoodsId(goodsId);
         request.setMerchId(merchId);
@@ -85,8 +89,40 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                             promotionList.addAll(response.getPromotionList());
                             goodsSpecValues.clear();
                             goodsSpecValues.addAll(response.getGoodsSpecValueList());
+                            Cache<String, Object> cache = mRootView.getCache();
+                            cache.put("goods", response.getGoods());
                             adapter.notifyDataChanged();
                             mRootView.updateUI(response);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 添加购物车
+     */
+    public void addGoodsToCart() {
+        Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        if (ArmsUtils.isEmpty((String) appCache.get("token"))) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+        AddGoodsToCartRequest request = new AddGoodsToCartRequest();
+        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
+        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        request.setNums(1);
+        request.setPromotionId(mRootView.getActivity().getIntent().getStringExtra("promotionId"));
+        request.setToken((String) appCache.get("token"));
+        mModel.addGoodsToCart(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

@@ -14,19 +14,22 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
-import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -45,7 +48,7 @@ import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> implements GoodsDetailsContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TagFlowLayout.OnTagClickListener {
+public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> implements GoodsDetailsContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TagFlowLayout.OnSelectListener {
 
     @BindView(R.id.back)
     View backV;
@@ -95,6 +98,14 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     TextView spcePriceTV;
     @BindView(R.id.spec_goods_id)
     TextView spceIDTV;
+    @BindView(R.id.unlike)
+    View unlikeV;
+    @BindView(R.id.like)
+    View likeV;
+    @BindView(R.id.promotion_close)
+    View promotionCloseV;
+    @BindView(R.id.spec_close)
+    View spceCloseV;
     @BindView(R.id.specs)
     TagFlowLayout speceflowLayout;
     @BindView(R.id.promotionCV)
@@ -146,6 +157,10 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         maskSpecV.setOnClickListener(this);
         imagesB.setImageLoader(new GlideImageLoader());
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
+        unlikeV.setOnClickListener(this);
+        likeV.setOnClickListener(this);
+        spceCloseV.setOnClickListener(this);
+        promotionCloseV.setOnClickListener(this);
         tabLayout.addTab(tabLayout.newTab().setText("商品详情"));
         tabLayout.addTab(tabLayout.newTab().setText("相关日志"));
 
@@ -156,8 +171,8 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         promotionCV.setAdapter(promotionAdapter);
         promotionAdapter.setOnItemClickListener(this);
         speceflowLayout.setAdapter(adapter);
+        speceflowLayout.setOnSelectListener(this);
 
-        speceflowLayout.setOnTagClickListener(this);
     }
 
 
@@ -207,6 +222,19 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         saleCountTV.setText(String.valueOf(response.getGoods().getSales()));
         goodSpecTV.setText(response.getGoods().getGoodsSpecValues());
         detailWV.loadData(response.getGoods().getMobileDetail(), "text/html", null);
+
+        if (response.getPromotionList().size() <= 0) {
+            promotionInfosV.setVisibility(View.GONE);
+        }
+
+        if (response.getGoodsSpecValueList().size() <= 0) {
+            specV.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
     }
 
     @Override
@@ -218,8 +246,10 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             case R.id.share:
                 break;
             case R.id.add_cart:
+                mPresenter.addGoodsToCart();
                 break;
             case R.id.buy:
+                ArmsUtils.startActivity(ConfirmOrderActivity.class);
                 break;
             case R.id.promotion:
                 showPro(true);
@@ -233,15 +263,41 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             case R.id.mask_spec:
                 showSpec(false);
                 break;
+            case R.id.unlike:
+                break;
+            case R.id.like:
+                break;
+            case R.id.promotion_close:
+                showPro(false);
+                break;
+            case R.id.spec_close:
+                showSpec(false);
+                break;
         }
     }
 
     private void showSpec(boolean show) {
+        if (adapter.getCount() <= 0) {
+            return;
+        }
         if (show) {
             maskSpecV.setVisibility(View.VISIBLE);
             maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
             specLayoutV.setVisibility(View.VISIBLE);
             specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_butom_in));
+            GoodsDetails.Goods goods = ((GoodsDetails.Goods) provideCache().get("goods"));
+            spceIDTV.setText(goods.getGoodsId());
+            spcePriceTV.setText(String.valueOf(goods.getSalePrice()));
+            spceNameTV.setText(goods.getName());
+
+            //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
+            mImageLoader.loadImage(spceImageIV.getContext(),
+                    ImageConfigImpl
+                            .builder()
+                            .url(goods.getImage())
+                            .imageView(spceImageIV)
+                            .build());
+
         } else {
             maskSpecV.setVisibility(View.GONE);
             maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_out));
@@ -251,6 +307,9 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     }
 
     private void showPro(boolean show) {
+        if (promotionAdapter.getInfos().size() <= 0) {
+            return;
+        }
         if (show) {
             maskProV.setVisibility(View.VISIBLE);
             maskProV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
@@ -264,24 +323,6 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         }
     }
 
-    private void showSpec() {
-//        mImageLoader.loadImage(this,
-//                ImageConfigImpl
-//                        .builder()
-//                        .url(response.getGoods().getImage())
-//                        .imageView(spceImageIV)
-//                        .build());
-//
-//        spceNameTV.setText(response.getGoods().getName());
-//        spcePriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
-//        spceIDTV.setText(response.getGoods().getMerchId());
-//        specList.add("500ML");
-//        specList.add("1000ML");
-//        specList.add("1500ML");
-//        speceflowLayout.setAdapter(adapter);
-
-    }
-
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
         switch (viewType) {
@@ -289,8 +330,18 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 List<GoodsDetails.Promotion> promotionList = promotionAdapter.getInfos();
                 for (int i = 0; i < promotionList.size(); i++) {
                     GoodsDetails.Promotion p = promotionList.get(i);
+                    if (i == position) {
+                        if (p.isCheck()) {
+                            p.setCheck(false);
+                        } else {
+                            p.setCheck(true);
+                        }
+                    } else {
+                        p.setCheck(false);
+                    }
                     p.setCheck(i == position ? p.isCheck() ? false : true : false);
                 }
+
                 promotionContentV.setVisibility(View.VISIBLE);
                 promotionTV.setText(promotionList.get(position).getTitle());
                 promotionAdapter.notifyDataSetChanged();
@@ -300,10 +351,11 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     }
 
     @Override
-    public boolean onTagClick(View view, int position, FlowLayout parent) {
-        view.setSelected(true);
-        showSpec(false);
-        return false;
+    public void onSelected(Set<Integer> selectPosSet) {
+        Toast.makeText(this, selectPosSet.toString(), Toast.LENGTH_LONG).show();
+        GoodsDetails.GoodsSpecValue goodsSpecValue = (GoodsDetails.GoodsSpecValue) adapter.getItem((int) selectPosSet.toArray()[0]);
+        goodsSpecValue.getSpecValueId();
+        goodSpecTV.setText(goodsSpecValue.getSpecValueName());
     }
 
     private class Mobile {

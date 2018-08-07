@@ -55,11 +55,12 @@
         <activity android:name=".mvp.ui.activity.PayResultActivity" />
         <activity android:name=".mvp.ui.activity.AddAddressActivity" />
         <activity android:name=".mvp.ui.activity.AddressListActivity" />
-        <activity android:name=".ConfirmOrderActivity" />
-        <activity android:name=".CouponActivity" />
-        <activity android:name=".SelfPickupAddrListActivity" />
-        <activity android:name=".ChoiceStoreActivity" />
-        <activity android:name=".PayActivity"></activity>
+        <activity android:name=".mvp.ui.activity.ConfirmOrderActivity" />
+        <activity android:name=".mvp.ui.activity.CouponActivity" />
+        <activity android:name=".mvp.ui.activity.SelfPickupAddrListActivity" />
+        <activity android:name=".mvp.ui.activity.ChoiceStoreActivity" />
+        <activity android:name=".mvp.ui.activity.PayActivity" />
+        <activity android:name=".mvp.ui.activity.CartActivity"></activity>
     </application>
 
 </manifest>

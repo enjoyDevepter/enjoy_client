@@ -1,8 +1,10 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -10,54 +12,54 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.di.component.DaggerConfirmOrderComponent;
-import me.jessyan.mvparms.demo.di.module.ConfirmOrderModule;
-import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
-import me.jessyan.mvparms.demo.mvp.presenter.ConfirmOrderPresenter;
+import me.jessyan.mvparms.demo.di.component.DaggerCartComponent;
+import me.jessyan.mvparms.demo.di.module.CartModule;
+import me.jessyan.mvparms.demo.mvp.contract.CartContract;
+import me.jessyan.mvparms.demo.mvp.presenter.CartPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> implements ConfirmOrderContract.View, View.OnClickListener {
-    @BindView(R.id.no_address)
-    View noAddressV;
-    @BindView(R.id.addres_info_layout)
-    View addressV;
-    @BindView(R.id.self_layout)
-    View selfV;
+public class CartActivity extends BaseActivity<CartPresenter> implements CartContract.View, View.OnClickListener {
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
     TextView titleTV;
-    @BindView(R.id.dispatch)
-    View dispatchV;
+    @BindView(R.id.edit)
+    TextView editTV;
+    @BindView(R.id.cartList)
+    RecyclerView cartRV;
+    @Inject
+    RecyclerView.Adapter mAdapter;
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
-        DaggerConfirmOrderComponent //如找不到该类,请编译一下项目
+        DaggerCartComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .confirmOrderModule(new ConfirmOrderModule(this))
+                .cartModule(new CartModule(this))
                 .build()
                 .inject(this);
     }
 
     @Override
     public int initView(Bundle savedInstanceState) {
-        return R.layout.activity_confirm_order; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+        return R.layout.activity_cart;
     }
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        titleTV.setText("确认订单");
-        noAddressV.setOnClickListener(this);
-        addressV.setOnClickListener(this);
-        selfV.setOnClickListener(this);
         backV.setOnClickListener(this);
-        dispatchV.setOnClickListener(this);
-
+        titleTV.setText("购物车");
+        editTV.setOnClickListener(this);
+        ArmsUtils.configRecyclerView(cartRV, mLayoutManager);
+        cartRV.setAdapter(mAdapter);
     }
 
 
@@ -92,12 +94,16 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.no_address:
-            case R.id.addres_info_layout:
-                ArmsUtils.startActivity(AddressListActivity.class);
+            case R.id.back:
+                killMyself();
                 break;
-            case R.id.self_layout:
+            case R.id.edit:
                 break;
         }
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 }

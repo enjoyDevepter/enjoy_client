@@ -12,7 +12,9 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 
 
@@ -39,6 +41,12 @@ public class GoodsDetailsModel extends BaseModel implements GoodsDetailsContract
     public Observable<GoodsDetailsResponse> getGoodsDetails(GoodsDetailsRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getGoodsDetails(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> addGoodsToCart(AddGoodsToCartRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .addGoodsToCart(request);
     }
 
 }
