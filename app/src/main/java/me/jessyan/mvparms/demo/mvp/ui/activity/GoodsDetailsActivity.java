@@ -14,7 +14,6 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
@@ -230,6 +229,18 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         if (response.getGoodsSpecValueList().size() <= 0) {
             specV.setVisibility(View.GONE);
         }
+
+        String specValueId = (String) provideCache().get("specValueId");
+        if (!ArmsUtils.isEmpty(specValueId)) {
+            for (int i = 0; i < response.getGoodsSpecValueList().size(); i++) {
+                if (response.getGoodsSpecValueList().get(i).getSpecValueId().equals(specValueId)) {
+                    adapter.setSelectedList(i);
+                    goodSpecTV.setText(response.getGoodsSpecValueList().get(i).getSpecValueName());
+                    return;
+                }
+            }
+        }
+
     }
 
     @Override
@@ -331,31 +342,30 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 for (int i = 0; i < promotionList.size(); i++) {
                     GoodsDetails.Promotion p = promotionList.get(i);
                     if (i == position) {
-                        if (p.isCheck()) {
-                            p.setCheck(false);
-                        } else {
-                            p.setCheck(true);
-                        }
+                        p.setCheck(!p.isCheck());
+                        promotionContentV.setVisibility(p.isCheck() ? View.VISIBLE : View.INVISIBLE);
+                        promotionTV.setText(p.isCheck() ? promotionList.get(position).getTitle() : "");
+                        provideCache().put("promotionId", p.isCheck() ? p.getId() : "");
                     } else {
                         p.setCheck(false);
                     }
-                    p.setCheck(i == position ? p.isCheck() ? false : true : false);
                 }
-
-                promotionContentV.setVisibility(View.VISIBLE);
-                promotionTV.setText(promotionList.get(position).getTitle());
                 promotionAdapter.notifyDataSetChanged();
-                showPro(false);
                 break;
         }
     }
 
     @Override
     public void onSelected(Set<Integer> selectPosSet) {
-        Toast.makeText(this, selectPosSet.toString(), Toast.LENGTH_LONG).show();
-        GoodsDetails.GoodsSpecValue goodsSpecValue = (GoodsDetails.GoodsSpecValue) adapter.getItem((int) selectPosSet.toArray()[0]);
-        goodsSpecValue.getSpecValueId();
-        goodSpecTV.setText(goodsSpecValue.getSpecValueName());
+        if (selectPosSet.size() > 0) {
+            GoodsDetails.GoodsSpecValue goodsSpecValue = (GoodsDetails.GoodsSpecValue) adapter.getItem((int) selectPosSet.toArray()[0]);
+            provideCache().put("specValueId", goodsSpecValue.getSpecValueId());
+            goodSpecTV.setText(goodsSpecValue.getSpecValueName());
+            mPresenter.getCoodsDetailsForSpecValueId();
+        } else {
+            goodSpecTV.setText("");
+            provideCache().put("specValueId", "");
+        }
     }
 
     private class Mobile {

@@ -31,6 +31,7 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
 
 /**
  * ================================================
@@ -42,7 +43,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
  * ================================================
  */
 public class CartGoodsListItemHolder extends BaseHolder<CartBean.GoodsBean> {
-
     @BindView(R.id.check)
     View checkV;
     @BindView(R.id.image)
@@ -57,21 +57,45 @@ public class CartGoodsListItemHolder extends BaseHolder<CartBean.GoodsBean> {
     View minusV;
     @BindView(R.id.add)
     View addV;
+    private CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
+    private int parentPosition;
 
-
-    public CartGoodsListItemHolder(View itemView) {
+    public CartGoodsListItemHolder(View itemView, CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener, int parentPosition) {
         super(itemView);
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
+        itemView.setOnClickListener(this);
+        minusV.setOnClickListener(this);
+        addV.setOnClickListener(this);
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
+        this.parentPosition = parentPosition;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (null != onChildItemClickLinstener) {
+            switch (view.getId()) {
+                case R.id.add:
+                    onChildItemClickLinstener.onChildItemClick(view, CartListAdapter.ViewName.ADD, parentPosition, getAdapterPosition());
+                    return;
+                case R.id.minus:
+                    onChildItemClickLinstener.onChildItemClick(view, CartListAdapter.ViewName.MINUS, parentPosition, getAdapterPosition());
+                    return;
+                case R.id.item_id:
+                    onChildItemClickLinstener.onChildItemClick(view, CartListAdapter.ViewName.CHECK, parentPosition, getAdapterPosition());
+                    break;
+            }
+        }
+        super.onClick(view);
     }
 
     @Override
     public void setData(CartBean.GoodsBean data, int position) {
-        Observable.just(data.isCheck())
-                .subscribe(s -> checkV.setSelected(s));
+        Observable.just(data.getStatus())
+                .subscribe(s -> checkV.setSelected("1".equals(s) ? true : false));
         Observable.just(data.getName())
                 .subscribe(s -> nameTV.setText(String.valueOf(s)));
         Observable.just(data.getSalePrice())

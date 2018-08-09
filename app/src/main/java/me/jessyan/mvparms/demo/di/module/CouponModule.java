@@ -1,11 +1,19 @@
 package me.jessyan.mvparms.demo.di.module;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
 import com.jess.arms.di.scope.ActivityScope;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.CouponContract;
 import me.jessyan.mvparms.demo.mvp.model.CouponModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.Coupon;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.CouponListAdapter;
 
 
 @Module
@@ -31,5 +39,23 @@ public class CouponModule {
     @Provides
     CouponContract.Model provideCouponModel(CouponModel model) {
         return model;
+    }
+
+    @ActivityScope
+    @Provides
+    RecyclerView.LayoutManager provideLayoutManager() {
+        return new LinearLayoutManager(view.getActivity(), LinearLayoutManager.VERTICAL, false);
+    }
+
+    @ActivityScope
+    @Provides
+    List<Coupon> provideCouponList() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    RecyclerView.Adapter provideCouponAdapter(List<Coupon> list) {
+        return new CouponListAdapter(list);
     }
 }

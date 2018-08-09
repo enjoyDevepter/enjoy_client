@@ -5,13 +5,14 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
  */
 
 public class GoodsDetailsRequest extends BaseRequest {
-    private int cmd = 403;
+    private int cmd;
     private String name;
     private String province;
     private String city;
     private String county;
     private String goodsId;
     private String merchId;
+    private String specValueId;
 
     public int getCmd() {
         return cmd;
@@ -69,6 +70,14 @@ public class GoodsDetailsRequest extends BaseRequest {
         this.merchId = merchId;
     }
 
+    public String getSpecValueId() {
+        return specValueId;
+    }
+
+    public void setSpecValueId(String specValueId) {
+        this.specValueId = specValueId;
+    }
+
     @Override
     public String toString() {
         return "GoodsDetailsRequest{" +
@@ -79,6 +88,7 @@ public class GoodsDetailsRequest extends BaseRequest {
                 ", county='" + county + '\'' +
                 ", goodsId='" + goodsId + '\'' +
                 ", merchId='" + merchId + '\'' +
+                ", specValueId='" + specValueId + '\'' +
                 '}';
     }
 }

@@ -13,6 +13,8 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.CartContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CartListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DeleteCartListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.EidtCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CartListResponse;
 
 
@@ -40,5 +42,17 @@ public class CartModel extends BaseModel implements CartContract.Model {
     public Observable<CartListResponse> getGoodsOfCart(CartListRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getGoodsOfCart(request);
+    }
+
+    @Override
+    public Observable<CartListResponse> editCartList(EidtCartRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .editCartList(request);
+    }
+
+    @Override
+    public Observable<CartListResponse> deleteCartList(DeleteCartListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .deleteCartList(request);
     }
 }

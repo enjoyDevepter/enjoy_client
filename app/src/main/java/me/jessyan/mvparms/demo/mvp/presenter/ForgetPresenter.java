@@ -76,6 +76,7 @@ public class ForgetPresenter extends BasePresenter<ForgetContract.Model, ForgetC
                     public void accept(RegisterResponse response) throws Exception {
                         if (response.isSuccess()) {
                             // 跳转到主页面
+                            mRootView.killMyself();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

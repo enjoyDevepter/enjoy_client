@@ -67,7 +67,6 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
                             cache.put("token", registerResponse.getToken());
                             cache.put("signkey", registerResponse.getSignkey());
                             mRootView.killMyself();
-                            mRootView.goMainPage();
                         } else {
                             mRootView.showMessage(registerResponse.getRetDesc());
                         }

@@ -55,7 +55,7 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        getGoodsDetails(mRootView.getActivity().getIntent().getStringExtra("goodsId"), mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        getGoodsDetails();
     }
 
     @Override
@@ -67,16 +67,56 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
         this.mApplication = null;
     }
 
-    public void getGoodsDetails(String goodsId, String merchId) {
+    /**
+     * 获取商品详情
+     */
+    public void getGoodsDetails() {
 
         GoodsDetailsRequest request = new GoodsDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setCmd(403);
         request.setCity((String) (cache.get("city")));
         request.setCounty((String) (cache.get("county")));
         request.setProvince((String) (cache.get("province")));
+        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
+        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        mModel.getGoodsDetails(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<GoodsDetailsResponse>() {
+                    @Override
+                    public void accept(GoodsDetailsResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            GoodsDetailsPresenter.this.response = response;
+                            promotionList.clear();
+                            promotionList.addAll(response.getPromotionList());
+                            goodsSpecValues.clear();
+                            goodsSpecValues.addAll(response.getGoodsSpecValueList());
+                            Cache<String, Object> cache = mRootView.getCache();
+                            cache.put("goods", response.getGoods());
+                            adapter.notifyDataChanged();
+                            mRootView.updateUI(response);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
 
-        request.setGoodsId(goodsId);
-        request.setMerchId(merchId);
+
+    /**
+     * 更加规格获取商品详情
+     */
+    public void getCoodsDetailsForSpecValueId() {
+        GoodsDetailsRequest request = new GoodsDetailsRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setCmd(409);
+        request.setCity((String) (cache.get("city")));
+        request.setCounty((String) (cache.get("county")));
+        request.setProvince((String) (cache.get("province")));
+        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
+        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        request.setSpecValueId((String) (mRootView.getCache().get("specValueId")));
         mModel.getGoodsDetails(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -122,7 +162,7 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                     @Override
                     public void accept(BaseResponse response) throws Exception {
                         if (response.isSuccess()) {
-
+                            mRootView.showMessage(response.getRetDesc());
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

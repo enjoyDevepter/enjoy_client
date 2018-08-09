@@ -1,23 +1,42 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerCouponComponent;
 import me.jessyan.mvparms.demo.di.module.CouponModule;
 import me.jessyan.mvparms.demo.mvp.contract.CouponContract;
 import me.jessyan.mvparms.demo.mvp.presenter.CouponPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class CouponActivity extends BaseActivity<CouponPresenter> implements CouponContract.View {
+public class CouponActivity extends BaseActivity<CouponPresenter> implements CouponContract.View, DefaultAdapter.OnRecyclerViewItemClickListener, View.OnClickListener {
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
+    @BindView(R.id.coupon)
+    RecyclerView mRecyclerView;
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+    @Inject
+    RecyclerView.Adapter mAdapter;
 
 
     @Override
@@ -37,13 +56,17 @@ public class CouponActivity extends BaseActivity<CouponPresenter> implements Cou
 
     @Override
     public void initData(Bundle savedInstanceState) {
-
+        backV.setOnClickListener(this);
+        ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        ((DefaultAdapter) mAdapter).setOnItemClickListener(this);
+        titleTV.setText("优惠券");
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
     }
 
 
     @Override
     public void showLoading() {
-
     }
 
     @Override
@@ -69,4 +92,22 @@ public class CouponActivity extends BaseActivity<CouponPresenter> implements Cou
     }
 
 
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public void onItemClick(View view, int viewType, Object data, int position) {
+        ((DefaultAdapter) mAdapter).getInfos().get(position);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+        }
+    }
 }

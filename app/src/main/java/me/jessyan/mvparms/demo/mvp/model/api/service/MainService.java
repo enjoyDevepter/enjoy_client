@@ -3,10 +3,13 @@ package me.jessyan.mvparms.demo.mvp.model.api.service;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CartListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DeleteCartListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.EidtCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HotRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -17,6 +20,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HotResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -54,7 +58,16 @@ public interface MainService {
     Observable<CartListResponse> getGoodsOfCart(@Body CartListRequest request);
 
     @POST("gateway")
+    Observable<CartListResponse> editCartList(@Body EidtCartRequest request);
+
+    @POST("gateway")
+    Observable<CartListResponse> deleteCartList(@Body DeleteCartListRequest request);
+
+    @POST("gateway")
     Observable<BaseResponse> addGoodsToCart(@Body AddGoodsToCartRequest request);
+
+    @POST("gateway")
+    Observable<OrderConfirmInfoResponse> getOrderConfirmInfo(@Body OrderConfirmInfoRequest request);
 
 
 }

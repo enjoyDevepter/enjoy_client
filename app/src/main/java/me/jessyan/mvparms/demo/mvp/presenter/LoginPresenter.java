@@ -72,6 +72,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     }
 
     public void loginByPhone(String mobile, String verifyCode) {
+        mRootView.showLoading();
         LoginByPhoneRequest request = new LoginByPhoneRequest();
         request.setMobile(mobile);
         request.setVerifyCode(verifyCode);
@@ -82,10 +83,10 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                 .subscribe(new Consumer<RegisterResponse>() {
                     @Override
                     public void accept(RegisterResponse response) throws Exception {
+                        mRootView.hideLoading();
                         if (response.isSuccess()) {
                             cacheUserInfo(response.getToken(), response.getSignkey());
                             mRootView.killMyself();
-                            mRootView.goMainPage();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -95,6 +96,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     }
 
     public void loginByUser(String username, String password) {
+        mRootView.showLoading();
         LoginByUserRequest request = new LoginByUserRequest();
         request.setUsername(username);
         request.setPassword(password);
@@ -105,10 +107,10 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                 .subscribe(new Consumer<RegisterResponse>() {
                     @Override
                     public void accept(RegisterResponse response) throws Exception {
+                        mRootView.hideLoading();
                         if (response.isSuccess()) {
                             cacheUserInfo(response.getToken(), response.getSignkey());
                             mRootView.killMyself();
-                            mRootView.goMainPage();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -118,7 +120,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     }
 
     public void getVerifyForUser(String mobile) {
-
         VeritfyRequest request = new VeritfyRequest();
         request.setCmd(106);
         request.setMobile(mobile);

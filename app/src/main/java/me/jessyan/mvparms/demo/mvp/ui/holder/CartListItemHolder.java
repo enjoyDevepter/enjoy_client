@@ -15,6 +15,7 @@
  */
 package me.jessyan.mvparms.demo.mvp.ui.holder;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -23,16 +24,13 @@ import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.utils.ArmsUtils;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CartGoodsListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
 
 /**
  * ================================================
@@ -55,45 +53,46 @@ public class CartListItemHolder extends BaseHolder<CartBean.CartItem> {
     TextView promotionTwoTV;
     @BindView(R.id.goods)
     RecyclerView goodsRV;
-    @Inject
-    CartGoodsListAdapter mAdapter;
-    @Inject
-    RecyclerView.LayoutManager layoutManager;
-    @Inject
-    List<CartBean.GoodsBean> goods;
+    private CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public CartListItemHolder(View itemView) {
+
+    public CartListItemHolder(View itemView, CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
     }
 
     @Override
     public void setData(CartBean.CartItem cartItem, int position) {
 
         CartBean.Promotion promotion = cartItem.getPromotion();
-        Observable.just(promotion.getTip()).subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String s) throws Exception {
-                if (ArmsUtils.isEmpty(s)) {
-                    topV.setVisibility(View.GONE);
-                } else {
-                    topV.setVisibility(View.VISIBLE);
-                    promotionOneTV.setText(s);
+        if (null != promotion) {
+            Observable.just(promotion.getTip()).subscribe(new Consumer<String>() {
+                @Override
+                public void accept(String s) throws Exception {
+                    if (ArmsUtils.isEmpty(s)) {
+                        topV.setVisibility(View.GONE);
+                    } else {
+                        topV.setVisibility(View.VISIBLE);
+                        promotionOneTV.setText(s);
+                    }
                 }
-            }
-        });
-        Observable.just(promotion.getTitle()).subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String s) throws Exception {
-                if (ArmsUtils.isEmpty(s)) {
-                    buttomV.setVisibility(View.GONE);
-                } else {
-                    topV.setVisibility(View.VISIBLE);
-                    promotionOneTV.setText(s);
+            });
+            Observable.just(promotion.getTitle()).subscribe(new Consumer<String>() {
+                @Override
+                public void accept(String s) throws Exception {
+                    if (ArmsUtils.isEmpty(s)) {
+                    } else {
+                        topV.setVisibility(View.VISIBLE);
+                        promotionOneTV.setText(s);
+                    }
                 }
-            }
-        });
-        goods.addAll(cartItem.getGoodsList());
-        ArmsUtils.configRecyclerView(goodsRV, layoutManager);
+            });
+        } else {
+            topV.setVisibility(View.GONE);
+            buttomV.setVisibility(View.GONE);
+        }
+        CartGoodsListAdapter mAdapter = new CartGoodsListAdapter(cartItem.getGoodsList(), onChildItemClickLinstener, position);
+        ArmsUtils.configRecyclerView(goodsRV, new LinearLayoutManager(topV.getContext(), LinearLayoutManager.VERTICAL, false));
         goodsRV.setAdapter(mAdapter);
     }
 

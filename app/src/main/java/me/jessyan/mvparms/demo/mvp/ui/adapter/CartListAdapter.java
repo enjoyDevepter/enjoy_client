@@ -36,17 +36,39 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.CartListItemHolder;
  * ================================================
  */
 public class CartListAdapter extends DefaultAdapter<CartBean.CartItem> {
+
+    private OnChildItemClickLinstener onChildItemClickLinstener;
+
     public CartListAdapter(List<CartBean.CartItem> cartItems) {
         super(cartItems);
     }
 
     @Override
     public BaseHolder<CartBean.CartItem> getHolder(View v, int viewType) {
-        return new CartListItemHolder(v);
+        return new CartListItemHolder(v, new OnChildItemClickLinstener() {
+            @Override
+            public void onChildItemClick(View v, ViewName viewname, int parentPosition, int childPosition) {
+                if (null != onChildItemClickLinstener) {
+                    onChildItemClickLinstener.onChildItemClick(v, viewname, parentPosition, childPosition);
+                }
+            }
+        });
     }
 
     @Override
     public int getLayoutId(int viewType) {
         return R.layout.cart_list_item;
+    }
+
+    public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
+    }
+
+    public enum ViewName {
+        MINUS, ADD, CHECK
+    }
+
+    public interface OnChildItemClickLinstener {
+        void onChildItemClick(View v, CartListAdapter.ViewName viewname, int parentPosition, int childPosition);
     }
 }

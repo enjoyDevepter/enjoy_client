@@ -6,4 +6,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#FFF5F5F5</color>
     <color name="choice">#FF66C1E4</color>
+
+    <color name="order_confirm_type_seleted">#FFFFFFFF</color>
+    <color name="order_confirm_type_unseleted">#FFD33232</color>
 </resources>

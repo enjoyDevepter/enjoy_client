@@ -10,6 +10,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
 
 public class GoodsDetailsResponse extends BaseResponse {
 
+    private String recom;
     private GoodsDetails.Goods goods;
     private List<GoodsDetails.GoodsSpec> goodsSpecList;
     private List<GoodsDetails.GoodsSpecValue> goodsSpecValueList;

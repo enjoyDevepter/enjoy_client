@@ -13,7 +13,6 @@ import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.CartContract;
 import me.jessyan.mvparms.demo.mvp.model.CartModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.CartGoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
 
 
@@ -60,18 +59,5 @@ public class CartModule {
     RecyclerView.Adapter provideCartAdapter(List<CartBean.CartItem> list) {
         return new CartListAdapter(list);
     }
-
-    @ActivityScope
-    @Provides
-    CartGoodsListAdapter provideCartGoodsAdapter(List<CartBean.GoodsBean> list) {
-        return new CartGoodsListAdapter(list);
-    }
-
-    @ActivityScope
-    @Provides
-    List<CartBean.GoodsBean> provideCartGoodsList() {
-        return new ArrayList<>();
-    }
-
 }
 

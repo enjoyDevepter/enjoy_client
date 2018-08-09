@@ -108,7 +108,6 @@ public class CartBean {
         private int sales;
         private String status;
         private String title;
-        private boolean check;
 
         public int getAttention() {
             return attention;
@@ -212,14 +211,6 @@ public class CartBean {
 
         public void setTitle(String title) {
             this.title = title;
-        }
-
-        public boolean isCheck() {
-            return check;
-        }
-
-        public void setCheck(boolean check) {
-            this.check = check;
         }
 
         @Override

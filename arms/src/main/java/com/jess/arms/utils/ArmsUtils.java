@@ -39,7 +39,10 @@ import com.jess.arms.base.App;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.AppManager;
 
+import java.math.BigDecimal;
 import java.security.MessageDigest;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import static com.jess.arms.integration.AppManager.APP_EXIT;
 import static com.jess.arms.integration.AppManager.KILL_ALL;
@@ -453,6 +456,19 @@ public class ArmsUtils {
         message.what = APP_EXIT;
         AppManager.post(message);
     }
+
+    public static String format(long money) {
+        NumberFormat nf = new DecimalFormat("#.##");
+        return nf.format(money);
+    }
+
+    public static String formatLong(long money) {
+        money = money / 100;
+        BigDecimal bd = new BigDecimal(money);
+        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return bd.toString();
+    }
+
 
     public static AppComponent obtainAppComponentFromContext(Context context) {
         Preconditions.checkNotNull(context, "%s cannot be null", Context.class.getName());

@@ -23,6 +23,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerLoginComponent;
 import me.jessyan.mvparms.demo.di.module.LoginModule;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
 import me.jessyan.mvparms.demo.mvp.presenter.LoginPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomProgressDailog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -56,6 +57,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Inject
     RxPermissions mRxPermissions;
 
+    CustomProgressDailog progressDailog;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -115,12 +117,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showLoading() {
-
+        progressDailog = new CustomProgressDailog(this);
+        progressDailog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        progressDailog.dismiss();
     }
 
     @Override
@@ -145,13 +148,15 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.forget:
+                killMyself();
                 ArmsUtils.startActivity(ForgetActivity.class);
                 break;
             case R.id.register:
+                killMyself();
                 ArmsUtils.startActivity(RegisterActivity.class);
                 break;
             case R.id.protocol:
-                ArmsUtils.startActivity(MainActivity.class);
+//                ArmsUtils.startActivity(MainActivity.class);
                 break;
             case R.id.login:
                 login();
@@ -178,11 +183,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public Activity getActivity() {
         return this;
-    }
-
-    @Override
-    public void goMainPage() {
-        ArmsUtils.startActivity(MainActivity.class);
     }
 
     @Override

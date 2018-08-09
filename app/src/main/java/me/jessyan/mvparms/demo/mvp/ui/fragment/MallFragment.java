@@ -188,6 +188,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cart:
+                mPresenter.goCart();
                 break;
             case R.id.message:
                 break;

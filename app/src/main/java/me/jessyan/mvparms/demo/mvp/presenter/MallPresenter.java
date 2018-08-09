@@ -24,6 +24,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.CartActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -81,6 +83,16 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                         }
                     }
                 });
+    }
+
+
+    public void goCart() {
+        Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        if (ArmsUtils.isEmpty((String) appCache.get("token"))) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+        ArmsUtils.startActivity(CartActivity.class);
     }
 
     public void getGoodsList() {

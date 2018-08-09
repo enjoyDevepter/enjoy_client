@@ -12,6 +12,7 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,7 +23,10 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.CartContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CartListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DeleteCartListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.EidtCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CartListResponse;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
@@ -64,15 +68,127 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
         CartListRequest request = new CartListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken(String.valueOf(cache.get("token")));
+        mRootView.showLoading();
         mModel.getGoodsOfCart(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<CartListResponse>() {
                     @Override
                     public void accept(CartListResponse response) throws Exception {
+                        mRootView.hideLoading();
                         if (response.isSuccess()) {
                             cartItems.clear();
                             cartItems.addAll(response.getCart().getCartItems());
+                            mRootView.updateUI(response.getCart());
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+
+    /**
+     * 编辑购物车
+     */
+    public void editCartList(boolean delete) {
+        EidtCartRequest request = new EidtCartRequest();
+        request.setCmd(delete ? 1003 : 1005);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setToken(String.valueOf(cache.get("token")));
+        request.setGoodsId((String) mRootView.getCache().get("goodsId"));
+        request.setMerchId((String) mRootView.getCache().get("merchId"));
+        request.setPromotionId((String) mRootView.getCache().get("promotionId"));
+        if (null != mRootView.getCache().get("nums")) {
+            request.setNums((Integer) mRootView.getCache().get("nums"));
+        }
+        request.setStatus((String) mRootView.getCache().get("status"));
+        mRootView.showLoading();
+        mModel.editCartList(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CartListResponse>() {
+                    @Override
+                    public void accept(CartListResponse response) throws Exception {
+                        mRootView.hideLoading();
+                        if (response.isSuccess()) {
+                            cartItems.clear();
+                            cartItems.addAll(response.getCart().getCartItems());
+                            mRootView.updateUI(response.getCart());
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+
+    /**
+     * 全选
+     */
+    public void seletedAll(boolean allCheck) {
+        mRootView.showLoading();
+        CartListRequest request = new CartListRequest();
+        request.setCmd(allCheck ? 1008 : 1009);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setToken(String.valueOf(cache.get("token")));
+        mModel.getGoodsOfCart(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CartListResponse>() {
+                    @Override
+                    public void accept(CartListResponse response) throws Exception {
+                        mRootView.hideLoading();
+                        if (response.isSuccess()) {
+                            cartItems.clear();
+                            cartItems.addAll(response.getCart().getCartItems());
+                            mRootView.updateUI(response.getCart());
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    public void deleteCartList() {
+
+        DeleteCartListRequest request = new DeleteCartListRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setToken(String.valueOf(cache.get("token")));
+
+        List<DeleteCartListRequest.GoodsBean> goodsBeans = new ArrayList<>();
+
+        List<CartBean.CartItem> cartItems = ((CartListAdapter) mAdapter).getInfos();
+        for (CartBean.CartItem cartItem : cartItems) {
+            for (CartBean.GoodsBean goodsBean : cartItem.getGoodsList()) {
+                if ("1".equals(goodsBean.getStatus())) {
+                    DeleteCartListRequest.GoodsBean bean = new DeleteCartListRequest.GoodsBean();
+                    bean.setGoodsId(goodsBean.getGoodsId());
+                    bean.setMerchId(goodsBean.getMerchId());
+                    goodsBeans.add(bean);
+                }
+            }
+        }
+        request.setGoodsList(goodsBeans);
+        if (goodsBeans.size() <= 0) {
+            mRootView.showMessage("请选择需要删除的商品！");
+            return;
+        }
+        mRootView.showLoading();
+        mModel.deleteCartList(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CartListResponse>() {
+                    @Override
+                    public void accept(CartListResponse response) throws Exception {
+                        mRootView.hideLoading();
+                        if (response.isSuccess()) {
+                            cartItems.clear();
+                            cartItems.addAll(response.getCart().getCartItems());
+                            mRootView.updateUI(response.getCart());
                             mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());

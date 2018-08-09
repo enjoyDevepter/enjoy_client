@@ -74,10 +74,4 @@ public class MallModule {
         return new GoodsFilterSecondAdapter(categories);
     }
 
-//    @ActivityScope
-//    @Provides
-//    GoodsFilterThirdAdapter provideFilterThirdAdapter(List<Category> categories) {
-//        return new GoodsFilterThirdAdapter(categories);
-//    }
-
 }

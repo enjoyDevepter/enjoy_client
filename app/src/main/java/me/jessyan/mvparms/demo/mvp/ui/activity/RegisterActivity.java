@@ -175,11 +175,6 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     }
 
     @Override
-    public void goMainPage() {
-        ArmsUtils.startActivity(MainActivity.class);
-    }
-
-    @Override
     public RxPermissions getRxPermissions() {
         return mRxPermissions;
     }

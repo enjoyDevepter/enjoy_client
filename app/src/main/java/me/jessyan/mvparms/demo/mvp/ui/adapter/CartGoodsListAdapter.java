@@ -36,13 +36,18 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.CartGoodsListItemHolder;
  * ================================================
  */
 public class CartGoodsListAdapter extends DefaultAdapter<CartBean.GoodsBean> {
-    public CartGoodsListAdapter(List<CartBean.GoodsBean> cartItems) {
+    private int parentPosition;
+    private CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
+
+    public CartGoodsListAdapter(List<CartBean.GoodsBean> cartItems, CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener, int parentPosition) {
         super(cartItems);
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
+        this.parentPosition = parentPosition;
     }
 
     @Override
     public BaseHolder<CartBean.GoodsBean> getHolder(View v, int viewType) {
-        return new CartGoodsListItemHolder(v);
+        return new CartGoodsListItemHolder(v, onChildItemClickLinstener, parentPosition);
     }
 
     @Override

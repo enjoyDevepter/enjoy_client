@@ -55,38 +55,51 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
+        android:background="@color/white"
         android:gravity="center_vertical">
 
-        <View
-            android:id="@+id/check"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/check_bg" />
-
-        <TextView
+        <LinearLayout
             android:id="@+id/all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="全选"
-            android:textColor="#FF333333"
-            android:textSize="13sp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/check"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/check_bg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="全选"
+                android:textColor="#FF333333"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
             android:text="删除"
             android:textColor="#FF333333"
             android:textSize="13sp"
             android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/pay_info"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="6dp"
+            android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="vertical">
@@ -99,11 +112,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="合计：￥"
+                    android:text="合计: ￥"
                     android:textColor="#FF565656"
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/payPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="148.00"
@@ -124,6 +138,7 @@
                     android:textSize="10sp" />
 
                 <TextView
+                    android:id="@+id/totalPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="288.00"
@@ -139,6 +154,7 @@
                     android:textSize="10sp" />
 
                 <TextView
+                    android:id="@+id/deductionMoney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="288.00"

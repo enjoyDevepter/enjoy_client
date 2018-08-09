@@ -9,7 +9,11 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 
 
 @ActivityScope
@@ -31,4 +35,9 @@ public class ConfirmOrderModel extends BaseModel implements ConfirmOrderContract
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<OrderConfirmInfoResponse> getOrderConfirmInfo(OrderConfirmInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .getOrderConfirmInfo(request);
+    }
 }

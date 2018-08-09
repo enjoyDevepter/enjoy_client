@@ -18,8 +18,6 @@ public interface RegisterContract {
     interface View extends IView {
         Activity getActivity();
 
-        void goMainPage();
-
         //申请权限
         RxPermissions getRxPermissions();
 
