@@ -10,15 +10,15 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.Store;
 
 public class StoresListResponse extends BaseResponse {
 
-    private List<Store> stores;
+    private List<Store> storeList;
     private int nextPageIndex;
 
-    public List<Store> getStores() {
-        return stores;
+    public List<Store> getStoreList() {
+        return storeList;
     }
 
-    public void setStores(List<Store> stores) {
-        this.stores = stores;
+    public void setStoreList(List<Store> storeList) {
+        this.storeList = storeList;
     }
 
     public int getNextPageIndex() {
@@ -32,7 +32,7 @@ public class StoresListResponse extends BaseResponse {
     @Override
     public String toString() {
         return "StoresListResponse{" +
-                "stores=" + stores +
+                "storeList=" + storeList +
                 ", nextPageIndex=" + nextPageIndex +
                 '}';
     }

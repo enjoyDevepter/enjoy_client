@@ -38,8 +38,8 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.OrderConfirmGoodsListItemHolder;
 public class OrderConfirmGoodsListAdapter extends DefaultAdapter<OrderConfirmInfoResponse.GoodsBean> {
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public OrderConfirmGoodsListAdapter(List<OrderConfirmInfoResponse.GoodsBean> cartItems) {
-        super(cartItems);
+    public OrderConfirmGoodsListAdapter(List<OrderConfirmInfoResponse.GoodsBean> goodsList) {
+        super(goodsList);
     }
 
     @Override

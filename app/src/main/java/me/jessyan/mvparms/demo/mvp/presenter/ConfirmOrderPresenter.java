@@ -21,7 +21,10 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
@@ -39,6 +42,8 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
     RecyclerView.Adapter mAdapter;
     @Inject
     List<OrderConfirmInfoResponse.GoodsBean> goodsBeans;
+
+    private OrderConfirmInfoResponse orderConfirmInfoResponse;
 
     @Inject
     public ConfirmOrderPresenter(ConfirmOrderContract.Model model, ConfirmOrderContract.View rootView) {
@@ -59,15 +64,20 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
         getOrderConfirmInfo();
     }
 
-    private void getOrderConfirmInfo() {
+    public void getOrderConfirmInfo() {
 
         OrderConfirmInfoRequest request = new OrderConfirmInfoRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setToken(String.valueOf(cache.get("token")));
-        request.setProvince(String.valueOf(cache.get("province")));
-        request.setCity(String.valueOf(cache.get("city")));
-        request.setCounty(String.valueOf(cache.get("county")));
-        request.setGoodsList(mRootView.getActivity().getIntent().getParcelableArrayListExtra("goodsList"));
+        request.setToken((String) (cache.get("token")));
+        request.setProvince((String) (cache.get("province")));
+        request.setCity((String) (cache.get("city")));
+        request.setCounty((String) (cache.get("county")));
+        request.setDeliveryMethod((String) mRootView.getCache().get("deliveryMethod"));
+        if (mRootView.getCache().get("money") != null) {
+            request.setMoney((Long) mRootView.getCache().get("money"));
+        }
+        request.setCouponId((String) mRootView.getCache().get("couponId"));
+        request.setGoodsList((List<OrderConfirmInfoRequest.OrderGoods>) mRootView.getCache().get("goodsList"));
         mRootView.showLoading();
         mModel.getOrderConfirmInfo(request)
                 .subscribeOn(Schedulers.io())
@@ -79,6 +89,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                         if (response.isSuccess()) {
                             goodsBeans.clear();
                             goodsBeans.addAll(response.getGoodsList());
+                            orderConfirmInfoResponse = response;
                             mRootView.updateUI(response);
                             mAdapter.notifyDataSetChanged();
                         } else {
@@ -87,6 +98,45 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                     }
                 });
 
+    }
+
+
+    public void placeOrder() {
+        PayOrderRequest request = new PayOrderRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setMemberAddressId((String) mRootView.getCache().get("memberAddressId"));
+        request.setStoreId((String) mRootView.getCache().get("storeId"));
+        request.setDeliveryMethodId((String) mRootView.getCache().get("deliveryMethodId"));
+        request.setCouponId((String) mRootView.getCache().get("couponId"));
+        request.setCoupon(orderConfirmInfoResponse.getCoupon());
+        request.setDeductionMoney(orderConfirmInfoResponse.getDeductionMoney());
+        if (mRootView.getCache().get("money") != null) {
+            request.setMoney((Long) mRootView.getCache().get("money"));
+        }
+        request.setFreight(orderConfirmInfoResponse.getFreight());
+        request.setPrice(orderConfirmInfoResponse.getPrice());
+        request.setTotalPrice(orderConfirmInfoResponse.getTotalPrice());
+        request.setPayMoney(orderConfirmInfoResponse.getPayMoney());
+        request.setRemark((String) mRootView.getCache().get("remark"));
+        request.setToken(String.valueOf(cache.get("token")));
+        request.setGoodsList((List<OrderConfirmInfoRequest.OrderGoods>) mRootView.getCache().get("goodsList"));
+        mRootView.showLoading();
+        mModel.placeOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<PayOrderResponse>() {
+                    @Override
+                    public void accept(PayOrderResponse response) throws Exception {
+                        mRootView.hideLoading();
+                        if (response.isSuccess()) {
+                            if ("0".equals(response.getPayStatus())) {
+                                ArmsUtils.startActivity(PayActivity.class);
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
     }
 
 }

@@ -8,8 +8,8 @@ import java.util.List;
 
 public class StoresListRequest extends BaseRequest {
     private int cmd = 701;
-    private int pageIndex;
-    private int pageSize;
+    private int pageIndex = 1;
+    private int pageSize = 10;
     private String provinceId;
     private String cityId;
     private String countyId;
@@ -104,9 +104,9 @@ public class StoresListRequest extends BaseRequest {
                 '}';
     }
 
-    public class OrderBy {
+    public static class OrderBy {
         private String field;
-        private String asc;
+        private boolean asc;
 
         public String getField() {
             return field;
@@ -116,20 +116,12 @@ public class StoresListRequest extends BaseRequest {
             this.field = field;
         }
 
-        public String getAsc() {
+        public boolean isAsc() {
             return asc;
         }
 
-        public void setAsc(String asc) {
+        public void setAsc(boolean asc) {
             this.asc = asc;
-        }
-
-        @Override
-        public String toString() {
-            return "OrderBy{" +
-                    "field='" + field + '\'' +
-                    ", asc='" + asc + '\'' +
-                    '}';
         }
     }
 

@@ -24,6 +24,8 @@ import me.jessyan.mvparms.demo.di.module.ChoiceStoreModule;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceStoreContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.Store;
 import me.jessyan.mvparms.demo.mvp.presenter.ChoiceStorePresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -64,6 +66,8 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
         titleV.setText("选择店铺");
         ArmsUtils.configRecyclerView(storesRV, mLayoutManager);
         storesRV.setAdapter(mAdapter);
+        storesRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
+        ((StoresListAdapter) mAdapter).setOnItemClickListener(this);
     }
 
     @Override

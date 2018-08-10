@@ -10,6 +10,7 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -59,21 +60,26 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
     }
 
     public void getStores() {
-
         StoresListRequest request = new StoresListRequest();
-        request.setCountyId("");
-        request.setCityId("");
-        request.setProvinceId("");
+        request.setCountyId(mRootView.getActivity().getIntent().getStringExtra("county"));
+        request.setCityId(mRootView.getActivity().getIntent().getStringExtra("city"));
+        request.setProvinceId(mRootView.getActivity().getIntent().getStringExtra("province"));
 
+        List<StoresListRequest.OrderBy> orderByList = new ArrayList<>();
+        StoresListRequest.OrderBy orderBy = new StoresListRequest.OrderBy();
+        orderBy.setField("distance");
+        orderBy.setAsc(false);
+        orderByList.add(orderBy);
+        request.setOrderBys(orderByList);
         mModel.getStores(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<StoresListResponse>() {
                     @Override
                     public void accept(StoresListResponse response) throws Exception {
-                        if (response.isSuccess()) {
+                        if (response.isSuccess() && response.getStoreList() != null) {
                             stores.clear();
-                            stores.addAll(response.getStores());
+                            stores.addAll(response.getStoreList());
                             mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());

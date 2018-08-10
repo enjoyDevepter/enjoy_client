@@ -264,6 +264,7 @@
                         android:textSize="11sp" />
 
                     <EditText
+                        android:id="@+id/money"
                         android:layout_width="34dp"
                         android:layout_height="16dp"
                         android:layout_marginRight="15dp"
@@ -333,7 +334,7 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/price"
+                        android:id="@+id/totalPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
@@ -366,7 +367,7 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/money"
+                        android:id="@+id/selt_money"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
@@ -436,7 +437,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
-                        android:text="100.00"
                         android:textColor="#FFFF0000"
                         android:textSize="15sp" />
 
@@ -471,7 +471,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
-                        android:text="0.00"
                         android:textColor="#FFFF0000"
                         android:textSize="15sp" />
 
@@ -510,7 +509,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    android:text="228.00"
                     android:textColor="#FFFF0000"
                     android:textSize="15sp" />
 

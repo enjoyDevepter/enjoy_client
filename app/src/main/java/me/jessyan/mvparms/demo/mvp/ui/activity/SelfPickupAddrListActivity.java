@@ -47,6 +47,7 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
 
     @Inject
     List<AreaAddress> addressList;
+
     private List<AreaAddress> options1Items = new ArrayList<>();
     private List<List<AreaAddress>> options2Items = new ArrayList<>();
     private List<List<List<AreaAddress>>> options3Items = new ArrayList<>();
@@ -70,9 +71,9 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
     public void initData(Bundle savedInstanceState) {
         titleTV.setText("自提地址");
         backV.setOnClickListener(this);
-        districtV.setOnClickListener(this);
-        storeV.setOnClickListener(this);
         confirmV.setOnClickListener(this);
+        storeLayoutV.setOnClickListener(this);
+        districtLayoutV.setOnClickListener(this);
     }
 
 

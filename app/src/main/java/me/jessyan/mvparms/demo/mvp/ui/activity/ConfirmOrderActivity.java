@@ -7,13 +7,16 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -23,6 +26,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerConfirmOrderComponent;
 import me.jessyan.mvparms.demo.di.module.ConfirmOrderModule;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.ConfirmOrderPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderConfirmGoodsListAdapter;
@@ -34,6 +38,8 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> implements ConfirmOrderContract.View, View.OnClickListener, OrderConfirmGoodsListAdapter.OnChildItemClickLinstener {
     @BindView(R.id.back)
     View backV;
+    @BindView(R.id.totalPrice)
+    TextView totalPrice;
     @BindView(R.id.balance)
     TextView balanceTV;
     @BindView(R.id.payMoney)
@@ -62,6 +68,12 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     TextView dispatchV;
     @BindView(R.id.self)
     TextView selfV;
+    @BindView(R.id.confirm)
+    View confirmV;
+    @BindView(R.id.selt_money)
+    EditText moneyET;
+    @BindView(R.id.remark)
+    EditText remarkET;
     @BindView(R.id.order_goods)
     RecyclerView mRecyclerView;
     @BindColor(R.color.order_confirm_type_seleted)
@@ -72,9 +84,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     RecyclerView.Adapter mAdapter;
-
     CustomProgressDailog progressDailog;
-
     OrderConfirmInfoResponse response;
 
     @Override
@@ -103,7 +113,12 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         selfV.setOnClickListener(this);
         dispatchV.setOnClickListener(this);
         couponLayoutV.setOnClickListener(this);
+        confirmV.setOnClickListener(this);
 
+        List<OrderConfirmInfoRequest.OrderGoods> goodsList = getIntent().getParcelableArrayListExtra("goodsList");
+        if (goodsList != null) {
+            provideCache().put("goodsList", goodsList);
+        }
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         ((OrderConfirmGoodsListAdapter) mAdapter).setOnChildItemClickLinstener(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -149,6 +164,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
                 ArmsUtils.startActivity(AddressListActivity.class);
                 break;
             case R.id.self_layout:
+                ArmsUtils.startActivity(SelfPickupAddrListActivity.class);
                 break;
             case R.id.dispatch:
                 changtDispatch(true);
@@ -161,10 +177,17 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
                 intent.putParcelableArrayListExtra("coupons", (ArrayList<? extends Parcelable>) response.getCouponList());
                 ArmsUtils.startActivity(intent);
                 break;
+            case R.id.confirm:
+                provideCache().put("money", moneyET.getText().toString());
+                provideCache().put("remark", remarkET.getText().toString());
+
+                mPresenter.placeOrder();
+                break;
         }
     }
 
     private void changtDispatch(boolean self) {
+        provideCache().put("deliveryMethod", self ? "1" : "0");
         selfV.setSelected(!self);
         dispatchV.setSelected(self);
         selfV.setTextColor(!self ? seletcedColor : unseletcedColor);
@@ -176,12 +199,16 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     @Override
     public void updateUI(OrderConfirmInfoResponse response) {
         this.response = response;
+        if (response.getCouponList() == null || (response.getCouponList() != null && response.getCouponList().size() <= 0)) {
+            couponLayoutV.setVisibility(View.GONE);
+        }
         balanceTV.setText(String.valueOf(response.getBalance()));
-        payMoneyTV.setText(String.valueOf(response.getPayMoney()));
-        freightTV.setText(String.valueOf(response.getFreight()));
-        deductionMoneyTV.setText(String.valueOf(response.getDeductionMoney()));
-        moneyTV.setText(String.valueOf(response.getMoney()));
-        couponTV.setText(String.valueOf(response.getCoupon()));
+        totalPrice.setText(ArmsUtils.formatLong(response.getTotalPrice()));
+        payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));
+        freightTV.setText(ArmsUtils.formatLong(response.getFreight()));
+        deductionMoneyTV.setText(ArmsUtils.formatLong(response.getDeductionMoney()));
+        moneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
+        couponTV.setText(ArmsUtils.formatLong(response.getCoupon()));
     }
 
     @Override
@@ -190,12 +217,25 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     }
 
     @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
     public void onChildItemClick(View v, OrderConfirmGoodsListAdapter.ViewName viewname, int position) {
+        List<OrderConfirmInfoResponse.GoodsBean> goodsList = ((OrderConfirmGoodsListAdapter) mAdapter).getInfos();
         switch (viewname) {
             case ADD:
+                goodsList.get(position).setNums(goodsList.get(position).getNums() + 1);
                 break;
             case MINUS:
+                if (goodsList.get(position).getNums() == 1) {
+                    return;
+                }
+                goodsList.get(position).setNums(goodsList.get(position).getNums() - 1);
                 break;
         }
+        provideCache().put("goodsList", goodsList);
+        mPresenter.getOrderConfirmInfo();
     }
 }

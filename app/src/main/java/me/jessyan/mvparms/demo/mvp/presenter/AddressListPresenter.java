@@ -25,7 +25,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.DelAddressRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAddressRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
-import me.jessyan.mvparms.demo.mvp.ui.activity.AddAddressActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressEditListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -106,7 +105,6 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                             addressList.clear();
                             addressList.addAll(response.getMemberAddressList());
                             if (addressList.size() <= 0) {
-                                ArmsUtils.startActivity(AddAddressActivity.class);
                                 return;
                             }
                             addressListAdapter.notifyDataSetChanged();

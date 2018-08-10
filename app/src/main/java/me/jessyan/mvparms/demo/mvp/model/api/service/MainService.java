@@ -10,6 +10,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HotRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -21,6 +22,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HotResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -68,6 +70,9 @@ public interface MainService {
 
     @POST("gateway")
     Observable<OrderConfirmInfoResponse> getOrderConfirmInfo(@Body OrderConfirmInfoRequest request);
+
+    @POST("gateway")
+    Observable<PayOrderResponse> placeOrder(@Body PayOrderRequest request);
 
 
 }
