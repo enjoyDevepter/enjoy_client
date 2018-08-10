@@ -39,9 +39,9 @@ public class AddAddressModel extends BaseModel implements AddAddressContract.Mod
 
 
     @Override
-    public Observable<BaseResponse> addAddress(ModifyAddressRequest request) {
+    public Observable<BaseResponse> modifyAddress(ModifyAddressRequest request) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
-                .updateAddress(request);
+                .modifyAddress(request);
     }
 
     @Override

@@ -39,7 +39,6 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
     @Inject
     List<Store> stores;
 
-
     @Inject
     public ChoiceStorePresenter(ChoiceStoreContract.Model model, ChoiceStoreContract.View rootView) {
         super(model, rootView);
@@ -75,6 +74,7 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
                         if (response.isSuccess()) {
                             stores.clear();
                             stores.addAll(response.getStores());
+                            mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

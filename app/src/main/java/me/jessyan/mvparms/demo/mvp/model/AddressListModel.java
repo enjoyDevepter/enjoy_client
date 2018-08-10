@@ -14,6 +14,7 @@ import me.jessyan.mvparms.demo.mvp.contract.AddressListContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddressListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DelAddressRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAddressRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 
@@ -46,4 +47,11 @@ public class AddressListModel extends BaseModel implements AddressListContract.M
     public Observable<AddressListResponse> getAddressList(AddressListRequest request) {
         return mRepositoryManager.obtainRetrofitService(UserService.class).getAddressList(request);
     }
+
+    @Override
+    public Observable<BaseResponse> modifyAddress(ModifyAddressRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .modifyAddress(request);
+    }
+
 }

@@ -56,7 +56,6 @@ ext {
             "banner"                   : "com.youth.banner:banner:1.4.10",
             "extendedRecyclerView"     : "com.github.liyuzero:extendedRecyclerView:1.1.0",
             "flowlayout"               : "com.hyman:flowlayout-lib:1.1.2",
-            "pickerView"               : "com.contrarywind:Android-PickerView:4.1.6",
 
             //rx1
             "rxandroid"                : "io.reactivex:rxandroid:1.2.1",

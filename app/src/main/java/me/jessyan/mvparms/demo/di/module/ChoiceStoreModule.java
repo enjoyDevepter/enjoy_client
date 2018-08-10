@@ -58,5 +58,4 @@ public class ChoiceStoreModule {
     RecyclerView.Adapter provideStoreAdapter(List<Store> list) {
         return new StoresListAdapter(list);
     }
-
 }

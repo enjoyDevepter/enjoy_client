@@ -42,6 +42,7 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
     @Inject
     RecyclerView.Adapter mAdapter;
 
+
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerChoiceStoreComponent //如找不到该类,请编译一下项目

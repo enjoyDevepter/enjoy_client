@@ -9,6 +9,7 @@ import com.jess.arms.mvp.IView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddressListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DelAddressRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAddressRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 
@@ -28,6 +29,6 @@ public interface AddressListContract {
 
         Observable<AddressListResponse> getAddressList(AddressListRequest request);
 
-
+        Observable<BaseResponse> modifyAddress(ModifyAddressRequest request);
     }
 }

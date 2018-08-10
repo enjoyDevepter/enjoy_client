@@ -1,10 +1,24 @@
 package me.jessyan.mvparms.demo.mvp.model.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by guomin on 2018/7/29.
  */
-public class Address {
+public class Address implements Parcelable {
 
+    public static final Creator<Address> CREATOR = new Creator<Address>() {
+        @Override
+        public Address createFromParcel(Parcel in) {
+            return new Address(in);
+        }
+
+        @Override
+        public Address[] newArray(int size) {
+            return new Address[size];
+        }
+    };
     private String address;
     private String city;
     private String cityName;
@@ -12,11 +26,29 @@ public class Address {
     private String countyName;
     private String province;
     private String provinceName;
-    private String id;
-    private String isDefaultIn;
+    private String addressId;
+    private String isDefaultIn = "0";
     private String phone;
     private String receiverName;
     private String zipcode;
+
+    public Address() {
+    }
+
+    protected Address(Parcel in) {
+        address = in.readString();
+        city = in.readString();
+        cityName = in.readString();
+        county = in.readString();
+        countyName = in.readString();
+        province = in.readString();
+        provinceName = in.readString();
+        addressId = in.readString();
+        isDefaultIn = in.readString();
+        phone = in.readString();
+        receiverName = in.readString();
+        zipcode = in.readString();
+    }
 
     public String getAddress() {
         return address;
@@ -74,12 +106,12 @@ public class Address {
         this.provinceName = provinceName;
     }
 
-    public String getId() {
-        return id;
+    public String getAddressId() {
+        return addressId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 
     public String getIsDefaultIn() {
@@ -124,11 +156,32 @@ public class Address {
                 ", countyName='" + countyName + '\'' +
                 ", province='" + province + '\'' +
                 ", provinceName='" + provinceName + '\'' +
-                ", id='" + id + '\'' +
+                ", addressId='" + addressId + '\'' +
                 ", isDefaultIn='" + isDefaultIn + '\'' +
                 ", phone='" + phone + '\'' +
                 ", receiverName='" + receiverName + '\'' +
                 ", zipcode='" + zipcode + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(address);
+        dest.writeString(city);
+        dest.writeString(cityName);
+        dest.writeString(county);
+        dest.writeString(countyName);
+        dest.writeString(province);
+        dest.writeString(provinceName);
+        dest.writeString(addressId);
+        dest.writeString(isDefaultIn);
+        dest.writeString(phone);
+        dest.writeString(receiverName);
+        dest.writeString(zipcode);
     }
 }

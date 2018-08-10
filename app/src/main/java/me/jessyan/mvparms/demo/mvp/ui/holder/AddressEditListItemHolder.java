@@ -86,12 +86,12 @@ public class AddressEditListItemHolder extends BaseHolder<Address> {
     public void setData(Address address, int position) {
         Observable.just(address.getIsDefaultIn())
                 .subscribe(s -> checkV.setSelected("1".equals(s) ? true : false));
-        Observable.just(address.getAddress())
+        Observable.just(address.getReceiverName())
                 .subscribe(s -> nameTV.setText(s));
         Observable.just(address.getPhone())
                 .subscribe(s -> phoneTV.setText(String.valueOf(s)));
         Observable.just(address.getAddress())
-                .subscribe(s -> addressTV.setText(String.valueOf(s)));
+                .subscribe(s -> addressTV.setText("地址：" + address.getProvinceName() + address.getCityName() + address.getCountyName() + " " + String.valueOf(s)));
     }
 
 

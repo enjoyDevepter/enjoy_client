@@ -53,7 +53,7 @@ public class AddressListItemHolder extends BaseHolder<Address> {
 
     @Override
     public void setData(Address address, int position) {
-        Observable.just(address.getAddress())
+        Observable.just(address.getReceiverName())
                 .subscribe(s -> nameTV.setText(s));
         Observable.just(address.getPhone())
                 .subscribe(s -> phoneTV.setText(String.valueOf(s)));
@@ -62,9 +62,9 @@ public class AddressListItemHolder extends BaseHolder<Address> {
                     @Override
                     public void accept(String s) throws Exception {
                         if ("1".equals(address.getIsDefaultIn())) {
-                            addressTV.setText(Html.fromHtml("<font color=\"#5FBFE3\">[默认地址]</font>地址：" + s));
+                            addressTV.setText(Html.fromHtml("<font color=\"#5FBFE3\">[默认地址]</font>地址：" + address.getProvinceName() + address.getCityName() + address.getCountyName() + " " + s));
                         } else {
-                            addressTV.setText("地址: " + s);
+                            addressTV.setText("地址: " + address.getProvinceName() + address.getCityName() + address.getCountyName() + " " + s);
                         }
                     }
                 });

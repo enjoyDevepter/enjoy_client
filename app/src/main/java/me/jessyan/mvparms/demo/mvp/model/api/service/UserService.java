@@ -54,7 +54,7 @@ public interface UserService {
     Observable<AddressListResponse> getAddressList(@Body AddressListRequest request);
 
     @POST("gateway")
-    Observable<BaseResponse> updateAddress(@Body ModifyAddressRequest request);
+    Observable<BaseResponse> modifyAddress(@Body ModifyAddressRequest request);
 
     @POST("gateway")
     Observable<BaseResponse> delAddrss(@Body DelAddressRequest request);

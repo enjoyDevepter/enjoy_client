@@ -9,7 +9,11 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.SelfPickupAddrListContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 
 
 @ActivityScope
@@ -31,4 +35,9 @@ public class SelfPickupAddrListModel extends BaseModel implements SelfPickupAddr
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<AllAddressResponse> getAllAddressList(SimpleRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getAllAddressList(request);
+    }
 }

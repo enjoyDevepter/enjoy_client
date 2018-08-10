@@ -34,7 +34,7 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.edit)
-    View editV;
+    TextView editTV;
     @BindView(R.id.title)
     TextView titleTV;
     @BindView(R.id.add_address)
@@ -66,13 +66,12 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
     @Override
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
-        editV.setOnClickListener(this);
+        editTV.setOnClickListener(this);
         addV.setOnClickListener(this);
         titleTV.setText("收货地址");
         ArmsUtils.configRecyclerView(contentRV, mLayoutManager);
         contentRV.setAdapter(addressListAdapter);
         addressEditListAdapter.setOnChildItemClickLinstener(this);
-        addressEditListAdapter.setOnItemClickListener(this);
         addressListAdapter.setOnItemClickListener(this);
 
     }
@@ -113,13 +112,23 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
                 killMyself();
                 break;
             case R.id.edit:
-                addV.setVisibility(View.VISIBLE);
-                contentRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
-                contentRV.setAdapter(addressEditListAdapter);
+                swtichToEditMode(!editTV.isSelected());
                 break;
             case R.id.add_address:
                 ArmsUtils.startActivity(AddAddressActivity.class);
                 break;
+        }
+    }
+
+    private void swtichToEditMode(boolean edit) {
+        editTV.setText(edit ? "确定" : "编辑");
+        editTV.setSelected(edit);
+        addV.setVisibility(edit ? View.VISIBLE : View.GONE);
+        if (edit) {
+            contentRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
+            contentRV.setAdapter(addressEditListAdapter);
+        } else {
+            contentRV.setAdapter(addressListAdapter);
         }
     }
 
@@ -132,10 +141,12 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
     public void onChildItemClick(View v, AddressEditListAdapter.ViewName viewname, int position) {
         switch (viewname) {
             case EDIT:
-                ArmsUtils.startActivity(AddAddressActivity.class);
+                Intent intent = new Intent(this, AddAddressActivity.class);
+                intent.putExtra("address", addressEditListAdapter.getInfos().get(position));
+                ArmsUtils.startActivity(intent);
                 break;
             case DELETE:
-                mPresenter.delAddress(addressEditListAdapter.getInfos().get(position).getId(), position);
+                mPresenter.delAddress(addressEditListAdapter.getInfos().get(position).getAddressId(), position);
                 break;
             case CHECK:
                 mPresenter.refreshList(position);
@@ -151,6 +162,11 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
-        mPresenter.refreshList(position);
+        switch (viewType) {
+            case R.layout.addrsss_list_item:
+                // 回传地址信息
+                killMyself();
+                break;
+        }
     }
 }

@@ -22,8 +22,10 @@ import me.jessyan.mvparms.demo.mvp.contract.AddressListContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddressListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DelAddressRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAddressRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.AddAddressActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressEditListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -51,7 +53,7 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
         super(model, rootView);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     void onCreate() {
         getAddressList();
     }
@@ -63,11 +65,6 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
-    }
-
-
-    public void modifyAddress() {
-
     }
 
     public void delAddress(String addressId, int delIndex) {
@@ -108,6 +105,10 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                         if (response.isSuccess()) {
                             addressList.clear();
                             addressList.addAll(response.getMemberAddressList());
+                            if (addressList.size() <= 0) {
+                                ArmsUtils.startActivity(AddAddressActivity.class);
+                                return;
+                            }
                             addressListAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
@@ -116,14 +117,41 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                 });
     }
 
+    private void modifyAddress(Address address) {
+        ModifyAddressRequest request = new ModifyAddressRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setCmd(205);
+        request.setToken(String.valueOf(cache.get("token")));
+        request.setMemberAddress(address);
+        mModel.modifyAddress(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            addressEditListAdapter.notifyDataSetChanged();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+
     public void refreshList(int position) {
+        if ("1".equals(addressList.get(position).getIsDefaultIn())) {
+            return;
+        }
         for (int i = 0; i < addressList.size(); i++) {
+            Address address = addressList.get(i);
             if (i == position) {
-                addressList.get(i).setIsDefaultIn("1");
-            } else {
-                addressList.get(i).setIsDefaultIn("0");
+                address.setIsDefaultIn("1");
+                modifyAddress(address);
+            } else if ("1".equals(address.getIsDefaultIn())) {
+                address.setIsDefaultIn("0");
+                modifyAddress(address);
             }
         }
-        addressEditListAdapter.notifyDataSetChanged();
     }
 }

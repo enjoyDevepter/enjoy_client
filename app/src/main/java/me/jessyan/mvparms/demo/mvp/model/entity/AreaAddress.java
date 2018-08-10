@@ -1,11 +1,14 @@
 package me.jessyan.mvparms.demo.mvp.model.entity;
 
+
+import com.bigkoo.pickerview.model.IPickerViewData;
+
 import java.util.List;
 
 /**
  * Created by guomin on 2018/7/29.
  */
-public class AreaAddress {
+public class AreaAddress implements IPickerViewData {
 
     private String areaId;
     private String name;
@@ -62,5 +65,10 @@ public class AreaAddress {
                 ", type='" + type + '\'' +
                 ", areaList=" + areaList +
                 '}';
+    }
+
+    @Override
+    public String getPickerViewText() {
+        return getName();
     }
 }
