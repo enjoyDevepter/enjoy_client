@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import javax.inject.Inject;
@@ -140,6 +141,12 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
                 mPresenter.refreshList(position);
                 break;
         }
+    }
+
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
     }
 
     @Override

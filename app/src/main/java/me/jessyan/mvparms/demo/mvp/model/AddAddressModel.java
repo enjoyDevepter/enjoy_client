@@ -13,6 +13,8 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.AddAddressContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAddressRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 
 
@@ -41,4 +43,12 @@ public class AddAddressModel extends BaseModel implements AddAddressContract.Mod
         return mRepositoryManager.obtainRetrofitService(UserService.class)
                 .updateAddress(request);
     }
+
+    @Override
+    public Observable<AllAddressResponse> getAllAddressList(SimpleRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getAllAddressList(request);
+    }
+
+
 }

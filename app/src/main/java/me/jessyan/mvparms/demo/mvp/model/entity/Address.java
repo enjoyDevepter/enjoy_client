@@ -5,31 +5,18 @@ package me.jessyan.mvparms.demo.mvp.model.entity;
  */
 public class Address {
 
-    private String id;
-    private String county;
     private String address;
     private String city;
-    private String isDefaultIn = "0";
+    private String cityName;
+    private String county;
+    private String countyName;
+    private String province;
+    private String provinceName;
+    private String id;
+    private String isDefaultIn;
     private String phone;
     private String receiverName;
     private String zipcode;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
 
     public String getAddress() {
         return address;
@@ -45,6 +32,54 @@ public class Address {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public String getCountyName() {
+        return countyName;
+    }
+
+    public void setCountyName(String countyName) {
+        this.countyName = countyName;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getIsDefaultIn() {
@@ -82,10 +117,14 @@ public class Address {
     @Override
     public String toString() {
         return "Address{" +
-                "id='" + id + '\'' +
-                ", county='" + county + '\'' +
-                ", address='" + address + '\'' +
+                "address='" + address + '\'' +
                 ", city='" + city + '\'' +
+                ", cityName='" + cityName + '\'' +
+                ", county='" + county + '\'' +
+                ", countyName='" + countyName + '\'' +
+                ", province='" + province + '\'' +
+                ", provinceName='" + provinceName + '\'' +
+                ", id='" + id + '\'' +
                 ", isDefaultIn='" + isDefaultIn + '\'' +
                 ", phone='" + phone + '\'' +
                 ", receiverName='" + receiverName + '\'' +

@@ -60,6 +60,7 @@ dependencies {
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
     implementation rootProject.ext.dependencies["lifecyclemodel"]
     implementation rootProject.ext.dependencies["bottomBarLayout"]
+    implementation rootProject.ext.dependencies["pickerView"]
 
     //view
     annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {

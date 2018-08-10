@@ -53,17 +53,7 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-//        getAddressList();
-        for (int i = 0; i < 3; i++) {
-            Address address = new Address();
-            address.setAddress("ajfdksjfsljfsljfslfjs");
-            address.setPhone("123112313");
-            address.setReceiverName("测试");
-            if (i == 0) {
-                address.setIsDefaultIn("1");
-            }
-            addressList.add(address);
-        }
+        getAddressList();
     }
 
     @Override
@@ -73,6 +63,11 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+
+    public void modifyAddress() {
+
     }
 
     public void delAddress(String addressId, int delIndex) {
@@ -111,7 +106,8 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                     @Override
                     public void accept(AddressListResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            addressList = response.getMemberAddressList();
+                            addressList.clear();
+                            addressList.addAll(response.getMemberAddressList());
                             addressListAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());

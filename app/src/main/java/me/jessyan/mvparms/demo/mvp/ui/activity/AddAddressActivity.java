@@ -1,5 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -102,8 +103,14 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
             case R.id.county_chocie:
                 break;
             case R.id.confirm:
+
                 mPresenter.addAddress();
                 break;
         }
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 }

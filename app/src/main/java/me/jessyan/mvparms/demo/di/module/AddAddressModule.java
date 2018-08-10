@@ -2,10 +2,14 @@ package me.jessyan.mvparms.demo.di.module;
 
 import com.jess.arms.di.scope.ActivityScope;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.AddAddressContract;
 import me.jessyan.mvparms.demo.mvp.model.AddAddressModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
 
 
 @Module
@@ -31,5 +35,12 @@ public class AddAddressModule {
     @Provides
     AddAddressContract.Model provideContactsModel(AddAddressModel model) {
         return model;
+    }
+
+
+    @ActivityScope
+    @Provides
+    List<AreaAddress> provideAddressList() {
+        return new ArrayList<>();
     }
 }

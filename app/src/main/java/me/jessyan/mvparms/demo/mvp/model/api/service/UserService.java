@@ -22,7 +22,9 @@ import me.jessyan.mvparms.demo.mvp.model.entity.User;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddressListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DelAddressRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAddressRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import retrofit2.Retrofit;
 import retrofit2.http.Body;
@@ -56,4 +58,9 @@ public interface UserService {
 
     @POST("gateway")
     Observable<BaseResponse> delAddrss(@Body DelAddressRequest request);
+
+    @POST("gateway")
+    Observable<AllAddressResponse> getAllAddressList(@Body SimpleRequest request);
+
+
 }
