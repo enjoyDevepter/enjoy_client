@@ -60,7 +60,6 @@
         <activity android:name=".mvp.ui.activity.SelfPickupAddrListActivity" />
         <activity android:name=".mvp.ui.activity.ChoiceStoreActivity" />
         <activity android:name=".mvp.ui.activity.PayActivity" />
-        <activity android:name=".mvp.ui.activity.CartActivity" />
         <activity android:name=".mvp.ui.activity.MealOrderConfirmActivity"></activity>
         <activity android:name=".mvp.ui.activity.CartActivity" />
         <activity android:name=".mvp.ui.activity.HospitalInfoActivity">
