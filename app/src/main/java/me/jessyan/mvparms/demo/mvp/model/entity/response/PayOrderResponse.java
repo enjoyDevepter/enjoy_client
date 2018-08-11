@@ -1,5 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.response;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -75,7 +78,18 @@ public class PayOrderResponse extends BaseResponse {
                 '}';
     }
 
-    public static class Goods {
+    public static class Goods implements Parcelable {
+        public static final Creator<Goods> CREATOR = new Creator<Goods>() {
+            @Override
+            public Goods createFromParcel(Parcel in) {
+                return new Goods(in);
+            }
+
+            @Override
+            public Goods[] newArray(int size) {
+                return new Goods[size];
+            }
+        };
         private String goodsId;
         private String merchId;
         private String code;
@@ -87,6 +101,22 @@ public class PayOrderResponse extends BaseResponse {
         private String title;
         private int nums;
         private GoodsSpce goodsSpecValue;
+
+        public Goods() {
+        }
+
+        protected Goods(Parcel in) {
+            goodsId = in.readString();
+            merchId = in.readString();
+            code = in.readString();
+            image = in.readString();
+            marketPrice = in.readDouble();
+            costPrice = in.readDouble();
+            name = in.readString();
+            salePrice = in.readDouble();
+            title = in.readString();
+            nums = in.readInt();
+        }
 
         public String getGoodsId() {
             return goodsId;
@@ -192,6 +222,25 @@ public class PayOrderResponse extends BaseResponse {
                     ", goodsSpecValue=" + goodsSpecValue +
                     '}';
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(goodsId);
+            dest.writeString(merchId);
+            dest.writeString(code);
+            dest.writeString(image);
+            dest.writeDouble(marketPrice);
+            dest.writeDouble(costPrice);
+            dest.writeString(name);
+            dest.writeDouble(salePrice);
+            dest.writeString(title);
+            dest.writeInt(nums);
+        }
     }
 
     public static class GoodsSpce {
@@ -223,12 +272,35 @@ public class PayOrderResponse extends BaseResponse {
         }
     }
 
-    public static class PayEntry {
+    public static class PayEntry implements Parcelable {
+        public static final Creator<PayEntry> CREATOR = new Creator<PayEntry>() {
+            @Override
+            public PayEntry createFromParcel(Parcel in) {
+                return new PayEntry(in);
+            }
+
+            @Override
+            public PayEntry[] newArray(int size) {
+                return new PayEntry[size];
+            }
+        };
         private String payId;
         private String type;
         private String name;
         private String image;
         private String extendParams;
+
+        public PayEntry() {
+
+        }
+
+        protected PayEntry(Parcel in) {
+            payId = in.readString();
+            type = in.readString();
+            name = in.readString();
+            image = in.readString();
+            extendParams = in.readString();
+        }
 
         public String getPayId() {
             return payId;
@@ -279,6 +351,20 @@ public class PayOrderResponse extends BaseResponse {
                     ", image='" + image + '\'' +
                     ", extendParams='" + extendParams + '\'' +
                     '}';
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(payId);
+            dest.writeString(type);
+            dest.writeString(name);
+            dest.writeString(image);
+            dest.writeString(extendParams);
         }
     }
 

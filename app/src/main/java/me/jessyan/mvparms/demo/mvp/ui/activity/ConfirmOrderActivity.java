@@ -26,7 +26,9 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerConfirmOrderComponent;
 import me.jessyan.mvparms.demo.di.module.ConfirmOrderModule;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.ConfirmOrderPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderConfirmGoodsListAdapter;
@@ -49,6 +51,8 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     @BindView(R.id.coupon)
     TextView couponTV;
     @BindView(R.id.money)
+    EditText moneyET;
+    @BindView(R.id.selt_money)
     TextView moneyTV;
     @BindView(R.id.deductionMoney)
     TextView deductionMoneyTV;
@@ -56,8 +60,16 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     View noAddressV;
     @BindView(R.id.addres_info_layout)
     View addressV;
+    @BindView(R.id.address)
+    TextView addressTV;
+    @BindView(R.id.name)
+    TextView nameTV;
+    @BindView(R.id.phone)
+    TextView phoneTV;
     @BindView(R.id.self_layout)
     View selfInfoV;
+    @BindView(R.id.self_address)
+    TextView selfAddressTV;
     @BindView(R.id.coupon_layout)
     View couponLayoutV;
     @BindView(R.id.coupon_text)
@@ -70,8 +82,6 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     TextView selfV;
     @BindView(R.id.confirm)
     View confirmV;
-    @BindView(R.id.selt_money)
-    EditText moneyET;
     @BindView(R.id.remark)
     EditText remarkET;
     @BindView(R.id.order_goods)
@@ -101,6 +111,34 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     public int initView(Bundle savedInstanceState) {
         return R.layout.activity_confirm_order; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+
+        if ("1".equals(provideCache().get("deliveryMethod"))) {
+            if (cache.get("memberAddressInfo") != null) {
+                Address address = (Address) cache.get("memberAddressInfo");
+                addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
+                nameTV.setText(address.getReceiverName());
+                phoneTV.setText(address.getPhone());
+                noAddressV.setVisibility(View.GONE);
+                addressV.setVisibility(View.VISIBLE);
+            } else {
+                noAddressV.setVisibility(View.VISIBLE);
+                addressV.setVisibility(View.GONE);
+            }
+        } else {
+            if (cache.get("storeInfo") != null) {
+                Store store = (Store) cache.get("storeInfo");
+                selfAddressTV.setText(store.getName());
+            }
+        }
+
+    }
+
 
     @Override
     public void initData(Bundle savedInstanceState) {
@@ -178,9 +216,11 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
                 ArmsUtils.startActivity(intent);
                 break;
             case R.id.confirm:
-                provideCache().put("money", moneyET.getText().toString());
+                String m = moneyET.getText().toString();
+                if (!ArmsUtils.isEmpty(m)) {
+                    provideCache().put("money", Long.valueOf(m));
+                }
                 provideCache().put("remark", remarkET.getText().toString());
-
                 mPresenter.placeOrder();
                 break;
         }
@@ -192,8 +232,14 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         dispatchV.setSelected(self);
         selfV.setTextColor(!self ? seletcedColor : unseletcedColor);
         dispatchV.setTextColor(self ? seletcedColor : unseletcedColor);
-        selfInfoV.setVisibility(!self ? View.VISIBLE : View.INVISIBLE);
-        noAddressV.setVisibility(self ? View.VISIBLE : View.INVISIBLE);
+        selfInfoV.setVisibility(!self ? View.VISIBLE : View.GONE);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        if (cache.get("memberAddressInfo") != null) {
+            addressV.setVisibility(self ? View.VISIBLE : View.GONE);
+        } else {
+            noAddressV.setVisibility(self ? View.VISIBLE : View.GONE);
+        }
+
     }
 
     @Override
@@ -202,6 +248,52 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         if (response.getCouponList() == null || (response.getCouponList() != null && response.getCouponList().size() <= 0)) {
             couponLayoutV.setVisibility(View.GONE);
         }
+
+        // 配送方式
+        OrderConfirmInfoResponse.Delivery delivery = response.getDeliveryMethod();
+        boolean supportDelivery = "1".equals(delivery.getIsDeliveryStaff());
+        boolean supportStore = "1".equals(delivery.getIsStoreOneSelf());
+        if (supportDelivery && supportStore) { // 都支持
+            provideCache().put("deliveryMethod", "1");
+            dispatchV.setVisibility(View.VISIBLE);
+            selfV.setVisibility(View.VISIBLE);
+            noAddressV.setVisibility(View.VISIBLE);
+            addressV.setVisibility(View.GONE);
+            selfInfoV.setVisibility(View.GONE);
+        } else if (supportDelivery && !supportStore) { //只支持快递
+            provideCache().put("deliveryMethod", "1");
+            dispatchV.setVisibility(View.VISIBLE);
+            selfV.setVisibility(View.GONE);
+            noAddressV.setVisibility(View.VISIBLE);
+            addressV.setVisibility(View.GONE);
+            selfInfoV.setVisibility(View.GONE);
+        } else if (!supportDelivery && supportStore) { //只支持自取
+            provideCache().put("deliveryMethod", "0");
+            selfV.setSelected(true);
+            selfV.setVisibility(View.VISIBLE);
+            selfInfoV.setVisibility(View.VISIBLE);
+            dispatchV.setVisibility(View.GONE);
+            noAddressV.setVisibility(View.GONE);
+            addressV.setVisibility(View.GONE);
+        }
+
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        if (cache.get("memberAddressInfo") != null) {
+            Address address = (Address) cache.get("memberAddressInfo");
+            addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
+            nameTV.setText(address.getReceiverName());
+            phoneTV.setText(address.getPhone());
+            noAddressV.setVisibility(View.GONE);
+            addressV.setVisibility(View.VISIBLE);
+        } else {
+            noAddressV.setVisibility(View.VISIBLE);
+            addressV.setVisibility(View.GONE);
+        }
+        if (cache.get("storeInfo") != null) {
+            Store store = (Store) cache.get("storeInfo");
+            selfAddressTV.setText(store.getName());
+        }
+
         balanceTV.setText(String.valueOf(response.getBalance()));
         totalPrice.setText(ArmsUtils.formatLong(response.getTotalPrice()));
         payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));

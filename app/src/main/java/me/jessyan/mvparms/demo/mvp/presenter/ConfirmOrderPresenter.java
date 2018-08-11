@@ -3,6 +3,8 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
@@ -12,6 +14,7 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,8 +23,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
@@ -104,8 +109,21 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
     public void placeOrder() {
         PayOrderRequest request = new PayOrderRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setMemberAddressId((String) mRootView.getCache().get("memberAddressId"));
-        request.setStoreId((String) mRootView.getCache().get("storeId"));
+        if ("1".equals(mRootView.getCache().get("deliveryMethod"))) {
+            if (null == cache.get("memberAddressInfo")) {
+                mRootView.showMessage("请选择地址！");
+                return;
+            }
+            Address address = (Address) cache.get("memberAddressInfo");
+            request.setMemberAddressId(address.getAddressId());
+        } else {
+            if (null == cache.get("storeInfo")) {
+                mRootView.showMessage("请选择自取店铺！");
+                return;
+            }
+            Store store = (Store) cache.get("storeInfo");
+            request.setStoreId(store.getId());
+        }
         request.setDeliveryMethodId((String) mRootView.getCache().get("deliveryMethodId"));
         request.setCouponId((String) mRootView.getCache().get("couponId"));
         request.setCoupon(orderConfirmInfoResponse.getCoupon());
@@ -130,7 +148,13 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
                             if ("0".equals(response.getPayStatus())) {
-                                ArmsUtils.startActivity(PayActivity.class);
+                                Intent intent = new Intent(mRootView.getActivity(), PayActivity.class);
+                                intent.putExtra("orderId", response.getOrderId());
+                                intent.putExtra("payMoney", response.getPayMoney());
+                                intent.putExtra("orderTime", response.getOrderTime());
+                                intent.putParcelableArrayListExtra("goodsList", (ArrayList<? extends Parcelable>) response.getGoodsList());
+                                intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
+                                ArmsUtils.startActivity(intent);
                             }
                         } else {
                             mRootView.showMessage(response.getRetDesc());

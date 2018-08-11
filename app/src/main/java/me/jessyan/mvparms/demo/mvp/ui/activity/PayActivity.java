@@ -1,14 +1,18 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
@@ -28,6 +32,10 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     TextView titleTV;
     @BindView(R.id.pay_for_zfb)
     View zfbPay;
+    @BindView(R.id.order_id)
+    TextView orderIdTV;
+    @BindView(R.id.price)
+    TextView priceTV;
     @BindView(R.id.zfb)
     View zfbV;
     @BindView(R.id.pay_for_wx)
@@ -36,6 +44,13 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     View wxV;
     @BindView(R.id.confirm)
     View confirmV;
+    @BindView(R.id.order_goods)
+    RecyclerView mRecyclerView;
+    @Inject
+    RecyclerView.Adapter mAdapter;
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -60,6 +75,11 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         zfbPay.setOnClickListener(this);
         wxPay.setOnClickListener(this);
         zfbV.setSelected(true);
+        ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
+        orderIdTV.setText(getIntent().getStringExtra("orderId"));
+        priceTV.setText(ArmsUtils.formatLong(getIntent().getLongExtra("payMoney", 0)));
     }
 
 
@@ -119,5 +139,10 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     private void changeToWX(boolean wxPay) {
         wxV.setSelected(wxPay);
         zfbV.setSelected(!wxPay);
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 }

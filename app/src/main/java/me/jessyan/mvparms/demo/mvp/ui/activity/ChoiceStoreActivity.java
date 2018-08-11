@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.util.List;
@@ -44,7 +45,6 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
     @Inject
     RecyclerView.Adapter mAdapter;
 
-
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerChoiceStoreComponent //如找不到该类,请编译一下项目
@@ -64,6 +64,7 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
         titleV.setText("选择店铺");
+        confirmV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(storesRV, mLayoutManager);
         storesRV.setAdapter(mAdapter);
         storesRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
@@ -102,6 +103,12 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
                 killMyself();
                 break;
             case R.id.confirm:
+                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+                if (cache.get("storeInfo") == null) {
+                    showMessage("请选择店铺信息！");
+                    return;
+                }
+                killMyself();
                 break;
         }
     }
@@ -109,7 +116,13 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
         List<Store> storeList = ((DefaultAdapter) mAdapter).getInfos();
-        storeList.get(position).setCheck(true);
+        Store store = storeList.get(position);
+        if (store.isCheck()) {
+            return;
+        }
+        store.setCheck(true);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        cache.put("storeInfo", store);
         mAdapter.notifyDataSetChanged();
     }
 

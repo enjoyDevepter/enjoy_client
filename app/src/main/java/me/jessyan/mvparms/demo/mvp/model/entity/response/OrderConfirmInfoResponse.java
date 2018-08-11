@@ -141,6 +141,7 @@ public class OrderConfirmInfoResponse extends BaseResponse {
         private String deliveryStaffId;
         private String deliveryStaffName;
         private String isDeliveryStaff;
+        private String isStoreOneSelf;
         private String storeOneSelfId;
         private String storeOneSelfName;
 
@@ -168,6 +169,14 @@ public class OrderConfirmInfoResponse extends BaseResponse {
             this.isDeliveryStaff = isDeliveryStaff;
         }
 
+        public String getIsStoreOneSelf() {
+            return isStoreOneSelf;
+        }
+
+        public void setIsStoreOneSelf(String isStoreOneSelf) {
+            this.isStoreOneSelf = isStoreOneSelf;
+        }
+
         public String getStoreOneSelfId() {
             return storeOneSelfId;
         }
@@ -190,6 +199,7 @@ public class OrderConfirmInfoResponse extends BaseResponse {
                     "deliveryStaffId='" + deliveryStaffId + '\'' +
                     ", deliveryStaffName='" + deliveryStaffName + '\'' +
                     ", isDeliveryStaff='" + isDeliveryStaff + '\'' +
+                    ", isStoreOneSelf='" + isStoreOneSelf + '\'' +
                     ", storeOneSelfId='" + storeOneSelfId + '\'' +
                     ", storeOneSelfName='" + storeOneSelfName + '\'' +
                     '}';

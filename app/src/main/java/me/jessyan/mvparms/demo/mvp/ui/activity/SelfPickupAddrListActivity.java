@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
@@ -104,6 +105,15 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
         finish();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+//        if (cache.get("storeInfo") != null) {
+//            Store store = (Store) cache.get("storeInfo");
+//            storeV.setText(store.getName());
+//        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -122,6 +132,12 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                 ArmsUtils.startActivity(intent);
                 break;
             case R.id.confirm:
+                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+                if (cache.get("storeInfo") == null) {
+                    showMessage("请选择店铺！");
+                    return;
+                }
+                killMyself();
                 break;
         }
     }

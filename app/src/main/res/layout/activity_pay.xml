@@ -27,7 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
-            android:text="SP1234212310000000"
             android:textColor="#FF666666"
             android:textSize="12sp" />
 
@@ -76,7 +75,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_toRightOf="@id/price_tag"
-                android:text="228.00"
                 android:textColor="#FF666666"
                 android:textSize="15sp" />
         </LinearLayout>
