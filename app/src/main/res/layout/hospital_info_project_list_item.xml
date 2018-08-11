@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_item_bg"
+    android:paddingBottom="10dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="10dp">
+
+
+    <ImageView
+        android:id="@+id/image"
+        android:background="#ff0000"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY" />
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/image"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/image"
+        android:lines="2"
+        android:text="【超级水宝宝】拯救沙漠肌 还原水润 嫩滑 让肌肤喝饱水"
+        android:textColor="#FF000000"
+        android:textSize="13sp" />
+
+    <TextView
+        android:textSize="12sp"
+        android:textColor="#666666"
+        android:id="@+id/doctor_info"
+        android:layout_below="@id/name"
+        android:maxLines="1"
+        android:text="刘聪 北京泰和医疗美容医院"
+        android:layout_alignLeft="@+id/name"
+        android:layout_marginTop="9dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/price_layout"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/doctor_info"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:layout_alignLeft="@+id/doctor_info"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="预付款："
+            android:textColor="#666666"
+            android:textSize="13sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/price_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="3dp"
+            android:text="￥"
+            android:textColor="#FFFF0000"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_toRightOf="@id/price_tag"
+            android:text="228.00"
+            android:textColor="#FFFF0000"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="9dp"
+        android:layout_alignBottom="@id/image"
+        android:id="@+id/all_price_layout"
+        android:orientation="horizontal"
+        android:layout_alignLeft="@id/price_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:text="总金额："
+            android:textColor="#666666"
+            android:textSize="13sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="3dp"
+            android:text="￥"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_toRightOf="@id/price_tag"
+            android:text="3280.00"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/image"
+        android:layout_marginBottom="7dp"
+        android:gravity="right|bottom"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已售:"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+</RelativeLayout>
+

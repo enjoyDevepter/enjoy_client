@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:background="@drawable/title_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/back"
+            android:layout_width="40dp"
+            android:layout_height="47dp"
+            android:layout_marginLeft="4dp"
+            android:gravity="center">
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="17dp"
+                android:background="@mipmap/back_black" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:textColor="#FF333333"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:background="#ff0000"
+        android:id="@+id/hot_img"
+        android:layout_width="match_parent"
+        android:layout_height="216dp" />
+
+    <View
+        android:background="#F4F4F4"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"/>
+    
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab"
+        app:tabTextColor="#333333"
+        app:tabMode="fixed"
+        app:tabIndicatorColor="#5FBFE3"
+        app:tabIndicatorHeight="2dp"
+        app:tabGravity="fill"
+        app:tabPaddingEnd="15dp"
+        app:tabPaddingStart="15dp"
+        app:tabSelectedTextColor="#5FBFE3"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"></android.support.design.widget.TabLayout>
+
+
+    <View
+        android:background="#F4F4F4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
