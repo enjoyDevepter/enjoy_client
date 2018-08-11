@@ -24,9 +24,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
@@ -149,6 +149,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                         if (response.isSuccess()) {
                             if ("0".equals(response.getPayStatus())) {
                                 Intent intent = new Intent(mRootView.getActivity(), PayActivity.class);
+                                intent.putExtra("comefrom", "mall");
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());

@@ -12,8 +12,8 @@ import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanContract;
 import me.jessyan.mvparms.demo.mvp.model.TaoCanModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
+import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.TaoCanListAdapter;
 
 
 @Module
@@ -49,13 +49,13 @@ public class TaoCanModule {
 
     @ActivityScope
     @Provides
-    List<Goods> provideGoodsList() {
+    List<MealGoods> provideGoodsList() {
         return new ArrayList<>();
     }
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideGoodsListAdapter(List<Goods> goods) {
-        return new GoodsListAdapter(goods);
+    TaoCanListAdapter provideGoodsListAdapter(List<MealGoods> goods) {
+        return new TaoCanListAdapter(goods);
     }
 }

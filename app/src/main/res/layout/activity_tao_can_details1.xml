@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="268dp">
+
+            <com.youth.banner.Banner
+                android:id="@+id/goods_iamges"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/image_count"
+                android:layout_width="43dp"
+                android:layout_height="17dp"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/goods_detail_images_bg"
+                android:gravity="center"
+                android:text="1/2"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:id="@+id/back"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/goods_detail_title_bg"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="13dp"
+                    android:background="@mipmap/back" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/share"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="right|top"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/goods_detail_title_bg"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:background="@mipmap/share" />
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFFFF"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="bottom"
+                    android:text="￥"
+                    android:textColor="#FFFF0000"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="228.00"
+                    android:textColor="#FFFF0000"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="bottom"
+                    android:text="￥"
+                    android:textColor="#FFABABAB"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/marketPrice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="228.00"
+                    android:textColor="#FFABABAB"
+                    android:textSize="12sp" />
+
+                <View
+                    android:id="@+id/unlike"
+                    android:layout_width="14dp"
+                    android:layout_height="13dp"
+                    android:background="@mipmap/unlike" />
+
+                <View
+                    android:id="@+id/like"
+                    android:layout_width="14dp"
+                    android:layout_height="13dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@mipmap/like" />
+
+                <TextView
+                    android:id="@+id/sale_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="已售："
+                    android:textColor="#FF666666"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/sale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:text="4"
+                    android:textColor="#FF666666"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:lines="2"
+                android:text="[超级水宝宝]拯救沙漠肌 还原水润嫩滑 让肌肤喝饱水"
+                android:textColor="#FF000000"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="#FFFFFFFF"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="#FF50C8F5"
+            app:tabIndicatorHeight="2dp"
+            app:tabMode="scrollable"
+            app:tabPaddingEnd="0dp"
+            app:tabPaddingStart="0dp"
+            app:tabSelectedTextColor="#FF5FBFE3"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"
+            app:tabTextColor="#FF666666" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:paddingLeft="15dp" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/title_bg"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+
+            <LinearLayout
+                android:id="@+id/title_back"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="4dp"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="17dp"
+                    android:background="@mipmap/back_black" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="套餐详情"
+                android:textColor="#FF333333"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/main_tab_bg"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3" />
+
+            <TextView
+                android:id="@+id/buy"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="#FFFF5656"
+                android:gravity="center"
+                android:text="立即购买" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</FrameLayout>

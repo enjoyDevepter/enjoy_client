@@ -25,7 +25,7 @@ import com.jess.arms.base.DefaultAdapter;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 
 /**
  * ================================================

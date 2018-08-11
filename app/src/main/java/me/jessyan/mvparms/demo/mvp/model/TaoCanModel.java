@@ -9,7 +9,11 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MealListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MealListResponse;
 
 
 @ActivityScope
@@ -31,4 +35,9 @@ public class TaoCanModel extends BaseModel implements TaoCanContract.Model {
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<MealListResponse> getTaoCanList(MealListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .getTaoCanList(request);
+    }
 }

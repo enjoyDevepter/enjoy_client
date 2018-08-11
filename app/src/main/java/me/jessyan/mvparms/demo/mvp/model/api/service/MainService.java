@@ -9,7 +9,11 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HotRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MealDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MealListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MealOrderConfrimRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.PayMealOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
@@ -21,7 +25,11 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HotResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MealListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MealOrderConfirmResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.PayMealOrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
 import retrofit2.http.Body;
@@ -35,7 +43,6 @@ public interface MainService {
 
     @POST("gateway")
     Observable<CityResponse> getCities(@Body SimpleRequest request);
-
 
     @POST("gateway")
     Observable<HotResponse> getHot(@Body HotRequest request);
@@ -74,5 +81,15 @@ public interface MainService {
     @POST("gateway")
     Observable<PayOrderResponse> placeOrder(@Body PayOrderRequest request);
 
+    @POST("gateway")
+    Observable<MealListResponse> getTaoCanList(@Body MealListRequest request);
 
+    @POST("gateway")
+    Observable<MealDetailsResponse> getMealDetail(@Body MealDetailsRequest request);
+
+    @POST("gateway")
+    Observable<MealOrderConfirmResponse> getMealOrderConfirmInfo(@Body MealOrderConfrimRequest request);
+
+    @POST("gateway")
+    Observable<PayMealOrderResponse> placeMealOrder(@Body PayMealOrderRequest request);
 }

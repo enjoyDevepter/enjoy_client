@@ -23,7 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.ui.holder.StoresListItemHolder;
 
 /**

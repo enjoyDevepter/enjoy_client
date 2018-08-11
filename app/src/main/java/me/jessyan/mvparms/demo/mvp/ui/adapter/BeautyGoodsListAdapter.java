@@ -23,8 +23,8 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
-import me.jessyan.mvparms.demo.mvp.ui.holder.MealGoodsListItemHolder;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.ui.holder.GoodsListItemHolder;
 
 /**
  * ================================================
@@ -35,40 +35,18 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.MealGoodsListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class TaoCanListAdapter extends DefaultAdapter<MealGoods> {
-
-    private OnChildItemClickLinstener onChildItemClickLinstener;
-
-    public TaoCanListAdapter(List<MealGoods> goods) {
+public class BeautyGoodsListAdapter extends DefaultAdapter<Goods> {
+    public BeautyGoodsListAdapter(List<Goods> goods) {
         super(goods);
     }
 
     @Override
-    public BaseHolder<MealGoods> getHolder(View v, int viewType) {
-        return new MealGoodsListItemHolder(v, new OnChildItemClickLinstener() {
-            @Override
-            public void onChildItemClick(View v, TaoCanListAdapter.ViewName viewname, int position) {
-                if (null != onChildItemClickLinstener) {
-                    onChildItemClickLinstener.onChildItemClick(v, viewname, position);
-                }
-            }
-        });
+    public BaseHolder<Goods> getHolder(View v, int viewType) {
+        return new GoodsListItemHolder(v, getInfos().size());
     }
 
     @Override
     public int getLayoutId(int viewType) {
-        return R.layout.taocan_list_item;
-    }
-
-    public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
-        this.onChildItemClickLinstener = onChildItemClickLinstener;
-    }
-
-    public enum ViewName {
-        BUY, ITEM,
-    }
-
-    public interface OnChildItemClickLinstener {
-        void onChildItemClick(View v, TaoCanListAdapter.ViewName viewname, int position);
+        return R.layout.goods_list_item;
     }
 }

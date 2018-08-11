@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="138dp"
+    android:background="@drawable/list_item_bg"
+    android:paddingBottom="10dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="10dp">
+
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY" />
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/image"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/image"
+        android:lines="2"
+        android:text="湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
+        android:textColor="#FF000000"
+        android:textSize="13sp" />
+
+    <LinearLayout
+        android:id="@+id/hosp_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/name"
+        android:layout_below="@id/name"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/image"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/doctor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:text="刘聪"
+            android:textColor="#FF666666"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/hospital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="北京太和医疗美容医院"
+            android:textColor="#FF666666"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/pre_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/hosp_layout"
+        android:layout_below="@id/hosp_layout"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/image"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:text="预付款"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/price_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="2dp"
+            android:text="￥"
+            android:textColor="#FFFF0000"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="228.00"
+            android:textColor="#FFFF0000"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/all_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/pre_layout"
+        android:layout_below="@id/pre_layout"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/image"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:text="总金额"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/all_price_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="2dp"
+            android:text="￥"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="228.00"
+            android:textColor="#FF666666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="已售:"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="4"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!--<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已售:"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="4"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+    </LinearLayout>-->
+
+</RelativeLayout>
+

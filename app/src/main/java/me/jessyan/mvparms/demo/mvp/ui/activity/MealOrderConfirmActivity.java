@@ -1,0 +1,195 @@
+package me.jessyan.mvparms.demo.mvp.ui.activity;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.jess.arms.base.BaseActivity;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
+import com.jess.arms.integration.cache.Cache;
+import com.jess.arms.utils.ArmsUtils;
+
+import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.di.component.DaggerMealOrderConfirmComponent;
+import me.jessyan.mvparms.demo.di.module.MealOrderConfirmModule;
+import me.jessyan.mvparms.demo.mvp.contract.MealOrderConfirmContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Address;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MealOrderConfirmResponse;
+import me.jessyan.mvparms.demo.mvp.presenter.MealOrderConfirmPresenter;
+
+import static com.jess.arms.utils.Preconditions.checkNotNull;
+
+
+public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPresenter> implements MealOrderConfirmContract.View, View.OnClickListener {
+
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
+    @BindView(R.id.confirm)
+    View confirmV;
+    @BindView(R.id.balance)
+    TextView balanceTV;
+    @BindView(R.id.price)
+    TextView priceTV;
+    @BindView(R.id.payMoney)
+    TextView payMoneyTV;
+    @BindView(R.id.remark)
+    EditText remarkET;
+    @BindView(R.id.money_et)
+    EditText moneyET;
+    @BindView(R.id.money)
+    TextView moneyTV;
+    @BindView(R.id.no_address)
+    View noAddressV;
+    @BindView(R.id.addres_info_layout)
+    View addressInfoV;
+    @BindView(R.id.name)
+    TextView nameTV;
+    @BindView(R.id.phone)
+    TextView phoneTV;
+    @BindView(R.id.address)
+    TextView addressTV;
+    @BindView(R.id.meal_name)
+    TextView mealNameTV;
+    @BindView(R.id.salesPrice)
+    TextView salesPriceTV;
+    @BindView(R.id.totalPrice)
+    TextView totalPriceTV;
+    @BindView(R.id.image)
+    ImageView imageIV;
+
+
+    private MealOrderConfirmResponse response;
+
+    @Override
+    public void setupActivityComponent(AppComponent appComponent) {
+        DaggerMealOrderConfirmComponent //如找不到该类,请编译一下项目
+                .builder()
+                .appComponent(appComponent)
+                .mealOrderConfirmModule(new MealOrderConfirmModule(this))
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    public int initView(Bundle savedInstanceState) {
+        return R.layout.activity_meal_order_confirm; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+    }
+
+    @Override
+    public void initData(Bundle savedInstanceState) {
+        titleTV.setText("确认订单");
+        backV.setOnClickListener(this);
+        confirmV.setOnClickListener(this);
+        noAddressV.setOnClickListener(this);
+        addressInfoV.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+
+        if (cache.get("memberAddressInfo") != null) {
+            Address address = (Address) cache.get("memberAddressInfo");
+            addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
+            nameTV.setText(address.getReceiverName());
+            phoneTV.setText(address.getPhone());
+            noAddressV.setVisibility(View.GONE);
+            addressInfoV.setVisibility(View.VISIBLE);
+        } else {
+            noAddressV.setVisibility(View.VISIBLE);
+            addressInfoV.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showMessage(@NonNull String message) {
+        checkNotNull(message);
+        ArmsUtils.snackbarText(message);
+    }
+
+    @Override
+    public void launchActivity(@NonNull Intent intent) {
+        checkNotNull(intent);
+        ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    public void killMyself() {
+        finish();
+    }
+
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    public void updateUI(MealOrderConfirmResponse response) {
+        this.response = response;
+
+        balanceTV.setText(String.valueOf(response.getBalance()));
+        priceTV.setText(ArmsUtils.formatLong(response.getPrice()));
+        payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));
+        moneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
+
+        mealNameTV.setText(response.getSetMealGoods().getName());
+        salesPriceTV.setText(String.valueOf(response.getSetMealGoods().getSalesPrice()));
+        totalPriceTV.setText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
+
+        AppComponent mAppComponent = ArmsUtils.obtainAppComponentFromContext(this);
+        mAppComponent.imageLoader()
+                .loadImage(this,
+                        ImageConfigImpl
+                                .builder()
+                                .url(response.getSetMealGoods().getImage())
+                                .imageView(imageIV)
+                                .build());
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+            case R.id.no_address:
+            case R.id.addres_info_layout:
+                ArmsUtils.startActivity(AddressListActivity.class);
+                break;
+            case R.id.confirm:
+                String m = moneyET.getText().toString();
+                if (!ArmsUtils.isEmpty(m)) {
+                    provideCache().put("money", Long.valueOf(m));
+                }
+                provideCache().put("remark", remarkET.getText().toString());
+                mPresenter.placeMealOrder();
+                break;
+        }
+    }
+}

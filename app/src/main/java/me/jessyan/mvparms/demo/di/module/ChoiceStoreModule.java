@@ -12,7 +12,7 @@ import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceStoreContract;
 import me.jessyan.mvparms.demo.mvp.model.ChoiceStoreModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
 
 

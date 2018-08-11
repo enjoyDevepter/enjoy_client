@@ -10,6 +10,8 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import java.text.SimpleDateFormat;
+
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerPayResultComponent;
@@ -32,8 +34,6 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
     TextView orderDetailTV;
     @BindView(R.id.pay_img)
     View payImg;
-    @BindView(R.id.price_status)
-    TextView payStatus;
     @BindView(R.id.pay_result_info)
     View payResultInfoV;
     @BindView(R.id.success)
@@ -44,6 +44,17 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
     View retryV;
     @BindView(R.id.fail_order_detail)
     View failOrderV;
+
+    @BindView(R.id.order_id)
+    TextView orderIdTV;
+    @BindView(R.id.pay_type)
+    TextView payTypeTV;
+    @BindView(R.id.money)
+    TextView moneyTV;
+    @BindView(R.id.time)
+    TextView timeTV;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -68,6 +79,11 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
         orderDetailTV.setOnClickListener(this);
         retryV.setOnClickListener(this);
         failOrderV.setOnClickListener(this);
+
+        orderIdTV.setText(getIntent().getStringExtra("orderId"));
+        payTypeTV.setText(getIntent().getStringExtra("payName"));
+        moneyTV.setText(ArmsUtils.formatLong(getIntent().getLongExtra("payMoney", 0)));
+        timeTV.setText(sdf.format(getIntent().getLongExtra("orderTime", 0)));
     }
 
 

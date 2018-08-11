@@ -47,6 +47,7 @@ import me.jessyan.mvparms.demo.mvp.presenter.HomePresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.AddressListActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CityActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.TaoCanActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HomeArticleAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HomeGoodsAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
@@ -123,6 +124,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 showMessage(tab.getText().toString());
+                switch (tab.getPosition()) {
+                    case 0:
+                        break;
+                    case 1:
+                        ArmsUtils.startActivity(TaoCanActivity.class);
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                }
             }
 
             @Override

@@ -20,11 +20,13 @@ import me.jessyan.mvparms.demo.di.component.DaggerTaoCanComponent;
 import me.jessyan.mvparms.demo.di.module.TaoCanModule;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanContract;
 import me.jessyan.mvparms.demo.mvp.presenter.TaoCanPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.TaoCanListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.TaoCanListAdapter.ViewName;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class TaoCanActivity extends BaseActivity<TaoCanPresenter> implements TaoCanContract.View, View.OnClickListener {
+public class TaoCanActivity extends BaseActivity<TaoCanPresenter> implements TaoCanContract.View, View.OnClickListener, TaoCanListAdapter.OnChildItemClickLinstener {
 
     @BindView(R.id.back)
     View backV;
@@ -32,11 +34,10 @@ public class TaoCanActivity extends BaseActivity<TaoCanPresenter> implements Tao
     TextView titleV;
     @BindView(R.id.content)
     RecyclerView mRecyclerView;
-
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    TaoCanListAdapter mAdapter;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -59,6 +60,7 @@ public class TaoCanActivity extends BaseActivity<TaoCanPresenter> implements Tao
         backV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnChildItemClickLinstener(this);
     }
 
 
@@ -100,6 +102,19 @@ public class TaoCanActivity extends BaseActivity<TaoCanPresenter> implements Tao
         switch (v.getId()) {
             case R.id.back:
                 killMyself();
+                break;
+        }
+    }
+
+    @Override
+    public void onChildItemClick(View v, ViewName viewname, int position) {
+        switch (viewname) {
+            case BUY:
+                break;
+            case ITEM:
+                Intent intent = new Intent(this, TaoCanDetailsActivity.class);
+                intent.putExtra("setMealId", mAdapter.getInfos().get(position).getSetMealId());
+                ArmsUtils.startActivity(intent);
                 break;
         }
     }

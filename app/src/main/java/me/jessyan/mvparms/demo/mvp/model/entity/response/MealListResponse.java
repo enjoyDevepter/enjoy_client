@@ -2,23 +2,23 @@ package me.jessyan.mvparms.demo.mvp.model.entity.response;
 
 import java.util.List;
 
-import me.jessyan.mvparms.demo.mvp.model.entity.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 
 /**
  * Created by guomin on 2018/7/28.
  */
 
-public class StoresListResponse extends BaseResponse {
+public class MealListResponse extends BaseResponse {
 
-    private List<Store> storeList;
+    private List<MealGoods> setMealGoodsList;
     private int nextPageIndex;
 
-    public List<Store> getStoreList() {
-        return storeList;
+    public List<MealGoods> getSetMealGoodsList() {
+        return setMealGoodsList;
     }
 
-    public void setStoreList(List<Store> storeList) {
-        this.storeList = storeList;
+    public void setSetMealGoodsList(List<MealGoods> setMealGoodsList) {
+        this.setMealGoodsList = setMealGoodsList;
     }
 
     public int getNextPageIndex() {
@@ -31,8 +31,8 @@ public class StoresListResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "StoresListResponse{" +
-                "storeList=" + storeList +
+        return "MealListResponse{" +
+                "setMealGoodsList=" + setMealGoodsList +
                 ", nextPageIndex=" + nextPageIndex +
                 '}';
     }

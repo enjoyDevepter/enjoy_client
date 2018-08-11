@@ -23,7 +23,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerChoiceStoreComponent;
 import me.jessyan.mvparms.demo.di.module.ChoiceStoreModule;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceStoreContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.presenter.ChoiceStorePresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;

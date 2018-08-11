@@ -11,4 +11,6 @@
 
     <dimen name="dialog_height">100dp</dimen>
     <dimen name="dialog_width">220dp</dimen>
+    <dimen name="divice_width">30dp</dimen>
+    <dimen name="plus_width">10dp</dimen>
 </resources>

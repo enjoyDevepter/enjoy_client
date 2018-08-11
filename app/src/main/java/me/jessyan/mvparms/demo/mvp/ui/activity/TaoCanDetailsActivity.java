@@ -5,25 +5,63 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerTaoCanDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.TaoCanDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanDetailsContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.TaoCanDetailsPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
+import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> implements TaoCanDetailsContract.View {
+public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> implements TaoCanDetailsContract.View, View.OnClickListener {
 
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.buy)
+    View buyV;
+    @BindView(R.id.goods_iamges)
+    Banner imagesB;
+    @BindView(R.id.image_count)
+    TextView imageCount;
+    @BindView(R.id.salesPrice)
+    TextView salesPriceTV;
+    @BindView(R.id.totalPrice)
+    TextView totalPriceTV;
+    @BindView(R.id.unlike)
+    View unlikeV;
+    @BindView(R.id.like)
+    View likeV;
+    @BindView(R.id.sales)
+    TextView salesTV;
+    @BindView(R.id.title)
+    TextView titleTV;
+    @BindView(R.id.detail)
+    RecyclerView detailRV;
     @BindView(R.id.tab)
     TabLayout tabLayout;
+    @Inject
+    RecyclerView.Adapter mAdapter;
+    @Inject
+    RecyclerView.LayoutManager layoutManager;
+
+    MealDetailsResponse response;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -42,7 +80,16 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        backV.setOnClickListener(this);
+        buyV.setOnClickListener(this);
+        unlikeV.setOnClickListener(this);
+        likeV.setOnClickListener(this);
+        imagesB.setImageLoader(new GlideImageLoader());
+        imagesB.setIndicatorGravity(BannerConfig.CENTER);
         tabLayout.addTab(tabLayout.newTab().setText("套餐详情"));
+        ArmsUtils.configRecyclerView(detailRV, layoutManager);
+        detailRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(this, R.dimen.divice_width), 0));
+        detailRV.setAdapter(mAdapter);
     }
 
 
@@ -77,5 +124,34 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     @Override
     public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public void updateUI(MealDetailsResponse response) {
+        this.response = response;
+        imagesB.setImages(response.getSetMealGoods().getImages());
+        imagesB.start();
+        imagesB.isAutoPlay(false);
+        imageCount.setText("1/" + response.getSetMealGoods().getImages().size());
+        titleTV.setText(String.valueOf(response.getSetMealGoods().getName()));
+        salesPriceTV.setText(String.valueOf(response.getSetMealGoods().getSalesPrice()));
+        totalPriceTV.setText("￥" + String.valueOf(response.getSetMealGoods().getTotalPrice()));
+        salesTV.setText(String.valueOf(response.getSetMealGoods().getSales()));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+            case R.id.buy:
+                mPresenter.buy();
+                break;
+            case R.id.unlike:
+                break;
+            case R.id.like:
+                break;
+        }
     }
 }

@@ -1,4 +1,4 @@
-package me.jessyan.mvparms.demo.mvp.model.entity.request;
+package me.jessyan.mvparms.demo.mvp.model.entity;
 
 /**
  * Created by guomin on 2018/8/6.

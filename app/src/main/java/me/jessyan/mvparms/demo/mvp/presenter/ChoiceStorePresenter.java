@@ -19,7 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceStoreContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;

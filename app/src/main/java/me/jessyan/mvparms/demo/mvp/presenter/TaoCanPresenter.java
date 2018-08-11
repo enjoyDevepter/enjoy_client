@@ -3,19 +3,26 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.ArmsUtils;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MealListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MealListResponse;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.TaoCanListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
@@ -30,9 +37,9 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
     @Inject
     ImageLoader mImageLoader;
     @Inject
-    List<Goods> mGoods;
+    List<MealGoods> mGoods;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    TaoCanListAdapter mAdapter;
 
     @Inject
     public TaoCanPresenter(TaoCanContract.Model model, TaoCanContract.View rootView) {
@@ -55,6 +62,28 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
 
     public void getTaoCan() {
 
+        MealListRequest request = new MealListRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get("token")));
+        request.setCity((String) (cache.get("city")));
+        request.setCounty((String) (cache.get("county")));
+        request.setProvince((String) (cache.get("province")));
+
+        mModel.getTaoCanList(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<MealListResponse>() {
+                    @Override
+                    public void accept(MealListResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            mGoods.clear();
+                            mGoods.addAll(response.getSetMealGoodsList());
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
     }
 
 }
