@@ -1,4 +1,13 @@
 package me.jessyan.mvparms.demo.mvp.model.api.service;
 
-public class DoctorService {
+import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DoctorListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DoctorListResponse;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
+
+public interface DoctorService {
+
+    @POST("gateway")
+    Observable<DoctorListResponse> requestDoctorPage(@Body DoctorListRequest request);
 }
