@@ -97,6 +97,8 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     CustomProgressDailog progressDailog;
     OrderConfirmInfoResponse response;
 
+    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.ADDR;
+
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerConfirmOrderComponent //如找不到该类,请编译一下项目
@@ -131,8 +133,8 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
                 addressV.setVisibility(View.GONE);
             }
         } else {
-            if (cache.get("storeInfo") != null) {
-                Store store = (Store) cache.get("storeInfo");
+            if (cache.get(listType.getDataKey()) != null) {
+                Store store = (Store) cache.get(listType.getDataKey());
                 selfAddressTV.setText(store.getName());
             }
         }
@@ -202,7 +204,9 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
                 ArmsUtils.startActivity(AddressListActivity.class);
                 break;
             case R.id.self_layout:
-                ArmsUtils.startActivity(SelfPickupAddrListActivity.class);
+                Intent intent2 = new Intent(this,SelfPickupAddrListActivity.class);
+                intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
+                ArmsUtils.startActivity(intent2);
                 break;
             case R.id.dispatch:
                 changtDispatch(true);
@@ -289,8 +293,8 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
             noAddressV.setVisibility(View.VISIBLE);
             addressV.setVisibility(View.GONE);
         }
-        if (cache.get("storeInfo") != null) {
-            Store store = (Store) cache.get("storeInfo");
+        if (cache.get(listType.getDataKey()) != null) {
+            Store store = (Store) cache.get(listType.getDataKey());
             selfAddressTV.setText(store.getName());
         }
 

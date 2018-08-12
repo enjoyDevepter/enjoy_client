@@ -40,10 +40,16 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
     View confirmV;
     @BindView(R.id.stores)
     RecyclerView storesRV;
+
+    @BindView(R.id.info_text)
+    TextView info_text;
+
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     RecyclerView.Adapter mAdapter;
+
+    private SelfPickupAddrListActivity.ListType listType;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -62,8 +68,13 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        listType = (SelfPickupAddrListActivity.ListType) getIntent().getSerializableExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE);
+        if(listType == null){
+            throw new RuntimeException("listType is not null.you need send listType use key  \"KEY_FOR_ACTIVITY_LIST_TYPE\"");
+        }
         backV.setOnClickListener(this);
-        titleV.setText("选择店铺");
+        titleV.setText(listType.getSecendListTitle());
+        info_text.setText(listType.getInfoText());
         confirmV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(storesRV, mLayoutManager);
         storesRV.setAdapter(mAdapter);
@@ -104,7 +115,7 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
                 break;
             case R.id.confirm:
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-                if (cache.get("storeInfo") == null) {
+                if (cache.get(listType.getDataKey()) == null) {
                     showMessage("请选择店铺信息！");
                     return;
                 }
@@ -122,7 +133,7 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
         }
         store.setCheck(true);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-        cache.put("storeInfo", store);
+        cache.put(listType.getDataKey(), store);
         mAdapter.notifyDataSetChanged();
     }
 

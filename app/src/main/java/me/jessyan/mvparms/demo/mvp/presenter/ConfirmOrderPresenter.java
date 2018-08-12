@@ -30,6 +30,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
@@ -49,6 +50,8 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
     List<OrderConfirmInfoResponse.GoodsBean> goodsBeans;
 
     private OrderConfirmInfoResponse orderConfirmInfoResponse;
+
+    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.ADDR;
 
     @Inject
     public ConfirmOrderPresenter(ConfirmOrderContract.Model model, ConfirmOrderContract.View rootView) {
@@ -117,11 +120,11 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
             Address address = (Address) cache.get("memberAddressInfo");
             request.setMemberAddressId(address.getAddressId());
         } else {
-            if (null == cache.get("storeInfo")) {
+            if (null == cache.get(listType.getDataKey())) {
                 mRootView.showMessage("请选择自取店铺！");
                 return;
             }
-            Store store = (Store) cache.get("storeInfo");
+            Store store = (Store) cache.get(listType.getDataKey());
             request.setStoreId(store.getId());
         }
         request.setDeliveryMethodId((String) mRootView.getCache().get("deliveryMethodId"));

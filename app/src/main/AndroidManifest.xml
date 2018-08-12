@@ -62,9 +62,8 @@
         <activity android:name=".mvp.ui.activity.PayActivity" />
         <activity android:name=".mvp.ui.activity.MealOrderConfirmActivity"></activity>
         <activity android:name=".mvp.ui.activity.CartActivity" />
-        <activity android:name=".mvp.ui.activity.HospitalInfoActivity">
-
-        </activity>
+        <activity android:name=".mvp.ui.activity.HospitalInfoActivity"></activity>
+        <activity android:name=".mvp.ui.activity.HospitalChooseActivity"></activity>
     </application>
 
 </manifest>

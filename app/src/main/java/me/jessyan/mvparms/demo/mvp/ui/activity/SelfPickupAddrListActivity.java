@@ -31,6 +31,11 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListPresenter> implements SelfPickupAddrListContract.View, View.OnClickListener {
 
+    // 要启动这个页面，必须使用这个Key，将ListType作为参数通过intent传递进来
+    public static final String KEY_FOR_ACTIVITY_LIST_TYPE = "key_for_activity_list_type";
+
+    private ListType listType;
+
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
@@ -70,7 +75,11 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        titleTV.setText("自提地址");
+        listType = (ListType) getIntent().getSerializableExtra(KEY_FOR_ACTIVITY_LIST_TYPE);
+        if(listType == null){
+            throw new RuntimeException("listType is not null.you need send listType use key  \"KEY_FOR_ACTIVITY_LIST_TYPE\"");
+        }
+        titleTV.setText(listType.getTitle());
         backV.setOnClickListener(this);
         confirmV.setOnClickListener(this);
         storeLayoutV.setOnClickListener(this);
@@ -106,16 +115,6 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-//        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-//        if (cache.get("storeInfo") != null) {
-//            Store store = (Store) cache.get("storeInfo");
-//            storeV.setText(store.getName());
-//        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
@@ -129,11 +128,12 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                 intent.putExtra("province", (String) provideCache().get("province"));
                 intent.putExtra("city", (String) provideCache().get("city"));
                 intent.putExtra("county", (String) provideCache().get("county"));
+                intent.putExtra(KEY_FOR_ACTIVITY_LIST_TYPE,listType);
                 ArmsUtils.startActivity(intent);
                 break;
             case R.id.confirm:
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-                if (cache.get("storeInfo") == null) {
+                if (cache.get(listType.getDataKey()) == null) {
                     showMessage("请选择店铺！");
                     return;
                 }
@@ -196,5 +196,58 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
 
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
+    }
+
+    /**
+     * 这个页面可以进行复用。使用这个
+     * */
+    public enum ListType{
+        HOP("选择医院","选择医院","请选择为您服务的医院","choose_hosptial_info"),  // 选择医院
+        STORE("选择店铺","选择店铺","请选择为您服务的店铺","choose_store_info"),  //选择店铺
+        ADDR("自提地址","选择店铺","请选择为您服务的店铺","choose_addr_info"); // 自提地址
+
+        private String title;  // 整个页面的标题
+        private String secendListTitle;  // 第二个选项的标题，也就是第二个Activity的大标题
+        private String infoText;  // 第二个页面的说明文字
+        private String dataKey;  // 携带数据的时候，使用的key。每个页面使用的Key应该不一样，避免相互覆盖
+
+        ListType(String title,String secendListTitle,String infoText,String dataKey){
+            this.title = title;
+            this.secendListTitle = secendListTitle;
+            this.infoText = infoText;
+            this.dataKey = dataKey;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getSecendListTitle() {
+            return secendListTitle;
+        }
+
+        public void setSecendListTitle(String secendListTitle) {
+            this.secendListTitle = secendListTitle;
+        }
+
+        public String getInfoText() {
+            return infoText;
+        }
+
+        public void setInfoText(String infoText) {
+            this.infoText = infoText;
+        }
+
+        public String getDataKey() {
+            return dataKey;
+        }
+
+        public void setDataKey(String dataKey) {
+            this.dataKey = dataKey;
+        }
     }
 }

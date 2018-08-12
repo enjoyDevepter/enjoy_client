@@ -8,6 +8,7 @@
     <include layout="@layout/title" />
 
     <TextView
+        android:id="@+id/info_text"
         android:layout_width="match_parent"
         android:layout_height="38dp"
         android:background="@drawable/title_bg"
