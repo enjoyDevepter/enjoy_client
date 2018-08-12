@@ -18,6 +18,7 @@ import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorMainPresenter;
 
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -29,6 +30,9 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     TextView title;
     @BindView(R.id.back)
     View back;
+
+    @BindView(R.id.head_image)
+    ShapeImageView head_image;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {

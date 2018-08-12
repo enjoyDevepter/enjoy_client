@@ -25,7 +25,9 @@
                 android:layout_below="@id/title_layout"
                 android:background="#5FBFE3" />
 
-            <View
+            <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
+                app:shape_type="round"
+                app:radius="17dp"
                 android:id="@+id/write_back"
                 android:layout_width="322dp"
                 android:layout_height="198dp"
@@ -34,8 +36,9 @@
                 android:layout_marginTop="46dp"
                 android:background="#ffffff" />
 
-            <ImageView
+            <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
                 android:id="@+id/head_image"
+                app:shape_type="circle"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_alignTop="@id/blue_back"
