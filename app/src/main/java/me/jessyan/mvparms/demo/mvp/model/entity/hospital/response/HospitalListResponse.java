@@ -1,8 +1,9 @@
-package me.jessyan.mvparms.demo.mvp.model.entity.response;
+package me.jessyan.mvparms.demo.mvp.model.entity.hospital.response;
 
 import java.util.List;
 
-import me.jessyan.mvparms.demo.mvp.model.entity.hospital.HospitalBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 
 public class HospitalListResponse extends BaseResponse {
     private List<HospitalBean> hospitalList;

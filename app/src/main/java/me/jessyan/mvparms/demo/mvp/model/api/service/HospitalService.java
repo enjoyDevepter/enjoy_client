@@ -1,10 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.api.service;
 
 import io.reactivex.Observable;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.DoctorListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.HospitalListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DoctorListResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.HospitalListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListResponse;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 

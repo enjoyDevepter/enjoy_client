@@ -1,4 +1,4 @@
-package me.jessyan.mvparms.demo.mvp.model.entity.hospital;
+package me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean;
 
 public class OrderBy {
     private String field;

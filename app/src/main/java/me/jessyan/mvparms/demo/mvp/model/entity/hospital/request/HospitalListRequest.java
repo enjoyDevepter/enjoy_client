@@ -1,8 +1,9 @@
-package me.jessyan.mvparms.demo.mvp.model.entity.request;
+package me.jessyan.mvparms.demo.mvp.model.entity.hospital.request;
 
 import java.util.List;
 
-import me.jessyan.mvparms.demo.mvp.model.entity.hospital.OrderBy;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.OrderBy;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
 public class HospitalListRequest extends BaseRequest {
     private int pageIndex;
