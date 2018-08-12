@@ -1,6 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean;
 
-public class HospitalBean {
+public class HospitalBaseInfoBean {
     private String id;
     private String name;
     private String province;
@@ -15,7 +15,7 @@ public class HospitalBean {
 
     @Override
     public String toString() {
-        return "HospitalBean{" +
+        return "HospitalBaseInfoBean{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", province='" + province + '\'' +

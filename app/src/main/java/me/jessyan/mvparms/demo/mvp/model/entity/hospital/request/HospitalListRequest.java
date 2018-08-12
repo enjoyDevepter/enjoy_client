@@ -15,6 +15,7 @@ public class HospitalListRequest extends BaseRequest {
     private String lat;
     private String specValueId;
     private List<OrderBy> orderBys;
+    private final int cmd = 601;
 
     @Override
     public String toString() {

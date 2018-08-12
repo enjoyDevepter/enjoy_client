@@ -2,11 +2,11 @@ package me.jessyan.mvparms.demo.mvp.model.entity.hospital.response;
 
 import java.util.List;
 
-import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 
 public class HospitalListResponse extends BaseResponse {
-    private List<HospitalBean> hospitalList;
+    private List<HospitalBaseInfoBean> hospitalList;
     private int nextPageIndex;
 
     @Override
@@ -17,11 +17,11 @@ public class HospitalListResponse extends BaseResponse {
                 '}';
     }
 
-    public List<HospitalBean> getHospitalList() {
+    public List<HospitalBaseInfoBean> getHospitalList() {
         return hospitalList;
     }
 
-    public void setHospitalList(List<HospitalBean> hospitalList) {
+    public void setHospitalList(List<HospitalBaseInfoBean> hospitalList) {
         this.hospitalList = hospitalList;
     }
 
