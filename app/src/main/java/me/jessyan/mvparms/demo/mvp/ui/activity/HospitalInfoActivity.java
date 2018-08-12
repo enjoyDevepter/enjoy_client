@@ -33,8 +33,6 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> implements HospitalInfoContract.View {
 
-    private String testId = "180717114157010010";
-
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.back)

@@ -60,10 +60,13 @@
         <activity android:name=".mvp.ui.activity.SelfPickupAddrListActivity" />
         <activity android:name=".mvp.ui.activity.ChoiceStoreActivity" />
         <activity android:name=".mvp.ui.activity.PayActivity" />
-        <activity android:name=".mvp.ui.activity.MealOrderConfirmActivity"></activity>
+        <activity android:name=".mvp.ui.activity.MealOrderConfirmActivity" />
         <activity android:name=".mvp.ui.activity.CartActivity" />
-        <activity android:name=".mvp.ui.activity.HospitalInfoActivity"></activity>
-        <activity android:name=".mvp.ui.activity.HospitalChooseActivity"></activity>
+        <activity android:name=".mvp.ui.activity.HospitalInfoActivity" />
+        <activity android:name=".mvp.ui.activity.HospitalChooseActivity" />
+        <activity android:name=".mvp.ui.activity.DoctorMainActivity">
+
+        </activity>
     </application>
 
 </manifest>

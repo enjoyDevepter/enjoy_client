@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RatingBar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rating"
+    android:layout_width="wrap_content"
+    android:layout_height="14dp"
+    android:isIndicator="false"
+    android:max="5"
+    android:numColumns="5"
+    android:numStars="3"
+    android:progressDrawable="@mipmap/doctor_star"
+    android:stepSize="1" />
