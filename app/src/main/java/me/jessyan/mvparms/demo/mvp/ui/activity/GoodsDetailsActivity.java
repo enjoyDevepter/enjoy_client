@@ -97,10 +97,8 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     TextView spcePriceTV;
     @BindView(R.id.spec_goods_id)
     TextView spceIDTV;
-    @BindView(R.id.unlike)
-    View unlikeV;
-    @BindView(R.id.like)
-    View likeV;
+    @BindView(R.id.collect)
+    View collectV;
     @BindView(R.id.promotion_close)
     View promotionCloseV;
     @BindView(R.id.spec_close)
@@ -156,8 +154,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         maskSpecV.setOnClickListener(this);
         imagesB.setImageLoader(new GlideImageLoader());
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
-        unlikeV.setOnClickListener(this);
-        likeV.setOnClickListener(this);
+        collectV.setOnClickListener(this);
         spceCloseV.setOnClickListener(this);
         promotionCloseV.setOnClickListener(this);
         tabLayout.addTab(tabLayout.newTab().setText("商品详情"));
@@ -208,6 +205,11 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     }
 
     @Override
+    public void updateCollect(boolean collect) {
+        collectV.setSelected(collect);
+    }
+
+    @Override
     public void updateUI(GoodsDetailsResponse response) {
         imagesB.setImages(response.getImages());
         //banner设置方法全部调用完毕时最后调用
@@ -215,7 +217,6 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         imagesB.isAutoPlay(false);
 
         imageCount.setText("1/" + response.getImages().size());
-
         nameTV.setText(response.getGoods().getName());
         priceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
         saleCountTV.setText(String.valueOf(response.getGoods().getSales()));
@@ -274,9 +275,8 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             case R.id.mask_spec:
                 showSpec(false);
                 break;
-            case R.id.unlike:
-                break;
-            case R.id.like:
+            case R.id.collect:
+                mPresenter.collectGoods(!collectV.isSelected());
                 break;
             case R.id.promotion_close:
                 showPro(false);

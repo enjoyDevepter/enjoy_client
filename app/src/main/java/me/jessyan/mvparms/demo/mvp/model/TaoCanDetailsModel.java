@@ -13,6 +13,7 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
 
 
@@ -39,5 +40,11 @@ public class TaoCanDetailsModel extends BaseModel implements TaoCanDetailsContra
     public Observable<MealDetailsResponse> getMealDetail(MealDetailsRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getMealDetail(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> collectGoods(MealDetailsRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .collectGoods(request);
     }
 }

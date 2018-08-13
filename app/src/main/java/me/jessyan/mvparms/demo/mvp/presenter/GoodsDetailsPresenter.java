@@ -22,6 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
@@ -101,6 +102,34 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                         }
                     }
                 });
+    }
+
+    public void collectGoods(boolean collect) {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        if (cache.get("token") == null) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+
+        CollectGoodsRequest request = new CollectGoodsRequest();
+        request.setCmd(collect ? 407 : 408);
+        request.setToken((String) cache.get("token"));
+        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
+        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        mModel.collectGoods(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            mRootView.updateCollect(collect);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+
     }
 
 

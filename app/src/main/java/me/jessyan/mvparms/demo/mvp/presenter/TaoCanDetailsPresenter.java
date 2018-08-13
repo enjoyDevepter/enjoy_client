@@ -23,6 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MealOrderConfirmActivity;
@@ -67,11 +68,13 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
     private void getMealDetail() {
         MealDetailsRequest request = new MealDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) cache.get("token");
         if (cache.get("token") != null) {
             request.setCmd(432);
         } else {
             request.setCmd(431);
         }
+        request.setToken(token);
         request.setSetMealId(mRootView.getActivity().getIntent().getStringExtra("setMealId"));
         mModel.getMealDetail(request)
                 .subscribeOn(Schedulers.io())
@@ -90,6 +93,34 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
                         }
                     }
                 });
+    }
+
+    public void collectGoods(boolean collect) {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        if (cache.get("token") == null) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+
+        MealDetailsRequest request = new MealDetailsRequest();
+        request.setCmd(collect ? 433 : 434);
+        request.setToken((String) cache.get("token"));
+
+        request.setSetMealId(mRootView.getActivity().getIntent().getStringExtra("setMealId"));
+        mModel.collectGoods(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            mRootView.updateCollect(collect);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+
     }
 
     public void buy() {

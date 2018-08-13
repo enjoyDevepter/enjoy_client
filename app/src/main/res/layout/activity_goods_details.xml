@@ -73,17 +73,11 @@
                         android:textSize="20sp" />
 
                     <View
-                        android:id="@+id/unlike"
-                        android:layout_width="14dp"
-                        android:layout_height="13dp"
-                        android:background="@mipmap/unlike" />
-
-                    <View
-                        android:id="@+id/like"
+                        android:id="@+id/collect"
                         android:layout_width="14dp"
                         android:layout_height="13dp"
                         android:layout_marginLeft="5dp"
-                        android:background="@mipmap/like" />
+                        android:background="@drawable/collect_bg" />
 
                     <TextView
                         android:id="@+id/sale_info"

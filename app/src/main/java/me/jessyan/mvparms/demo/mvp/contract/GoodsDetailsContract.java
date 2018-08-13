@@ -8,6 +8,7 @@ import com.jess.arms.mvp.IView;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
@@ -17,6 +18,8 @@ public interface GoodsDetailsContract {
     //对于经常使用的关于UI的方法可以定义到IView中,如显示隐藏进度条,和显示文字消息
     interface View extends IView {
         Activity getActivity();
+
+        void updateCollect(boolean collect);
 
         void updateUI(GoodsDetailsResponse response);
 
@@ -30,6 +33,8 @@ public interface GoodsDetailsContract {
         Observable<GoodsDetailsResponse> getGoodsDetails(GoodsDetailsRequest request);
 
         Observable<BaseResponse> addGoodsToCart(AddGoodsToCartRequest request);
+
+        Observable<BaseResponse> collectGoods(CollectGoodsRequest request);
 
     }
 }

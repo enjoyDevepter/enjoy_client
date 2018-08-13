@@ -44,10 +44,8 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     TextView salesPriceTV;
     @BindView(R.id.totalPrice)
     TextView totalPriceTV;
-    @BindView(R.id.unlike)
-    View unlikeV;
-    @BindView(R.id.like)
-    View likeV;
+    @BindView(R.id.collect)
+    View collectV;
     @BindView(R.id.sales)
     TextView salesTV;
     @BindView(R.id.title)
@@ -82,8 +80,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
         buyV.setOnClickListener(this);
-        unlikeV.setOnClickListener(this);
-        likeV.setOnClickListener(this);
+        collectV.setOnClickListener(this);
         imagesB.setImageLoader(new GlideImageLoader());
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
         tabLayout.addTab(tabLayout.newTab().setText("套餐详情"));
@@ -137,6 +134,12 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         salesPriceTV.setText(String.valueOf(response.getSetMealGoods().getSalesPrice()));
         totalPriceTV.setText("￥" + String.valueOf(response.getSetMealGoods().getTotalPrice()));
         salesTV.setText(String.valueOf(response.getSetMealGoods().getSales()));
+        collectV.setSelected("1".equals(response.getSetMealGoods().getFavorite()) ? true : false);
+    }
+
+    @Override
+    public void updateCollect(boolean collect) {
+        collectV.setSelected(collect);
     }
 
     @Override
@@ -148,9 +151,8 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
             case R.id.buy:
                 mPresenter.buy();
                 break;
-            case R.id.unlike:
-                break;
-            case R.id.like:
+            case R.id.collect:
+                mPresenter.collectGoods(!collectV.isSelected());
                 break;
         }
     }

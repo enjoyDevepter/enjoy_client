@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.model.api.service;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CartListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DeleteCartListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryCommentListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryDetailsRequest;
@@ -91,6 +92,9 @@ public interface MainService {
     Observable<BaseResponse> addGoodsToCart(@Body AddGoodsToCartRequest request);
 
     @POST("gateway")
+    Observable<BaseResponse> collectGoods(@Body CollectGoodsRequest request);
+
+    @POST("gateway")
     Observable<OrderConfirmInfoResponse> getOrderConfirmInfo(@Body OrderConfirmInfoRequest request);
 
     @POST("gateway")
@@ -101,6 +105,9 @@ public interface MainService {
 
     @POST("gateway")
     Observable<MealDetailsResponse> getMealDetail(@Body MealDetailsRequest request);
+
+    @POST("gateway")
+    Observable<BaseResponse> collectGoods(@Body MealDetailsRequest request);
 
     @POST("gateway")
     Observable<MealOrderConfirmResponse> getMealOrderConfirmInfo(@Body MealOrderConfrimRequest request);
