@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +34,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> implements DiaryDetailsContract.View, View.OnClickListener {
+public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> implements DiaryDetailsContract.View, View.OnClickListener, TextView.OnEditorActionListener {
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
@@ -120,6 +122,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         goodsInfoV.setOnClickListener(this);
         praiseV.setOnClickListener(this);
         voteV.setOnClickListener(this);
+        commentET.setOnEditorActionListener(this);
         ArmsUtils.configRecyclerView(commentRV, mLayoutManager);
         commentRV.setAdapter(mAdapter);
     }
@@ -159,15 +162,15 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 killMyself();
                 break;
             case R.id.follow:
-                provideCache().put("memberId", response.getDiary().getMember().getMemberId());
+                provideCache().put("memberId", response.getMember().getMemberId());
                 mPresenter.follow(!followV.isSelected());
                 break;
             case R.id.praise_layout:
                 break;
             case R.id.goods_info:
                 Intent intent = new Intent(getActivity().getApplication(), GoodsDetailsActivity.class);
-                intent.putExtra("goodsId", response.getDiary().getGoods().getGoodsId());
-                intent.putExtra("merchId", response.getDiary().getGoods().getMerchId());
+                intent.putExtra("goodsId", response.getGoods().getGoodsId());
+                intent.putExtra("merchId", response.getGoods().getMerchId());
                 ArmsUtils.startActivity(intent);
                 break;
             case R.id.vote:
@@ -176,7 +179,6 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 break;
         }
     }
-
 
     @Override
     public Activity getActivity() {
@@ -242,5 +244,21 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     @Override
     public void updateVoteStatus(boolean vote) {
         voteV.setSelected(vote);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        switch (actionId) {
+            case EditorInfo.IME_ACTION_SEND:
+                System.out.println("");
+                break;
+        }
+
+        return false;
     }
 }

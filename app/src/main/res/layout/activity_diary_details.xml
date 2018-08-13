@@ -58,7 +58,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="15dp"
                     android:layout_marginTop="15dp"
                     android:text="2018-07-12"
                     android:textColor="#FFB3B3B3"
@@ -331,7 +330,9 @@
             android:layout_toLeftOf="@id/vote"
             android:background="@drawable/search_input_bg"
             android:hint="请输入评论内容..."
+            android:imeOptions="actionSend"
             android:paddingLeft="10dp"
+            android:singleLine="true"
             android:textColor="#FF333333"
             android:textSize="12sp" />
 

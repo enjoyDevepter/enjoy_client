@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -34,9 +37,11 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.SearchTypeAdapter;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class SearchActivity extends BaseActivity<SearchPresenter> implements SearchContract.View, TagFlowLayout.OnTagClickListener, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener {
+public class SearchActivity extends BaseActivity<SearchPresenter> implements SearchContract.View, TagFlowLayout.OnTagClickListener, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TextView.OnEditorActionListener {
     @BindView(R.id.hot_search)
     TagFlowLayout tagFlowLayout;
+    @BindView(R.id.content)
+    EditText contentET;
     @BindView(R.id.clean)
     View cleanV;
     @BindView(R.id.back)
@@ -83,7 +88,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         backV.setOnClickListener(this);
         ((HistoryAdapter) historyAdapter).setOnItemClickListener(this);
         cleanV.setOnClickListener(this);
-
+        contentET.setOnEditorActionListener(this);
         mPresenter.getHot("110000", "110000", "110000");
         mPresenter.getCategory();
     }
@@ -172,5 +177,14 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(searchTypeV, 0, 0);
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        switch (actionId) {
+            case EditorInfo.IME_ACTION_SEARCH:
+                return true;
+        }
+        return false;
     }
 }

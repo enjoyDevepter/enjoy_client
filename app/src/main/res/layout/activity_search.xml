@@ -52,6 +52,8 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 android:textColor="#FF666666"
                 android:textSize="13sp" />
 

@@ -74,6 +74,8 @@
                 android:layout_marginLeft="10dp"
                 android:background="@android:color/transparent"
                 android:hint="请输入账号"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
                 android:textSize="13sp" />
 
         </LinearLayout>
@@ -117,6 +119,8 @@
                 android:layout_marginLeft="9dp"
                 android:background="@android:color/transparent"
                 android:hint="请输入密码"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
                 android:textSize="13sp" />
 
         </LinearLayout>
@@ -143,6 +147,8 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="请输入验证码"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
                 android:textSize="13sp" />
 
             <TextView

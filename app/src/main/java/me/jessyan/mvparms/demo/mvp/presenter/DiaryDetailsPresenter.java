@@ -67,6 +67,7 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
         } else {
             request.setCmd(817);
         }
+        request.setToken(token);
         request.setDiaryId(mRootView.getActivity().getIntent().getStringExtra("diaryId"));
 
         mModel.getDiaryDetails(request)
