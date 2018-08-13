@@ -18,7 +18,6 @@ package me.jessyan.mvparms.demo.mvp.ui.holder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
@@ -28,10 +27,8 @@ import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
+import me.jessyan.mvparms.demo.mvp.model.entity.DiaryAlbum;
 
 /**
  * ================================================
@@ -42,76 +39,37 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class CartGoodsListItemHolder extends BaseHolder<CartBean.GoodsBean> {
-    @BindView(R.id.check)
-    View checkV;
+public class DiaryImageItemHolder extends BaseHolder<DiaryAlbum> {
+
     @BindView(R.id.image)
     ImageView imageIV;
-    @BindView(R.id.name)
-    TextView nameTV;
-    @BindView(R.id.price)
-    TextView priceTV;
-    @BindView(R.id.count)
-    TextView countTV;
-    @BindView(R.id.minus)
-    View minusV;
-    @BindView(R.id.add)
-    View addV;
-    private CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
-    private int parentPosition;
 
-    public CartGoodsListItemHolder(View itemView, CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener, int parentPosition) {
+    public DiaryImageItemHolder(View itemView) {
         super(itemView);
-        this.onChildItemClickLinstener = onChildItemClickLinstener;
-        itemView.setOnClickListener(this);
-        minusV.setOnClickListener(this);
-        addV.setOnClickListener(this);
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
-        this.parentPosition = parentPosition;
+        int screenWidth = ArmsUtils.getScreenWidth(ArmsUtils.getContext());
+//        if (size == 2) {
+//            itemView.setLayoutParams(new RecyclerView.LayoutParams((screenWidth - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_style_margin_left) * 3 - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_margin_left) * 2) / 2, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        } else {
+//            itemView.setLayoutParams(new RecyclerView.LayoutParams((screenWidth - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_style_margin_left) * 4 - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_margin_left) * 2) / 3, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        }
     }
 
     @Override
-    public void onClick(View view) {
-        if (null != onChildItemClickLinstener) {
-            switch (view.getId()) {
-                case R.id.add:
-                    onChildItemClickLinstener.onChildItemClick(view, CartListAdapter.ViewName.ADD, parentPosition, getAdapterPosition());
-                    return;
-                case R.id.minus:
-                    onChildItemClickLinstener.onChildItemClick(view, CartListAdapter.ViewName.MINUS, parentPosition, getAdapterPosition());
-                    return;
-                case R.id.item_id:
-                    onChildItemClickLinstener.onChildItemClick(view, CartListAdapter.ViewName.CHECK, parentPosition, getAdapterPosition());
-                    return;
-            }
-        }
-        super.onClick(view);
-    }
-
-    @Override
-    public void setData(CartBean.GoodsBean data, int position) {
-        Observable.just(data.getStatus())
-                .subscribe(s -> checkV.setSelected("1".equals(s) ? true : false));
-        Observable.just(data.getName())
-                .subscribe(s -> nameTV.setText(String.valueOf(s)));
-        Observable.just(data.getSalePrice())
-                .subscribe(s -> priceTV.setText(String.valueOf(s)));
-        Observable.just(data.getNums())
-                .subscribe(s -> countTV.setText(String.valueOf(s)));
-
+    public void setData(DiaryAlbum album, int position) {
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .url(data.getImage())
+                        .url(album.getImage())
                         .imageView(imageIV)
                         .build());
-
     }
+
 
     /**
      * 在 Activity 的 onDestroy 中使用 {@link DefaultAdapter#releaseAllHolder(RecyclerView)} 方法 (super.onDestroy() 之前)
@@ -124,12 +82,8 @@ public class CartGoodsListItemHolder extends BaseHolder<CartBean.GoodsBean> {
         mImageLoader.clear(mAppComponent.application(), ImageConfigImpl.builder()
                 .imageViews(imageIV)
                 .build());
-        this.checkV = null;
         this.imageIV = null;
-        this.nameTV = null;
-        this.priceTV = null;
-        this.countTV = null;
-        this.minusV = null;
-        this.addV = null;
+        this.mAppComponent = null;
+        this.mImageLoader = null;
     }
 }

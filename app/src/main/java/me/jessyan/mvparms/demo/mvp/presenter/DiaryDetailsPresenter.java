@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -18,23 +19,21 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.contract.DiscoverContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
+import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.DiaryComment;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryCommentListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryNaviListResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryTypeListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryCommentListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
 @ActivityScope
-public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, DiscoverContract.View> {
+public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Model, DiaryDetailsContract.View> {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -44,41 +43,40 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
     @Inject
     ImageLoader mImageLoader;
     @Inject
-    DiaryListAdapter mAdapter;
+    List<DiaryComment> diaryCommentList;
     @Inject
-    List<Diary> diaryList;
+    RecyclerView.Adapter mAdapter;
 
     @Inject
-    public DiscoverPresenter(DiscoverContract.Model model, DiscoverContract.View rootView) {
+    public DiaryDetailsPresenter(DiaryDetailsContract.Model model, DiaryDetailsContract.View rootView) {
         super(model, rootView);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.mErrorHandler = null;
-        this.mAppManager = null;
-        this.mImageLoader = null;
-        this.mApplication = null;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        getDiaryNaviType();
+        getDiaryDetails();
+        getDiaryComment();
     }
 
-    private void getDiaryNaviType() {
-        SimpleRequest request = new SimpleRequest();
-        request.setCmd(821);
-        mModel.getDiaryNaviType(request)
+    private void getDiaryDetails() {
+        DiaryDetailsRequest request = new DiaryDetailsRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) (cache.get("token"));
+        if (ArmsUtils.isEmpty(token)) {
+            request.setCmd(807);
+        } else {
+            request.setCmd(817);
+        }
+        request.setDiaryId(mRootView.getActivity().getIntent().getStringExtra("diaryId"));
+
+        mModel.getDiaryDetails(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DiaryNaviListResponse>() {
+                .subscribe(new Consumer<DiaryDetailsResponse>() {
                     @Override
-                    public void accept(DiaryNaviListResponse response) throws Exception {
+                    public void accept(DiaryDetailsResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            mRootView.updateTab(response.getNavList());
-                            getDiaryList("recom");
+                            mRootView.updateUI(response);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -86,44 +84,20 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                 });
     }
 
+    private void getDiaryComment() {
 
-    public void getDiaryList(String diaryType) {
+        DiaryCommentListRequest request = new DiaryCommentListRequest();
+        request.setDiaryId(mRootView.getActivity().getIntent().getStringExtra("diaryId"));
 
-        DiaryListRequest request = new DiaryListRequest();
-
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        String token = (String) (cache.get("token"));
-        if (ArmsUtils.isEmpty(token)) {
-            if ("recom".equals(diaryType)) {
-                request.setCmd(803);
-            } else if ("folow".equals(diaryType)) {
-                mRootView.showError(true);
-                return;
-            } else {
-                request.setCmd(805);
-                request.setTypeId(diaryType);
-            }
-        } else {
-            if ("recom".equals(diaryType)) {
-                request.setCmd(813);
-            } else if ("folow".equals(diaryType)) {
-                request.setCmd(804);
-            } else {
-                request.setCmd(815);
-                request.setTypeId(diaryType);
-            }
-        }
-        request.setToken(token);
-        mModel.getDiaryList(request)
+        mModel.getDiaryComment(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DiaryListResponse>() {
+                .subscribe(new Consumer<DiaryCommentListResponse>() {
                     @Override
-                    public void accept(DiaryListResponse response) throws Exception {
+                    public void accept(DiaryCommentListResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            diaryList.clear();
-                            diaryList.addAll(response.getDiaryList());
-                            mRootView.showError(diaryList.size() <= 0);
+                            diaryCommentList.clear();
+                            diaryCommentList.addAll(response.getDiaryCommentList());
                             mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
@@ -132,25 +106,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                 });
     }
 
-
-    private void getDiaryType() {
-        SimpleRequest request = new SimpleRequest();
-        request.setCmd(801);
-        mModel.getDiaryType(request)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DiaryTypeListResponse>() {
-                    @Override
-                    public void accept(DiaryTypeListResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
-                    }
-                });
-    }
-
-    public void vote(boolean vote, int position) {
+    public void vote(boolean vote) {
         if (checkLoginStatus()) {
             ArmsUtils.startActivity(LoginActivity.class);
             return;
@@ -167,10 +123,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                     @Override
                     public void accept(BaseResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            diaryList.get(position).setIsPraise(vote ? "1" : "0");
-                            int num = diaryList.get(position).getPraise();
-                            diaryList.get(position).setPraise(vote ? num + 1 : num <= 0 ? 0 : num - 1);
-                            mAdapter.notifyItemChanged(position);
+                            mRootView.updateVoteStatus(vote);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -179,7 +132,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
 
     }
 
-    public void follow(boolean follow, int position) {
+    public void follow(boolean follow) {
         if (checkLoginStatus()) {
             ArmsUtils.startActivity(LoginActivity.class);
             return;
@@ -196,8 +149,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                     @Override
                     public void accept(BaseResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            diaryList.get(position).getMember().setIsFollow(follow ? "1" : "0");
-                            mAdapter.notifyItemChanged(position);
+                            mRootView.updatefollowStatus(follow);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -210,4 +162,14 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         String token = (String) (cache.get("token"));
         return ArmsUtils.isEmpty(token);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.mErrorHandler = null;
+        this.mAppManager = null;
+        this.mImageLoader = null;
+        this.mApplication = null;
+    }
+
 }

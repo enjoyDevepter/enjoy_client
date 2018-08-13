@@ -18,23 +18,22 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.contract.DiscoverContract;
+import me.jessyan.mvparms.demo.mvp.contract.DiaryForGoodsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MyDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryNaviListResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryTypeListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyDiaryListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
 @ActivityScope
-public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, DiscoverContract.View> {
+public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.Model, DiaryForGoodsContract.View> {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -44,77 +43,35 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
     @Inject
     ImageLoader mImageLoader;
     @Inject
-    DiaryListAdapter mAdapter;
-    @Inject
     List<Diary> diaryList;
+    @Inject
+    MyDiaryListAdapter mAdapter;
 
     @Inject
-    public DiscoverPresenter(DiscoverContract.Model model, DiscoverContract.View rootView) {
+    public DiaryForGoodsPresenter(DiaryForGoodsContract.Model model, DiaryForGoodsContract.View rootView) {
         super(model, rootView);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.mErrorHandler = null;
-        this.mAppManager = null;
-        this.mImageLoader = null;
-        this.mApplication = null;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        getDiaryNaviType();
+        getDiary();
+        getMyDiaryList();
     }
 
-    private void getDiaryNaviType() {
-        SimpleRequest request = new SimpleRequest();
-        request.setCmd(821);
-        mModel.getDiaryNaviType(request)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DiaryNaviListResponse>() {
-                    @Override
-                    public void accept(DiaryNaviListResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                            mRootView.updateTab(response.getNavList());
-                            getDiaryList("recom");
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
-                    }
-                });
-    }
-
-
-    public void getDiaryList(String diaryType) {
-
-        DiaryListRequest request = new DiaryListRequest();
-
+    private void getMyDiaryList() {
+        MyDiaryRequest request = new MyDiaryRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         String token = (String) (cache.get("token"));
         if (ArmsUtils.isEmpty(token)) {
-            if ("recom".equals(diaryType)) {
-                request.setCmd(803);
-            } else if ("folow".equals(diaryType)) {
-                mRootView.showError(true);
-                return;
-            } else {
-                request.setCmd(805);
-                request.setTypeId(diaryType);
-            }
+            request.setCmd(816);
         } else {
-            if ("recom".equals(diaryType)) {
-                request.setCmd(813);
-            } else if ("folow".equals(diaryType)) {
-                request.setCmd(804);
-            } else {
-                request.setCmd(815);
-                request.setTypeId(diaryType);
-            }
+            request.setCmd(806);
         }
         request.setToken(token);
-        mModel.getDiaryList(request)
+        request.setMemberId(mRootView.getActivity().getIntent().getStringExtra("memberId"));
+        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
+        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        mModel.getMyDiaryList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<DiaryListResponse>() {
@@ -123,7 +80,6 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                         if (response.isSuccess()) {
                             diaryList.clear();
                             diaryList.addAll(response.getDiaryList());
-                            mRootView.showError(diaryList.size() <= 0);
                             mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
@@ -133,16 +89,28 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
     }
 
 
-    private void getDiaryType() {
-        SimpleRequest request = new SimpleRequest();
-        request.setCmd(801);
-        mModel.getDiaryType(request)
+    private void getDiary() {
+        DiaryRequest request = new DiaryRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) (cache.get("token"));
+        if (ArmsUtils.isEmpty(token)) {
+            request.setCmd(808);
+        } else {
+            request.setCmd(818);
+        }
+        request.setToken(token);
+        request.setDiaryId(mRootView.getActivity().getIntent().getStringExtra("diaryId"));
+        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
+        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+
+        mModel.getDiary(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DiaryTypeListResponse>() {
+                .subscribe(new Consumer<DiaryResponse>() {
                     @Override
-                    public void accept(DiaryTypeListResponse response) throws Exception {
+                    public void accept(DiaryResponse response) throws Exception {
                         if (response.isSuccess()) {
+                            mRootView.updateUI(response);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -158,8 +126,8 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         DiaryVoteRequest request = new DiaryVoteRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get("token")));
-        request.setCmd(vote ? 811 : 812);
         request.setDiaryId((String) mRootView.getCache().get("diaryId"));
+        request.setCmd(vote ? 811 : 812);
         mModel.diaryVote(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -179,7 +147,8 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
 
     }
 
-    public void follow(boolean follow, int position) {
+
+    public void follow(boolean follow) {
         if (checkLoginStatus()) {
             ArmsUtils.startActivity(LoginActivity.class);
             return;
@@ -187,8 +156,8 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         FollowMemberRequest request = new FollowMemberRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get("token")));
-        request.setCmd(follow ? 201 : 211);
         request.setMemberId((String) mRootView.getCache().get("memberId"));
+        request.setCmd(follow ? 201 : 211);
         mModel.follow(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -196,8 +165,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                     @Override
                     public void accept(BaseResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            diaryList.get(position).getMember().setIsFollow(follow ? "1" : "0");
-                            mAdapter.notifyItemChanged(position);
+                            mRootView.updateFollow(follow);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -210,4 +178,15 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         String token = (String) (cache.get("token"));
         return ArmsUtils.isEmpty(token);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.mErrorHandler = null;
+        this.mAppManager = null;
+        this.mImageLoader = null;
+        this.mApplication = null;
+    }
+
+
 }

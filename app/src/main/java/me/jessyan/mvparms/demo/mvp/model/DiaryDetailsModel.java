@@ -10,25 +10,24 @@ import com.jess.arms.mvp.BaseModel;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import me.jessyan.mvparms.demo.mvp.contract.DiscoverContract;
+import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryCommentListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryNaviListResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryTypeListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryCommentListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
 
 
 @ActivityScope
-public class DiscoverModel extends BaseModel implements DiscoverContract.Model {
+public class DiaryDetailsModel extends BaseModel implements DiaryDetailsContract.Model {
     private Gson mGson;
     private Application mApplication;
 
     @Inject
-    public DiscoverModel(IRepositoryManager repositoryManager, Gson gson, Application application) {
+    public DiaryDetailsModel(IRepositoryManager repositoryManager, Gson gson, Application application) {
         super(repositoryManager);
         this.mGson = gson;
         this.mApplication = application;
@@ -42,21 +41,15 @@ public class DiscoverModel extends BaseModel implements DiscoverContract.Model {
     }
 
     @Override
-    public Observable<DiaryTypeListResponse> getDiaryType(SimpleRequest request) {
+    public Observable<DiaryDetailsResponse> getDiaryDetails(DiaryDetailsRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
-                .getDiaryType(request);
+                .getDiaryDetails(request);
     }
 
     @Override
-    public Observable<DiaryNaviListResponse> getDiaryNaviType(SimpleRequest request) {
+    public Observable<DiaryCommentListResponse> getDiaryComment(DiaryCommentListRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
-                .getDiaryNaviType(request);
-    }
-
-    @Override
-    public Observable<DiaryListResponse> getDiaryList(DiaryListRequest request) {
-        return mRepositoryManager.obtainRetrofitService(MainService.class)
-                .getDiaryList(request);
+                .getDiaryComment(request);
     }
 
     @Override

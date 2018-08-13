@@ -4,7 +4,14 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CartListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DeleteCartListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryCommentListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryImagesRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.EidtCartRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeRequest;
@@ -12,6 +19,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.HotRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealOrderConfrimRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MyDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayMealOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
@@ -21,6 +29,13 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CartListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryCommentListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryImagesResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryNaviListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryTypeListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeResponse;
@@ -92,4 +107,36 @@ public interface MainService {
 
     @POST("gateway")
     Observable<PayMealOrderResponse> placeMealOrder(@Body PayMealOrderRequest request);
+
+    @POST("gateway")
+    Observable<DiaryTypeListResponse> getDiaryType(@Body SimpleRequest request);
+
+    @POST("gateway")
+    Observable<DiaryNaviListResponse> getDiaryNaviType(@Body SimpleRequest request);
+
+    @POST("gateway")
+    Observable<DiaryListResponse> getDiaryList(@Body DiaryListRequest request);
+
+    @POST("gateway")
+    Observable<BaseResponse> diaryVote(@Body DiaryVoteRequest request);
+
+    @POST("gateway")
+    Observable<BaseResponse> follow(@Body FollowMemberRequest request);
+
+    @POST("gateway")
+    Observable<DiaryResponse> getDiary(@Body DiaryRequest request);
+
+    @POST("gateway")
+    Observable<DiaryImagesResponse> getDiaryImages(@Body DiaryImagesRequest request);
+
+    @POST("gateway")
+    Observable<DiaryListResponse> getMyDiaryList(@Body MyDiaryRequest request);
+
+    @POST("gateway")
+    Observable<DiaryDetailsResponse> getDiaryDetails(@Body DiaryDetailsRequest request);
+
+    @POST("gateway")
+    Observable<DiaryCommentListResponse> getDiaryComment(@Body DiaryCommentListRequest request);
+
+
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="76dp"
+    android:background="@color/white"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+    <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
+        android:id="@+id/headImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/nickName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@id/headImage"
+        android:text="雪怡gril"
+        android:textColor="#FF676767"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/nickName"
+        android:layout_below="@id/nickName"
+        android:layout_marginTop="6dp"
+        android:text="看起来还不错"
+        android:textColor="#FF676767"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/publishDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="16dp"
+        android:text="2018-07-12"
+        android:textColor="#FFB3B3B3"
+        android:textSize="10sp" />
+
+</RelativeLayout>

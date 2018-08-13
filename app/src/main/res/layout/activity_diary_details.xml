@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/white"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
+                    android:id="@+id/headImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/nickName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@id/headImage"
+                    android:text="雪怡gril"
+                    android:textColor="#FF676767"
+                    android:textSize="12sp" />
+
+                <View
+                    android:id="@+id/follow"
+                    android:layout_width="44dp"
+                    android:layout_height="16dp"
+                    android:layout_alignLeft="@id/nickName"
+                    android:layout_below="@id/nickName"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/follow_bg" />
+
+                <TextView
+                    android:id="@+id/publishDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="2018-07-12"
+                    android:textColor="#FFB3B3B3"
+                    android:textSize="10sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/goods_info"
+                android:layout_width="match_parent"
+                android:layout_height="102dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp">
+
+
+                <ImageView
+                    android:id="@+id/goods_image"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitXY" />
+
+
+                <TextView
+                    android:id="@+id/goods_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/image"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@id/goods_image"
+                    android:lines="2"
+                    android:text="湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
+                    android:textColor="#FF000000"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:id="@+id/price_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/goods_name"
+                    android:layout_below="@id/goods_name"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/price_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="3dp"
+                        android:text="￥"
+                        android:textColor="#FFFF0000"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/goods_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_toRightOf="@id/price_tag"
+                        android:text="228.00"
+                        android:textColor="#FFFF0000"
+                        android:textSize="17sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="242dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/diary_publishDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="2018-07-12"
+                        android:textColor="#FFB3B3B3"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/index"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="第一篇日记"
+                        android:textColor="#FF676767"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/left"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="12dp"
+                        android:layout_weight="1"
+                        android:scaleType="fitXY" />
+
+                    <ImageView
+                        android:id="@+id/right"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/intro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lines="2"
+                    android:text="打完水光针这么多天了，很针的注射和皮..." />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingRight="10dp">
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="8dp"
+                            android:background="@mipmap/look" />
+
+                        <TextView
+                            android:id="@+id/browse"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:text="1000"
+                            android:textColor="#FFB3B3B3"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|right"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp">
+
+                        <View
+                            android:layout_width="8dp"
+                            android:layout_height="7dp"
+                            android:background="@mipmap/comment" />
+
+                        <TextView
+                            android:id="@+id/comment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:text="1000"
+                            android:textColor="#FFB3B3B3"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/praise_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp">
+
+                        <View
+                            android:id="@+id/isPraise"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:background="@drawable/vote_bg" />
+
+                        <TextView
+                            android:id="@+id/praise"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:text="1000"
+                            android:textColor="#FFB3B3B3"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="@drawable/title_bg"
+                app:tabIndicatorColor="#FF50C8F5"
+                app:tabIndicatorHeight="2dp"
+                app:tabMode="scrollable"
+                app:tabPaddingEnd="0dp"
+                app:tabPaddingStart="0dp"
+                app:tabSelectedTextColor="#FF50C8F5"
+                app:tabTextAppearance="@style/TabLayoutTextStyle"
+                app:tabTextColor="#FF666666" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/commentRV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:background="@color/white">
+
+        <View
+            android:id="@+id/vote"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/vote_bg" />
+
+
+        <EditText
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toLeftOf="@id/vote"
+            android:background="@drawable/search_input_bg"
+            android:hint="请输入评论内容..."
+            android:paddingLeft="10dp"
+            android:textColor="#FF333333"
+            android:textSize="12sp" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

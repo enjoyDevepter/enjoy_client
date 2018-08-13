@@ -64,9 +64,10 @@
         <activity android:name=".mvp.ui.activity.CartActivity" />
         <activity android:name=".mvp.ui.activity.HospitalInfoActivity" />
         <activity android:name=".mvp.ui.activity.HospitalChooseActivity" />
-        <activity android:name=".mvp.ui.activity.DoctorMainActivity">
-
-        </activity>
+        <activity android:name=".mvp.ui.activity.DoctorMainActivity" />
+        <activity android:name=".mvp.ui.activity.DiaryDetailsActivity" />
+        <activity android:name=".mvp.ui.activity.DiaryImageActivity" />
+        <activity android:name=".mvp.ui.activity.DiaryForGoodsActivity"></activity>
     </application>
 
 </manifest>

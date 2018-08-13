@@ -10,37 +10,36 @@ import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
-import me.jessyan.mvparms.demo.mvp.contract.DiscoverContract;
-import me.jessyan.mvparms.demo.mvp.model.DiscoverModel;
+import me.jessyan.mvparms.demo.mvp.contract.DiaryForGoodsContract;
+import me.jessyan.mvparms.demo.mvp.model.DiaryForGoodsModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyDiaryListAdapter;
 
 
 @Module
-public class DiscoverModule {
-    private DiscoverContract.View view;
+public class DiaryForGoodsModule {
+    private DiaryForGoodsContract.View view;
 
     /**
-     * 构建DiscoverModule时,将View的实现类传进来,这样就可以提供View的实现类给presenter
+     * 构建DiaryForGoodsModule时,将View的实现类传进来,这样就可以提供View的实现类给presenter
      *
      * @param view
      */
-    public DiscoverModule(DiscoverContract.View view) {
+    public DiaryForGoodsModule(DiaryForGoodsContract.View view) {
         this.view = view;
     }
 
     @ActivityScope
     @Provides
-    DiscoverContract.View provideDiscoverView() {
+    DiaryForGoodsContract.View provideDiaryForGoodsView() {
         return this.view;
     }
 
     @ActivityScope
     @Provides
-    DiscoverContract.Model provideDiscoverModel(DiscoverModel model) {
+    DiaryForGoodsContract.Model provideDiaryForGoodsModel(DiaryForGoodsModel model) {
         return model;
     }
-
 
     @ActivityScope
     @Provides
@@ -56,8 +55,8 @@ public class DiscoverModule {
 
     @ActivityScope
     @Provides
-    DiaryListAdapter provideGoodsListAdapter(List<Diary> diaries) {
-        return new DiaryListAdapter(diaries);
+    MyDiaryListAdapter provideGoodsListAdapter(List<Diary> diaries) {
+        return new MyDiaryListAdapter(diaries);
     }
 
 }
