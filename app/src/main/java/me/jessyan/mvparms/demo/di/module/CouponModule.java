@@ -55,7 +55,7 @@ public class CouponModule {
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideCouponAdapter(List<Coupon> list) {
+    CouponListAdapter provideCouponAdapter(List<Coupon> list) {
         return new CouponListAdapter(list);
     }
 }

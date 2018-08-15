@@ -20,13 +20,11 @@ import com.jess.arms.utils.ArmsUtils;
 import java.lang.reflect.Field;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerHospitalInfoComponent;
 import me.jessyan.mvparms.demo.di.module.HospitalInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
 import me.jessyan.mvparms.demo.mvp.presenter.HospitalInfoPresenter;
-
-import me.jessyan.mvparms.demo.R;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -56,9 +54,9 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     private RecyclerView.Adapter[] adapters = new RecyclerView.Adapter[3];
 
-    private void initViewPager(){
+    private void initViewPager() {
         views[0] = new TextView(this);
-        for(int i = 1;i<4;i++){
+        for (int i = 1; i < 4; i++) {
             views[i] = new RecyclerView(this);
         }
         viewpager.setAdapter(new PagerAdapter() {
@@ -93,7 +91,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         });
     }
 
-    private void initTabLayout(){
+    private void initTabLayout() {
         tab.setupWithViewPager(viewpager);
         Class tablayout = tab.getClass();
         Field tabStrip = null;
@@ -106,7 +104,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
                 child.setPadding(0, 0, 0, 0);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
                 params.leftMargin = 60;
-                params.rightMargin= 45;
+                params.rightMargin = 45;
                 child.setLayoutParams(params);
                 child.invalidate(); // 这个方法是重画
             }
@@ -117,7 +115,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         }
     }
 
-    private void initAdapter(){
+    private void initAdapter() {
 
     }
 

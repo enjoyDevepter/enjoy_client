@@ -11,11 +11,13 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.MallContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.HGoodsService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 
 
 @ActivityScope
@@ -48,6 +50,12 @@ public class MallModel extends BaseModel implements MallContract.Model {
     public Observable<GoodsListResponse> getGoodsList(GoodsListRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getCategory(request);
+    }
+
+    @Override
+    public Observable<HGoodsListResponse> getHGoodsList(GoodsListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(HGoodsService.class)
+                .getHGoodsList(request);
     }
 
 }

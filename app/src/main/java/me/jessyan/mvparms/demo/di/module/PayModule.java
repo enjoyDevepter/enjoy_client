@@ -12,7 +12,7 @@ import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.PayContract;
 import me.jessyan.mvparms.demo.mvp.model.PayModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.PayGoods;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.PayGoodsListAdapter;
 
 
@@ -49,13 +49,13 @@ public class PayModule {
 
     @ActivityScope
     @Provides
-    List<PayOrderResponse.Goods> provideGoodsList() {
+    List<PayGoods> provideGoodsList() {
         return new ArrayList<>();
     }
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideOrderConfirmAdapter(List<PayOrderResponse.Goods> goodsList) {
+    RecyclerView.Adapter provideOrderConfirmAdapter(List<PayGoods> goodsList) {
         return new PayGoodsListAdapter(goodsList);
     }
 }

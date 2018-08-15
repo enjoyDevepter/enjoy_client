@@ -33,12 +33,15 @@ import me.jessyan.mvparms.demo.di.module.MallModule;
 import me.jessyan.mvparms.demo.mvp.contract.MallContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.MallPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterThirdAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -94,6 +97,8 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     @Inject
     GoodsListAdapter mAdapter;
     @Inject
+    HGoodsListAdapter mHAdapter;
+    @Inject
     GoodsFilterSecondAdapter secondAdapter;
     GoodsFilterThirdAdapter thirdAdapter;
 
@@ -128,11 +133,11 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         saleV.setOnClickListener(this);
         priceV.setOnClickListener(this);
         mAdapter.setOnItemClickListener(this);
+        mHAdapter.setOnItemClickListener(this);
         maskV.setOnClickListener(this);
 
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         ArmsUtils.configRecyclerView(secondFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        mRecyclerView.setAdapter(mAdapter);
         secondFilterRV.setAdapter(secondAdapter);
         secondAdapter.setOnItemClickListener(this);
         tabLayout.addOnTabSelectedListener(this);
@@ -250,7 +255,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     public void refreshNaviTitle(List<Category> categories) {
         for (Category category : categories) {
             if ("0".equals(category.getParentId())) {
-                tabLayout.addTab(tabLayout.newTab().setTag(category.getBusType()).setText(category.getName()));
+                tabLayout.addTab(tabLayout.newTab().setText(category.getName()));
             }
         }
     }
@@ -262,7 +267,6 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
-        System.out.println("");
         // 如何区分
         switch (viewType) {
             case R.layout.goods_list_item:
@@ -271,6 +275,14 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 intent.putExtra("goodsId", goods.getGoodsId());
                 intent.putExtra("merchId", goods.getMerchId());
                 ArmsUtils.startActivity(intent);
+                break;
+            case R.layout.h_goods_list_item:
+                HGoodsListResponse.HGoods hGoods = mHAdapter.getInfos().get(position);
+                Intent hGoodsintent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
+                hGoodsintent.putExtra("goodsId", hGoods.getGoodsId());
+                hGoodsintent.putExtra("merchId", hGoods.getMerchId());
+                hGoodsintent.putExtra("advanceDepositId", hGoods.getAdvanceDepositId());
+                ArmsUtils.startActivity(hGoodsintent);
                 break;
             case R.layout.goods_filter_second_item:
                 List<Category> childs = secondAdapter.getInfos();
@@ -300,8 +312,18 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        provideCache().put("busType", tab.getTag());
-        mPresenter.getGoodsList();
+        switch (tab.getPosition()) {
+            case 0:
+                mRecyclerView.setAdapter(mAdapter);
+                mPresenter.getGoodsList();
+                break;
+            case 1:
+                break;
+            case 2:
+                mRecyclerView.setAdapter(mHAdapter);
+                mPresenter.getHGoodsList();
+                break;
+        }
     }
 
     @Override

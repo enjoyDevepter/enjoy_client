@@ -141,6 +141,7 @@
                         android:layout_height="18dp"
                         android:layout_marginLeft="3dp"
                         android:background="@drawable/goods_off_bg"
+                        android:gravity="center"
                         android:text="满减"
                         android:textColor="#FFFF0000"
                         android:textSize="13sp" />
@@ -247,6 +248,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFFFFFF"
+            android:clickable="true"
             android:visibility="gone">
 
             <ImageView
@@ -389,6 +391,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFFFFFF"
+            android:clickable="true"
             android:visibility="gone">
 
             <TextView

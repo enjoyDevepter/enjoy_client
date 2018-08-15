@@ -97,7 +97,6 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
     protected void onResume() {
         super.onResume();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-
         if (cache.get("memberAddressInfo") != null) {
             Address address = (Address) cache.get("memberAddressInfo");
             addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());

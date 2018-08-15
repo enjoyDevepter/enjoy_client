@@ -20,7 +20,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
+import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
+import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
@@ -41,11 +42,11 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
     @Inject
     ImageLoader mImageLoader;
     @Inject
-    GoodsDetailsResponse response;
+    GoodsDetailsResponse goodsDetailsResponse;
     @Inject
-    List<GoodsDetails.Promotion> promotionList;
+    List<Promotion> promotionList;
     @Inject
-    List<GoodsDetails.GoodsSpecValue> goodsSpecValues;
+    List<GoodsSpecValue> goodsSpecValues;
     @Inject
     TagAdapter adapter;
 
@@ -88,7 +89,7 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                     @Override
                     public void accept(GoodsDetailsResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            GoodsDetailsPresenter.this.response = response;
+                            goodsDetailsResponse = response;
                             promotionList.clear();
                             promotionList.addAll(response.getPromotionList());
                             goodsSpecValues.clear();
@@ -153,7 +154,7 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                     @Override
                     public void accept(GoodsDetailsResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            GoodsDetailsPresenter.this.response = response;
+                            response = response;
                             promotionList.clear();
                             promotionList.addAll(response.getPromotionList());
                             goodsSpecValues.clear();

@@ -14,6 +14,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 
 
 public interface MallContract {
@@ -34,5 +35,7 @@ public interface MallContract {
         Observable<CategoryResponse> getCategory(SimpleRequest request);
 
         Observable<GoodsListResponse> getGoodsList(GoodsListRequest request);
+
+        Observable<HGoodsListResponse> getHGoodsList(GoodsListRequest request);
     }
 }

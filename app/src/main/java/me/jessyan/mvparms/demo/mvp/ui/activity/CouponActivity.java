@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerCouponComponent;
 import me.jessyan.mvparms.demo.di.module.CouponModule;
 import me.jessyan.mvparms.demo.mvp.contract.CouponContract;
 import me.jessyan.mvparms.demo.mvp.presenter.CouponPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.CouponListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -36,7 +38,7 @@ public class CouponActivity extends BaseActivity<CouponPresenter> implements Cou
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    CouponListAdapter mAdapter;
 
 
     @Override
@@ -59,7 +61,7 @@ public class CouponActivity extends BaseActivity<CouponPresenter> implements Cou
         backV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        ((DefaultAdapter) mAdapter).setOnItemClickListener(this);
+        mAdapter.setOnItemClickListener(this);
         titleTV.setText("优惠券");
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
     }
@@ -99,7 +101,9 @@ public class CouponActivity extends BaseActivity<CouponPresenter> implements Cou
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
-        ((DefaultAdapter) mAdapter).getInfos().get(position);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        cache.put("coupon", mAdapter.getInfos().get(position));
+        killMyself();
     }
 
     @Override

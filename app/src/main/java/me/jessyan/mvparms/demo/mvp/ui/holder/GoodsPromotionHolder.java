@@ -26,7 +26,7 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
+import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 
 /**
  * ================================================
@@ -37,7 +37,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class GoodsPromotionHolder extends BaseHolder<GoodsDetails.Promotion> {
+public class GoodsPromotionHolder extends BaseHolder<Promotion> {
 
     @BindView(R.id.name)
     TextView nameTV;
@@ -50,7 +50,7 @@ public class GoodsPromotionHolder extends BaseHolder<GoodsDetails.Promotion> {
     }
 
     @Override
-    public void setData(GoodsDetails.Promotion promotion, int position) {
+    public void setData(Promotion promotion, int position) {
         Observable.just(promotion.getTitle()).subscribe(new Consumer<String>() {
             @Override
             public void accept(String s) throws Exception {

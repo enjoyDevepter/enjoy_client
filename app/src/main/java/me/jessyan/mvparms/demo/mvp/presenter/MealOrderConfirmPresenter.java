@@ -23,6 +23,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MealOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
+import me.jessyan.mvparms.demo.mvp.model.entity.PayEntry;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealOrderConfrimRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayMealOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealOrderConfirmResponse;
@@ -138,7 +139,7 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());
-                                List<PayMealOrderResponse.PayEntry> payEntryList = response.getPayEntryList();
+                                List<PayEntry> payEntryList = response.getPayEntryList();
                                 if (payEntryList != null && payEntryList.size() > 0) {
                                     intent.putExtra("payName", payEntryList.get(0).getName());
                                 }

@@ -30,7 +30,7 @@ import com.jess.arms.utils.ArmsUtils;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.PayGoods;
 
 /**
  * ================================================
@@ -41,7 +41,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class PayGoodsListItemHolder extends BaseHolder<PayOrderResponse.Goods> {
+public class PayGoodsListItemHolder extends BaseHolder<PayGoods> {
     @BindView(R.id.image)
     ImageView imageIV;
     @BindView(R.id.name)
@@ -59,7 +59,7 @@ public class PayGoodsListItemHolder extends BaseHolder<PayOrderResponse.Goods> {
     }
 
     @Override
-    public void setData(PayOrderResponse.Goods data, int position) {
+    public void setData(PayGoods data, int position) {
         Observable.just(data.getName())
                 .subscribe(s -> nameTV.setText(String.valueOf(s)));
         Observable.just(data.getNums())

@@ -38,6 +38,8 @@ import me.jessyan.mvparms.demo.di.component.DaggerGoodsDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.GoodsDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
+import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
+import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.GoodsDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
@@ -266,11 +268,11 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             case R.id.promotion:
                 showPro(true);
                 break;
-            case R.id.spec:
-                showSpec(true);
-                break;
             case R.id.mask_pro:
                 showPro(false);
+                break;
+            case R.id.spec:
+                showSpec(true);
                 break;
             case R.id.mask_spec:
                 showSpec(false);
@@ -338,14 +340,14 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     public void onItemClick(View view, int viewType, Object data, int position) {
         switch (viewType) {
             case R.layout.goods_promotion_item:
-                List<GoodsDetails.Promotion> promotionList = promotionAdapter.getInfos();
+                List<Promotion> promotionList = promotionAdapter.getInfos();
                 for (int i = 0; i < promotionList.size(); i++) {
-                    GoodsDetails.Promotion p = promotionList.get(i);
+                    Promotion p = promotionList.get(i);
                     if (i == position) {
                         p.setCheck(!p.isCheck());
                         promotionContentV.setVisibility(p.isCheck() ? View.VISIBLE : View.INVISIBLE);
                         promotionTV.setText(p.isCheck() ? promotionList.get(position).getTitle() : "");
-                        provideCache().put("promotionId", p.isCheck() ? p.getId() : "");
+                        provideCache().put("promotionId", p.isCheck() ? p.getPromotionId() : "");
                     } else {
                         p.setCheck(false);
                     }
@@ -358,7 +360,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     @Override
     public void onSelected(Set<Integer> selectPosSet) {
         if (selectPosSet.size() > 0) {
-            GoodsDetails.GoodsSpecValue goodsSpecValue = (GoodsDetails.GoodsSpecValue) adapter.getItem((int) selectPosSet.toArray()[0]);
+            GoodsSpecValue goodsSpecValue = (GoodsSpecValue) adapter.getItem((int) selectPosSet.toArray()[0]);
             provideCache().put("specValueId", goodsSpecValue.getSpecValueId());
             goodSpecTV.setText(goodsSpecValue.getSpecValueName());
             mPresenter.getCoodsDetailsForSpecValueId();

@@ -3,7 +3,6 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -16,6 +15,7 @@ import javax.inject.Inject;
 
 import me.jessyan.mvparms.demo.mvp.contract.CouponContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Coupon;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.CouponListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
@@ -32,7 +32,7 @@ public class CouponPresenter extends BasePresenter<CouponContract.Model, CouponC
     @Inject
     List<Coupon> couponList;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    CouponListAdapter mAdapter;
 
     @Inject
     public CouponPresenter(CouponContract.Model model, CouponContract.View rootView) {

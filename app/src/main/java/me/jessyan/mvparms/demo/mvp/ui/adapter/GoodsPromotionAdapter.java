@@ -23,7 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
+import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.ui.holder.GoodsPromotionHolder;
 
 /**
@@ -35,14 +35,14 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.GoodsPromotionHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class GoodsPromotionAdapter extends DefaultAdapter<GoodsDetails.Promotion> {
+public class GoodsPromotionAdapter extends DefaultAdapter<Promotion> {
 
-    public GoodsPromotionAdapter(List<GoodsDetails.Promotion> promotions) {
+    public GoodsPromotionAdapter(List<Promotion> promotions) {
         super(promotions);
     }
 
     @Override
-    public BaseHolder<GoodsDetails.Promotion> getHolder(View v, int viewType) {
+    public BaseHolder<Promotion> getHolder(View v, int viewType) {
         return new GoodsPromotionHolder(v);
     }
 

@@ -23,7 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.PayGoods;
 import me.jessyan.mvparms.demo.mvp.ui.holder.PayGoodsListItemHolder;
 
 /**
@@ -35,14 +35,14 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.PayGoodsListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class PayGoodsListAdapter extends DefaultAdapter<PayOrderResponse.Goods> {
+public class PayGoodsListAdapter extends DefaultAdapter<PayGoods> {
 
-    public PayGoodsListAdapter(List<PayOrderResponse.Goods> goodsList) {
+    public PayGoodsListAdapter(List<PayGoods> goodsList) {
         super(goodsList);
     }
 
     @Override
-    public BaseHolder<PayOrderResponse.Goods> getHolder(View v, int viewType) {
+    public BaseHolder<PayGoods> getHolder(View v, int viewType) {
         return new PayGoodsListItemHolder(v);
     }
 

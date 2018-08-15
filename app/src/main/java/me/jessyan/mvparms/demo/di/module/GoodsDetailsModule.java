@@ -19,7 +19,8 @@ import dagger.Provides;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.GoodsDetailsModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
+import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
+import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
 
@@ -58,10 +59,10 @@ public class GoodsDetailsModule {
 
     @ActivityScope
     @Provides
-    TagAdapter provideSerachAdapter(List<GoodsDetails.GoodsSpecValue> list) {
-        return new TagAdapter<GoodsDetails.GoodsSpecValue>(list) {
+    TagAdapter provideSerachAdapter(List<GoodsSpecValue> list) {
+        return new TagAdapter<GoodsSpecValue>(list) {
             @Override
-            public View getView(FlowLayout parent, int position, GoodsDetails.GoodsSpecValue s) {
+            public View getView(FlowLayout parent, int position, GoodsSpecValue s) {
                 TextView tv = (TextView) LayoutInflater.from(ArmsUtils.getContext()).inflate(R.layout.goods_spec_item, null, false);
                 tv.setText(s.getSpecValueName());
                 return tv;
@@ -71,7 +72,7 @@ public class GoodsDetailsModule {
 
     @ActivityScope
     @Provides
-    List<GoodsDetails.GoodsSpecValue> provideGoodSpecList() {
+    List<GoodsSpecValue> provideGoodSpecList() {
         return new ArrayList<>();
     }
 
@@ -83,13 +84,13 @@ public class GoodsDetailsModule {
 
     @ActivityScope
     @Provides
-    List<GoodsDetails.Promotion> providePromotionList() {
+    List<Promotion> providePromotionList() {
         return new ArrayList<>();
     }
 
     @ActivityScope
     @Provides
-    GoodsPromotionAdapter providePromotionAdapter(List<GoodsDetails.Promotion> list) {
+    GoodsPromotionAdapter providePromotionAdapter(List<Promotion> list) {
         return new GoodsPromotionAdapter(list);
     }
 

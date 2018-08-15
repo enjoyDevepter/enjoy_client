@@ -15,7 +15,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import me.jessyan.mvparms.demo.mvp.contract.PayContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.PayGoods;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
@@ -30,7 +30,7 @@ public class PayPresenter extends BasePresenter<PayContract.Model, PayContract.V
     @Inject
     ImageLoader mImageLoader;
     @Inject
-    List<PayOrderResponse.Goods> goodsList;
+    List<PayGoods> goodsList;
     @Inject
     RecyclerView.Adapter mAdapter;
 

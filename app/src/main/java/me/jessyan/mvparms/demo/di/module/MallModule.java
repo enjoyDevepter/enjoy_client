@@ -14,8 +14,10 @@ import me.jessyan.mvparms.demo.mvp.contract.MallContract;
 import me.jessyan.mvparms.demo.mvp.model.MallModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 
 
 @Module
@@ -58,6 +60,12 @@ public class MallModule {
 
     @ActivityScope
     @Provides
+    List<HGoodsListResponse.HGoods> provideHGoodsList() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
     List<Category> provideCategories() {
         return new ArrayList<>();
     }
@@ -67,6 +75,13 @@ public class MallModule {
     GoodsListAdapter provideGoodsListAdapter(List<Goods> goods) {
         return new GoodsListAdapter(goods);
     }
+
+    @ActivityScope
+    @Provides
+    HGoodsListAdapter provideHGoodsListAdapter(List<HGoodsListResponse.HGoods> goods) {
+        return new HGoodsListAdapter(goods);
+    }
+
 
     @ActivityScope
     @Provides

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -37,38 +36,39 @@
     </LinearLayout>
 
     <ImageView
-        android:background="#ff0000"
         android:id="@+id/hot_img"
         android:layout_width="match_parent"
-        android:layout_height="216dp" />
+        android:layout_height="216dp"
+        android:background="#ff0000" />
 
     <View
-        android:background="#F4F4F4"
         android:layout_width="match_parent"
-        android:layout_height="3dp"/>
-    
+        android:layout_height="3dp"
+        android:background="#F4F4F4" />
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tab"
-        app:tabTextColor="#333333"
-        app:tabMode="fixed"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        app:tabGravity="fill"
         app:tabIndicatorColor="#5FBFE3"
         app:tabIndicatorHeight="2dp"
-        app:tabGravity="fill"
+        app:tabMode="fixed"
         app:tabPaddingEnd="15dp"
         app:tabPaddingStart="15dp"
         app:tabSelectedTextColor="#5FBFE3"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"></android.support.design.widget.TabLayout>
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabTextColor="#333333"></android.support.design.widget.TabLayout>
 
 
     <View
-        android:background="#F4F4F4"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:background="#F4F4F4" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

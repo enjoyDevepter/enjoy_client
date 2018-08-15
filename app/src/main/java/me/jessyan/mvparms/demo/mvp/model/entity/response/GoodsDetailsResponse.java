@@ -3,6 +3,8 @@ package me.jessyan.mvparms.demo.mvp.model.entity.response;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
+import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
+import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 
 /**
  * Created by guomin on 2018/7/28.
@@ -13,9 +15,9 @@ public class GoodsDetailsResponse extends BaseResponse {
     private String recom;
     private GoodsDetails.Goods goods;
     private List<GoodsDetails.GoodsSpec> goodsSpecList;
-    private List<GoodsDetails.GoodsSpecValue> goodsSpecValueList;
+    private List<GoodsSpecValue> goodsSpecValueList;
     private List<String> images;
-    private List<GoodsDetails.Promotion> promotionList;
+    private List<Promotion> promotionList;
 
 
     public GoodsDetails.Goods getGoods() {
@@ -34,11 +36,11 @@ public class GoodsDetailsResponse extends BaseResponse {
         this.goodsSpecList = goodsSpecList;
     }
 
-    public List<GoodsDetails.GoodsSpecValue> getGoodsSpecValueList() {
+    public List<GoodsSpecValue> getGoodsSpecValueList() {
         return goodsSpecValueList;
     }
 
-    public void setGoodsSpecValueList(List<GoodsDetails.GoodsSpecValue> goodsSpecValueList) {
+    public void setGoodsSpecValueList(List<GoodsSpecValue> goodsSpecValueList) {
         this.goodsSpecValueList = goodsSpecValueList;
     }
 
@@ -50,11 +52,11 @@ public class GoodsDetailsResponse extends BaseResponse {
         this.images = images;
     }
 
-    public List<GoodsDetails.Promotion> getPromotionList() {
+    public List<Promotion> getPromotionList() {
         return promotionList;
     }
 
-    public void setPromotionList(List<GoodsDetails.Promotion> promotionList) {
+    public void setPromotionList(List<Promotion> promotionList) {
         this.promotionList = promotionList;
     }
 
