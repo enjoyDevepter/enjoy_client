@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginRight="3dp"
-                android:text="X"
+                android:text="x"
                 android:textColor="#FF666666"
                 android:textSize="12sp" />
 

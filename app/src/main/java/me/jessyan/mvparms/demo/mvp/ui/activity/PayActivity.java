@@ -115,6 +115,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
+                killMyself();
                 break;
             case R.id.pay_for_zfb:
                 if (!zfbV.isSelected()) {
