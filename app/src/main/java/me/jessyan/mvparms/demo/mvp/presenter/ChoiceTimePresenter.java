@@ -48,6 +48,7 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
         appointments.addAll(mRootView.getActivity().getIntent().getParcelableArrayListExtra("appointmnetInfo"));
+        appointments.get(0).setChoice(true);
         timeList.addAll(appointments.get(0).getAppointmentsTimeList());
         timeAdapter.notifyDataSetChanged();
         dateAdapter.notifyDataSetChanged();

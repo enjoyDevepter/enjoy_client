@@ -29,6 +29,8 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressEditListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class AddressListPresenter extends BasePresenter<AddressListContract.Model, AddressListContract.View> {
@@ -69,7 +71,7 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
     public void delAddress(String addressId, int delIndex) {
         DelAddressRequest request = new DelAddressRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setToken(String.valueOf(cache.get("token")));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
         request.setId(addressId);
 
         mModel.delAddress(request)
@@ -91,7 +93,7 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
     public void getAddressList() {
         AddressListRequest request = new AddressListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setToken(String.valueOf(cache.get("token")));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
         request.setPageIndex(1);
         request.setPageSize(10);
 
@@ -119,7 +121,7 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
         ModifyAddressRequest request = new ModifyAddressRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setCmd(205);
-        request.setToken(String.valueOf(cache.get("token")));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
         request.setMemberAddress(address);
         mModel.modifyAddress(request)
                 .subscribeOn(Schedulers.io())

@@ -23,7 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
 import me.jessyan.mvparms.demo.mvp.ui.holder.StoresListItemHolder;
 
 /**
@@ -35,13 +35,13 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.StoresListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class StoresListAdapter extends DefaultAdapter<Store> {
-    public StoresListAdapter(List<Store> stores) {
+public class StoresListAdapter extends DefaultAdapter<CommonStoreDateType> {
+    public StoresListAdapter(List<CommonStoreDateType> stores) {
         super(stores);
     }
 
     @Override
-    public BaseHolder<Store> getHolder(View v, int viewType) {
+    public BaseHolder<CommonStoreDateType> getHolder(View v, int viewType) {
         return new StoresListItemHolder(v);
     }
 

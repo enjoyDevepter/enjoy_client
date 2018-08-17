@@ -19,6 +19,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContract.View> {
@@ -49,7 +51,7 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                 //request permission success, do something.
                 HomeRequest request = new HomeRequest();
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-                String token = String.valueOf(cache.get("token"));
+                String token = String.valueOf(cache.get(KEY_KEEP + "token"));
                 if (ArmsUtils.isEmpty(token)) {
                     request.setCmd(301);
                 } else {

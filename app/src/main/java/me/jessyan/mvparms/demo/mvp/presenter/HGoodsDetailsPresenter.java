@@ -31,6 +31,8 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.Model, HGoodsDetailsContract.View> {
@@ -70,12 +72,13 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
 
         GoodsDetailsRequest request = new GoodsDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        String token = (String) cache.get("token");
+        String token = (String) cache.get(KEY_KEEP + "token");
         if (ArmsUtils.isEmpty(token)) {
             request.setCmd(441);
         } else {
             request.setCmd(442);
         }
+        request.setToken(token);
         request.setCity((String) (cache.get("city")));
         request.setCounty((String) (cache.get("county")));
         request.setProvince((String) (cache.get("province")));
@@ -107,7 +110,7 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
     public void getHCoodsDetailsForSpecValueId() {
         GoodsDetailsRequest request = new GoodsDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        String token = (String) cache.get("token");
+        String token = (String) cache.get(KEY_KEEP + "token");
         if (ArmsUtils.isEmpty(token)) {
             request.setCmd(443);
         } else {
@@ -152,7 +155,7 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
         }
 
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        String token = (String) cache.get("token");
+        String token = (String) cache.get(KEY_KEEP + "token");
         if (ArmsUtils.isEmpty(token)) {
             ArmsUtils.startActivity(LoginActivity.class);
             return;

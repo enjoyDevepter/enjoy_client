@@ -12,7 +12,7 @@ import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceStoreContract;
 import me.jessyan.mvparms.demo.mvp.model.ChoiceStoreModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
 
 
@@ -49,13 +49,13 @@ public class ChoiceStoreModule {
 
     @ActivityScope
     @Provides
-    List<Store> provideStoreList() {
+    List<CommonStoreDateType> provideStoreList() {
         return new ArrayList<>();
     }
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideStoreAdapter(List<Store> list) {
+    RecyclerView.Adapter provideStoreAdapter(List<CommonStoreDateType> list) {
         return new StoresListAdapter(list);
     }
 }

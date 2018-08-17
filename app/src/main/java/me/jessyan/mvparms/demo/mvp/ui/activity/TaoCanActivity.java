@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import javax.inject.Inject;
@@ -19,10 +20,12 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerTaoCanComponent;
 import me.jessyan.mvparms.demo.di.module.TaoCanModule;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.presenter.TaoCanPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.TaoCanListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.TaoCanListAdapter.ViewName;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -108,12 +111,24 @@ public class TaoCanActivity extends BaseActivity<TaoCanPresenter> implements Tao
 
     @Override
     public void onChildItemClick(View v, ViewName viewname, int position) {
+        MealGoods goods = mAdapter.getInfos().get(position);
         switch (viewname) {
             case BUY:
+                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+                if (null == cache.get(KEY_KEEP + "token")) {
+                    ArmsUtils.startActivity(LoginActivity.class);
+                    return;
+                }
+                Intent confrimIntent = new Intent(this, MealOrderConfirmActivity.class);
+                confrimIntent.putExtra("nums", 1);
+                confrimIntent.putExtra("totalPrice", goods.getTotalPrice());
+                confrimIntent.putExtra("setMealId", goods.getSetMealId());
+                confrimIntent.putExtra("salePrice", goods.getSalesPrice());
+                ArmsUtils.startActivity(confrimIntent);
                 break;
             case ITEM:
                 Intent intent = new Intent(this, TaoCanDetailsActivity.class);
-                intent.putExtra("setMealId", mAdapter.getInfos().get(position).getSetMealId());
+                intent.putExtra("setMealId", goods.getSetMealId());
                 ArmsUtils.startActivity(intent);
                 break;
         }

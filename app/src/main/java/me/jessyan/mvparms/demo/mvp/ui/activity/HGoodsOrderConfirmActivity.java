@@ -24,6 +24,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerHGoodsOrderConfirmComponent;
 import me.jessyan.mvparms.demo.di.module.HGoodsOrderConfirmModule;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
+import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
 import me.jessyan.mvparms.demo.mvp.model.entity.Coupon;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsOrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.HGoodsOrderConfirmPresenter;
@@ -48,11 +49,10 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
     TextView tailMoneyTV;
     @BindView(R.id.goods_spec)
     TextView goodsSpecTV;
-    @BindView(R.id.hospital_layout)
+    @BindView(R.id.hospital_info)
     View hospitalV;
     @BindView(R.id.hospital)
     TextView hospitalTV;
-    // 医院如何显示
     @BindView(R.id.appointments_layout)
     View appointmnetV;
     @BindView(R.id.appointments_time)
@@ -93,7 +93,10 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
     @BindView(R.id.confirm)
     View confirmV;
 
-    HGoodsOrderConfirmInfoResponse response;
+    private HGoodsOrderConfirmInfoResponse response;
+
+    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.HOP;
+
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -120,6 +123,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         couponV.setOnClickListener(this);
         confirmV.setOnClickListener(this);
         hospitalV.setOnClickListener(this);
+        hospitalTV.setOnClickListener(this);
     }
 
     @Override
@@ -146,8 +150,8 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
             couponTV.setText(((Coupon) cache.get("coupon")).getName());
         }
 
-        if (cache.get("hospitalId") != null) {
-            hospitalTV.setText((String) cache.get("hospitalId"));
+        if (cache.get(listType.getDataKey()) != null) {
+            hospitalTV.setText((((CommonStoreDateType) cache.get(listType.getDataKey())).getName()));
         }
 
 
@@ -215,8 +219,14 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
             case R.id.back:
                 killMyself();
                 break;
-            case R.id.hospital_layout:
+            case R.id.hospital_info:
                 ArmsUtils.startActivity(HospitalInfoActivity.class);
+                break;
+            case R.id.hospital:
+                Intent intent2 = new Intent(this, SelfPickupAddrListActivity.class);
+                intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
+                intent2.putExtra("specValueId", response.getGoodsList().get(0).getGoodsSpecValue().getSpecValueId());
+                ArmsUtils.startActivity(intent2);
                 break;
             case R.id.appointments_layout:
                 Intent appointmentsIntent = new Intent(this, ChoiceTimeActivity.class);

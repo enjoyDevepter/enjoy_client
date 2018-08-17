@@ -32,6 +32,8 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmContract.Model, MealOrderConfirmContract.View> {
@@ -63,7 +65,7 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
 
         MealOrderConfrimRequest request = new MealOrderConfrimRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setToken((String) (cache.get("token")));
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
 
         MealOrderConfrimRequest.MealGoods mealGoods = new MealOrderConfrimRequest.MealGoods();
         mealGoods.setNums(mRootView.getActivity().getIntent().getIntExtra("nums", 1));
@@ -108,7 +110,7 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
         request.setTotalPrice(orderConfirmInfoResponse.getTotalPrice());
         request.setPayMoney(orderConfirmInfoResponse.getPayMoney());
         request.setRemark((String) mRootView.getCache().get("remark"));
-        request.setToken(String.valueOf(cache.get("token")));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
 
         PayMealOrderRequest.MealGoods mealGoods = new PayMealOrderRequest.MealGoods();
         mealGoods.setNums(1);

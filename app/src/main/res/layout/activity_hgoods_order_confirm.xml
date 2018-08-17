@@ -41,7 +41,6 @@
                     android:layout_marginLeft="12dp"
                     android:layout_toRightOf="@id/image"
                     android:lines="2"
-                    android:text="湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
                     android:textColor="#FF000000"
                     android:textSize="13sp" />
 
@@ -75,7 +74,6 @@
                         android:id="@+id/deposit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="228.00"
                         android:textColor="#FFFF0000"
                         android:textSize="17sp" />
 
@@ -85,7 +83,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="x1"
                         android:textColor="#FFABABAB"
                         android:textSize="12sp" />
 
@@ -114,8 +111,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:layout_toRightOf="@id/price_tag"
-                        android:text="228.00" />
+                        android:layout_toRightOf="@id/price_tag" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -155,7 +151,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/hospital_layout"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -163,10 +158,10 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
-                        android:layout_weight="1"
+                        android:layout_marginRight="10dp"
                         android:text="医院"
                         android:textColor="#FF666666"
                         android:textSize="13sp" />
@@ -178,11 +173,11 @@
                         android:layout_marginRight="8dp"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="北京太和医疗美容医院"
                         android:textColor="#FF000000"
                         android:textSize="13sp" />
 
                     <View
+                        android:id="@+id/hospital_info"
                         android:layout_width="16dp"
                         android:layout_height="5dp"
                         android:layout_marginRight="15dp"

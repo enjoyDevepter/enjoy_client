@@ -18,6 +18,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class ModifyPresenter extends BasePresenter<ModifyContract.Model, ModifyContract.View> {
@@ -49,7 +51,7 @@ public class ModifyPresenter extends BasePresenter<ModifyContract.Model, ModifyC
         ModifyRequest request = new ModifyRequest();
         request.setPassword(password);
         request.setConfirmPassword(confirmPassword);
-        request.setToken((String) ArmsUtils.obtainAppComponentFromContext(mApplication).extras().get("token"));
+        request.setToken((String) ArmsUtils.obtainAppComponentFromContext(mApplication).extras().get(KEY_KEEP + "token"));
 
         mModel.modify(request)
                 .subscribeOn(Schedulers.io())

@@ -6,8 +6,9 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.OrderBy;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
 public class HospitalListRequest extends BaseRequest {
-    private int pageIndex;
-    private int pageSize;
+    private final int cmd = 601;
+    private int pageIndex = 1;
+    private int pageSize = 10;
     private String provinceId;
     private String cityId;
     private String countyId;
@@ -15,7 +16,6 @@ public class HospitalListRequest extends BaseRequest {
     private String lat;
     private String specValueId;
     private List<OrderBy> orderBys;
-    private final int cmd = 601;
 
     @Override
     public String toString() {

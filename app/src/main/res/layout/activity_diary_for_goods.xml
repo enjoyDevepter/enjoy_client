@@ -43,7 +43,6 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="6dp"
                         android:layout_toRightOf="@id/headImage"
-                        android:text="雪怡gril"
                         android:textColor="#FF676767"
                         android:textSize="12sp" />
 
@@ -86,7 +85,6 @@
                             android:layout_marginRight="8dp"
                             android:background="@drawable/diary_img_count_bg"
                             android:gravity="center"
-                            android:text="4"
                             android:textColor="#FFFFFFFF"
                             android:textSize="13sp" />
 
@@ -113,7 +111,6 @@
                             android:layout_marginRight="8dp"
                             android:background="@drawable/diary_img_count_bg"
                             android:gravity="center"
-                            android:text="4"
                             android:textColor="#FFFFFFFF"
                             android:textSize="13sp" />
 
@@ -150,7 +147,6 @@
                     android:layout_marginLeft="12dp"
                     android:layout_toRightOf="@id/goods_image"
                     android:lines="2"
-                    android:text="湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
                     android:textColor="#FF000000"
                     android:textSize="13sp" />
 
@@ -179,7 +175,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:layout_toRightOf="@id/price_tag"
-                        android:text="228.00"
                         android:textColor="#FFFF0000"
                         android:textSize="17sp" />
                 </LinearLayout>

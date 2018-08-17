@@ -61,7 +61,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @BindView(R.id.message)
     View messageV;
     @BindView(R.id.city)
-    View cityV;
+    TextView cityV;
     @BindView(R.id.search)
     View serachV;
     @BindView(R.id.tabOne)
@@ -220,6 +220,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Subscriber(tag = EventBusTags.CITY_CHANGE_EVENT)
     private void updateUserWithMode(Area area) {
+        cityV.setText(area.getName());
         mPresenter.updateHomeInfo();
     }
 

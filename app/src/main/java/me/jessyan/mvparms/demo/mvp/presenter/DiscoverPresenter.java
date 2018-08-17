@@ -32,6 +32,8 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, DiscoverContract.View> {
@@ -92,7 +94,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         DiaryListRequest request = new DiaryListRequest();
 
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        String token = (String) (cache.get("token"));
+        String token = (String) (cache.get(KEY_KEEP + "token"));
         if (ArmsUtils.isEmpty(token)) {
             if ("recom".equals(diaryType)) {
                 request.setCmd(803);
@@ -157,7 +159,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         }
         DiaryVoteRequest request = new DiaryVoteRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setToken((String) (cache.get("token")));
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setCmd(vote ? 811 : 812);
         request.setDiaryId((String) mRootView.getCache().get("diaryId"));
         mModel.diaryVote(request)
@@ -186,7 +188,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         }
         FollowMemberRequest request = new FollowMemberRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setToken((String) (cache.get("token")));
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setCmd(follow ? 201 : 211);
         request.setMemberId((String) mRootView.getCache().get("memberId"));
         mModel.follow(request)
@@ -207,7 +209,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
 
     private boolean checkLoginStatus() {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        String token = (String) (cache.get("token"));
+        String token = (String) (cache.get(KEY_KEEP + "token"));
         return ArmsUtils.isEmpty(token);
     }
 }

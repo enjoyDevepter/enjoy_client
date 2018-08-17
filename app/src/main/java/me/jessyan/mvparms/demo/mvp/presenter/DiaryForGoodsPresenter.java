@@ -31,6 +31,8 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyDiaryListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.Model, DiaryForGoodsContract.View> {
@@ -61,7 +63,7 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
     private void getMyDiaryList() {
         MyDiaryRequest request = new MyDiaryRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        String token = (String) (cache.get("token"));
+        String token = (String) (cache.get(KEY_KEEP + "token"));
         if (ArmsUtils.isEmpty(token)) {
             request.setCmd(816);
         } else {
@@ -92,7 +94,7 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
     private void getDiary() {
         DiaryRequest request = new DiaryRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        String token = (String) (cache.get("token"));
+        String token = (String) (cache.get(KEY_KEEP + "token"));
         if (ArmsUtils.isEmpty(token)) {
             request.setCmd(808);
         } else {
@@ -125,7 +127,7 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
         }
         DiaryVoteRequest request = new DiaryVoteRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setToken((String) (cache.get("token")));
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setDiaryId((String) mRootView.getCache().get("diaryId"));
         request.setCmd(vote ? 811 : 812);
         mModel.diaryVote(request)
@@ -155,7 +157,7 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
         }
         FollowMemberRequest request = new FollowMemberRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setToken((String) (cache.get("token")));
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setMemberId((String) mRootView.getCache().get("memberId"));
         request.setCmd(follow ? 201 : 211);
         mModel.follow(request)
@@ -175,7 +177,7 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
 
     private boolean checkLoginStatus() {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        String token = (String) (cache.get("token"));
+        String token = (String) (cache.get(KEY_KEEP + "token"));
         return ArmsUtils.isEmpty(token);
     }
 

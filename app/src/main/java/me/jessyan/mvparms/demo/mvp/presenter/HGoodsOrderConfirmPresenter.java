@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
+import android.os.Parcelable;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -22,7 +23,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
-import me.jessyan.mvparms.demo.mvp.model.entity.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.PayGoods;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HGoodsOrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HGoodsPayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsOrderConfirmInfoResponse;
@@ -30,6 +32,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsPayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
 
 @ActivityScope
@@ -44,7 +48,7 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
     ImageLoader mImageLoader;
 
     HGoodsOrderConfirmInfoResponse hGoodsOrderConfirmInfoResponse;
-    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.ADDR;
+    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.HOP;
 
     @Inject
     public HGoodsOrderConfirmPresenter(HGoodsOrderConfirmContract.Model model, HGoodsOrderConfirmContract.View rootView) {
@@ -61,7 +65,7 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
 
         HGoodsOrderConfirmInfoRequest request = new HGoodsOrderConfirmInfoRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setToken((String) (cache.get("token")));
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setProvince((String) (cache.get("province")));
         request.setCity((String) (cache.get("city")));
         request.setCounty((String) (cache.get("county")));
@@ -102,20 +106,25 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
     public void placeHGoodsOrder() {
         HGoodsPayOrderRequest request = new HGoodsPayOrderRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        if ("1".equals(mRootView.getCache().get("deliveryMethod"))) {
-            if (null == cache.get("memberAddressInfo")) {
-                mRootView.showMessage("请选择地址！");
-                return;
-            }
-            Address address = (Address) cache.get("memberAddressInfo");
-            request.setMemberAddressId(address.getAddressId());
-        } else {
-            if (null == cache.get(listType.getDataKey())) {
-                mRootView.showMessage("请选择自取店铺！");
-                return;
-            }
-            Store store = (Store) cache.get(listType.getDataKey());
+        if (cache.get(listType.getDataKey()) == null) {
+            mRootView.showMessage("请选择医院！");
+            return;
         }
+        if ((cache.get("appointmentsDate") == null || cache.get("appointmentsTime") == null)) {
+            mRootView.showMessage("请预约时间！");
+            return;
+        }
+        if (null == cache.get("memberAddressInfo")) {
+            mRootView.showMessage("请选择地址！");
+            return;
+        }
+
+
+        Address address = (Address) cache.get("memberAddressInfo");
+        request.setMemberAddressId(address.getAddressId());
+        request.setAppointmentsDate((String) cache.get("appointmentsDate"));
+        request.setAppointmentsTime((String) cache.get("appointmentsTime"));
+        request.setHospitalId(((HospitalBaseInfoBean) (cache.get(listType.getDataKey()))).getHospitalId());
         request.setCouponId((String) mRootView.getCache().get("couponId"));
         request.setCoupon(hGoodsOrderConfirmInfoResponse.getCoupon());
         request.setDeductionMoney(hGoodsOrderConfirmInfoResponse.getDeductionMoney());
@@ -127,8 +136,22 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
         request.setTotalPrice(hGoodsOrderConfirmInfoResponse.getTotalPrice());
         request.setPayMoney(hGoodsOrderConfirmInfoResponse.getPayMoney());
         request.setRemark((String) mRootView.getCache().get("remark"));
-        request.setToken(String.valueOf(cache.get("token")));
-        request.setGoodsList((List<HGoodsPayOrderRequest.OrderGoods>) mRootView.getCache().get("goodsList"));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
+
+        List<HGoodsPayOrderRequest.OrderGoods> goodsList = new ArrayList<>();
+        for (HGoodsOrderConfirmInfoResponse.GoodsBean goods : hGoodsOrderConfirmInfoResponse.getGoodsList()) {
+            HGoodsPayOrderRequest.OrderGoods payGoods = new HGoodsPayOrderRequest.OrderGoods();
+            payGoods.setGoodsId(goods.getGoodsId());
+            payGoods.setAdvanceDepositId(goods.getAdvanceDepositId());
+            payGoods.setDeposit(goods.getDeposit());
+            payGoods.setTailMoney(goods.getTailMoney());
+            payGoods.setMerchId(goods.getMerchId());
+            payGoods.setNums(goods.getNums());
+            payGoods.setPromotionId(goods.getPromotionId());
+            payGoods.setSalePrice(goods.getSalePrice());
+            goodsList.add(payGoods);
+        }
+        request.setGoodsList(goodsList);
         mRootView.showLoading();
         mModel.placeHGoodsOrder(request)
                 .subscribeOn(Schedulers.io())
@@ -144,8 +167,25 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());
-//                                intent.putParcelableArrayListExtra("goodsList", (ArrayList<? extends Parcelable>) response.getGoodsList());
-//                                intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
+
+                                List<PayGoods> goodsList = new ArrayList<>();
+                                for (HGoodsPayOrderResponse.HGoods goods : response.getGoodsList()) {
+                                    PayGoods payGoods = new PayGoods();
+                                    payGoods.setGoodsId(goods.getGoodsId());
+                                    payGoods.setMerchId(goods.getMerchId());
+                                    payGoods.setCode(goods.getCode());
+                                    payGoods.setImage(goods.getImage());
+                                    payGoods.setMarketPrice(goods.getMarketPrice());
+                                    payGoods.setCostPrice(goods.getCostPrice());
+                                    payGoods.setName(goods.getName());
+                                    payGoods.setSalePrice(goods.getSalePrice());
+                                    payGoods.setTitle(goods.getTitle());
+                                    payGoods.setNums(goods.getNums());
+                                    payGoods.setGoodsSpecValue(goods.getGoodsSpecValue());
+                                    goodsList.add(payGoods);
+                                }
+                                intent.putParcelableArrayListExtra("goodsList", (ArrayList<? extends Parcelable>) goodsList);
+                                intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
                                 ArmsUtils.startActivity(intent);
                             }
                         } else {

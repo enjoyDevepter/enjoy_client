@@ -1,7 +1,5 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean;
 
-import java.util.List;
-
 public class HospitalInfoBean {
     private String image;
     private String intro;

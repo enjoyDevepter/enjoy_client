@@ -1,49 +1,22 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean;
 
-public class HospitalBaseInfoBean {
-    private String id;
-    private String name;
+import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
+
+public class HospitalBaseInfoBean extends CommonStoreDateType {
+    private String hospitalId;
     private String province;
     private String provinceName;
     private String city;
     private String cityName;
     private String county;
     private String countyName;
-    private String address;
-    private String distance;
-    private String distanceDesc;
 
-    @Override
-    public String toString() {
-        return "HospitalBaseInfoBean{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", province='" + province + '\'' +
-                ", provinceName='" + provinceName + '\'' +
-                ", city='" + city + '\'' +
-                ", cityName='" + cityName + '\'' +
-                ", county='" + county + '\'' +
-                ", countyName='" + countyName + '\'' +
-                ", address='" + address + '\'' +
-                ", distance='" + distance + '\'' +
-                ", distanceDesc='" + distanceDesc + '\'' +
-                '}';
+    public String getHospitalId() {
+        return hospitalId;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setHospitalId(String hospitalId) {
+        this.hospitalId = hospitalId;
     }
 
     public String getProvince() {
@@ -94,27 +67,21 @@ public class HospitalBaseInfoBean {
         this.countyName = countyName;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getDistance() {
-        return distance;
-    }
-
-    public void setDistance(String distance) {
-        this.distance = distance;
-    }
-
-    public String getDistanceDesc() {
-        return distanceDesc;
-    }
-
-    public void setDistanceDesc(String distanceDesc) {
-        this.distanceDesc = distanceDesc;
+    @Override
+    public String toString() {
+        return "HospitalBaseInfoBean{" +
+                "name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", distance='" + distance + '\'' +
+                ", hospitalId='" + hospitalId + '\'' +
+                ", distanceDesc='" + distanceDesc + '\'' +
+                ", province='" + province + '\'' +
+                ", check=" + check +
+                ", provinceName='" + provinceName + '\'' +
+                ", city='" + city + '\'' +
+                ", cityName='" + cityName + '\'' +
+                ", county='" + county + '\'' +
+                ", countyName='" + countyName + '\'' +
+                '}';
     }
 }

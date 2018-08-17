@@ -12,6 +12,8 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceStoreContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
 
@@ -39,6 +41,12 @@ public class ChoiceStoreModel extends BaseModel implements ChoiceStoreContract.M
     public Observable<StoresListResponse> getStores(StoresListRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getStores(request);
+    }
+
+    @Override
+    public Observable<HospitalListResponse> getHospitals(HospitalListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .getHospitals(request);
     }
 
 }

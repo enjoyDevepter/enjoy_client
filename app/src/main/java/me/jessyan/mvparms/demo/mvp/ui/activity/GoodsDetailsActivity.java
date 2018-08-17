@@ -263,7 +263,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 mPresenter.addGoodsToCart();
                 break;
             case R.id.buy:
-                ArmsUtils.startActivity(ConfirmOrderActivity.class);
+                mPresenter.goOrderConfirm();
                 break;
             case R.id.promotion:
                 showPro(true);

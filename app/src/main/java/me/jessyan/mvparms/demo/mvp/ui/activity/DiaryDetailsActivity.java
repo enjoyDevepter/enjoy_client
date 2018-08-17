@@ -39,6 +39,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     View backV;
     @BindView(R.id.title)
     TextView titleTV;
+    @BindView(R.id.share)
+    View shareV;
 
     @BindView(R.id.headImage)
     ShapeImageView headImageIV;
@@ -116,8 +118,9 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        backV.setOnClickListener(this);
         titleTV.setText("日记详情");
+        backV.setOnClickListener(this);
+        shareV.setOnClickListener(this);
         followV.setOnClickListener(this);
         goodsInfoV.setOnClickListener(this);
         praiseV.setOnClickListener(this);
@@ -160,6 +163,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         switch (v.getId()) {
             case R.id.back:
                 killMyself();
+                break;
+            case R.id.share:
                 break;
             case R.id.follow:
                 provideCache().put("memberId", response.getMember().getMemberId());

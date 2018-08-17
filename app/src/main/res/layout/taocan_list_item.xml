@@ -26,7 +26,6 @@
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@id/image"
         android:lines="2"
-        android:text="湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
         android:textColor="#FF000000"
         android:textSize="13sp" />
 
@@ -53,7 +52,6 @@
             android:id="@+id/salesPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="228.00"
             android:textColor="#FFFF0000"
             android:textSize="17sp" />
 
@@ -71,7 +69,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:text="4"
             android:textColor="#FF666666"
             android:textSize="13sp" />
     </LinearLayout>
@@ -99,7 +96,6 @@
             android:id="@+id/totalPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="228.00"
             android:textColor="#FF666666"
             android:textSize="14sp" />
 

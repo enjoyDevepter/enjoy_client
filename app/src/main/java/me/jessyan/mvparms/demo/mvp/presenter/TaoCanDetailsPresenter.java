@@ -29,6 +29,8 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MealOrderConfirmActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.Model, TaoCanDetailsContract.View> {
@@ -68,8 +70,8 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
     private void getMealDetail() {
         MealDetailsRequest request = new MealDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        String token = (String) cache.get("token");
-        if (cache.get("token") != null) {
+        String token = (String) cache.get(KEY_KEEP + "token");
+        if (cache.get(KEY_KEEP + "token") != null) {
             request.setCmd(432);
         } else {
             request.setCmd(431);
@@ -97,14 +99,14 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
 
     public void collectGoods(boolean collect) {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        if (cache.get("token") == null) {
+        if (cache.get(KEY_KEEP + "token") == null) {
             ArmsUtils.startActivity(LoginActivity.class);
             return;
         }
 
         MealDetailsRequest request = new MealDetailsRequest();
         request.setCmd(collect ? 433 : 434);
-        request.setToken((String) cache.get("token"));
+        request.setToken((String) cache.get(KEY_KEEP + "token"));
 
         request.setSetMealId(mRootView.getActivity().getIntent().getStringExtra("setMealId"));
         mModel.collectGoods(request)
@@ -125,7 +127,7 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
 
     public void buy() {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        if (cache.get("token") == null) {
+        if (cache.get(KEY_KEEP + "token") == null) {
             ArmsUtils.startActivity(LoginActivity.class);
             return;
         }

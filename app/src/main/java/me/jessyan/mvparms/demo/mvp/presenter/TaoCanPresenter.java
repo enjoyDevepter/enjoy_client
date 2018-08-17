@@ -25,6 +25,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.MealListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.TaoCanListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanContract.View> {
@@ -64,7 +66,7 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
 
         MealListRequest request = new MealListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setToken((String) (cache.get("token")));
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setCity((String) (cache.get("city")));
         request.setCounty((String) (cache.get("county")));
         request.setProvince((String) (cache.get("province")));
@@ -85,5 +87,4 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
                     }
                 });
     }
-
 }

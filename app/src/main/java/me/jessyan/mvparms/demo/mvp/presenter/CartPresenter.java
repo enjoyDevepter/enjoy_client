@@ -29,6 +29,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.CartListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class CartPresenter extends BasePresenter<CartContract.Model, CartContract.View> {
@@ -67,7 +69,7 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
     private void getCartList() {
         CartListRequest request = new CartListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setToken(String.valueOf(cache.get("token")));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
         mRootView.showLoading();
         mModel.getGoodsOfCart(request)
                 .subscribeOn(Schedulers.io())
@@ -96,7 +98,7 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
         EidtCartRequest request = new EidtCartRequest();
         request.setCmd(delete ? 1003 : 1005);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setToken(String.valueOf(cache.get("token")));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
         request.setGoodsId((String) mRootView.getCache().get("goodsId"));
         request.setMerchId((String) mRootView.getCache().get("merchId"));
         request.setPromotionId((String) mRootView.getCache().get("promotionId"));
@@ -133,7 +135,7 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
         CartListRequest request = new CartListRequest();
         request.setCmd(allCheck ? 1008 : 1009);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setToken(String.valueOf(cache.get("token")));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
         mModel.getGoodsOfCart(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -157,7 +159,7 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
 
         DeleteCartListRequest request = new DeleteCartListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setToken(String.valueOf(cache.get("token")));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
 
         List<DeleteCartListRequest.GoodsBean> goodsBeans = new ArrayList<>();
 

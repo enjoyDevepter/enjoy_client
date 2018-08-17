@@ -24,6 +24,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerSelfPickupAddrListComponent;
 import me.jessyan.mvparms.demo.di.module.SelfPickupAddrListModule;
 import me.jessyan.mvparms.demo.mvp.contract.SelfPickupAddrListContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
+import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
 import me.jessyan.mvparms.demo.mvp.presenter.SelfPickupAddrListPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -33,9 +34,6 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
 
     // 要启动这个页面，必须使用这个Key，将ListType作为参数通过intent传递进来
     public static final String KEY_FOR_ACTIVITY_LIST_TYPE = "key_for_activity_list_type";
-
-    private ListType listType;
-
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
@@ -46,14 +44,15 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
     View districtLayoutV;
     @BindView(R.id.store)
     TextView storeV;
+    @BindView(R.id.store_title)
+    TextView storeTitleTV;
     @BindView(R.id.store_layout)
     View storeLayoutV;
     @BindView(R.id.confirm)
     View confirmV;
-
     @Inject
     List<AreaAddress> addressList;
-
+    private ListType listType;
     private List<AreaAddress> options1Items = new ArrayList<>();
     private List<List<AreaAddress>> options2Items = new ArrayList<>();
     private List<List<List<AreaAddress>>> options3Items = new ArrayList<>();
@@ -76,16 +75,25 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
     @Override
     public void initData(Bundle savedInstanceState) {
         listType = (ListType) getIntent().getSerializableExtra(KEY_FOR_ACTIVITY_LIST_TYPE);
-        if(listType == null){
+        if (listType == null) {
             throw new RuntimeException("listType is not null.you need send listType use key  \"KEY_FOR_ACTIVITY_LIST_TYPE\"");
         }
-        titleTV.setText(listType.getTitle());
+        storeTitleTV.setText(listType.getTitle());
+        titleTV.setText(listType.getSecendListTitle());
         backV.setOnClickListener(this);
         confirmV.setOnClickListener(this);
         storeLayoutV.setOnClickListener(this);
         districtLayoutV.setOnClickListener(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        if (null != cache.get(listType.getDataKey())) {
+            storeV.setText(((CommonStoreDateType) cache.get(listType.getDataKey())).getName());
+        }
+    }
 
     @Override
     public void showLoading() {
@@ -128,13 +136,23 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                 intent.putExtra("province", (String) provideCache().get("province"));
                 intent.putExtra("city", (String) provideCache().get("city"));
                 intent.putExtra("county", (String) provideCache().get("county"));
-                intent.putExtra(KEY_FOR_ACTIVITY_LIST_TYPE,listType);
+                intent.putExtra("specValueId", getIntent().getStringExtra("specValueId"));
+                intent.putExtra(KEY_FOR_ACTIVITY_LIST_TYPE, listType);
                 ArmsUtils.startActivity(intent);
                 break;
             case R.id.confirm:
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
                 if (cache.get(listType.getDataKey()) == null) {
-                    showMessage("请选择店铺！");
+                    switch (listType) {
+                        case HOP:
+                            showMessage("请选择医院！");
+                            break;
+                        case STORE:
+                            showMessage("请选择店铺！");
+                            break;
+                        case ADDR:
+                            break;
+                    }
                     return;
                 }
                 killMyself();
@@ -200,18 +218,18 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
 
     /**
      * 这个页面可以进行复用。使用这个
-     * */
-    public enum ListType{
-        HOP("选择医院","选择医院","请选择为您服务的医院","choose_hosptial_info"),  // 选择医院
-        STORE("选择店铺","选择店铺","请选择为您服务的店铺","choose_store_info"),  //选择店铺
-        ADDR("自提地址","选择店铺","请选择为您服务的店铺","choose_addr_info"); // 自提地址
+     */
+    public enum ListType {
+        HOP("选择医院", "选择医院: ", "请选择为您服务的医院", "choose_hosptial_info"),  // 选择医院
+        STORE("选择店铺", "选择店铺: ", "请选择为您服务的店铺", "choose_store_info"),  //选择店铺
+        ADDR("自提地址", "选择店铺: ", "请选择为您服务的店铺", "choose_addr_info"); // 自提地址
 
         private String title;  // 整个页面的标题
         private String secendListTitle;  // 第二个选项的标题，也就是第二个Activity的大标题
         private String infoText;  // 第二个页面的说明文字
         private String dataKey;  // 携带数据的时候，使用的key。每个页面使用的Key应该不一样，避免相互覆盖
 
-        ListType(String title,String secendListTitle,String infoText,String dataKey){
+        ListType(String title, String secendListTitle, String infoText, String dataKey) {
             this.title = title;
             this.secendListTitle = secendListTitle;
             this.infoText = infoText;

@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.api.service;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CartListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
@@ -78,6 +80,9 @@ public interface MainService {
 
     @POST("gateway")
     Observable<StoresListResponse> getStores(@Body StoresListRequest request);
+
+    @POST("gateway")
+    Observable<HospitalListResponse> getHospitals(@Body HospitalListRequest request);
 
     @POST("gateway")
     Observable<CartListResponse> getGoodsOfCart(@Body CartListRequest request);

@@ -31,6 +31,8 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class MallPresenter extends BasePresenter<MallContract.Model, MallContract.View> {
@@ -94,7 +96,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
 
     public void goCart() {
         Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        if (ArmsUtils.isEmpty((String) appCache.get("token"))) {
+        if (ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
             ArmsUtils.startActivity(LoginActivity.class);
             return;
         }

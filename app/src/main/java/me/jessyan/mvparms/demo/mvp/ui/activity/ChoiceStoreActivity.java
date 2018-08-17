@@ -14,8 +14,6 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -23,7 +21,6 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerChoiceStoreComponent;
 import me.jessyan.mvparms.demo.di.module.ChoiceStoreModule;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceStoreContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.presenter.ChoiceStorePresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -40,10 +37,8 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
     View confirmV;
     @BindView(R.id.stores)
     RecyclerView storesRV;
-
     @BindView(R.id.info_text)
     TextView info_text;
-
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
@@ -69,7 +64,7 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
     @Override
     public void initData(Bundle savedInstanceState) {
         listType = (SelfPickupAddrListActivity.ListType) getIntent().getSerializableExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE);
-        if(listType == null){
+        if (listType == null) {
             throw new RuntimeException("listType is not null.you need send listType use key  \"KEY_FOR_ACTIVITY_LIST_TYPE\"");
         }
         backV.setOnClickListener(this);
@@ -116,7 +111,16 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
             case R.id.confirm:
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
                 if (cache.get(listType.getDataKey()) == null) {
-                    showMessage("请选择店铺信息！");
+                    switch (listType) {
+                        case HOP:
+                            showMessage("请选择医院！");
+                            break;
+                        case STORE:
+                            showMessage("请选择店铺信息！");
+                            break;
+                        case ADDR:
+                            break;
+                    }
                     return;
                 }
                 killMyself();
@@ -126,15 +130,9 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
-        List<Store> storeList = ((DefaultAdapter) mAdapter).getInfos();
-        Store store = storeList.get(position);
-        if (store.isCheck()) {
-            return;
-        }
-        store.setCheck(true);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-        cache.put(listType.getDataKey(), store);
-        mAdapter.notifyDataSetChanged();
+        cache.put(listType.getDataKey(), ((DefaultAdapter) mAdapter).getInfos().get(position));
+        mPresenter.choiceItem(position);
     }
 
     @Override

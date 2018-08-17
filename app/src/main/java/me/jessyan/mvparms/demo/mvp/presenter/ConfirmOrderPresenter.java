@@ -33,6 +33,8 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Model, ConfirmOrderContract.View> {
@@ -76,7 +78,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
 
         OrderConfirmInfoRequest request = new OrderConfirmInfoRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        request.setToken((String) (cache.get("token")));
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setProvince((String) (cache.get("province")));
         request.setCity((String) (cache.get("city")));
         request.setCounty((String) (cache.get("county")));
@@ -139,7 +141,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
         request.setTotalPrice(orderConfirmInfoResponse.getTotalPrice());
         request.setPayMoney(orderConfirmInfoResponse.getPayMoney());
         request.setRemark((String) mRootView.getCache().get("remark"));
-        request.setToken(String.valueOf(cache.get("token")));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
         request.setGoodsList((List<OrderConfirmInfoRequest.OrderGoods>) mRootView.getCache().get("goodsList"));
         mRootView.showLoading();
         mModel.placeOrder(request)

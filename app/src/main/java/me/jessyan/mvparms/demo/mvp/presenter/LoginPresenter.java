@@ -25,6 +25,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginContract.View> {
@@ -139,7 +141,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
 
     private void cacheUserInfo(String token, String signkey) {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        cache.put("token", token);
-        cache.put("signkey", signkey);
+        cache.put(KEY_KEEP + "token", token);
+        cache.put(KEY_KEEP + "signkey", signkey);
     }
 }

@@ -27,6 +27,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+
 
 @ActivityScope
 public class AddAddressPresenter extends BasePresenter<AddAddressContract.Model, AddAddressContract.View> {
@@ -90,7 +92,7 @@ public class AddAddressPresenter extends BasePresenter<AddAddressContract.Model,
         } else {
             request.setCmd(205);
         }
-        request.setToken(String.valueOf(cache.get("token")));
+        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
         Address address = new Address();
         address.setAddress((String) mRootView.getCache().get("address"));
         address.setReceiverName((String) mRootView.getCache().get("receiverName"));

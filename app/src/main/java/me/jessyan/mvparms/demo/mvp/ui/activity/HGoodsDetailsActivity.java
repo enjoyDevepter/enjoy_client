@@ -149,7 +149,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         maskSpecV.setOnClickListener(this);
         promotionCloseV.setOnClickListener(this);
         spceCloseV.setOnClickListener(this);
-
+        isFavoriteV.setOnClickListener(this);
         buyV.setOnClickListener(this);
 
         ArmsUtils.configRecyclerView(promotionCV, mLayoutManager);
@@ -244,6 +244,8 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             case R.id.spec:
             case R.id.spec_close:
                 showSpec();
+                break;
+            case R.id.isFavorite: // 缺接口
                 break;
             case R.id.buy:
                 mPresenter.goOrderConfirm();

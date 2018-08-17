@@ -25,7 +25,7 @@ import com.jess.arms.base.DefaultAdapter;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
 
 /**
  * ================================================
@@ -36,7 +36,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Store;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class StoresListItemHolder extends BaseHolder<Store> {
+public class StoresListItemHolder extends BaseHolder<CommonStoreDateType> {
 
     @BindView(R.id.name)
     TextView nameTV;
@@ -52,7 +52,7 @@ public class StoresListItemHolder extends BaseHolder<Store> {
     }
 
     @Override
-    public void setData(Store store, int position) {
+    public void setData(CommonStoreDateType store, int position) {
         Observable.just(store.getName())
                 .subscribe(s -> nameTV.setText(s));
         Observable.just(store.getDistance())

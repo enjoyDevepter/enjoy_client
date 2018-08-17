@@ -97,7 +97,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     CustomProgressDailog progressDailog;
     OrderConfirmInfoResponse response;
 
-    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.ADDR;
+    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.STORE;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -204,7 +204,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
                 ArmsUtils.startActivity(AddressListActivity.class);
                 break;
             case R.id.self_layout:
-                Intent intent2 = new Intent(this,SelfPickupAddrListActivity.class);
+                Intent intent2 = new Intent(this, SelfPickupAddrListActivity.class);
                 intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
                 ArmsUtils.startActivity(intent2);
                 break;
