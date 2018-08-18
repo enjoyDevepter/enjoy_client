@@ -333,4 +333,10 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             provideCache().put("specValueId", "");
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DefaultAdapter.releaseAllHolder(promotionCV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+    }
 }

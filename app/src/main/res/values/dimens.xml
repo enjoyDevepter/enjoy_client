@@ -10,7 +10,11 @@
     <dimen name="address_list_item_space">5dp</dimen>
 
     <dimen name="dialog_height">100dp</dimen>
+    <dimen name="order_image_height">100dp</dimen>
     <dimen name="dialog_width">220dp</dimen>
+
     <dimen name="divice_width">30dp</dimen>
+    <dimen name="order_single_item_height">212dp</dimen>
+    <dimen name="order_item_height">244dp</dimen>
     <dimen name="plus_width">10dp</dimen>
 </resources>

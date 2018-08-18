@@ -75,7 +75,7 @@ public class MealGoodsListItemHolder extends BaseHolder<MealGoods> {
                 .subscribe(s -> nameTV.setText(s));
         Observable.just(goods.getSales())
                 .subscribe(s -> saleTV.setText(String.valueOf(s)));
-        Observable.just(goods.getSalesPrice())
+        Observable.just(goods.getSalePrice())
                 .subscribe(s -> salesPriceTV.setText(String.valueOf(s)));
         Observable.just(goods.getTotalPrice())
                 .subscribe(s -> totalPriceTV.setText(String.valueOf(s)));

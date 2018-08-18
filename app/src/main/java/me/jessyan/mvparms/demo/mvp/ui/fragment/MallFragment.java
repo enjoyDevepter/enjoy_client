@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +50,7 @@ import static android.view.View.VISIBLE;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MallFragment extends BaseFragment<MallPresenter> implements MallContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener {
+public class MallFragment extends BaseFragment<MallPresenter> implements MallContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.tab)
     TabLayout tabLayout;
@@ -76,6 +78,8 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     TextView priceTV;
     @BindView(R.id.price_status)
     View priceStautsV;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.goods)
     RecyclerView mRecyclerView;
     @BindView(R.id.secondCategory)
@@ -103,6 +107,11 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     GoodsFilterThirdAdapter thirdAdapter;
 
     private List<Category> thirdCategoryList;
+
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
+
 
     public static MallFragment newInstance() {
         MallFragment fragment = new MallFragment();
@@ -135,13 +144,73 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         mAdapter.setOnItemClickListener(this);
         mHAdapter.setOnItemClickListener(this);
         maskV.setOnClickListener(this);
-
+        swipeRefreshLayout.setOnRefreshListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         ArmsUtils.configRecyclerView(secondFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         secondFilterRV.setAdapter(secondAdapter);
         secondAdapter.setOnItemClickListener(this);
         tabLayout.addOnTabSelectedListener(this);
         mPresenter.getCategory();
+    }
+
+    /**
+     * 开始加载更多
+     */
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    @Override
+    public void setLoadedAllItems(boolean has) {
+        this.hasLoadedAllItems = has;
+    }
+
+    /**
+     * 初始化Paginate,用于加载更多
+     */
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    int type = (int) provideCache().get("type");
+                    switch (type) {
+                        case 0:
+                            mPresenter.getGoodsList(false);
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            mPresenter.getHGoodsList(false);
+                            break;
+                    }
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return hasLoadedAllItems;
+                }
+            };
+
+            mPaginate = Paginate.with(mRecyclerView, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
     }
 
     /**
@@ -158,18 +227,17 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
     @Override
     public void setData(Object data) {
-
     }
 
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -215,7 +283,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 provideCache().put("orderByAsc", saleTV.isSelected());
                 saleTV.setTextColor(choiceColor);
                 saleStatusV.setBackground(saleV.isSelected() ? asceD : descD);
-                mPresenter.getGoodsList();
+                mPresenter.getGoodsList(false);
                 break;
             case R.id.price_layout:
                 priceV.setSelected(!priceV.isSelected());
@@ -224,7 +292,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 priceTV.setTextColor(choiceColor);
                 priceStautsV.setBackground(priceV.isSelected() ? asceD : descD);
                 showFilter(false);
-                mPresenter.getGoodsList();
+                mPresenter.getGoodsList(false);
                 break;
         }
     }
@@ -305,25 +373,27 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getId());
                 showFilter(false);
-                mPresenter.getGoodsList();
+                mPresenter.getGoodsList(true);
                 break;
         }
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        provideCache().put("type", tab.getPosition());
         switch (tab.getPosition()) {
             case 0:
                 mRecyclerView.setAdapter(mAdapter);
-                mPresenter.getGoodsList();
+                mPresenter.getGoodsList(true);
                 break;
             case 1:
                 break;
             case 2:
                 mRecyclerView.setAdapter(mHAdapter);
-                mPresenter.getHGoodsList();
+                mPresenter.getHGoodsList(true);
                 break;
         }
+        initPaginate();
     }
 
     @Override
@@ -334,5 +404,29 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.mPaginate = null;
+        DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        DefaultAdapter.releaseAllHolder(secondFilterRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        DefaultAdapter.releaseAllHolder(thirdFilterRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+    }
+
+    @Override
+    public void onRefresh() {
+        int type = (int) provideCache().get("type");
+        switch (type) {
+            case 0:
+                mPresenter.getGoodsList(true);
+                break;
+            case 1:
+                break;
+            case 2:
+                mPresenter.getHGoodsList(true);
+                break;
+        }
     }
 }

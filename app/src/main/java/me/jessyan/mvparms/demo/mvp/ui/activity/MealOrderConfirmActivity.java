@@ -158,7 +158,7 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
         moneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
 
         mealNameTV.setText(response.getSetMealGoods().getName());
-        salesPriceTV.setText(String.valueOf(response.getSetMealGoods().getSalesPrice()));
+        salesPriceTV.setText(String.valueOf(response.getSetMealGoods().getSalePrice()));
         totalPriceTV.setText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
 
         AppComponent mAppComponent = ArmsUtils.obtainAppComponentFromContext(this);

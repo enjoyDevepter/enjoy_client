@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.youth.banner.Banner;
@@ -131,7 +132,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         imagesB.isAutoPlay(false);
         imageCount.setText("1/" + response.getSetMealGoods().getImages().size());
         titleTV.setText(String.valueOf(response.getSetMealGoods().getName()));
-        salesPriceTV.setText(String.valueOf(response.getSetMealGoods().getSalesPrice()));
+        salesPriceTV.setText(String.valueOf(response.getSetMealGoods().getSalePrice()));
         totalPriceTV.setText("￥" + String.valueOf(response.getSetMealGoods().getTotalPrice()));
         salesTV.setText(String.valueOf(response.getSetMealGoods().getSales()));
         collectV.setSelected("1".equals(response.getSetMealGoods().getFavorite()) ? true : false);
@@ -155,5 +156,11 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
                 mPresenter.collectGoods(!collectV.isSelected());
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DefaultAdapter.releaseAllHolder(detailRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
     }
 }

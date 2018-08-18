@@ -370,6 +370,12 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DefaultAdapter.releaseAllHolder(promotionCV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+    }
+
     private class Mobile {
         @JavascriptInterface
         public void onGetWebContentHeight() {
@@ -382,8 +388,6 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 layoutParams.height = measuredHeight;
                 detailWV.setLayoutParams(layoutParams);
             });
-
-
         }
     }
 }

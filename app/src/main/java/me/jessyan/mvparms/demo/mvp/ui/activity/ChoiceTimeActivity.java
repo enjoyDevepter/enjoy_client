@@ -156,4 +156,11 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
                 break;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DefaultAdapter.releaseAllHolder(dateRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        DefaultAdapter.releaseAllHolder(timeRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+    }
 }

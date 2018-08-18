@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
@@ -202,7 +203,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         followV.setSelected("1".equals(response.getMember().getIsFollow()) ? true : false);
         publishDateTV.setText(response.getDiary().getPublishDate());
         goodsNameTV.setText(response.getGoods().getName());
-        goodsPriceTV.setText(String.valueOf(response.getGoods().getSalesPrice()));
+        goodsPriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
         diaryPublishDateTV.setText(response.getDiary().getPublishDate());
         int position = getIntent().getIntExtra("position", 0);
         indexTV.setText("第" + NumberToChn.NumberToChn(position + 1) + "篇日记");
@@ -265,5 +266,11 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         }
 
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DefaultAdapter.releaseAllHolder(commentRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
     }
 }

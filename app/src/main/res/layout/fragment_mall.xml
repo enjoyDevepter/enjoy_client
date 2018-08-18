@@ -6,11 +6,19 @@
     android:background="@color/background">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/goods"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="127dp" />
+        android:layout_marginTop="127dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/goods"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/no_date"

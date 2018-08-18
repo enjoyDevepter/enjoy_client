@@ -6,22 +6,57 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerMyComponent;
 import me.jessyan.mvparms.demo.di.module.MyModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
 import me.jessyan.mvparms.demo.mvp.presenter.MyPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.View {
+public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.View, View.OnClickListener {
 
+    @BindView(R.id.setting)
+    View settingV;
+    @BindView(R.id.msg)
+    View msgV;
+    @BindView(R.id.nickName)
+    TextView nickNameTV;
+    @BindView(R.id.money)
+    TextView moneyTV;
+    @BindView(R.id.member_money)
+    TextView memberMoneyTV;
+    @BindView(R.id.bonus)
+    TextView bonusTV;
+    @BindView(R.id.goods_order)
+    View gOrderV;
+    @BindView(R.id.hgoods_order)
+    View hOrderV;
+    @BindView(R.id.kgoods_order)
+    View kOrderV;
+    @BindView(R.id.friend)
+    View friendV;
+    @BindView(R.id.diary)
+    View diaryV;
+    @BindView(R.id.collect)
+    View collectV;
+    @BindView(R.id.follow)
+    View followV;
+    @BindView(R.id.meal)
+    View mealV;
+    @BindView(R.id.coupon)
+    View couponV;
+    @BindView(R.id.store)
+    View storeV;
 
     public static MyFragment newInstance() {
         MyFragment fragment = new MyFragment();
@@ -45,7 +80,18 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     @Override
     public void initData(Bundle savedInstanceState) {
-
+        gOrderV.setOnClickListener(this);
+        kOrderV.setOnClickListener(this);
+        hOrderV.setOnClickListener(this);
+        friendV.setOnClickListener(this);
+        diaryV.setOnClickListener(this);
+        collectV.setOnClickListener(this);
+        followV.setOnClickListener(this);
+        mealV.setOnClickListener(this);
+        couponV.setOnClickListener(this);
+        storeV.setOnClickListener(this);
+        settingV.setOnClickListener(this);
+        msgV.setOnClickListener(this);
     }
 
     /**
@@ -93,4 +139,42 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.setting:
+                break;
+            case R.id.msg:
+                break;
+            case R.id.goods_order:
+                Intent intent0 = new Intent(getContext(), MyOrderActivity.class);
+                intent0.putExtra("type", 0);
+                ArmsUtils.startActivity(intent0);
+                break;
+            case R.id.kgoods_order:
+                Intent intent1 = new Intent(getContext(), MyOrderActivity.class);
+                intent1.putExtra("type", 1);
+                ArmsUtils.startActivity(intent1);
+                break;
+            case R.id.hgoods_order:
+                Intent intent2 = new Intent(getContext(), MyOrderActivity.class);
+                intent2.putExtra("type", 2);
+                ArmsUtils.startActivity(intent2);
+                break;
+            case R.id.friend:
+                break;
+            case R.id.diary:
+                break;
+            case R.id.collect:
+                break;
+            case R.id.follow:
+                break;
+            case R.id.meal:
+                break;
+            case R.id.coupon:
+                break;
+            case R.id.store:
+                break;
+        }
+    }
 }

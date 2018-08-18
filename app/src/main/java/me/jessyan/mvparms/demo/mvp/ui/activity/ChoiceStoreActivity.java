@@ -139,4 +139,10 @@ public class ChoiceStoreActivity extends BaseActivity<ChoiceStorePresenter> impl
     public Activity getActivity() {
         return this;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DefaultAdapter.releaseAllHolder(storesRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+    }
 }

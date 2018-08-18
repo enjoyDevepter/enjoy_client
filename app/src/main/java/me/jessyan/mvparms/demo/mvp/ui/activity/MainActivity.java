@@ -10,6 +10,7 @@ import com.chaychan.library.BottomBarItem;
 import com.chaychan.library.BottomBarLayout;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import me.jessyan.mvparms.demo.mvp.ui.fragment.HomeFragment;
 import me.jessyan.mvparms.demo.mvp.ui.fragment.MallFragment;
 import me.jessyan.mvparms.demo.mvp.ui.fragment.MyFragment;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -57,10 +59,20 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     public void initData(Bundle savedInstanceState) {
 
         initFragment();
-
         bottomBarLayout.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
             @Override
             public void onItemSelected(BottomBarItem bottomBarItem, int previousPosition, int currentPosition) {
+                if (previousPosition == currentPosition) {
+                    return;
+                }
+                if (currentPosition == 3 || currentPosition == 4) {
+                    Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
+                    if (ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
+                        bottomBarLayout.setCurrentItem(previousPosition);
+                        ArmsUtils.startActivity(LoginActivity.class);
+                        return;
+                    }
+                }
                 changeFragment(currentPosition);
             }
         });

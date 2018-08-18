@@ -187,4 +187,10 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         }
         return false;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DefaultAdapter.releaseAllHolder(historyRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+    }
 }

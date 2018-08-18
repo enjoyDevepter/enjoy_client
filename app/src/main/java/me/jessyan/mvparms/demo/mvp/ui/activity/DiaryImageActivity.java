@@ -111,4 +111,10 @@ public class DiaryImageActivity extends BaseActivity<DiaryImagePresenter> implem
     public void onItemClick(View view, int viewType, Object data, int position) {
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+    }
 }

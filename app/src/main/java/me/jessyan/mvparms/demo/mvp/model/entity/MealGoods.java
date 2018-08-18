@@ -17,7 +17,7 @@ public class MealGoods {
     private List<String> images;
     private String name;
     private int sales;
-    private double salesPrice;
+    private double salePrice;
     private String title;
     private List<Goods> goodsList;
 
@@ -85,12 +85,12 @@ public class MealGoods {
         this.sales = sales;
     }
 
-    public double getSalesPrice() {
-        return salesPrice;
+    public double getSalePrice() {
+        return salePrice;
     }
 
-    public void setSalesPrice(double salesPrice) {
-        this.salesPrice = salesPrice;
+    public void setSalePrice(double salePrice) {
+        this.salePrice = salePrice;
     }
 
     public String getTitle() {
@@ -129,7 +129,7 @@ public class MealGoods {
                 ", images=" + images +
                 ", name='" + name + '\'' +
                 ", sales=" + sales +
-                ", salesPrice=" + salesPrice +
+                ", salePrice=" + salePrice +
                 ", title='" + title + '\'' +
                 ", goodsList=" + goodsList +
                 '}';
@@ -142,7 +142,7 @@ public class MealGoods {
         private String title;
         private String image;
         private int nums;
-        private double salesPrice;
+        private double salePrice;
         private double marketPrice;
         private double costPrice;
 
@@ -194,12 +194,12 @@ public class MealGoods {
             this.nums = nums;
         }
 
-        public double getSalesPrice() {
-            return salesPrice;
+        public double getSalePrice() {
+            return salePrice;
         }
 
-        public void setSalesPrice(double salesPrice) {
-            this.salesPrice = salesPrice;
+        public void setSalePrice(double salePrice) {
+            this.salePrice = salePrice;
         }
 
         public double getMarketPrice() {
@@ -227,7 +227,7 @@ public class MealGoods {
                     ", title='" + title + '\'' +
                     ", image='" + image + '\'' +
                     ", nums=" + nums +
-                    ", salesPrice=" + salesPrice +
+                    ", salePrice=" + salePrice +
                     ", marketPrice=" + marketPrice +
                     ", costPrice=" + costPrice +
                     '}';

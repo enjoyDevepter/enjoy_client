@@ -114,7 +114,7 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
 
         PayMealOrderRequest.MealGoods mealGoods = new PayMealOrderRequest.MealGoods();
         mealGoods.setNums(1);
-        mealGoods.setSalePrice(orderConfirmInfoResponse.getSetMealGoods().getSalesPrice());
+        mealGoods.setSalePrice(orderConfirmInfoResponse.getSetMealGoods().getSalePrice());
         mealGoods.setSetMealId(orderConfirmInfoResponse.getSetMealGoods().getSetMealId());
         mealGoods.setTotalPrice(orderConfirmInfoResponse.getSetMealGoods().getTotalPrice());
         request.setSetMealGoods(mealGoods);

@@ -33,7 +33,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="当前定位"
             android:textColor="#FF333333"
             android:textSize="18sp" />
 
@@ -120,7 +119,6 @@
                     android:id="@+id/payPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="148.00"
                     android:textColor="#FF565656"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -141,7 +139,6 @@
                     android:id="@+id/totalPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="288.00"
                     android:textColor="#FF666666"
                     android:textSize="10sp" />
 
@@ -157,7 +154,6 @@
                     android:id="@+id/deductionMoney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="288.00"
                     android:textColor="#FF666666"
                     android:textSize="10sp" />
 
@@ -178,11 +174,19 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/cartList"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/price_info"
-        android:layout_below="@id/title_layout" />
+        android:layout_below="@id/title_layout">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cartList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </RelativeLayout>

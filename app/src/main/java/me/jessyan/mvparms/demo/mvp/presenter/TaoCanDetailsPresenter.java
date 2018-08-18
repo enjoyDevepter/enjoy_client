@@ -64,10 +64,10 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        getMealDetail();
+        getMealDetail(true);
     }
 
-    private void getMealDetail() {
+    public void getMealDetail(boolean pullToRefresh) {
         MealDetailsRequest request = new MealDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
@@ -134,7 +134,7 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
         Intent intent = new Intent(mRootView.getActivity(), MealOrderConfirmActivity.class);
         intent.putExtra("totalPrice", mealDetailsResponse.getSetMealGoods().getTotalPrice());
         intent.putExtra("setMealId", mealDetailsResponse.getSetMealGoods().getSetMealId());
-        intent.putExtra("salePrice", mealDetailsResponse.getSetMealGoods().getSalesPrice());
+        intent.putExtra("salePrice", mealDetailsResponse.getSetMealGoods().getSalePrice());
         ArmsUtils.startActivity(intent);
 
     }

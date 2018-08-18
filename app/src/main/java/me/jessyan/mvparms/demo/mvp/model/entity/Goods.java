@@ -9,15 +9,15 @@ public class Goods {
     private int attention;
     private int cnt;
     private double costPrice;
+    private int favorite;
     private String goodsId;
     private String merchId;
     private String image;
     private double marketPrice;
     private String name;
     private int sales;
-    private double salesPrice;
+    private double salePrice;
     private String title;
-    private int nextPageIndex;
 
     public int getAttention() {
         return attention;
@@ -33,6 +33,14 @@ public class Goods {
 
     public void setCnt(int cnt) {
         this.cnt = cnt;
+    }
+
+    public int getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
     }
 
     public double getCostPrice() {
@@ -91,12 +99,12 @@ public class Goods {
         this.sales = sales;
     }
 
-    public double getSalesPrice() {
-        return salesPrice;
+    public double getSalePrice() {
+        return salePrice;
     }
 
-    public void setSalesPrice(double salesPrice) {
-        this.salesPrice = salesPrice;
+    public void setSalePrice(double salePrice) {
+        this.salePrice = salePrice;
     }
 
     public String getTitle() {
@@ -107,29 +115,21 @@ public class Goods {
         this.title = title;
     }
 
-    public int getNextPageIndex() {
-        return nextPageIndex;
-    }
-
-    public void setNextPageIndex(int nextPageIndex) {
-        this.nextPageIndex = nextPageIndex;
-    }
-
     @Override
     public String toString() {
         return "Goods{" +
                 "attention=" + attention +
                 ", cnt=" + cnt +
                 ", costPrice=" + costPrice +
+                ", favorite=" + favorite +
                 ", goodsId='" + goodsId + '\'' +
                 ", merchId='" + merchId + '\'' +
                 ", image='" + image + '\'' +
                 ", marketPrice=" + marketPrice +
                 ", name='" + name + '\'' +
                 ", sales=" + sales +
-                ", salesPrice=" + salesPrice +
+                ", salePrice=" + salePrice +
                 ", title='" + title + '\'' +
-                ", nextPageIndex=" + nextPageIndex +
                 '}';
     }
 }

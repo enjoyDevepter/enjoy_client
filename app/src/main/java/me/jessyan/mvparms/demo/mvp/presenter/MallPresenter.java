@@ -55,6 +55,10 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
     @Inject
     HGoodsListAdapter mHAdapter;
 
+    private int preEndIndex;
+    private int lastPageIndex = 1;
+
+
     @Inject
     public MallPresenter(MallContract.Model model, MallContract.View rootView) {
         super(model, rootView);
@@ -68,6 +72,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
         this.mImageLoader = null;
         this.mApplication = null;
     }
+
 
     public void getCategory() {
 
@@ -103,7 +108,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
         ArmsUtils.startActivity(CartActivity.class);
     }
 
-    public void getGoodsList() {
+    public void getGoodsList(boolean pullToRefresh) {
         GoodsListRequest request = new GoodsListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setProvince(String.valueOf(cache.get("province")));
@@ -119,24 +124,48 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
             request.setOrderBy(orderBy);
         }
 
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
         mModel.getGoodsList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<GoodsListResponse>() {
-                    @Override
-                    public void accept(GoodsListResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                            mGoods.clear();
-                            mGoods.addAll(response.getGoodsList());
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                }).subscribe(new Consumer<GoodsListResponse>() {
+            @Override
+            public void accept(GoodsListResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    if (pullToRefresh) {
+                        mGoods.clear();
                     }
-                });
+                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                    mGoods.addAll(response.getGoodsList());
+                    preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = mGoods.size() / 10;
+                    if (pullToRefresh) {
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
     }
 
-    public void getHGoodsList() {
+    public void getHGoodsList(final boolean pullToRefresh) {
         GoodsListRequest request = new GoodsListRequest();
         request.setCmd(440);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
@@ -156,18 +185,39 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
         mModel.getHGoodsList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<HGoodsListResponse>() {
-                    @Override
-                    public void accept(HGoodsListResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                            mHGoods.clear();
-                            mHGoods.addAll(response.getGoodsList());
-                            mHAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                }).subscribe(new Consumer<HGoodsListResponse>() {
+            @Override
+            public void accept(HGoodsListResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    if (pullToRefresh) {
+                        mHGoods.clear();
                     }
-                });
+                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                    mHGoods.addAll(response.getGoodsList());
+                    preEndIndex = mHGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = mHGoods.size() / 10;
+                    if (pullToRefresh) {
+                        mHAdapter.notifyDataSetChanged();
+                    } else {
+                        mHAdapter.notifyItemRangeInserted(preEndIndex, mHGoods.size());
+                        mHAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
     }
 
     private List<Category> sortCategory(List<Category> categoryList) {

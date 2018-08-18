@@ -47,6 +47,9 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
     @Inject
     RecyclerView.Adapter mAdapter;
 
+    private int preEndIndex;
+    private int lastPageIndex = 1;
+
     @Inject
     public CartPresenter(CartContract.Model model, CartContract.View rootView) {
         super(model, rootView);
@@ -61,33 +64,56 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
         this.mApplication = null;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     void onCreate() {
-        getCartList();
+        getCartList(true);
     }
 
-    private void getCartList() {
+    public void getCartList(boolean pullToRefresh) {
         CartListRequest request = new CartListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
-        mRootView.showLoading();
+
+
+        if (pullToRefresh) lastPageIndex = 1;
+//        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
         mModel.getGoodsOfCart(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<CartListResponse>() {
-                    @Override
-                    public void accept(CartListResponse response) throws Exception {
-                        mRootView.hideLoading();
-                        if (response.isSuccess()) {
-                            cartItems.clear();
-                            cartItems.addAll(response.getCart().getCartItems());
-                            mRootView.updateUI(response.getCart());
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                }).subscribe(new Consumer<CartListResponse>() {
+            @Override
+            public void accept(CartListResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    if (pullToRefresh) {
+                        cartItems.clear();
                     }
-                });
+                    mRootView.setLoadedAllItems(true);
+                    cartItems.addAll(response.getCart().getCartItems());
+                    preEndIndex = cartItems.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = cartItems.size() / 10;
+                    if (pullToRefresh) {
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mAdapter.notifyItemRangeInserted(preEndIndex, cartItems.size());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
     }
 
 
@@ -106,14 +132,12 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
             request.setNums((Integer) mRootView.getCache().get("nums"));
         }
         request.setStatus((String) mRootView.getCache().get("status"));
-        mRootView.showLoading();
         mModel.editCartList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<CartListResponse>() {
                     @Override
                     public void accept(CartListResponse response) throws Exception {
-                        mRootView.hideLoading();
                         if (response.isSuccess()) {
                             cartItems.clear();
                             cartItems.addAll(response.getCart().getCartItems());

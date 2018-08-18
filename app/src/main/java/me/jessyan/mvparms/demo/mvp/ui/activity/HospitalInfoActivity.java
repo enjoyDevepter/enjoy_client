@@ -10,14 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-
-import java.lang.reflect.Field;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
@@ -29,7 +26,7 @@ import me.jessyan.mvparms.demo.mvp.presenter.HospitalInfoPresenter;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> implements HospitalInfoContract.View {
+public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> implements HospitalInfoContract.View, View.OnClickListener {
 
     @BindView(R.id.title)
     TextView title;
@@ -93,26 +90,26 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     private void initTabLayout() {
         tab.setupWithViewPager(viewpager);
-        Class tablayout = tab.getClass();
-        Field tabStrip = null;
-        try {
-            tabStrip = tablayout.getDeclaredField("mTabStrip");
-            tabStrip.setAccessible(true);
-            LinearLayout ll_tab = (LinearLayout) tabStrip.get(tab);
-            for (int i = 0; i < ll_tab.getChildCount(); i++) {
-                View child = ll_tab.getChildAt(i);
-                child.setPadding(0, 0, 0, 0);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-                params.leftMargin = 60;
-                params.rightMargin = 45;
-                child.setLayoutParams(params);
-                child.invalidate(); // 这个方法是重画
-            }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+//        Class tablayout = tab.getClass();
+//        Field tabStrip = null;
+//        try {
+//            tabStrip = tablayout.getDeclaredField("mTabStrip");
+//            tabStrip.setAccessible(true);
+//            LinearLayout ll_tab = (LinearLayout) tabStrip.get(tab);
+//            for (int i = 0; i < ll_tab.getChildCount(); i++) {
+//                View child = ll_tab.getChildAt(i);
+//                child.setPadding(0, 0, 0, 0);
+//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+//                params.leftMargin = 60;
+//                params.rightMargin = 45;
+//                child.setLayoutParams(params);
+//                child.invalidate(); // 这个方法是重画
+//            }
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void initAdapter() {
@@ -137,12 +134,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         title.setText("北京太和医疗美容医院");
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                killMyself();
-            }
-        });
+        back.setOnClickListener(this);
         initViewPager();
         initTabLayout();
     }
@@ -172,5 +164,14 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     @Override
     public void killMyself() {
         finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+        }
     }
 }

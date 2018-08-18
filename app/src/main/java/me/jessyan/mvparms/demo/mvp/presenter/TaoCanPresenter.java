@@ -43,6 +43,9 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
     @Inject
     TaoCanListAdapter mAdapter;
 
+    private int preEndIndex;
+    private int lastPageIndex = 1;
+
     @Inject
     public TaoCanPresenter(TaoCanContract.Model model, TaoCanContract.View rootView) {
         super(model, rootView);
@@ -50,7 +53,7 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        getTaoCan(); // 进入界面后加载
+        getTaoCan(true); // 进入界面后加载
     }
 
     @Override
@@ -62,7 +65,7 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
         this.mApplication = null;
     }
 
-    public void getTaoCan() {
+    public void getTaoCan(boolean pullToRefresh) {
 
         MealListRequest request = new MealListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
@@ -71,20 +74,44 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
         request.setCounty((String) (cache.get("county")));
         request.setProvince((String) (cache.get("province")));
 
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
         mModel.getTaoCanList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<MealListResponse>() {
-                    @Override
-                    public void accept(MealListResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                            mGoods.clear();
-                            mGoods.addAll(response.getSetMealGoodsList());
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                }).subscribe(new Consumer<MealListResponse>() {
+            @Override
+            public void accept(MealListResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    if (pullToRefresh) {
+                        mGoods.clear();
                     }
-                });
+                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                    mGoods.addAll(response.getSetMealGoodsList());
+                    preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = mGoods.size() / 10;
+                    if (pullToRefresh) {
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
     }
 }

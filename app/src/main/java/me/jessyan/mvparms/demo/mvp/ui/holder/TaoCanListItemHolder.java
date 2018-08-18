@@ -67,7 +67,7 @@ public class TaoCanListItemHolder extends BaseHolder<Goods> {
                 .subscribe(s -> nameTV.setText(s));
         Observable.just(goods.getSales())
                 .subscribe(s -> saleTV.setText(String.valueOf(s)));
-        Observable.just(goods.getSalesPrice())
+        Observable.just(goods.getSalePrice())
                 .subscribe(s -> priceTV.setText(String.valueOf(s)));
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
