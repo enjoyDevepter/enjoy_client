@@ -222,6 +222,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
 
     private List<Category> sortCategory(List<Category> categoryList) {
         List<Category> categories = new ArrayList<>();
+
         for (Category category : categoryList) {
             if ("0".equals(category.getParentId())) {
                 category.setCatagories(new ArrayList<>());
@@ -230,6 +231,14 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
         }
 
         for (Category category : categories) {
+            Category allCategory = new Category();
+            allCategory.setChoice(true);
+            allCategory.setName("全部项目");
+            allCategory.setId("");
+            allCategory.setBusType("");
+            allCategory.setParentId("");
+            allCategory.setCatagories(new ArrayList<>());
+            category.getCatagories().add(allCategory);
             // 子
             for (Category child : categoryList) {
                 if (child.getParentId().equals(category.getId())) {

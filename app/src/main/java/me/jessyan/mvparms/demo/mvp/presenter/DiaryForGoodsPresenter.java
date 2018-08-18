@@ -49,6 +49,9 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
     @Inject
     MyDiaryListAdapter mAdapter;
 
+    private int preEndIndex;
+    private int lastPageIndex = 1;
+
     @Inject
     public DiaryForGoodsPresenter(DiaryForGoodsContract.Model model, DiaryForGoodsContract.View rootView) {
         super(model, rootView);
@@ -60,7 +63,7 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
         getMyDiaryList();
     }
 
-    private void getMyDiaryList() {
+    public void getMyDiaryList() {
         MyDiaryRequest request = new MyDiaryRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         String token = (String) (cache.get(KEY_KEEP + "token"));
@@ -70,24 +73,38 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
             request.setCmd(806);
         }
         request.setToken(token);
+        request.setPageIndex(lastPageIndex);
         request.setMemberId(mRootView.getActivity().getIntent().getStringExtra("memberId"));
         request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
         request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+
         mModel.getMyDiaryList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DiaryListResponse>() {
-                    @Override
-                    public void accept(DiaryListResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                            diaryList.clear();
-                            diaryList.addAll(response.getDiaryList());
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
+                .doOnSubscribe(disposable -> {
+                    mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                }).subscribe(new Consumer<DiaryListResponse>() {
+            @Override
+            public void accept(DiaryListResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                    diaryList.addAll(response.getDiaryList());
+                    preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = diaryList.size() / 10;
+                    if (lastPageIndex == 1) {
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
                     }
-                });
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
+
     }
 
 

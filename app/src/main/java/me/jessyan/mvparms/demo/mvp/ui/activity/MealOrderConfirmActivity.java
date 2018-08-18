@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -160,6 +161,7 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
         mealNameTV.setText(response.getSetMealGoods().getName());
         salesPriceTV.setText(String.valueOf(response.getSetMealGoods().getSalePrice()));
         totalPriceTV.setText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
+        totalPriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
         AppComponent mAppComponent = ArmsUtils.obtainAppComponentFromContext(this);
         mAppComponent.imageLoader()

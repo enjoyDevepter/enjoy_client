@@ -15,6 +15,7 @@
  */
 package me.jessyan.mvparms.demo.mvp.ui.holder;
 
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -77,8 +78,8 @@ public class MealGoodsListItemHolder extends BaseHolder<MealGoods> {
                 .subscribe(s -> saleTV.setText(String.valueOf(s)));
         Observable.just(goods.getSalePrice())
                 .subscribe(s -> salesPriceTV.setText(String.valueOf(s)));
-        Observable.just(goods.getTotalPrice())
-                .subscribe(s -> totalPriceTV.setText(String.valueOf(s)));
+        totalPriceTV.setText(String.valueOf(goods.getTotalPrice()));
+        totalPriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),

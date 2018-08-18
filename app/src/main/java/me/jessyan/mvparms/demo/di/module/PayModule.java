@@ -1,19 +1,11 @@
 package me.jessyan.mvparms.demo.di.module;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
 import com.jess.arms.di.scope.ActivityScope;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.PayContract;
 import me.jessyan.mvparms.demo.mvp.model.PayModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.PayGoods;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.PayGoodsListAdapter;
 
 
 @Module
@@ -39,23 +31,5 @@ public class PayModule {
     @Provides
     PayContract.Model providePayModel(PayModel model) {
         return model;
-    }
-
-    @ActivityScope
-    @Provides
-    RecyclerView.LayoutManager provideLayoutManager() {
-        return new LinearLayoutManager(view.getActivity(), LinearLayoutManager.VERTICAL, false);
-    }
-
-    @ActivityScope
-    @Provides
-    List<PayGoods> provideGoodsList() {
-        return new ArrayList<>();
-    }
-
-    @ActivityScope
-    @Provides
-    RecyclerView.Adapter provideOrderConfirmAdapter(List<PayGoods> goodsList) {
-        return new PayGoodsListAdapter(goodsList);
     }
 }

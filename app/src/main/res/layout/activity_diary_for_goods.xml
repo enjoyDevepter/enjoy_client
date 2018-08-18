@@ -195,6 +195,7 @@
                 app:tabTextAppearance="@style/TabLayoutTextStyle"
                 app:tabTextColor="#FF666666" />
 
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/diaryRV"
                 android:layout_width="match_parent"

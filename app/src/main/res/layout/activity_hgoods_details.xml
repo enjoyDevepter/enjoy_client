@@ -581,7 +581,8 @@
                 android:layout_height="match_parent"
                 android:background="#FFFF5656"
                 android:gravity="center"
-                android:text="立即预定" />
+                android:text="立即预定"
+                android:textColor="@color/white" />
 
         </LinearLayout>
     </RelativeLayout>

@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
-import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
@@ -45,13 +41,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     View wxV;
     @BindView(R.id.confirm)
     View confirmV;
-    @BindView(R.id.order_goods)
-    RecyclerView mRecyclerView;
-    @Inject
-    RecyclerView.Adapter mAdapter;
-    @Inject
-    RecyclerView.LayoutManager mLayoutManager;
-
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -76,9 +65,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         zfbPay.setOnClickListener(this);
         wxPay.setOnClickListener(this);
         zfbV.setSelected(true);
-        ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-
         orderIdTV.setText(getIntent().getStringExtra("orderId"));
         priceTV.setText(ArmsUtils.formatLong(getIntent().getLongExtra("payMoney", 0)));
     }
@@ -151,6 +137,5 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
     }
 }

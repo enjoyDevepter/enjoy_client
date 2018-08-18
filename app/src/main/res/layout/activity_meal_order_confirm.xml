@@ -69,7 +69,6 @@
                         android:id="@+id/totalPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="228.00"
                         android:textColor="#FFABABAB"
                         android:textSize="12sp" />
 
@@ -109,7 +108,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:layout_toRightOf="@id/price_tag"
-                        android:text="228.00"
                         android:textColor="#FFFF0000"
                         android:textSize="17sp" />
                 </LinearLayout>

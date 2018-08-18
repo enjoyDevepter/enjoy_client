@@ -55,6 +55,12 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     RecyclerView detailRV;
     @BindView(R.id.tab)
     TabLayout tabLayout;
+    @BindView(R.id.deposit)
+    TextView depositTV;
+    @BindView(R.id.tailMoney)
+    TextView tailMoneyTV;
+    @BindView(R.id.tel)
+    View telV;
     @Inject
     RecyclerView.Adapter mAdapter;
     @Inject
@@ -88,6 +94,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         ArmsUtils.configRecyclerView(detailRV, layoutManager);
         detailRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(this, R.dimen.divice_width), 0));
         detailRV.setAdapter(mAdapter);
+        telV.setOnClickListener(this);
     }
 
 
@@ -136,6 +143,8 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         totalPriceTV.setText("￥" + String.valueOf(response.getSetMealGoods().getTotalPrice()));
         salesTV.setText(String.valueOf(response.getSetMealGoods().getSales()));
         collectV.setSelected("1".equals(response.getSetMealGoods().getFavorite()) ? true : false);
+        depositTV.setText(String.valueOf(response.getSetMealGoods().getSalePrice()));
+        tailMoneyTV.setText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
     }
 
     @Override
@@ -154,6 +163,8 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
                 break;
             case R.id.collect:
                 mPresenter.collectGoods(!collectV.isSelected());
+                break;
+            case R.id.tel:
                 break;
         }
     }

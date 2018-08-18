@@ -141,7 +141,7 @@ public class MealGoods {
         private String name;
         private String title;
         private String image;
-        private int nums;
+        private int num;
         private double salePrice;
         private double marketPrice;
         private double costPrice;
@@ -186,12 +186,12 @@ public class MealGoods {
             this.image = image;
         }
 
-        public int getNums() {
-            return nums;
+        public int getNum() {
+            return num;
         }
 
-        public void setNums(int nums) {
-            this.nums = nums;
+        public void setNum(int num) {
+            this.num = num;
         }
 
         public double getSalePrice() {
@@ -226,7 +226,7 @@ public class MealGoods {
                     ", name='" + name + '\'' +
                     ", title='" + title + '\'' +
                     ", image='" + image + '\'' +
-                    ", nums=" + nums +
+                    ", num=" + num +
                     ", salePrice=" + salePrice +
                     ", marketPrice=" + marketPrice +
                     ", costPrice=" + costPrice +

@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/name"
         android:layout_below="@id/name"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/image"
         android:orientation="horizontal">
 
@@ -43,7 +43,7 @@
             android:id="@+id/salesPrice_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="1dp"
             android:text="￥"
             android:textColor="#FFFF0000"
             android:textSize="13sp" />
@@ -80,14 +80,14 @@
         android:layout_alignLeft="@id/salesPrice_layout"
         android:layout_below="@id/salesPrice_layout"
         android:layout_marginBottom="2dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:layout_toRightOf="@id/image"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="1dp"
             android:text="￥"
             android:textColor="#FF666666"
             android:textSize="13sp" />

@@ -50,6 +50,9 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
     @Inject
     List<Diary> diaryList;
 
+    private int preEndIndex;
+    private int lastPageIndex = 1;
+
     @Inject
     public DiscoverPresenter(DiscoverContract.Model model, DiscoverContract.View rootView) {
         super(model, rootView);
@@ -69,7 +72,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         getDiaryNaviType();
     }
 
-    private void getDiaryNaviType() {
+    public void getDiaryNaviType() {
         SimpleRequest request = new SimpleRequest();
         request.setCmd(821);
         mModel.getDiaryNaviType(request)
@@ -80,7 +83,8 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                     public void accept(DiaryNaviListResponse response) throws Exception {
                         if (response.isSuccess()) {
                             mRootView.updateTab(response.getNavList());
-                            getDiaryList("recom");
+                            mRootView.getCache().put("type", "recom");
+                            getDiaryList(true);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -89,49 +93,75 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
     }
 
 
-    public void getDiaryList(String diaryType) {
+    public void getDiaryList(boolean pullToRefresh) {
 
         DiaryListRequest request = new DiaryListRequest();
 
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         String token = (String) (cache.get(KEY_KEEP + "token"));
+        String type = (String) mRootView.getCache().get("type");
         if (ArmsUtils.isEmpty(token)) {
-            if ("recom".equals(diaryType)) {
+            if ("recom".equals(type)) {
                 request.setCmd(803);
-            } else if ("folow".equals(diaryType)) {
+            } else if ("folow".equals(type)) {
                 mRootView.showError(true);
                 return;
             } else {
                 request.setCmd(805);
-                request.setTypeId(diaryType);
+                request.setTypeId(type);
             }
         } else {
-            if ("recom".equals(diaryType)) {
+            if ("recom".equals(type)) {
                 request.setCmd(813);
-            } else if ("folow".equals(diaryType)) {
+            } else if ("folow".equals(type)) {
                 request.setCmd(804);
             } else {
                 request.setCmd(815);
-                request.setTypeId(diaryType);
+                request.setTypeId(type);
             }
         }
         request.setToken(token);
+
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
         mModel.getDiaryList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DiaryListResponse>() {
-                    @Override
-                    public void accept(DiaryListResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                            diaryList.clear();
-                            diaryList.addAll(response.getDiaryList());
-                            mRootView.showError(diaryList.size() <= 0);
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                }).subscribe(new Consumer<DiaryListResponse>() {
+            @Override
+            public void accept(DiaryListResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    if (pullToRefresh) {
+                        diaryList.clear();
                     }
-                });
+                    mRootView.showError(response.getDiaryList().size() <= 0);
+                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                    diaryList.addAll(response.getDiaryList());
+                    preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = diaryList.size() / 10;
+                    if (pullToRefresh) {
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
     }
 
 

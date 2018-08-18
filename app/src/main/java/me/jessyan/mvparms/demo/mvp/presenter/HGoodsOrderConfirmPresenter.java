@@ -23,7 +23,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
-import me.jessyan.mvparms.demo.mvp.model.entity.PayGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HGoodsOrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HGoodsPayOrderRequest;
@@ -168,23 +167,23 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());
 
-                                List<PayGoods> goodsList = new ArrayList<>();
-                                for (HGoodsPayOrderResponse.HGoods goods : response.getGoodsList()) {
-                                    PayGoods payGoods = new PayGoods();
-                                    payGoods.setGoodsId(goods.getGoodsId());
-                                    payGoods.setMerchId(goods.getMerchId());
-                                    payGoods.setCode(goods.getCode());
-                                    payGoods.setImage(goods.getImage());
-                                    payGoods.setMarketPrice(goods.getMarketPrice());
-                                    payGoods.setCostPrice(goods.getCostPrice());
-                                    payGoods.setName(goods.getName());
-                                    payGoods.setSalePrice(goods.getSalePrice());
-                                    payGoods.setTitle(goods.getTitle());
-                                    payGoods.setNums(goods.getNums());
-                                    payGoods.setGoodsSpecValue(goods.getGoodsSpecValue());
-                                    goodsList.add(payGoods);
-                                }
-                                intent.putParcelableArrayListExtra("goodsList", (ArrayList<? extends Parcelable>) goodsList);
+//                                List<PayGoods> goodsList = new ArrayList<>();
+//                                for (HGoodsPayOrderResponse.HGoods goods : response.getGoodsList()) {
+//                                    PayGoods payGoods = new PayGoods();
+//                                    payGoods.setGoodsId(goods.getGoodsId());
+//                                    payGoods.setMerchId(goods.getMerchId());
+//                                    payGoods.setCode(goods.getCode());
+//                                    payGoods.setImage(goods.getImage());
+//                                    payGoods.setMarketPrice(goods.getMarketPrice());
+//                                    payGoods.setCostPrice(goods.getCostPrice());
+//                                    payGoods.setName(goods.getName());
+//                                    payGoods.setSalePrice(goods.getSalePrice());
+//                                    payGoods.setTitle(goods.getTitle());
+//                                    payGoods.setNums(goods.getNums());
+//                                    payGoods.setGoodsSpecValue(goods.getGoodsSpecValue());
+//                                    goodsList.add(payGoods);
+//                                }
+//                                intent.putParcelableArrayListExtra("goodsList", (ArrayList<? extends Parcelable>) goodsList);
                                 intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
                                 ArmsUtils.startActivity(intent);
                             }

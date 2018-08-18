@@ -123,7 +123,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                showMessage(tab.getText().toString());
                 switch (tab.getPosition()) {
                     case 0:
                         break;
@@ -197,7 +196,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         tabLayoutTwo.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                showMessage(tab.getText().toString());
             }
 
             @Override

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,13 +40,15 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements DiscoverContract.View, DiaryListAdapter.OnChildItemClickLinstener {
+public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements DiscoverContract.View, DiaryListAdapter.OnChildItemClickLinstener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
     TextView titleTV;
     @BindView(R.id.tab)
     TabLayout tabLayout;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.diaryRV)
     RecyclerView diaryRV;
     @BindView(R.id.noData)
@@ -54,7 +58,9 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
     @Inject
     DiaryListAdapter mAdapter;
 
-
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
     private List<DiaryNavi> diaryNavis;
 
     public static DiscoverFragment newInstance() {
@@ -85,6 +91,58 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
         diaryRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         diaryRV.setAdapter(mAdapter);
         mAdapter.setOnChildItemClickLinstener(this);
+        initPaginate();
+        swipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    /**
+     * 开始加载更多
+     */
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    @Override
+    public void setLoadedAllItems(boolean has) {
+        this.hasLoadedAllItems = has;
+    }
+
+    /**
+     * 初始化Paginate,用于加载更多
+     */
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.getDiaryList(false);
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return hasLoadedAllItems;
+                }
+            };
+
+            mPaginate = Paginate.with(diaryRV, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
     }
 
     /**
@@ -101,19 +159,19 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
 
     @Override
     public void setData(Object data) {
-
     }
 
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        swipeRefreshLayout.setRefreshing(false);
     }
+
 
     @Override
     public void showMessage(@NonNull String message) {
@@ -148,20 +206,21 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        mPresenter.getDiaryList("recom");
+                        provideCache().put("type", "recom");
                         break;
                     case 1:
-                        mPresenter.getDiaryList("folow");
+                        provideCache().put("type", "folow");
                         break;
                     default:
                         try {
                             JSONObject object = new JSONObject(diaryNavis.get(tab.getPosition() - 2).getExtendParam());
-                            mPresenter.getDiaryList(object.optString("object"));
+                            provideCache().put("type", object.optString("object"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         break;
                 }
+                mPresenter.getDiaryList(true);
             }
 
             @Override
@@ -179,7 +238,7 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
     @Override
     public void showError(boolean nodata) {
         noDataV.setVisibility(nodata ? View.VISIBLE : View.GONE);
-        diaryRV.setVisibility(nodata ? View.GONE : View.VISIBLE);
+        swipeRefreshLayout.setVisibility(nodata ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -217,6 +276,12 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
     @Override
     public void onDestroy() {
         super.onDestroy();
+        this.mPaginate = null;
         DefaultAdapter.releaseAllHolder(diaryRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.getDiaryList(true);
     }
 }

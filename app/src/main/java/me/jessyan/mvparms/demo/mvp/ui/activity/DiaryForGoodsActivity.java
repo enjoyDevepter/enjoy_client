@@ -17,6 +17,7 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
 import javax.inject.Inject;
 
@@ -75,6 +76,10 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
 
     private DiaryResponse response;
 
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
+
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerDiaryForGoodsComponent //如找不到该类,请编译一下项目
@@ -103,6 +108,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         diaryRV.setAdapter(mAdapter);
         mAdapter.setOnChildItemClickLinstener(this);
         tabLayout.addTab(tabLayout.newTab().setText("我的日记"));
+        initPaginate();
     }
 
 
@@ -169,6 +175,56 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                 rightIntent.putExtra("memberId", response.getMember().getMemberId());
                 ArmsUtils.startActivity(rightIntent);
                 break;
+        }
+    }
+
+    /**
+     * 开始加载更多
+     */
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    @Override
+    public void setLoadedAllItems(boolean has) {
+        this.hasLoadedAllItems = has;
+    }
+
+    /**
+     * 初始化Paginate,用于加载更多
+     */
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.getMyDiaryList();
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return hasLoadedAllItems;
+                }
+            };
+
+            mPaginate = Paginate.with(diaryRV, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
         }
     }
 
@@ -259,6 +315,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        this.mPaginate = null;
         DefaultAdapter.releaseAllHolder(diaryRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
     }
 }

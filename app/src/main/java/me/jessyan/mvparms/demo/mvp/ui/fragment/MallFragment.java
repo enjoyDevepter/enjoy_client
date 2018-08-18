@@ -323,7 +323,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     public void refreshNaviTitle(List<Category> categories) {
         for (Category category : categories) {
             if ("0".equals(category.getParentId())) {
-                tabLayout.addTab(tabLayout.newTab().setText(category.getName()));
+                tabLayout.addTab(tabLayout.newTab().setTag(category.getBusType()).setText(category.getName()));
             }
         }
     }

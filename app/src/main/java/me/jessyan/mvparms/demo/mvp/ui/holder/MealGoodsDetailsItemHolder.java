@@ -66,7 +66,7 @@ public class MealGoodsDetailsItemHolder extends BaseHolder<MealGoods.Goods> {
                 .subscribe(s -> nameTV.setText(String.valueOf(s)));
         Observable.just(data.getMarketPrice())
                 .subscribe(s -> totalPriceTV.setText("￥" + String.valueOf(s)));
-        Observable.just(data.getNums())
+        Observable.just(data.getNum())
                 .subscribe(s -> countTV.setText("x" + String.valueOf(s)));
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),

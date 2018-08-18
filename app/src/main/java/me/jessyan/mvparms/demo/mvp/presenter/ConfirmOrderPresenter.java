@@ -158,7 +158,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());
-                                intent.putParcelableArrayListExtra("goodsList", (ArrayList<? extends Parcelable>) response.getGoodsList());
+//                                intent.putParcelableArrayListExtra("goodsList", (ArrayList<? extends Parcelable>) response.getGoodsList());
                                 intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
                                 ArmsUtils.startActivity(intent);
                             }

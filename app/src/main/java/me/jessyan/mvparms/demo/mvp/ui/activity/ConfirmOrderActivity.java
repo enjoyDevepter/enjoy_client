@@ -136,7 +136,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         } else {
             if (cache.get(listType.getDataKey()) != null) {
                 Store store = (Store) cache.get(listType.getDataKey());
-                selfAddressTV.setText(store.getName());
+                selfAddressTV.setText(store.getAddress() + " " + store.getName());
             }
         }
 
