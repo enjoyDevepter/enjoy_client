@@ -9,7 +9,7 @@ public class OrderRequest extends BaseRequest {
     private String token;
     private int pageIndex = 1;
     private int pageSize = 10;
-    private int cmd = 550;
+    private int cmd;
 
     public String getOrderStatus() {
         return orderStatus;

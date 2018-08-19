@@ -53,7 +53,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
 
     private OrderConfirmInfoResponse orderConfirmInfoResponse;
 
-    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.ADDR;
+    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.STORE;
 
     @Inject
     public ConfirmOrderPresenter(ConfirmOrderContract.Model model, ConfirmOrderContract.View rootView) {
@@ -82,7 +82,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
         request.setProvince((String) (cache.get("province")));
         request.setCity((String) (cache.get("city")));
         request.setCounty((String) (cache.get("county")));
-        request.setDeliveryMethod((String) mRootView.getCache().get("deliveryMethod"));
+        request.setDeliveryMethodId((String) mRootView.getCache().get("deliveryMethodId"));
         if (mRootView.getCache().get("money") != null) {
             request.setMoney((Long) mRootView.getCache().get("money"));
         }
@@ -114,7 +114,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
     public void placeOrder() {
         PayOrderRequest request = new PayOrderRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        if ("1".equals(mRootView.getCache().get("deliveryMethod"))) {
+        if ("1".equals(mRootView.getCache().get("deliveryMethodId"))) {
             if (null == cache.get("memberAddressInfo")) {
                 mRootView.showMessage("请选择地址！");
                 return;
@@ -127,7 +127,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                 return;
             }
             Store store = (Store) cache.get(listType.getDataKey());
-            request.setStoreId(store.getId());
+            request.setStoreId(store.getStoreId());
         }
         request.setDeliveryMethodId((String) mRootView.getCache().get("deliveryMethodId"));
         request.setCouponId((String) mRootView.getCache().get("couponId"));
@@ -158,7 +158,6 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());
-//                                intent.putParcelableArrayListExtra("goodsList", (ArrayList<? extends Parcelable>) response.getGoodsList());
                                 intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
                                 ArmsUtils.startActivity(intent);
                             }

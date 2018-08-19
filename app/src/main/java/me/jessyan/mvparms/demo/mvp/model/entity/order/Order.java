@@ -2,8 +2,6 @@ package me.jessyan.mvparms.demo.mvp.model.entity.order;
 
 import java.util.List;
 
-import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
-
 /**
  * Created by guomin on 2018/8/17.
  */
@@ -13,11 +11,15 @@ public class Order {
     private long orderTime;
     private int nums;
     private String orderId;
+    private String orderType;
+    private String orderTypeDesc;
     private String orderStatus;
     private long payMoney;
     private long price;
     private long totalPrice;
-    private List<Goods> goodsList;
+    private List<OrderGoods> goodsList;
+    private List<MealGoods> setMealGoodsList;
+
 
     public long getOrderTime() {
         return orderTime;
@@ -75,14 +77,37 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-    public List<Goods> getGoodsList() {
+    public List<OrderGoods> getGoodsList() {
         return goodsList;
     }
 
-    public void setGoodsList(List<Goods> goodsList) {
+    public void setGoodsList(List<OrderGoods> goodsList) {
         this.goodsList = goodsList;
     }
 
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getOrderTypeDesc() {
+        return orderTypeDesc;
+    }
+
+    public void setOrderTypeDesc(String orderTypeDesc) {
+        this.orderTypeDesc = orderTypeDesc;
+    }
+
+    public List<MealGoods> getSetMealGoodsList() {
+        return setMealGoodsList;
+    }
+
+    public void setSetMealGoodsList(List<MealGoods> setMealGoodsList) {
+        this.setMealGoodsList = setMealGoodsList;
+    }
 
     @Override
     public String toString() {
@@ -90,39 +115,33 @@ public class Order {
                 "orderTime=" + orderTime +
                 ", nums=" + nums +
                 ", orderId='" + orderId + '\'' +
+                ", orderType='" + orderType + '\'' +
+                ", orderTypeDesc='" + orderTypeDesc + '\'' +
                 ", orderStatus='" + orderStatus + '\'' +
                 ", payMoney=" + payMoney +
                 ", price=" + price +
                 ", totalPrice=" + totalPrice +
                 ", goodsList=" + goodsList +
+                ", setMealGoodsList=" + setMealGoodsList +
                 '}';
     }
 
-    public class Goods {
 
-        private String goodsId;
-        private String merchId;
+    public class MealGoods {
+        private String setMealId;
         private String image;
         private String name;
-        private double salesPrice;
+        private double salePrice;
+        private double totalPrice;
         private String title;
         private int nums;
-        private GoodsSpecValue goodsSpecValue;
 
-        public String getGoodsId() {
-            return goodsId;
+        public String getSetMealId() {
+            return setMealId;
         }
 
-        public void setGoodsId(String goodsId) {
-            this.goodsId = goodsId;
-        }
-
-        public String getMerchId() {
-            return merchId;
-        }
-
-        public void setMerchId(String merchId) {
-            this.merchId = merchId;
+        public void setSetMealId(String setMealId) {
+            this.setMealId = setMealId;
         }
 
         public String getImage() {
@@ -141,12 +160,20 @@ public class Order {
             this.name = name;
         }
 
-        public double getSalesPrice() {
-            return salesPrice;
+        public double getSalePrice() {
+            return salePrice;
         }
 
-        public void setSalesPrice(double salesPrice) {
-            this.salesPrice = salesPrice;
+        public void setSalePrice(double salePrice) {
+            this.salePrice = salePrice;
+        }
+
+        public double getTotalPrice() {
+            return totalPrice;
+        }
+
+        public void setTotalPrice(double totalPrice) {
+            this.totalPrice = totalPrice;
         }
 
         public String getTitle() {
@@ -165,25 +192,16 @@ public class Order {
             this.nums = nums;
         }
 
-        public GoodsSpecValue getGoodsSpecValue() {
-            return goodsSpecValue;
-        }
-
-        public void setGoodsSpecValue(GoodsSpecValue goodsSpecValue) {
-            this.goodsSpecValue = goodsSpecValue;
-        }
-
         @Override
         public String toString() {
-            return "Goods{" +
-                    "goodsId='" + goodsId + '\'' +
-                    ", merchId='" + merchId + '\'' +
+            return "MealGoods{" +
+                    "setMealId='" + setMealId + '\'' +
                     ", image='" + image + '\'' +
                     ", name='" + name + '\'' +
-                    ", salesPrice=" + salesPrice +
+                    ", salePrice=" + salePrice +
+                    ", totalPrice=" + totalPrice +
                     ", title='" + title + '\'' +
                     ", nums=" + nums +
-                    ", goodsSpecValue=" + goodsSpecValue +
                     '}';
         }
     }

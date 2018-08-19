@@ -71,7 +71,8 @@
         <activity android:name=".mvp.ui.activity.HGoodsDetailsActivity" />
         <activity android:name=".mvp.ui.activity.HGoodsOrderConfirmActivity" />
         <activity android:name=".mvp.ui.activity.ChoiceTimeActivity" />
-        <activity android:name=".mvp.ui.activity.MyOrderActivity"></activity>
+        <activity android:name=".mvp.ui.activity.MyOrderActivity" />
+        <activity android:name=".mvp.ui.activity.OrderDeatilsActivity"></activity>
     </application>
 
 </manifest>

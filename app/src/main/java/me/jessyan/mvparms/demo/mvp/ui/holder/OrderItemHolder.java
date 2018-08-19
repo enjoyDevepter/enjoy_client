@@ -31,10 +31,12 @@ import com.jess.arms.utils.ArmsUtils;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderGoods;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyOrderAdapter;
 
 /**
@@ -75,6 +77,16 @@ public class OrderItemHolder extends BaseHolder<Order> {
     TextView priceTV;
     @BindView(R.id.count)
     TextView countTV;
+    @BindView(R.id.payPrice_layout)
+    View payPriceV;
+    @BindView(R.id.payPrice)
+    TextView payPriceTV;
+    @BindView(R.id.single_price_info)
+    TextView single_price_infoTV;
+    @BindView(R.id.single_price_tag)
+    TextView single_price_tagTV;
+    @BindColor(R.color.order_item_color)
+    int textColor;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 
@@ -115,16 +127,30 @@ public class OrderItemHolder extends BaseHolder<Order> {
     public void setData(Order order, int position) {
         Observable.just(order.getOrderTime())
                 .subscribe(s -> timeTV.setText("时间：" + sdf.format(s)));
-
         RecyclerView.LayoutParams itemLayoutParams = (RecyclerView.LayoutParams) itemView.getLayoutParams();
+
+        if ("6".equals(order.getOrderType())) { // 医美套餐
+            countTV.setVisibility(View.INVISIBLE);
+            payPriceV.setVisibility(View.INVISIBLE);
+        } else if ("7".equals(order.getOrderType())) { // 医美定金预售
+            countTV.setVisibility(View.GONE);
+            payPriceV.setVisibility(View.VISIBLE);
+            priceTV.setTextColor(textColor);
+            single_price_tagTV.setTextColor(textColor);
+            single_price_infoTV.setTextColor(textColor);
+            payPriceTV.setText(String.valueOf(order.getGoodsList().get(0).getSalePrice()));
+        } else {
+            single_price_infoTV.setVisibility(View.GONE);
+        }
+
         if (order.getGoodsList().size() > 1) {
             itemLayoutParams.height = ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_item_height);
             singleV.setVisibility(View.GONE);
             moreV.setVisibility(View.VISIBLE);
-            List<Order.Goods> goodsList = order.getGoodsList();
+            List<OrderGoods> goodsList = order.getGoodsList();
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_image_height), ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_image_height));
             layoutParams.rightMargin = ArmsUtils.getDimens(itemView.getContext(), R.dimen.plus_width);
-            for (Order.Goods goods : goodsList) {
+            for (OrderGoods goods : goodsList) {
                 ImageView imageView = new ImageView(itemView.getContext());
                 imageView.setLayoutParams(layoutParams);
                 mImageLoader.loadImage(itemView.getContext(),
@@ -141,18 +167,30 @@ public class OrderItemHolder extends BaseHolder<Order> {
             moreV.setVisibility(View.GONE);
             singleV.setVisibility(View.VISIBLE);
             itemLayoutParams.height = ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_single_item_height);
-            Order.Goods goods = order.getGoodsList().get(0);
+            String name = "", image = "";
+            double salePrice = 0;
+            if ("6".equals(order.getOrderType())) {
+                image = order.getSetMealGoodsList().get(0).getImage();
+                name = order.getSetMealGoodsList().get(0).getName();
+                salePrice = order.getSetMealGoodsList().get(0).getSalePrice();
+            } else {
+                OrderGoods goods = order.getGoodsList().get(0);
+                name = goods.getName();
+                image = goods.getImage();
+                salePrice = goods.getSalePrice();
+            }
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
             mImageLoader.loadImage(itemView.getContext(),
                     ImageConfigImpl
                             .builder()
-                            .url(goods.getImage())
+                            .url(image)
                             .imageView(imageIV)
                             .build());
 
-            nameTV.setText(goods.getName());
-            priceTV.setText(String.valueOf(goods.getSalesPrice()));
+            nameTV.setText(name);
+            priceTV.setText(String.valueOf(salePrice));
             countTV.setText("数量：x" + String.valueOf(order.getNums()));
+
         }
 
         if (order.getOrderStatus().equals("1")) {

@@ -24,6 +24,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.MealListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealOrderConfrimRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MyDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayMealOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
@@ -48,6 +49,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealOrderConfirmResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayMealOrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
@@ -154,5 +156,8 @@ public interface MainService {
 
     @POST("gateway")
     Observable<OrderResponse> getMyOrder(@Body OrderRequest request);
+
+    @POST("gateway")
+    Observable<OrderDetailsResponse> getOrderDetails(@Body OrderDetailsRequest request);
 
 }

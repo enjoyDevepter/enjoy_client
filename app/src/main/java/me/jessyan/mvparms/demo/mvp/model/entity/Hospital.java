@@ -1,18 +1,29 @@
 package me.jessyan.mvparms.demo.mvp.model.entity;
 
 /**
- * Created by guomin on 2018/8/6.
+ * Created by guomin on 2018/8/19.
  */
 
-public class Store extends CommonStoreDateType {
-
+public class Hospital {
+    private String address;
     private String province;
     private String provinceName;
     private String city;
     private String cityName;
     private String county;
     private String countyName;
-    private String storeId;
+    private String name;
+    private String hospitalId;
+    private String distance;
+    private String distanceDesc;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String getProvince() {
         return province;
@@ -62,29 +73,52 @@ public class Store extends CommonStoreDateType {
         this.countyName = countyName;
     }
 
-    public String getStoreId() {
-        return storeId;
+    public String getName() {
+        return name;
     }
 
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(String hospitalId) {
+        this.hospitalId = hospitalId;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getDistanceDesc() {
+        return distanceDesc;
+    }
+
+    public void setDistanceDesc(String distanceDesc) {
+        this.distanceDesc = distanceDesc;
     }
 
     @Override
     public String toString() {
-        return "Store{" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
+        return "Hospital{" +
+                "address='" + address + '\'' +
                 ", province='" + province + '\'' +
-                ", distance='" + distance + '\'' +
                 ", provinceName='" + provinceName + '\'' +
-                ", distanceDesc='" + distanceDesc + '\'' +
                 ", city='" + city + '\'' +
-                ", check=" + check +
                 ", cityName='" + cityName + '\'' +
                 ", county='" + county + '\'' +
                 ", countyName='" + countyName + '\'' +
-                ", storeId='" + storeId + '\'' +
+                ", name='" + name + '\'' +
+                ", hospitalId='" + hospitalId + '\'' +
+                ", distance='" + distance + '\'' +
+                ", distanceDesc='" + distanceDesc + '\'' +
                 '}';
     }
 }

@@ -24,6 +24,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerMyOrderComponent;
 import me.jessyan.mvparms.demo.di.module.MyOrderModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyOrderContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
 import me.jessyan.mvparms.demo.mvp.presenter.MyOrderPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyOrderAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -83,10 +84,11 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
         TabLayout.Tab tab1 = typeTabLayout.newTab().setText("商美");
         TabLayout.Tab tab2 = typeTabLayout.newTab().setText("生美/科美");
         TabLayout.Tab tab3 = typeTabLayout.newTab().setText("医美");
-        int type = getIntent().getIntExtra("type", 0);
         typeTabLayout.addTab(tab1);
         typeTabLayout.addTab(tab2);
         typeTabLayout.addTab(tab3);
+        typeTabLayout.addOnTabSelectedListener(this);
+        int type = getIntent().getIntExtra("type", 0);
         provideCache().put("type", type);
         switch (type) {
             case 0:
@@ -104,7 +106,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
         statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待发货"));
         statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待收货"));
         statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
-
+        statusTabLayout.addOnTabSelectedListener(this);
         initPaginate();
     }
 
@@ -148,7 +150,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        if (!tab.getTag().equals("status")) {
+        if (!"status".equals(tab.getTag())) {
             provideCache().put("type", tab.getPosition());
         } else {
             provideCache().put("status", tab.getPosition());
@@ -245,10 +247,21 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
 
     @Override
     public void onChildItemClick(View v, MyOrderAdapter.ViewName viewname, int position) {
+        Order order = mAdapter.getInfos().get(position);
         switch (viewname) {
             case PAY:
+                Intent payIntent = new Intent(this, PayActivity.class);
+                payIntent.putExtra("orderId", order.getOrderId());
+                payIntent.putExtra("payMoney", order.getPayMoney());
+                payIntent.putExtra("orderTime", order.getOrderTime());
+                ArmsUtils.startActivity(payIntent);
                 break;
             case ITEM:
+                Intent detailIntent = new Intent(this, OrderDeatilsActivity.class);
+                detailIntent.putExtra("orderId", order.getOrderId());
+                detailIntent.putExtra("type", (int) provideCache().get("type"));
+                detailIntent.putExtra("isMeal", "6".equals(order.getOrderType()) ? true : false);
+                ArmsUtils.startActivity(detailIntent);
                 break;
             case LOGISTICS:
                 break;

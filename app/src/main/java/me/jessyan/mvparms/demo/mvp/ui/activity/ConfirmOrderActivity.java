@@ -121,7 +121,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
 
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
 
-        if ("1".equals(provideCache().get("deliveryMethod"))) {
+        if ("1".equals(provideCache().get("deliveryMethodId"))) {
             if (cache.get("memberAddressInfo") != null) {
                 Address address = (Address) cache.get("memberAddressInfo");
                 addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
@@ -156,6 +156,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         couponLayoutV.setOnClickListener(this);
         confirmV.setOnClickListener(this);
 
+        provideCache().put("deliveryMethodId", "1");
         List<OrderConfirmInfoRequest.OrderGoods> goodsList = getIntent().getParcelableArrayListExtra("goodsList");
         if (goodsList != null) {
             provideCache().put("goodsList", goodsList);
@@ -232,7 +233,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     }
 
     private void changtDispatch(boolean self) {
-        provideCache().put("deliveryMethod", self ? "1" : "0");
+        provideCache().put("deliveryMethodId", self ? "1" : "0");
         selfV.setSelected(!self);
         dispatchV.setSelected(self);
         selfV.setTextColor(!self ? seletcedColor : unseletcedColor);
@@ -259,21 +260,21 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         boolean supportDelivery = "1".equals(delivery.getIsDeliveryStaff());
         boolean supportStore = "1".equals(delivery.getIsStoreOneSelf());
         if (supportDelivery && supportStore) { // 都支持
-            provideCache().put("deliveryMethod", "1");
+            provideCache().put("deliveryMethodId", "1");
             dispatchV.setVisibility(View.VISIBLE);
             selfV.setVisibility(View.VISIBLE);
             noAddressV.setVisibility(View.VISIBLE);
             addressV.setVisibility(View.GONE);
             selfInfoV.setVisibility(View.GONE);
         } else if (supportDelivery && !supportStore) { //只支持快递
-            provideCache().put("deliveryMethod", "1");
+            provideCache().put("deliveryMethodId", "1");
             dispatchV.setVisibility(View.VISIBLE);
             selfV.setVisibility(View.GONE);
             noAddressV.setVisibility(View.VISIBLE);
             addressV.setVisibility(View.GONE);
             selfInfoV.setVisibility(View.GONE);
         } else if (!supportDelivery && supportStore) { //只支持自取
-            provideCache().put("deliveryMethod", "0");
+            provideCache().put("deliveryMethodId", "0");
             selfV.setSelected(true);
             selfV.setVisibility(View.VISIBLE);
             selfInfoV.setVisibility(View.VISIBLE);

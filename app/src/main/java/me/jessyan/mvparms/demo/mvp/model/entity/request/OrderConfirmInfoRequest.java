@@ -15,7 +15,7 @@ public class OrderConfirmInfoRequest extends BaseRequest {
     private String province;
     private String city;
     private String county;
-    private String deliveryMethod;
+    private String deliveryMethodId;
     private long money;
     private String couponId;
     private String token;
@@ -53,20 +53,20 @@ public class OrderConfirmInfoRequest extends BaseRequest {
         this.county = county;
     }
 
-    public String getDeliveryMethod() {
-        return deliveryMethod;
-    }
-
-    public void setDeliveryMethod(String deliveryMethod) {
-        this.deliveryMethod = deliveryMethod;
-    }
-
     public long getMoney() {
         return money;
     }
 
     public void setMoney(long money) {
         this.money = money;
+    }
+
+    public String getDeliveryMethodId() {
+        return deliveryMethodId;
+    }
+
+    public void setDeliveryMethodId(String deliveryMethodId) {
+        this.deliveryMethodId = deliveryMethodId;
     }
 
     public String getCouponId() {
@@ -100,7 +100,7 @@ public class OrderConfirmInfoRequest extends BaseRequest {
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", county='" + county + '\'' +
-                ", deliveryMethod='" + deliveryMethod + '\'' +
+                ", deliveryMethodId='" + deliveryMethodId + '\'' +
                 ", money=" + money +
                 ", couponId='" + couponId + '\'' +
                 ", token='" + token + '\'' +

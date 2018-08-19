@@ -19,6 +19,7 @@ public class MealGoods {
     private int sales;
     private double salePrice;
     private String title;
+    private int nums;
     private List<Goods> goodsList;
 
     public String getIsFavorite() {
@@ -43,6 +44,14 @@ public class MealGoods {
 
     public void setCnt(int cnt) {
         this.cnt = cnt;
+    }
+
+    public int getNums() {
+        return nums;
+    }
+
+    public void setNums(int nums) {
+        this.nums = nums;
     }
 
     public double getTotalPrice() {

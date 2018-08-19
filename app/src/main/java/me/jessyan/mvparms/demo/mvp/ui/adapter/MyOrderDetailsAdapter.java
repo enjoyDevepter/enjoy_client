@@ -23,8 +23,8 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
-import me.jessyan.mvparms.demo.mvp.ui.holder.OrderItemHolder;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderGoods;
+import me.jessyan.mvparms.demo.mvp.ui.holder.OrderDetailsItemHolder;
 
 /**
  * ================================================
@@ -35,39 +35,20 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.OrderItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class MyOrderAdapter extends DefaultAdapter<Order> {
-    private OnChildItemClickLinstener onChildItemClickLinstener;
+public class MyOrderDetailsAdapter extends DefaultAdapter<OrderGoods> {
 
-    public MyOrderAdapter(List<Order> goodsList) {
+    public MyOrderDetailsAdapter(List<OrderGoods> goodsList) {
         super(goodsList);
     }
 
     @Override
-    public BaseHolder<Order> getHolder(View v, int viewType) {
-        return new OrderItemHolder(v, new OnChildItemClickLinstener() {
-            @Override
-            public void onChildItemClick(View v, ViewName viewname, int position) {
-                if (onChildItemClickLinstener != null) {
-                    onChildItemClickLinstener.onChildItemClick(v, viewname, position);
-                }
-            }
-        });
+    public BaseHolder<OrderGoods> getHolder(View v, int viewType) {
+        return new OrderDetailsItemHolder(v);
     }
 
     @Override
     public int getLayoutId(int viewType) {
-        return R.layout.my_order_item;
+        return R.layout.my_order_details_item;
     }
 
-    public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
-        this.onChildItemClickLinstener = onChildItemClickLinstener;
-    }
-
-    public enum ViewName {
-        PAY, ITEM, LOGISTICS, TAKE_OVER
-    }
-
-    public interface OnChildItemClickLinstener {
-        void onChildItemClick(View v, MyOrderAdapter.ViewName viewname, int position);
-    }
 }

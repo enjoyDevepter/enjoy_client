@@ -81,6 +81,7 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
         OrderRequest request = new OrderRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(550);
         int statusInt = 0;
         if (null != mRootView.getCache().get("status")) {
             statusInt = (int) mRootView.getCache().get("status");
@@ -127,10 +128,7 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
             @Override
             public void accept(OrderResponse response) throws Exception {
                 if (response.isSuccess()) {
-                    if (response.getOrderList().size() <= 0) {
-                        mRootView.showConent(false);
-                        return;
-                    }
+                    mRootView.showConent(response.getOrderList().size() > 0);
                     if (pullToRefresh) {
                         orderList.clear();
                     }
@@ -155,6 +153,9 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
      * 医美订单
      */
     private void getHOrder(boolean pullToRefresh) {
+        OrderRequest request = new OrderRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
         int statusInt = 0;
         if (null != mRootView.getCache().get("status")) {
             statusInt = (int) mRootView.getCache().get("status");
@@ -175,6 +176,49 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                 status = "5";
                 break;
         }
+        request.setOrderStatus(status);
+        request.setCmd(570);
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
+        mModel.getMyOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                }).subscribe(new Consumer<OrderResponse>() {
+            @Override
+            public void accept(OrderResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    // 数据转换
+                    mRootView.showConent(response.getOrderList().size() > 0);
+                    if (pullToRefresh) {
+                        orderList.clear();
+                    }
+                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                    orderList.addAll(response.getOrderList());
+                    preEndIndex = orderList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = orderList.size() / 10;
+                    if (pullToRefresh) {
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mAdapter.notifyItemRangeInserted(preEndIndex, orderList.size());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
     }
 
     /**
@@ -185,7 +229,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
         if (null != mRootView.getCache().get("status")) {
             statusInt = (int) mRootView.getCache().get("status");
         }
-
     }
 
 

@@ -29,6 +29,8 @@ public class Address implements Parcelable {
     private String addressId;
     private String isDefaultIn = "0";
     private String phone;
+    private String mobile;
+    private String realName;
     private String receiverName;
     private String zipcode;
 
@@ -46,6 +48,8 @@ public class Address implements Parcelable {
         addressId = in.readString();
         isDefaultIn = in.readString();
         phone = in.readString();
+        mobile = in.readString();
+        realName = in.readString();
         receiverName = in.readString();
         zipcode = in.readString();
     }
@@ -146,6 +150,22 @@ public class Address implements Parcelable {
         this.zipcode = zipcode;
     }
 
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
     @Override
     public String toString() {
         return "Address{" +
@@ -159,6 +179,8 @@ public class Address implements Parcelable {
                 ", addressId='" + addressId + '\'' +
                 ", isDefaultIn='" + isDefaultIn + '\'' +
                 ", phone='" + phone + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", realName='" + realName + '\'' +
                 ", receiverName='" + receiverName + '\'' +
                 ", zipcode='" + zipcode + '\'' +
                 '}';
@@ -181,6 +203,8 @@ public class Address implements Parcelable {
         dest.writeString(addressId);
         dest.writeString(isDefaultIn);
         dest.writeString(phone);
+        dest.writeString(mobile);
+        dest.writeString(realName);
         dest.writeString(receiverName);
         dest.writeString(zipcode);
     }
