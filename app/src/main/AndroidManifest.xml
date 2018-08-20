@@ -74,6 +74,7 @@
         <activity android:name=".mvp.ui.activity.MyOrderActivity" />
         <activity android:name=".mvp.ui.activity.OrderDeatilsActivity" />
         <activity android:name=".mvp.ui.activity.DoctorIntorActivity"></activity>
+        <activity android:name=".mvp.ui.activity.MyMealActivity"></activity>
     </application>
 
 </manifest>

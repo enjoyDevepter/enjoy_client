@@ -93,19 +93,27 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
         switch (type) {
             case 0:
                 tab1.select();
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待发货"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待收货"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                 break;
             case 1:
                 tab2.select();
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("可消费"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                 break;
             case 2:
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("二次付款"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                 tab3.select();
                 break;
         }
-        statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
-        statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
-        statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待发货"));
-        statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待收货"));
-        statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
         statusTabLayout.addOnTabSelectedListener(this);
         initPaginate();
     }
@@ -152,6 +160,28 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
     public void onTabSelected(TabLayout.Tab tab) {
         if (!"status".equals(tab.getTag())) {
             provideCache().put("type", tab.getPosition());
+            statusTabLayout.removeAllTabs();
+            switch (tab.getPosition()) {
+                case 0:
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待发货"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待收货"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
+                    break;
+                case 1:
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("可消费"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
+                    break;
+                case 2:
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("二次付款"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
+                    break;
+            }
         } else {
             provideCache().put("status", tab.getPosition());
         }

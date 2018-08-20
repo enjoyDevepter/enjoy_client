@@ -3,25 +3,57 @@ package me.jessyan.mvparms.demo.mvp.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerAppointmentComponent;
 import me.jessyan.mvparms.demo.di.module.AppointmentModule;
 import me.jessyan.mvparms.demo.mvp.contract.AppointmentContract;
 import me.jessyan.mvparms.demo.mvp.presenter.AppointmentPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class AppointmentFragment extends BaseFragment<AppointmentPresenter> implements AppointmentContract.View {
+public class AppointmentFragment extends BaseFragment<AppointmentPresenter> implements AppointmentContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, AppointmentListAdapter.OnChildItemClickLinstener, TabLayout.OnTabSelectedListener {
 
+    @BindView(R.id.shengmei)
+    View shengmeiV;
+    @BindView(R.id.yimei1)
+    View yimei1V;
+    @BindView(R.id.yimei2)
+    View yimei2V;
+    @BindView(R.id.tab)
+    TabLayout tabLayout;
+    @BindView(R.id.no_data)
+    View noDataV;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.appointments)
+    RecyclerView mRecyclerView;
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+    @Inject
+    AppointmentListAdapter mAdapter;
+
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
 
     public static AppointmentFragment newInstance() {
         AppointmentFragment fragment = new AppointmentFragment();
@@ -45,6 +77,23 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        shengmeiV.setOnClickListener(this);
+        yimei1V.setOnClickListener(this);
+        yimei2V.setOnClickListener(this);
+        yimei1V.setSelected(true);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
+        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
+        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("可预约"));
+        tabLayout.addOnTabSelectedListener(this);
+        ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
+        mAdapter.setOnChildItemClickLinstener(this);
+        provideCache().put("type", 1);
+        provideCache().put("status", 0);
+        initPaginate();
+        mPresenter.getAppointment(true);
 
     }
 
@@ -62,18 +111,67 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
 
     @Override
     public void setData(Object data) {
-
     }
 
-
+    /**
+     * 开始加载更多
+     */
     @Override
-    public void showLoading() {
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
 
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
     }
 
     @Override
-    public void hideLoading() {
+    public void setLoadedAllItems(boolean has) {
+        this.hasLoadedAllItems = has;
+    }
 
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    public void showError(boolean hasData) {
+        swipeRefreshLayout.setVisibility(hasData ? View.VISIBLE : View.GONE);
+        noDataV.setVisibility(hasData ? View.GONE : View.VISIBLE);
+    }
+
+    /**
+     * 初始化Paginate,用于加载更多
+     */
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.getAppointment(false);
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return hasLoadedAllItems;
+                }
+            };
+
+            mPaginate = Paginate.with(mRecyclerView, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
     }
 
     @Override
@@ -88,9 +186,65 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
         ArmsUtils.startActivity(intent);
     }
 
+
     @Override
     public void killMyself() {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.shengmei:
+                provideCache().put("type", 0);
+                shengmeiV.setSelected(true);
+                yimei1V.setSelected(false);
+                yimei2V.setSelected(false);
+                break;
+            case R.id.yimei1:
+                provideCache().put("type", 1);
+                shengmeiV.setSelected(false);
+                yimei1V.setSelected(true);
+                yimei2V.setSelected(false);
+                break;
+            case R.id.yimei2:
+                provideCache().put("type", 2);
+                shengmeiV.setSelected(false);
+                yimei1V.setSelected(false);
+                yimei2V.setSelected(true);
+                break;
+        }
+        mPresenter.getAppointment(true);
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.getAppointment(true);
+    }
+
+    @Override
+    public void onChildItemClick(View v, AppointmentListAdapter.ViewName viewname, int position) {
+        switch (viewname) {
+            case MAKE:
+                break;
+            case ITEM:
+                break;
+        }
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        provideCache().put("status", tab.getPosition());
+        mPresenter.getAppointment(true);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
 }

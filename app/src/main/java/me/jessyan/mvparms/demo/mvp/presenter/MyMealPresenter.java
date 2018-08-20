@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -16,18 +18,18 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.contract.AppointmentContract;
+import me.jessyan.mvparms.demo.mvp.contract.MyMealContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
 
 @ActivityScope
-public class AppointmentPresenter extends BasePresenter<AppointmentContract.Model, AppointmentContract.View> {
+public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealContract.View> {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -39,21 +41,24 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
     @Inject
     List<Appointment> appointments;
     @Inject
-    AppointmentListAdapter mAdapter;
+    MyMealListAdapter mAdapter;
 
     private int preEndIndex;
     private int lastPageIndex = 1;
 
-
     @Inject
-    public AppointmentPresenter(AppointmentContract.Model model, AppointmentContract.View rootView
-            , RxErrorHandler handler, Application application
-            , ImageLoader imageLoader, AppManager appManager) {
+    public MyMealPresenter(MyMealContract.Model model, MyMealContract.View rootView) {
         super(model, rootView);
     }
 
 
-    public void getAppointment(boolean pullToRefresh) {
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    void onCreate() {
+        getMyMealAppointment(true);
+    }
+
+
+    public void getMyMealAppointment(boolean pullToRefresh) {
         AppointmentRequest request = new AppointmentRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
@@ -63,31 +68,27 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
         }
         switch (type) {
             case 0:
-                mRootView.showError(false);
-                return;
+                request.setCmd(2102);
+                break;
             case 1:
-                switch (((int) mRootView.getCache().get("status"))) {
-                    case 0:
-                        request.setCmd(2000);
-                        break;
-                    case 1:
-                        request.setCmd(2001);
-                        break;
-                    case 2:
-                        request.setCmd(2002);
-                        break;
-                }
+                request.setCmd(2100);
                 break;
             case 2:
-                mRootView.showError(false);
-                return;
+                request.setCmd(2101);
+                break;
+            case 3:
+                request.setCmd(2104);
+                break;
+            case 4:
+                request.setCmd(2103);
+                break;
         }
 
 
         if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
-        mModel.getAppointment(request)
+        mModel.getMyMealAppointment(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
@@ -105,7 +106,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
             @Override
             public void accept(AppointmentResponse response) throws Exception {
                 if (response.isSuccess()) {
-                    mRootView.showError(response.getOrderProjectDetailList().size() > 0);
+                    mRootView.showConent(response.getOrderProjectDetailList().size() > 0);
                     if (pullToRefresh) {
                         appointments.clear();
                     }

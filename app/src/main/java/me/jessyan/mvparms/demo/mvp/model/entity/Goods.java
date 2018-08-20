@@ -15,6 +15,7 @@ public class Goods {
     private String image;
     private double marketPrice;
     private String name;
+    private String recom;
     private int sales;
     private double salePrice;
     private String title;
@@ -41,6 +42,14 @@ public class Goods {
 
     public void setFavorite(int favorite) {
         this.favorite = favorite;
+    }
+
+    public String getRecom() {
+        return recom;
+    }
+
+    public void setRecom(String recom) {
+        this.recom = recom;
     }
 
     public double getCostPrice() {
@@ -127,6 +136,7 @@ public class Goods {
                 ", image='" + image + '\'' +
                 ", marketPrice=" + marketPrice +
                 ", name='" + name + '\'' +
+                ", recom='" + recom + '\'' +
                 ", sales=" + sales +
                 ", salePrice=" + salePrice +
                 ", title='" + title + '\'' +

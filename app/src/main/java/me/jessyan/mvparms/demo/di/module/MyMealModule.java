@@ -10,34 +10,34 @@ import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
-import me.jessyan.mvparms.demo.mvp.contract.AppointmentContract;
-import me.jessyan.mvparms.demo.mvp.model.AppointmentModel;
+import me.jessyan.mvparms.demo.mvp.contract.MyMealContract;
+import me.jessyan.mvparms.demo.mvp.model.MyMealModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
 
 
 @Module
-public class AppointmentModule {
-    private AppointmentContract.View view;
+public class MyMealModule {
+    private MyMealContract.View view;
 
     /**
-     * 构建AppointmentModule时,将View的实现类传进来,这样就可以提供View的实现类给presenter
+     * 构建MyMealModule时,将View的实现类传进来,这样就可以提供View的实现类给presenter
      *
      * @param view
      */
-    public AppointmentModule(AppointmentContract.View view) {
+    public MyMealModule(MyMealContract.View view) {
         this.view = view;
     }
 
     @ActivityScope
     @Provides
-    AppointmentContract.View provideAppointmentView() {
+    MyMealContract.View provideMyMealView() {
         return this.view;
     }
 
     @ActivityScope
     @Provides
-    AppointmentContract.Model provideAppointmentModel(AppointmentModel model) {
+    MyMealContract.Model provideMyMealModel(MyMealModel model) {
         return model;
     }
 
@@ -55,7 +55,7 @@ public class AppointmentModule {
 
     @ActivityScope
     @Provides
-    AppointmentListAdapter provideUserAdapter(List<Appointment> list) {
-        return new AppointmentListAdapter(list);
+    MyMealListAdapter provideUserAdapter(List<Appointment> list) {
+        return new MyMealListAdapter(list);
     }
 }
