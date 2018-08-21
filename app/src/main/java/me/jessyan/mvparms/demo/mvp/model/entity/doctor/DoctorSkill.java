@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.doctor;
 
-public class DoctorSkill {
+import java.io.Serializable;
+
+public class DoctorSkill implements Serializable{
     private String projectId;
     private String projectName;
 

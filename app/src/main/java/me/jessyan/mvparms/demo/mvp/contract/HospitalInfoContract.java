@@ -11,8 +11,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoReq
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.DoctorListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DoctorListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListResponse;
 
 
 public interface HospitalInfoContract {

@@ -73,7 +73,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="1234条评论"
+                    android:text="1234"
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="条评论"
                     android:textColor="#666666"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -85,7 +91,7 @@
                 android:layout_below="@id/rating_layout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="14dp"
-                android:background="@mipmap/hit_good_yes" />
+                android:background="@mipmap/hit_good_no" />
 
             <TextView
                 android:id="@+id/addr_title"
@@ -138,10 +144,83 @@
                 android:layout_below="@id/blue_back" />
 
             <LinearLayout
+                android:layout_below="@id/divide1"
+                android:id="@+id/func_parent"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="69dp">
+
+                <LinearLayout
+                    android:id="@+id/doctor_intro"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_height="match_parent">
+                    <View
+                        android:background="@mipmap/doctor_intro_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"/>
+                    <TextView
+                        android:layout_marginTop="7dp"
+                        android:text="医生资料"
+                        android:textColor="#ff333333"
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/doctor_paper"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+                    <View
+                        android:background="@mipmap/doctor_paper_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"/>
+                    <TextView
+                        android:layout_marginTop="7dp"
+                        android:text="医生证件"
+                        android:textColor="#ff333333"
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/doctor_honor"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+                    <View
+                        android:background="@mipmap/doctor_honor_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"/>
+                    <TextView
+                        android:layout_marginTop="7dp"
+                        android:text="医生展示"
+                        android:textColor="#ff333333"
+                        android:textSize="13sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+
+                android:id="@+id/divide1_5"
+                style="@style/divider_3"
+                android:layout_below="@id/func_parent" />
+
+            <LinearLayout
                 android:id="@+id/title1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/divide1"
+                android:layout_below="@id/divide1_5"
                 android:orientation="vertical">
 
                 <LinearLayout

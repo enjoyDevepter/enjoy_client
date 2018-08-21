@@ -1,8 +1,9 @@
-package me.jessyan.mvparms.demo.mvp.model.entity.response;
+package me.jessyan.mvparms.demo.mvp.model.entity.doctor;
 
 import java.util.List;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 
 public class DoctorListResponse extends BaseResponse {
     private List<DoctorBean> doctorList;

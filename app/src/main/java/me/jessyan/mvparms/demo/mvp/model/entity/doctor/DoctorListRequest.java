@@ -1,4 +1,6 @@
-package me.jessyan.mvparms.demo.mvp.model.entity.request;
+package me.jessyan.mvparms.demo.mvp.model.entity.doctor;
+
+import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
 public class DoctorListRequest extends BaseRequest {
     private String hospitalId;

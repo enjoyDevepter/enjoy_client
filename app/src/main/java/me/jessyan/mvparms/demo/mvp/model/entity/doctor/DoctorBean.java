@@ -11,6 +11,9 @@ public class DoctorBean implements Serializable{
     private List<DoctorSkill> doctorSkillList;
     private HospitalBean hospitalBean;
 
+    private int comment;
+    private String isPraise;  // 1:是0:否
+
     @Override
     public String toString() {
         return "DoctorBean{" +
@@ -20,6 +23,8 @@ public class DoctorBean implements Serializable{
                 ", star=" + star +
                 ", doctorSkillList=" + doctorSkillList +
                 ", hospitalBean=" + hospitalBean +
+                ", comment=" + comment +
+                ", isPraise='" + isPraise + '\'' +
                 '}';
     }
 
@@ -69,5 +74,21 @@ public class DoctorBean implements Serializable{
 
     public void setHospitalBean(HospitalBean hospitalBean) {
         this.hospitalBean = hospitalBean;
+    }
+
+    public int getComment() {
+        return comment;
+    }
+
+    public void setComment(int comment) {
+        this.comment = comment;
+    }
+
+    public String getIsPraise() {
+        return isPraise;
+    }
+
+    public void setIsPraise(String isPraise) {
+        this.isPraise = isPraise;
     }
 }

@@ -14,15 +14,12 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.DoctorService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.HospitalService;
-import me.jessyan.mvparms.demo.mvp.model.api.service.LoginAndRegisterService;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.DoctorListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginByPhoneRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.DoctorListResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListResponse;
 
 
 @ActivityScope

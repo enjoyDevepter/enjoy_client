@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.doctor;
 
-public class HospitalBean {
+import java.io.Serializable;
+
+public class HospitalBean implements Serializable {
     private String hospitalId;
     private String name;
 
