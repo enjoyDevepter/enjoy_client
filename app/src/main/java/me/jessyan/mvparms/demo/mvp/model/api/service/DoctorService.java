@@ -3,6 +3,8 @@ package me.jessyan.mvparms.demo.mvp.model.api.service;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
@@ -35,4 +37,8 @@ public interface DoctorService {
     @POST("gateway")
     // 取消点赞医生
     Observable<UnLikeDoctorResponse> unlikeDoctor(@Body UnLikeDoctorRequest request);
+
+    @POST("gateway")
+    // 获取医生详情
+    Observable<DoctorIntorResponse> getDoctorIntor(@Body DoctorIntorRequest request);
 }

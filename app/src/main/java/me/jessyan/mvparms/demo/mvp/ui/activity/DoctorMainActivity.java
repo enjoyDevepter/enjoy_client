@@ -72,6 +72,9 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     @BindView(R.id.skill_list)
     TagFlowLayout skill_list;
 
+    @BindView(R.id.doctor_intro)
+    View doctor_intro;
+
     @Inject
     ImageLoader mImageLoader;
 
@@ -146,6 +149,15 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         };
         skill_list.setAdapter(adapter);
         skill_list.setMaxSelectCount(0);
+
+        doctor_intro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DoctorMainActivity.this,DoctorIntorActivity.class);
+                intent.putExtra(DoctorIntorActivity.KEY_FOR_DOCTOR_BEAN,doctorBean);
+                ArmsUtils.startActivity(intent);
+            }
+        });
     }
 
     @Override
