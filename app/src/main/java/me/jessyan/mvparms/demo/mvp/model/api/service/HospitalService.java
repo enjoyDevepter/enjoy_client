@@ -16,8 +16,10 @@ public interface HospitalService {
     Observable<HospitalListResponse> requestHospitalPage(@Body HospitalListRequest request);
 
     @POST("gateway")
+    // 未登录用户获取医院详情
     Observable<HospitalInfoResponse> requestHospitalInfo(@Body HospitalInfoRequest request);
 
     @POST("gateway")
+    // 已登录用户获取医院详情
     Observable<LoginUserHospitalInfoResponse> requestHospitalInfoForLoginUser(@Body LoginUserHospitalInfoRequest request);
 }

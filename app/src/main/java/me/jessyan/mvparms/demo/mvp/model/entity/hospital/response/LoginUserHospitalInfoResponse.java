@@ -9,4 +9,28 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 public class LoginUserHospitalInfoResponse extends BaseResponse {
     private HospitalInfoBean hospital;
     private List<HospitalEnvBean> hospitalEnvList;
+
+    @Override
+    public String toString() {
+        return "LoginUserHospitalInfoResponse{" +
+                "hospital=" + hospital +
+                ", hospitalEnvList=" + hospitalEnvList +
+                '}';
+    }
+
+    public HospitalInfoBean getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(HospitalInfoBean hospital) {
+        this.hospital = hospital;
+    }
+
+    public List<HospitalEnvBean> getHospitalEnvList() {
+        return hospitalEnvList;
+    }
+
+    public void setHospitalEnvList(List<HospitalEnvBean> hospitalEnvList) {
+        this.hospitalEnvList = hospitalEnvList;
+    }
 }

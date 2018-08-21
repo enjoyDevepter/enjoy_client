@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean;
 
-public class HospitalInfoBean {
+import java.io.Serializable;
+
+public class HospitalInfoBean implements Serializable{
     private String image;
     private String intro;
     private String isFollow;

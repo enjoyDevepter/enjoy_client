@@ -1,5 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,39 +8,58 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerHospitalInfoComponent;
 import me.jessyan.mvparms.demo.di.module.HospitalInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.HospitalInfoPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalEnvImageAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalGoodsListAdapter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> implements HospitalInfoContract.View, View.OnClickListener {
 
+    public static final String KEY_FOR_HOSPITAL_ID = "key_for_hospital_id";
+    public static final String KEY_FOR_HOSPITAL_NAME = "key_for_hospital_name";
+
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.back)
     View back;
     @BindView(R.id.hot_img)
-    View hot_img;
-
+    ImageView hot_img;
     @BindView(R.id.tab)
     TabLayout tab;
-
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    @Inject
+    ImageLoader mImageLoader;
 
     private View[] views = new View[4];
     private String[] titles = new String[]{
@@ -49,13 +69,114 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
             "医院环境"
     };
 
-    private RecyclerView.Adapter[] adapters = new RecyclerView.Adapter[3];
+    // 第一个页面
+    private TextView hospitalInfo;
+
+    // 第二个页面
+    private RecyclerView goodsList;
+    private SwipeRefreshLayout goodsSwipeRefreshLayout;
+    @Inject
+    HospitalGoodsListAdapter hospitalGoodsListAdapter;
+    private Paginate goodsPaginate;
+    private boolean isGoodsLoadingMore;
+    private boolean isGoodsEnd;
+
+    // 第三个页面
+    private RecyclerView doctorList;
+    private SwipeRefreshLayout doctorSwipeRefreshLayout;
+    @Inject
+    DoctorListAdapter doctorListAdapter;
+    private Paginate doctorPaginate;
+    private boolean isDoctorLoadingMore;
+    private boolean isDoctorEnd;
+
+    // 第四个页面
+    private RecyclerView envList;
+    @Inject
+    HospitalEnvImageAdapter hospitalEnvImageAdapter;
 
     private void initViewPager() {
-        views[0] = new TextView(this);
-        for (int i = 1; i < 4; i++) {
-            views[i] = new RecyclerView(this);
-        }
+        // 初始化第一个页面
+        hospitalInfo = new TextView(this);
+        views[0] = hospitalInfo;
+
+        // 初始化第二个页面
+        goodsSwipeRefreshLayout = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview,null);
+        goodsList = goodsSwipeRefreshLayout.findViewById(R.id.list);
+        goodsList.setAdapter(hospitalGoodsListAdapter);
+        LinearLayoutManager goodsListLayoutManager = new LinearLayoutManager(this);
+        ArmsUtils.configRecyclerView(goodsList, goodsListLayoutManager);
+        views[1] = goodsSwipeRefreshLayout;
+        Paginate.Callbacks goodsPaginateCallback = new Paginate.Callbacks() {
+            @Override
+            public void onLoadMore() {
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isGoodsLoadingMore;
+            }
+
+            @Override
+            public boolean hasLoadedAllItems() {
+                return isGoodsEnd;
+            }
+        };
+
+        goodsPaginate = Paginate.with(goodsList, goodsPaginateCallback)
+                .setLoadingTriggerThreshold(0)
+                .build();
+        goodsPaginate.setHasMoreDataToLoad(false);
+        goodsSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+            }
+        });
+
+        // 初始化第三个页面
+        doctorSwipeRefreshLayout = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview,null);
+        doctorList = doctorSwipeRefreshLayout.findViewById(R.id.list);
+        LinearLayoutManager doctorLayoutManager = new LinearLayoutManager(this);
+        ArmsUtils.configRecyclerView(doctorList, doctorLayoutManager);
+        doctorList.setAdapter(doctorListAdapter);
+        views[2] = doctorSwipeRefreshLayout;
+        Paginate.Callbacks doctorPaginateCallback = new Paginate.Callbacks() {
+            @Override
+            public void onLoadMore() {
+                mPresenter.nextDoctorPage();
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isDoctorLoadingMore;
+            }
+
+            @Override
+            public boolean hasLoadedAllItems() {
+                return isDoctorEnd;
+            }
+        };
+
+        doctorPaginate = Paginate.with(doctorList, doctorPaginateCallback)
+                .setLoadingTriggerThreshold(0)
+                .build();
+        doctorPaginate.setHasMoreDataToLoad(false);
+        doctorSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.requestDoctor();
+            }
+        });
+
+        // 初始化第四个页面
+        envList = new RecyclerView(this);
+        GridLayoutManager envLayoutManager = new GridLayoutManager(this, 2);
+        ArmsUtils.configRecyclerView(envList, envLayoutManager);
+        envList.setAdapter(hospitalEnvImageAdapter);
+        views[3] = envList;
+
+
+        // 初始化viewPager
         viewpager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
@@ -112,10 +233,6 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 //        }
     }
 
-    private void initAdapter() {
-
-    }
-
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerHospitalInfoComponent //如找不到该类,请编译一下项目
@@ -133,7 +250,8 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        title.setText("北京太和医疗美容医院");
+        String titleStr1 = getIntent().getStringExtra(KEY_FOR_HOSPITAL_NAME);
+        title.setText(titleStr1);
         back.setOnClickListener(this);
         initViewPager();
         initTabLayout();
@@ -147,6 +265,30 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     @Override
     public void hideLoading() {
 
+    }
+
+    public void startLoadGoodsMore(){
+        isGoodsLoadingMore = true;
+    }
+
+    public void endLoadGoodsMore(){
+        isGoodsLoadingMore = false;
+    }
+
+    public void startLoadDoctorMore(){
+        isGoodsLoadingMore = true;
+    }
+
+    public void endLoadDoctorMore(){
+        isGoodsLoadingMore = false;
+    }
+
+    public void endGoods(boolean isGoodsEnd){
+        this.isGoodsEnd = isGoodsEnd;
+    }
+
+    public void endDoctor(boolean isDoctorEnd){
+        this.isDoctorEnd = isDoctorEnd;
     }
 
     @Override
@@ -173,5 +315,30 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
                 killMyself();
                 break;
         }
+    }
+
+    public Activity getActivity(){
+        return this;
+    }
+
+    public void updateHosptialInfo(HospitalInfoBean hospital){
+        ((TextView)views[0]).setText(hospital.getIntro());
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .url(hospital.getImage())
+                        .imageView(hot_img)
+                        .build());
+    }
+
+    @Override
+    protected void onDestroy() {
+        DefaultAdapter.releaseAllHolder(doctorList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        DefaultAdapter.releaseAllHolder(envList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        DefaultAdapter.releaseAllHolder(goodsList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
+
+        doctorPaginate = null;
+        goodsPaginate = null;
     }
 }

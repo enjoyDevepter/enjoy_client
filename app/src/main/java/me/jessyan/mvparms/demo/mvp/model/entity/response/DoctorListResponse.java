@@ -6,11 +6,13 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
 
 public class DoctorListResponse extends BaseResponse {
     private List<DoctorBean> doctorList;
+    private int nextPageIndex;
 
     @Override
     public String toString() {
         return "DoctorListResponse{" +
                 "doctorList=" + doctorList +
+                ", nextPageIndex=" + nextPageIndex +
                 '}';
     }
 
@@ -20,5 +22,13 @@ public class DoctorListResponse extends BaseResponse {
 
     public void setDoctorList(List<DoctorBean> doctorList) {
         this.doctorList = doctorList;
+    }
+
+    public int getNextPageIndex() {
+        return nextPageIndex;
+    }
+
+    public void setNextPageIndex(int nextPageIndex) {
+        this.nextPageIndex = nextPageIndex;
     }
 }

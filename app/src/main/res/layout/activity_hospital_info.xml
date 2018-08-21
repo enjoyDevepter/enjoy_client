@@ -39,7 +39,7 @@
         android:id="@+id/hot_img"
         android:layout_width="match_parent"
         android:layout_height="216dp"
-        android:background="#ff0000" />
+        />
 
     <View
         android:layout_width="match_parent"

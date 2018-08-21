@@ -26,6 +26,8 @@ import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
 import me.jessyan.mvparms.demo.mvp.model.entity.Coupon;
+import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsOrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.HGoodsOrderConfirmPresenter;
 
@@ -151,11 +153,14 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         }
 
         if (cache.get(listType.getDataKey()) != null) {
-            hospitalTV.setText((((CommonStoreDateType) cache.get(listType.getDataKey())).getName()));
+            hospitalBaseInfoBean = (HospitalBaseInfoBean) cache.get(listType.getDataKey());
+            hospitalTV.setText(hospitalBaseInfoBean.getName());
         }
 
 
     }
+
+    private HospitalBaseInfoBean hospitalBaseInfoBean;
 
 
     @Override
@@ -220,7 +225,14 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                 killMyself();
                 break;
             case R.id.hospital_info:
-                ArmsUtils.startActivity(HospitalInfoActivity.class);
+                if(hospitalBaseInfoBean == null){
+                    ArmsUtils.makeText(this,"请先选择医院");
+                    break;
+                }
+                Intent hospitalIntent = new Intent(HGoodsOrderConfirmActivity.this,HospitalInfoActivity.class);
+                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_NAME,hospitalBaseInfoBean.name);
+                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID,hospitalBaseInfoBean.getHospitalId());
+                ArmsUtils.startActivity(hospitalIntent);
                 break;
             case R.id.hospital:
                 Intent intent2 = new Intent(this, SelfPickupAddrListActivity.class);
