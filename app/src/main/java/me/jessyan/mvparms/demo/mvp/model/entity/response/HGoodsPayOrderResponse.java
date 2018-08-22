@@ -2,7 +2,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.response;
 
 import java.util.List;
 
-import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.PayEntry;
 
 /**
@@ -18,7 +18,7 @@ public class HGoodsPayOrderResponse extends BaseResponse {
     private String payType;
     private String payTypeDesc;
     private String payStatus;
-    private List<HGoods> goodsList;
+    private List<Goods> goodsList;
     private List<PayEntry> payEntryList;
 
     public String getOrderId() {
@@ -77,11 +77,11 @@ public class HGoodsPayOrderResponse extends BaseResponse {
         this.payStatus = payStatus;
     }
 
-    public List<HGoods> getGoodsList() {
+    public List<Goods> getGoodsList() {
         return goodsList;
     }
 
-    public void setGoodsList(List<HGoods> goodsList) {
+    public void setGoodsList(List<Goods> goodsList) {
         this.goodsList = goodsList;
     }
 
@@ -107,157 +107,6 @@ public class HGoodsPayOrderResponse extends BaseResponse {
                 ", payEntryList=" + payEntryList +
                 '}';
     }
-
-    public class HGoods {
-        private String goodsId;
-        private String merchId;
-        private String advanceDepositId;
-        private double deposit;
-        private double tailMoney;
-        private String code;
-        private String image;
-        private double marketPrice;
-        private double costPrice;
-        private String name;
-        private double salePrice;
-        private String title;
-        private int nums;
-        private GoodsSpecValue goodsSpecValue;
-
-
-        public String getGoodsId() {
-            return goodsId;
-        }
-
-        public void setGoodsId(String goodsId) {
-            this.goodsId = goodsId;
-        }
-
-        public String getMerchId() {
-            return merchId;
-        }
-
-        public void setMerchId(String merchId) {
-            this.merchId = merchId;
-        }
-
-        public String getAdvanceDepositId() {
-            return advanceDepositId;
-        }
-
-        public void setAdvanceDepositId(String advanceDepositId) {
-            this.advanceDepositId = advanceDepositId;
-        }
-
-        public double getDeposit() {
-            return deposit;
-        }
-
-        public void setDeposit(double deposit) {
-            this.deposit = deposit;
-        }
-
-        public double getTailMoney() {
-            return tailMoney;
-        }
-
-        public void setTailMoney(double tailMoney) {
-            this.tailMoney = tailMoney;
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
-        }
-
-        public double getMarketPrice() {
-            return marketPrice;
-        }
-
-        public void setMarketPrice(double marketPrice) {
-            this.marketPrice = marketPrice;
-        }
-
-        public double getCostPrice() {
-            return costPrice;
-        }
-
-        public void setCostPrice(double costPrice) {
-            this.costPrice = costPrice;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public double getSalePrice() {
-            return salePrice;
-        }
-
-        public void setSalePrice(double salePrice) {
-            this.salePrice = salePrice;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public int getNums() {
-            return nums;
-        }
-
-        public void setNums(int nums) {
-            this.nums = nums;
-        }
-
-        public GoodsSpecValue getGoodsSpecValue() {
-            return goodsSpecValue;
-        }
-
-        public void setGoodsSpecValue(GoodsSpecValue goodsSpecValue) {
-            this.goodsSpecValue = goodsSpecValue;
-        }
-
-        @Override
-        public String toString() {
-            return "HGoods{" +
-                    "goodsId='" + goodsId + '\'' +
-                    ", merchId='" + merchId + '\'' +
-                    ", advanceDepositId='" + advanceDepositId + '\'' +
-                    ", deposit=" + deposit +
-                    ", tailMoney=" + tailMoney +
-                    ", code='" + code + '\'' +
-                    ", image='" + image + '\'' +
-                    ", marketPrice=" + marketPrice +
-                    ", costPrice=" + costPrice +
-                    ", name='" + name + '\'' +
-                    ", salePrice=" + salePrice +
-                    ", title='" + title + '\'' +
-                    ", nums=" + nums +
-                    ", goodsSpecValue=" + goodsSpecValue +
-                    '}';
-        }
-    }
-
 }
 
 

@@ -27,10 +27,11 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 
 /**
  * ================================================
@@ -41,7 +42,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class HGoodsListItemHolder extends BaseHolder<HGoodsListResponse.HGoods> {
+public class HGoodsListItemHolder extends BaseHolder<HGoods> {
 
     @BindView(R.id.image)
     ImageView imageIV;
@@ -55,6 +56,14 @@ public class HGoodsListItemHolder extends BaseHolder<HGoodsListResponse.HGoods> 
     TextView tailMoneyTV;
     @BindView(R.id.sale)
     TextView saleTV;
+    @BindView(R.id.pricet_tag)
+    TextView priceTagTV;
+    @BindColor(R.color.red)
+    int redColor;
+    @BindColor(R.color.order_item_color)
+    int norColor;
+    @BindView(R.id.price_layout)
+    View depositV;
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
 
@@ -66,17 +75,29 @@ public class HGoodsListItemHolder extends BaseHolder<HGoodsListResponse.HGoods> 
     }
 
     @Override
-    public void setData(HGoodsListResponse.HGoods goods, int position) {
+    public void setData(HGoods goods, int position) {
         Observable.just(goods.getName())
                 .subscribe(s -> nameTV.setText(s));
         Observable.just(goods.getGoodsSpecValue().getSpecValueName())
                 .subscribe(s -> doctorT.setText(s));
         Observable.just(goods.getSales())
                 .subscribe(s -> saleTV.setText(String.valueOf(s)));
-        Observable.just(goods.getDeposit())
-                .subscribe(s -> depositTV.setText(String.valueOf(s)));
-        Observable.just(goods.getTailMoney())
-                .subscribe(s -> tailMoneyTV.setText(String.valueOf(s)));
+        if (goods.getDeposit() == 0 && goods.getTailMoney() == 0 && ArmsUtils.isEmpty(goods.getAdvanceDepositId())) {
+            depositV.setVisibility(View.INVISIBLE);
+            priceTagTV.setTextColor(redColor);
+//            tailMoneyTV.setTextSize(ArmsUtils.getDimens(tailMoneyTV.getContext(), R.dimen.price_red_text_size));
+            tailMoneyTV.setTextColor(redColor);
+            Observable.just(goods.getSalePrice())
+                    .subscribe(s -> tailMoneyTV.setText(String.valueOf(s)));
+        } else {
+//            tailMoneyTV.setTextSize(ArmsUtils.getDimens(tailMoneyTV.getContext(), R.dimen.price_nor_text_size));
+            tailMoneyTV.setTextColor(norColor);
+            priceTagTV.setTextColor(norColor);
+            Observable.just(goods.getDeposit())
+                    .subscribe(s -> depositTV.setText(String.valueOf(s)));
+            Observable.just(goods.getTailMoney())
+                    .subscribe(s -> tailMoneyTV.setText(String.valueOf(s)));
+        }
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),

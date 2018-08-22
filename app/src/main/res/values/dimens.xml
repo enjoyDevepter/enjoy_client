@@ -13,6 +13,8 @@
     <dimen name="order_image_height">100dp</dimen>
     <dimen name="dialog_width">220dp</dimen>
 
+    <dimen name="price_red_text_size">17sp</dimen>
+    <dimen name="price_nor_text_size">13sp</dimen>
     <dimen name="divice_width">30dp</dimen>
     <dimen name="order_single_item_height">212dp</dimen>
     <dimen name="order_item_height">244dp</dimen>

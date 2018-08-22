@@ -62,6 +62,12 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
     public void getOrderConfirmInfo() {
 
         HGoodsOrderConfirmInfoRequest request = new HGoodsOrderConfirmInfoRequest();
+        boolean payAll = mRootView.getActivity().getIntent().getBooleanExtra("payAll", false);
+        if (payAll) {
+            request.setCmd(525);
+        } else {
+            request.setCmd(523);
+        }
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setProvince((String) (cache.get("province")));
@@ -106,6 +112,12 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
             return;
         }
 
+        boolean payAll = mRootView.getActivity().getIntent().getBooleanExtra("payAll", false);
+        if (payAll) {
+            request.setCmd(526);
+        } else {
+            request.setCmd(524);
+        }
 
         Address address = (Address) cache.get("memberAddressInfo");
         request.setMemberAddressId(address.getAddressId());

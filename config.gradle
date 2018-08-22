@@ -56,7 +56,8 @@ ext {
             "banner"                   : "com.youth.banner:banner:1.4.10",
             "extendedRecyclerView"     : "com.github.liyuzero:extendedRecyclerView:1.1.0",
             "flowlayout"               : "com.hyman:flowlayout-lib:1.1.2",
-            "countdownview"           : "com.github.iwgang:countdownview:2.1.6",
+            "countdownview"            : "com.github.iwgang:countdownview:2.1.6",
+            "moneyview"                : "com.github.cchao:moneyview:1.0.1",
 
             //rx1
             "rxandroid"                : "io.reactivex:rxandroid:1.2.1",

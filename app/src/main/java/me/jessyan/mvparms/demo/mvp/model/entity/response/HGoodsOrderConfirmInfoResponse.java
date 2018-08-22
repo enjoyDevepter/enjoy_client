@@ -22,7 +22,7 @@ public class HGoodsOrderConfirmInfoResponse extends BaseResponse {
     private String couponId;
     private List<Coupon> couponList;
     private List<Goods> goodsList;
-    private List<HAppointments> appointmentsDateList;
+    private List<HAppointments> reservationDateList;
 
     public long getBalance() {
         return balance;
@@ -112,13 +112,12 @@ public class HGoodsOrderConfirmInfoResponse extends BaseResponse {
         this.couponList = couponList;
     }
 
-
-    public List<HAppointments> getAppointmentsDateList() {
-        return appointmentsDateList;
+    public List<HAppointments> getReservationDateList() {
+        return reservationDateList;
     }
 
-    public void setAppointmentsDateList(List<HAppointments> appointmentsDateList) {
-        this.appointmentsDateList = appointmentsDateList;
+    public void setReservationDateList(List<HAppointments> reservationDateList) {
+        this.reservationDateList = reservationDateList;
     }
 
     @Override
@@ -135,7 +134,7 @@ public class HGoodsOrderConfirmInfoResponse extends BaseResponse {
                 ", couponId='" + couponId + '\'' +
                 ", couponList=" + couponList +
                 ", goodsList=" + goodsList +
-                ", appointmentsDateList=" + appointmentsDateList +
+                ", appointmentsDateList=" + reservationDateList +
                 '}';
     }
 }

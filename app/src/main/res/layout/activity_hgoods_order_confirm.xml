@@ -56,6 +56,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/deposit_tag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="3dp"
@@ -68,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:text="￥"
                         android:textColor="#FFFF0000"
-                        android:textSize="17sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/deposit"
@@ -89,6 +90,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/tailMoney_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/price_layout"
@@ -142,7 +144,7 @@
                         android:id="@+id/goods_spec"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp"
+                        android:layout_marginRight="39dp"
                         android:layout_weight="1"
                         android:gravity="right"
                         android:textColor="#FF333333"
@@ -430,15 +432,17 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="13dp"
+                android:paddingTop="13dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="13dp"
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/depositTV"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -466,6 +470,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/tailMoney_layout_xx"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
@@ -534,7 +539,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="13dp"
                     android:layout_marginTop="9dp"
                     android:orientation="horizontal">
 
@@ -565,6 +569,40 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/deductionMoney_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:text="满减"
+                        android:textColor="#FF666666"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dp"
+                        android:text="-"
+                        android:textColor="#FFFF0000"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/deductionMoney"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:textColor="#FFFF0000"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -587,7 +625,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="3dp"
                     android:text="￥"
                     android:textColor="#FFFF0000"
                     android:textSize="12sp" />
@@ -599,8 +636,6 @@
                     android:layout_marginRight="15dp"
                     android:textColor="#FFFF0000"
                     android:textSize="15sp" />
-
-
             </LinearLayout>
 
         </LinearLayout>

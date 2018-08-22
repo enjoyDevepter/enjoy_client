@@ -120,12 +120,12 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
                 break;
             case R.id.confirm:
                 if ("choice_time".equals(getActivity().getIntent().getStringExtra("type"))) {
-                    mPresenter.modifyAppointmentTime();
-                } else {
                     Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
                     cache.put("appointmentsDate", provideCache().get("appointmentsDate"));
                     cache.put("appointmentsTime", provideCache().get("appointmentsTime"));
                     killMyself();
+                } else {
+                    mPresenter.modifyAppointmentTime();
                 }
                 break;
         }

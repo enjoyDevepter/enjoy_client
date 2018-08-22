@@ -6,7 +6,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#FFF5F5F5</color>
     <color name="choice">#FF66C1E4</color>
-
+    <color name="unchoice">#FF333333</color>
+    <color name="red">#FFFF0000</color>
     <color name="order_item_color">#FF666666</color>
     <color name="order_item_red_color">#FFED3833</color>
     <color name="order_confirm_type_seleted">#FFFFFFFF</color>

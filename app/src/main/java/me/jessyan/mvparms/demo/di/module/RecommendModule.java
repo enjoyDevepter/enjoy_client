@@ -10,41 +10,38 @@ import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
-import me.jessyan.mvparms.demo.mvp.contract.MallContract;
-import me.jessyan.mvparms.demo.mvp.model.MallModel;
+import me.jessyan.mvparms.demo.mvp.contract.RecommendContract;
+import me.jessyan.mvparms.demo.mvp.model.RecommendModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 
 
 @Module
-public class MallModule {
-    private MallContract.View view;
+public class RecommendModule {
+    private RecommendContract.View view;
 
     /**
-     * 构建MallModule时,将View的实现类传进来,这样就可以提供View的实现类给presenter
+     * 构建RecommendModule时,将View的实现类传进来,这样就可以提供View的实现类给presenter
      *
      * @param view
      */
-    public MallModule(MallContract.View view) {
+    public RecommendModule(RecommendContract.View view) {
         this.view = view;
     }
 
     @ActivityScope
     @Provides
-    MallContract.View provideMallView() {
+    RecommendContract.View provideRecommendView() {
         return this.view;
     }
 
     @ActivityScope
     @Provides
-    MallContract.Model provideMallModel(MallModel model) {
+    RecommendContract.Model provideRecommendModel(RecommendModel model) {
         return model;
     }
-
 
     @ActivityScope
     @Provides
@@ -58,11 +55,6 @@ public class MallModule {
         return new ArrayList<>();
     }
 
-    @ActivityScope
-    @Provides
-    List<HGoods> provideHGoodsList() {
-        return new ArrayList<>();
-    }
 
     @ActivityScope
     @Provides
@@ -75,13 +67,6 @@ public class MallModule {
     GoodsListAdapter provideGoodsListAdapter(List<Goods> goods) {
         return new GoodsListAdapter(goods);
     }
-
-    @ActivityScope
-    @Provides
-    HGoodsListAdapter provideHGoodsListAdapter(List<HGoods> goods) {
-        return new HGoodsListAdapter(goods);
-    }
-
 
     @ActivityScope
     @Provides

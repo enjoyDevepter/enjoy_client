@@ -23,7 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.ui.holder.HGoodsListItemHolder;
 
 /**
@@ -35,13 +35,13 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.HGoodsListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class HGoodsListAdapter extends DefaultAdapter<HGoodsListResponse.HGoods> {
-    public HGoodsListAdapter(List<HGoodsListResponse.HGoods> goods) {
+public class HGoodsListAdapter extends DefaultAdapter<HGoods> {
+    public HGoodsListAdapter(List<HGoods> goods) {
         super(goods);
     }
 
     @Override
-    public BaseHolder<HGoodsListResponse.HGoods> getHolder(View v, int viewType) {
+    public BaseHolder<HGoods> getHolder(View v, int viewType) {
         return new HGoodsListItemHolder(v);
     }
 

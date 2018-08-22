@@ -42,40 +42,111 @@
             android:name="me.jessyan.mvparms.demo.app.GlobalConfiguration"
             android:value="ConfigModule" />
 
-        <activity android:name=".mvp.ui.activity.ForgetActivity" />
-        <activity android:name=".mvp.ui.activity.ModifyActivity" />
-        <activity android:name=".mvp.ui.activity.RegisterActivity" />
-        <activity android:name=".mvp.ui.activity.LoginActivity" />
-        <activity android:name=".mvp.ui.activity.CityActivity" />
-        <activity android:name=".mvp.ui.activity.SearchActivity" />
-        <activity android:name=".mvp.ui.activity.SearchResultActivity" />
-        <activity android:name=".mvp.ui.activity.GoodsDetailsActivity" />
-        <activity android:name=".mvp.ui.activity.TaoCanActivity" />
-        <activity android:name=".mvp.ui.activity.TaoCanDetailsActivity" />
-        <activity android:name=".mvp.ui.activity.PayResultActivity" />
-        <activity android:name=".mvp.ui.activity.AddAddressActivity" />
-        <activity android:name=".mvp.ui.activity.AddressListActivity" />
-        <activity android:name=".mvp.ui.activity.ConfirmOrderActivity" />
-        <activity android:name=".mvp.ui.activity.CouponActivity" />
-        <activity android:name=".mvp.ui.activity.SelfPickupAddrListActivity" />
-        <activity android:name=".mvp.ui.activity.ChoiceStoreActivity" />
-        <activity android:name=".mvp.ui.activity.PayActivity" />
-        <activity android:name=".mvp.ui.activity.MealOrderConfirmActivity" />
-        <activity android:name=".mvp.ui.activity.CartActivity" />
-        <activity android:name=".mvp.ui.activity.HospitalInfoActivity" />
-        <activity android:name=".mvp.ui.activity.HospitalChooseActivity" />
-        <activity android:name=".mvp.ui.activity.DoctorMainActivity" />
-        <activity android:name=".mvp.ui.activity.DiaryDetailsActivity" />
-        <activity android:name=".mvp.ui.activity.DiaryImageActivity" />
-        <activity android:name=".mvp.ui.activity.DiaryForGoodsActivity" />
-        <activity android:name=".mvp.ui.activity.HGoodsDetailsActivity" />
-        <activity android:name=".mvp.ui.activity.HGoodsOrderConfirmActivity" />
-        <activity android:name=".mvp.ui.activity.ChoiceTimeActivity" />
-        <activity android:name=".mvp.ui.activity.MyOrderActivity" />
-        <activity android:name=".mvp.ui.activity.OrderDeatilsActivity" />
-        <activity android:name=".mvp.ui.activity.MyMealActivity" />
-        <activity android:name=".mvp.ui.activity.NewlywedsActivity" />
-        <activity android:name=".mvp.ui.activity.TimelimitActivity"/>
+        <activity
+            android:name=".mvp.ui.activity.ForgetActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.ModifyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.CityActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.SearchResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.GoodsDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.TaoCanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.TaoCanDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.PayResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.AddAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.AddressListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.ConfirmOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.CouponActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.SelfPickupAddrListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.ChoiceStoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.PayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.MealOrderConfirmActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.CartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.HospitalInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.HospitalChooseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.DoctorMainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.DiaryDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.DiaryImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.DiaryForGoodsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.HGoodsDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.HGoodsOrderConfirmActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.ChoiceTimeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.MyOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.OrderDeatilsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.MyMealActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.NewlywedsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.TimelimitActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.RecommendActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -57,6 +57,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.DiaryForGoodsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.NewlywedsActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.RecommendActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.TaoCanActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.TaoCanDetailsActivity;
@@ -295,6 +296,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 1:
+                        ArmsUtils.startActivity(getActivity(), RecommendActivity.class);
                         break;
                 }
             }

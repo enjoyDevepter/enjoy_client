@@ -27,7 +27,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsDetailsResponse;
-import me.jessyan.mvparms.demo.mvp.ui.activity.ConfirmOrderActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsOrderConfirmActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -75,6 +75,7 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
         String promotionId = mRootView.getActivity().getIntent().getStringExtra("promotionId");
+        String advanceDepositId = mRootView.getActivity().getIntent().getStringExtra("advanceDepositId");
         String where = mRootView.getActivity().getIntent().getStringExtra("where");
         if ("timelimitdetail".equals(where)) {
             request.setPromotionId(promotionId);
@@ -91,10 +92,19 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
                 request.setCmd(456);
             }
         } else {
-            if (ArmsUtils.isEmpty(token)) {
-                request.setCmd(441);
+
+            if (ArmsUtils.isEmpty(advanceDepositId)) {
+                if (ArmsUtils.isEmpty(token)) {
+                    request.setCmd(445);
+                } else {
+                    request.setCmd(446);
+                }
             } else {
-                request.setCmd(442);
+                if (ArmsUtils.isEmpty(token)) {
+                    request.setCmd(441);
+                } else {
+                    request.setCmd(442);
+                }
             }
         }
         request.setToken(token);
@@ -103,7 +113,7 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
         request.setProvince((String) (cache.get("province")));
         request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
         request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
-        request.setAdvanceDepositId(mRootView.getActivity().getIntent().getStringExtra("advanceDepositId"));
+        request.setAdvanceDepositId(advanceDepositId);
         mModel.getHGoodsDetails(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -131,12 +141,28 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
     public void getHCoodsDetailsForSpecValueId() {
         GoodsDetailsRequest request = new GoodsDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String advanceDepositId = mRootView.getActivity().getIntent().getStringExtra("advanceDepositId");
         String token = (String) cache.get(KEY_KEEP + "token");
         if (ArmsUtils.isEmpty(token)) {
             request.setCmd(443);
         } else {
             request.setCmd(444);
         }
+
+        if (ArmsUtils.isEmpty(advanceDepositId)) {
+            if (ArmsUtils.isEmpty(token)) {
+                request.setCmd(447);
+            } else {
+                request.setCmd(448);
+            }
+        } else {
+            if (ArmsUtils.isEmpty(token)) {
+                request.setCmd(441);
+            } else {
+                request.setCmd(442);
+            }
+        }
+
         request.setToken(token);
         request.setCity((String) (cache.get("city")));
         request.setCounty((String) (cache.get("county")));
@@ -144,7 +170,7 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
         request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
         request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
         request.setSpecValueId((String) (mRootView.getCache().get("specValueId")));
-        request.setAdvanceDepositId(mRootView.getActivity().getIntent().getStringExtra("advanceDepositId"));
+        request.setAdvanceDepositId(advanceDepositId);
         mModel.getHGoodsDetails(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -181,13 +207,16 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
             return;
         }
 
-        Intent intent = new Intent(mRootView.getActivity(), ConfirmOrderActivity.class);
+        String advanceDepositId = mRootView.getActivity().getIntent().getStringExtra("advanceDepositId");
+
+        Intent intent = new Intent(mRootView.getActivity(), HGoodsOrderConfirmActivity.class);
         ArrayList<Goods> goodsList = new ArrayList<>();
         Goods goods = hGoodsDetailsResponse.getGoods();
         goods.setNums(1);
         goodsList.add(goods);
         intent.putExtra("where", mRootView.getActivity().getIntent().getStringExtra("where"));
         intent.putParcelableArrayListExtra("goodsList", goodsList);
+        intent.putExtra("payAll", ArmsUtils.isEmpty(advanceDepositId));
         ArmsUtils.startActivity(intent);
     }
 

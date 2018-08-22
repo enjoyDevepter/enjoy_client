@@ -1,20 +1,18 @@
-package me.jessyan.mvparms.demo.mvp.ui.fragment;
+package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-import com.jess.arms.base.BaseFragment;
+import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
@@ -30,20 +28,15 @@ import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.di.component.DaggerMallComponent;
-import me.jessyan.mvparms.demo.di.module.MallModule;
-import me.jessyan.mvparms.demo.mvp.contract.MallContract;
+import me.jessyan.mvparms.demo.di.component.DaggerRecommendComponent;
+import me.jessyan.mvparms.demo.di.module.RecommendModule;
+import me.jessyan.mvparms.demo.mvp.contract.RecommendContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
-import me.jessyan.mvparms.demo.mvp.presenter.MallPresenter;
-import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
-import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
-import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
+import me.jessyan.mvparms.demo.mvp.presenter.RecommendPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterThirdAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -51,16 +44,12 @@ import static android.view.View.VISIBLE;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MallFragment extends BaseFragment<MallPresenter> implements MallContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+public class RecommendActivity extends BaseActivity<RecommendPresenter> implements RecommendContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, DefaultAdapter.OnRecyclerViewItemClickListener {
 
-    @BindView(R.id.tab)
-    TabLayout tabLayout;
-    @BindView(R.id.message)
-    View messageV;
-    @BindView(R.id.cart)
-    View cartV;
-    @BindView(R.id.search)
-    View searchV;
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
     @BindView(R.id.type_layout)
     View typeV;
     @BindView(R.id.type)
@@ -79,12 +68,12 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     TextView priceTV;
     @BindView(R.id.price_status)
     View priceStautsV;
+    @BindView(R.id.no_date)
+    View onDate;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.goods)
     RecyclerView mRecyclerView;
-    @BindView((R.id.no_date))
-    View noDataV;
     @BindView(R.id.secondCategory)
     RecyclerView secondFilterRV;
     @BindView(R.id.thirdCategory)
@@ -100,13 +89,11 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     @BindColor(R.color.choice)
     int choiceColor;
     @BindColor(R.color.unchoice)
-    int unChoiceColor;
+    int unchoice;
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     GoodsListAdapter mAdapter;
-    @Inject
-    HGoodsListAdapter mHAdapter;
     @Inject
     GoodsFilterSecondAdapter secondAdapter;
     GoodsFilterThirdAdapter thirdAdapter;
@@ -118,44 +105,80 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     private boolean hasLoadedAllItems;
 
 
-    public static MallFragment newInstance() {
-        MallFragment fragment = new MallFragment();
-        return fragment;
-    }
-
     @Override
-    public void setupFragmentComponent(AppComponent appComponent) {
-        DaggerMallComponent //如找不到该类,请编译一下项目
+    public void setupActivityComponent(AppComponent appComponent) {
+        DaggerRecommendComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .mallModule(new MallModule(this))
+                .recommendModule(new RecommendModule(this))
                 .build()
                 .inject(this);
     }
 
     @Override
-    public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_mall, container, false);
+    public int initView(Bundle savedInstanceState) {
+        return R.layout.activity_recommend; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        messageV.setOnClickListener(this);
-        cartV.setOnClickListener(this);
-        searchV.setOnClickListener(this);
+        backV.setOnClickListener(this);
+        titleTV.setText("推荐商品");
+        ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        initPaginate();
         typeV.setOnClickListener(this);
         saleV.setOnClickListener(this);
         priceV.setOnClickListener(this);
         mAdapter.setOnItemClickListener(this);
-        mHAdapter.setOnItemClickListener(this);
         maskV.setOnClickListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         ArmsUtils.configRecyclerView(secondFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         secondFilterRV.setAdapter(secondAdapter);
         secondAdapter.setOnItemClickListener(this);
-        tabLayout.addOnTabSelectedListener(this);
         mPresenter.getCategory();
+    }
+
+
+    @Override
+    public void showLoading() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    public void showError(boolean hasDate) {
+        onDate.setVisibility(hasDate ? INVISIBLE : VISIBLE);
+        swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+    }
+
+
+    @Override
+    public void showMessage(@NonNull String message) {
+        checkNotNull(message);
+        ArmsUtils.snackbarText(message);
+    }
+
+    @Override
+    public void launchActivity(@NonNull Intent intent) {
+        checkNotNull(intent);
+        ArmsUtils.startActivity(intent);
     }
 
     /**
@@ -179,6 +202,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         this.hasLoadedAllItems = has;
     }
 
+
     /**
      * 初始化Paginate,用于加载更多
      */
@@ -187,17 +211,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    int type = (int) provideCache().get("type");
-                    switch (type) {
-                        case 0:
-                            mPresenter.getGoodsList(false);
-                            break;
-                        case 1:
-                            break;
-                        case 2:
-                            mPresenter.getHGoodsList(false);
-                            break;
-                    }
+                    mPresenter.getRecommendGoodsList(false);
                 }
 
                 @Override
@@ -218,67 +232,23 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         }
     }
 
-    /**
-     * 此方法是让外部调用使fragment做一些操作的,比如说外部的activity想让fragment对象执行一些方法,
-     * 建议在有多个需要让外界调用的方法时,统一传Message,通过what字段,来区分不同的方法,在setData
-     * 方法中就可以switch做不同的操作,这样就可以用统一的入口方法做不同的事
-     * <p>
-     * 使用此方法时请注意调用时fragment的生命周期,如果调用此setData方法时onCreate还没执行
-     * setData里却调用了presenter的方法时,是会报空的,因为dagger注入是在onCreated方法中执行的,然后才创建的presenter
-     * 如果要做一些初始化操作,可以不必让外部调setData,在initData中初始化就可以了
-     *
-     * @param data
-     */
 
     @Override
-    public void setData(Object data) {
-    }
-
-
-    @Override
-    public void showError(boolean hasDate) {
-        noDataV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
-        swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
-    }
-
-
-    @Override
-    public void showLoading() {
-        swipeRefreshLayout.setRefreshing(true);
-    }
-
-    @Override
-    public void hideLoading() {
-        swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void showMessage(@NonNull String message) {
-        checkNotNull(message);
-        ArmsUtils.snackbarText(message);
-    }
-
-    @Override
-    public void launchActivity(@NonNull Intent intent) {
-        checkNotNull(intent);
-        ArmsUtils.startActivity(intent);
+    public void onRefresh() {
+        mPresenter.getRecommendGoodsList(true);
     }
 
     @Override
     public void killMyself() {
-
+        finish();
     }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.cart:
-                mPresenter.goCart();
-                break;
-            case R.id.message:
-                break;
-            case R.id.search:
-                ArmsUtils.startActivity(SearchActivity.class);
+            case R.id.back:
+                killMyself();
                 break;
             case R.id.mask:
                 showFilter(false);
@@ -294,43 +264,26 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 saleTV.setTextColor(choiceColor);
                 saleStatusV.setBackground(saleV.isSelected() ? asceD : descD);
 
-                priceTV.setTextColor(unChoiceColor);
+                priceTV.setTextColor(unchoice);
                 priceV.setSelected(false);
                 priceStautsV.setBackground(descD);
 
-                switch ((int) provideCache().get("type")) {
-                    case 0:
-                        mPresenter.getGoodsList(true);
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        mPresenter.getHGoodsList(true);
-                        break;
-                }
+                mPresenter.getRecommendGoodsList(true);
                 break;
             case R.id.price_layout:
                 provideCache().put("orderByField", "salesPrice");
                 provideCache().put("orderByAsc", priceV.isSelected());
+
                 priceV.setSelected(!priceV.isSelected());
                 priceTV.setTextColor(choiceColor);
                 priceStautsV.setBackground(priceV.isSelected() ? asceD : descD);
 
-                saleTV.setTextColor(unChoiceColor);
+                saleTV.setTextColor(unchoice);
                 saleV.setSelected(false);
                 saleStatusV.setBackground(descD);
 
                 showFilter(false);
-                switch ((int) provideCache().get("type")) {
-                    case 0:
-                        mPresenter.getGoodsList(true);
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        mPresenter.getHGoodsList(true);
-                        break;
-                }
+                mPresenter.getRecommendGoodsList(true);
                 break;
         }
     }
@@ -347,36 +300,27 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
             thirdAdapter.setOnItemClickListener(this);
             if (filterV.getVisibility() == GONE) {
                 filterV.setVisibility(VISIBLE);
-                filterV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.menu_in));
+                filterV.setAnimation(AnimationUtils.loadAnimation(this, R.anim.menu_in));
             }
             if (maskV.getVisibility() == GONE) {
                 maskV.setVisibility(VISIBLE);
-                maskV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
+                maskV.setAnimation(AnimationUtils.loadAnimation(this, R.anim.mask_in));
             }
         } else {
             if (filterV.getVisibility() == VISIBLE) {
                 filterV.setVisibility(GONE);
-                filterV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.menu_out));
+                filterV.setAnimation(AnimationUtils.loadAnimation(this, R.anim.menu_out));
             }
             if (maskV.getVisibility() == VISIBLE) {
                 maskV.setVisibility(GONE);
-                maskV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_out));
+                maskV.setAnimation(AnimationUtils.loadAnimation(this, R.anim.mask_out));
             }
         }
     }
 
     @Override
-    public void refreshNaviTitle(List<Category> categories) {
-        for (Category category : categories) {
-            if ("0".equals(category.getParentId())) {
-                tabLayout.addTab(tabLayout.newTab().setTag(category.getBusType()).setText(category.getName()));
-            }
-        }
-    }
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
-    @Override
-    public Cache getCache() {
-        return provideCache();
     }
 
     @Override
@@ -391,14 +335,6 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 intent.putExtra("merchId", goods.getMerchId());
                 ArmsUtils.startActivity(intent);
                 break;
-            case R.layout.h_goods_list_item:
-                HGoods hGoods = mHAdapter.getInfos().get(position);
-                Intent hGoodsintent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
-                hGoodsintent.putExtra("goodsId", hGoods.getGoodsId());
-                hGoodsintent.putExtra("merchId", hGoods.getMerchId());
-                hGoodsintent.putExtra("advanceDepositId", hGoods.getAdvanceDepositId());
-                ArmsUtils.startActivity(hGoodsintent);
-                break;
             case R.layout.goods_filter_second_item:
                 List<Category> childs = secondAdapter.getInfos();
                 for (int i = 0; i < childs.size(); i++) {
@@ -410,16 +346,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                     provideCache().put("categoryId", "");
                     typeTV.setTextColor(choiceColor);
                     typeTV.setText(childs.get(position).getName());
-                    switch ((int) provideCache().get("type")) {
-                        case 0:
-                            mPresenter.getGoodsList(true);
-                            break;
-                        case 1:
-                            break;
-                        case 2:
-                            mPresenter.getHGoodsList(true);
-                            break;
-                    }
+                    mPresenter.getRecommendGoodsList(true);
                     return;
                 }
                 secondAdapter.notifyDataSetChanged();
@@ -438,74 +365,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getId());
                 showFilter(false);
-                mPresenter.getGoodsList(true);
-                break;
-        }
-    }
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        provideCache().put("type", tab.getPosition());
-        priceTV.setTextColor(unChoiceColor);
-        priceV.setSelected(false);
-        priceStautsV.setBackground(descD);
-
-        saleTV.setTextColor(unChoiceColor);
-        saleV.setSelected(false);
-        saleStatusV.setBackground(descD);
-
-        typeTV.setTextColor(unChoiceColor);
-        typeTV.setText("全部商品");
-        typeStatusV.setBackground(descD);
-
-        provideCache().put("secondCategoryId", "");
-        provideCache().put("categoryId", "");
-
-        switch (tab.getPosition()) {
-            case 0:
-                mRecyclerView.setAdapter(mAdapter);
-                mPresenter.getGoodsList(true);
-                break;
-            case 1:
-                break;
-            case 2:
-                mRecyclerView.setAdapter(mHAdapter);
-                mPresenter.getHGoodsList(true);
-                break;
-        }
-        initPaginate();
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.mPaginate = null;
-        DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
-        DefaultAdapter.releaseAllHolder(secondFilterRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
-        DefaultAdapter.releaseAllHolder(thirdFilterRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
-    }
-
-    @Override
-    public void onRefresh() {
-        int type = (int) provideCache().get("type");
-        switch (type) {
-            case 0:
-                mPresenter.getGoodsList(true);
-                break;
-            case 1:
-                break;
-            case 2:
-                mPresenter.getHGoodsList(true);
+                mPresenter.getRecommendGoodsList(true);
                 break;
         }
     }

@@ -24,10 +24,8 @@ import me.jessyan.mvparms.demo.di.component.DaggerHGoodsOrderConfirmComponent;
 import me.jessyan.mvparms.demo.di.module.HGoodsOrderConfirmModule;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
-import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
 import me.jessyan.mvparms.demo.mvp.model.entity.Coupon;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsOrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.HGoodsOrderConfirmPresenter;
@@ -96,10 +94,24 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
     @BindView(R.id.confirm)
     View confirmV;
 
+    @BindView(R.id.depositTV)
+    TextView depositTVTV;
+    @BindView(R.id.tailMoney_layout_xx)
+    View tailMoney_layout_xxV;
+    @BindView(R.id.deductionMoney_layout)
+    View deductionMoney_layoutV;
+    @BindView(R.id.deductionMoney)
+    TextView deductionMoneyTV;
+    @BindView(R.id.deposit_tag)
+    TextView depositTagTV;
+
+    @BindView(R.id.tailMoney_layout)
+    View tailMoneyLayoutV;
+
     private HGoodsOrderConfirmInfoResponse response;
 
     private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.HOP;
-
+    private HospitalBaseInfoBean hospitalBaseInfoBean;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -161,9 +173,6 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
 
     }
 
-    private HospitalBaseInfoBean hospitalBaseInfoBean;
-
-
     @Override
     public void showLoading() {
 
@@ -197,13 +206,11 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         this.response = response;
         Goods goods = response.getGoodsList().get(0);
         goodsNameTV.setText(goods.getName());
-        depositTV.setText(String.valueOf(goods.getDeposit()));
         numsTV.setText("x" + String.valueOf(goods.getNums()));
         tailMoneyTV.setText(String.valueOf(goods.getTailMoney()));
         goodsSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
 
         balanceTV.setText(String.valueOf(response.getBalance()));
-        depositButtomTV.setText(String.valueOf(goods.getDeposit()));
         tailMoneyButtomTV.setText(String.valueOf(goods.getTailMoney()));
         moneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
         couponButtomTV.setText(ArmsUtils.formatLong(response.getCoupon()));
@@ -217,6 +224,27 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                                 .url(goods.getImage())
                                 .imageView(imageIV)
                                 .build());
+
+        boolean payAll = getIntent().getBooleanExtra("payAll", false);
+        if (payAll) {
+            tailMoneyLayoutV.setVisibility(View.INVISIBLE);
+            depositTV.setText(String.valueOf(goods.getSalePrice()));
+            depositTVTV.setText("总金额");
+            depositTagTV.setText("总金额");
+            tailMoney_layout_xxV.setVisibility(View.GONE);
+            deductionMoney_layoutV.setVisibility(View.VISIBLE);
+            depositButtomTV.setText(String.valueOf(goods.getSalePrice()));
+            deductionMoneyTV.setText(ArmsUtils.formatLong(response.getDeductionMoney()));
+
+        } else {
+            depositTVTV.setText("预付款");
+            depositTagTV.setText("总金额");
+            deductionMoney_layoutV.setVisibility(View.GONE);
+            tailMoney_layout_xxV.setVisibility(View.VISIBLE);
+            tailMoneyLayoutV.setVisibility(View.VISIBLE);
+            depositButtomTV.setText(String.valueOf(goods.getDeposit()));
+            depositTV.setText(String.valueOf(goods.getDeposit()));
+        }
     }
 
     @Override
@@ -226,13 +254,13 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                 killMyself();
                 break;
             case R.id.hospital_info:
-                if(hospitalBaseInfoBean == null){
-                    ArmsUtils.makeText(this,"请先选择医院");
+                if (hospitalBaseInfoBean == null) {
+                    ArmsUtils.makeText(this, "请先选择医院");
                     break;
                 }
-                Intent hospitalIntent = new Intent(HGoodsOrderConfirmActivity.this,HospitalInfoActivity.class);
-                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_NAME,hospitalBaseInfoBean.name);
-                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID,hospitalBaseInfoBean.getHospitalId());
+                Intent hospitalIntent = new Intent(HGoodsOrderConfirmActivity.this, HospitalInfoActivity.class);
+                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_NAME, hospitalBaseInfoBean.name);
+                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID, hospitalBaseInfoBean.getHospitalId());
                 ArmsUtils.startActivity(hospitalIntent);
                 break;
             case R.id.hospital:
@@ -244,7 +272,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
             case R.id.appointments_layout:
                 Intent appointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
                 appointmentsIntent.putExtra("type", "choice_time");
-                appointmentsIntent.putParcelableArrayListExtra("appointmnetInfo", (ArrayList<? extends Parcelable>) response.getAppointmentsDateList());
+                appointmentsIntent.putParcelableArrayListExtra("appointmnetInfo", (ArrayList<? extends Parcelable>) response.getReservationDateList());
                 ArmsUtils.startActivity(appointmentsIntent);
                 break;
             case R.id.no_address:

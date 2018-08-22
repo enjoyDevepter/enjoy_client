@@ -36,7 +36,6 @@
             android:id="@+id/marketPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
             android:textColor="#FFA0A0A0"
             android:textSize="10sp" />
     </LinearLayout>

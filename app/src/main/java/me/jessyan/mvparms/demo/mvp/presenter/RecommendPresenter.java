@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -17,71 +19,49 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.contract.MallContract;
+import me.jessyan.mvparms.demo.mvp.contract.RecommendContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
-import me.jessyan.mvparms.demo.mvp.ui.activity.CartActivity;
-import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
 
 @ActivityScope
-public class MallPresenter extends BasePresenter<MallContract.Model, MallContract.View> {
+public class RecommendPresenter extends BasePresenter<RecommendContract.Model, RecommendContract.View> {
     @Inject
     RxErrorHandler mErrorHandler;
-    @Inject
-    AppManager mAppManager;
     @Inject
     Application mApplication;
     @Inject
     ImageLoader mImageLoader;
     @Inject
+    AppManager mAppManager;
+    @Inject
     List<Goods> mGoods;
-    @Inject
-    List<HGoods> mHGoods;
-    @Inject
-    List<Category> categories;
     @Inject
     GoodsListAdapter mAdapter;
     @Inject
-    HGoodsListAdapter mHAdapter;
-
+    List<Category> categories;
     private int preEndIndex;
     private int lastPageIndex = 1;
 
-
     @Inject
-    public MallPresenter(MallContract.Model model, MallContract.View rootView) {
+    public RecommendPresenter(RecommendContract.Model model, RecommendContract.View rootView) {
         super(model, rootView);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.mErrorHandler = null;
-        this.mAppManager = null;
-        this.mImageLoader = null;
-        this.mApplication = null;
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    void onCreate() {
+        getCategory();
+        getRecommendGoodsList(true);
     }
 
-
     public void getCategory() {
-
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        if (cache.get("category") != null) {
-            mRootView.refreshNaviTitle((List<Category>) cache.get("category"));
-            return;
-        }
         SimpleRequest request = new SimpleRequest();
         request.setCmd(401);
         mModel.getCategory(request)
@@ -91,7 +71,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                     @Override
                     public void accept(CategoryResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            mRootView.refreshNaviTitle(sortCategory(response.getGoodsCategoryList()));
+                            sortCategory(response.getGoodsCategoryList());
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -99,25 +79,16 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                 });
     }
 
-
-    public void goCart() {
-        Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        if (ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
-            ArmsUtils.startActivity(LoginActivity.class);
-            return;
-        }
-        ArmsUtils.startActivity(CartActivity.class);
-    }
-
-    public void getGoodsList(boolean pullToRefresh) {
+    public void getRecommendGoodsList(boolean pullToRefresh) {
         GoodsListRequest request = new GoodsListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setCmd(404);
         request.setProvince(String.valueOf(cache.get("province")));
         request.setCity(String.valueOf(cache.get("city")));
         request.setCounty(String.valueOf(cache.get("county")));
         request.setCategoryId((String) mRootView.getCache().get("categoryId"));
         request.setSecondCategoryId((String) (mRootView.getCache().get("secondCategoryId")));
-
+        request.setFirstCategoryId((String) (mRootView.getCache().get("firstCategoryId")));
         if (!ArmsUtils.isEmpty(String.valueOf(mRootView.getCache().get("orderByField")))) {
             GoodsListRequest.OrderBy orderBy = new GoodsListRequest.OrderBy();
             orderBy.setField((String) mRootView.getCache().get("orderByField"));
@@ -128,7 +99,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
         if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
-        mModel.getGoodsList(request)
+        mModel.getRecommendGoodsList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
@@ -158,6 +129,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
+                        mAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mRootView.showMessage(response.getRetDesc());
@@ -166,63 +138,6 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
         });
     }
 
-    public void getHGoodsList(final boolean pullToRefresh) {
-        GoodsListRequest request = new GoodsListRequest();
-        request.setCmd(440);
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setProvince(String.valueOf(cache.get("province")));
-        request.setCity(String.valueOf(cache.get("city")));
-        request.setCounty(String.valueOf(cache.get("county")));
-        request.setCategoryId((String) mRootView.getCache().get("categoryId"));
-        request.setSecondCategoryId((String) (mRootView.getCache().get("secondCategoryId")));
-
-        if (!ArmsUtils.isEmpty(String.valueOf(mRootView.getCache().get("orderByField")))) {
-            GoodsListRequest.OrderBy orderBy = new GoodsListRequest.OrderBy();
-            orderBy.setField((String) mRootView.getCache().get("orderByField"));
-            orderBy.setAsc((Boolean) mRootView.getCache().get("orderByAsc"));
-            request.setOrderBy(orderBy);
-        }
-
-        mModel.getHGoodsList(request)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> {
-                    if (pullToRefresh)
-                        mRootView.showLoading();//显示下拉刷新的进度条
-                    else
-                        mRootView.startLoadMore();//显示上拉加载更多的进度条
-                })
-                .doFinally(() -> {
-                    if (pullToRefresh)
-                        mRootView.hideLoading();//隐藏下拉刷新的进度条
-                    else
-                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<HGoodsListResponse>() {
-            @Override
-            public void accept(HGoodsListResponse response) throws Exception {
-                if (response.isSuccess()) {
-                    if (pullToRefresh) {
-                        mHGoods.clear();
-                    }
-                    mRootView.showError(response.getGoodsList().size() > 0);
-                    if (response.getGoodsList().size() <= 0) {
-                        return;
-                    }
-                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    mHGoods.addAll(response.getGoodsList());
-                    preEndIndex = mHGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = mHGoods.size() / 10;
-                    if (pullToRefresh) {
-                        mHAdapter.notifyDataSetChanged();
-                    } else {
-                        mHAdapter.notifyItemRangeInserted(preEndIndex, mHGoods.size());
-                    }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
-    }
 
     private List<Category> sortCategory(List<Category> categoryList) {
         List<Category> categories = new ArrayList<>();
@@ -259,11 +174,19 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                 }
             }
         }
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        cache.put("category", categories);
         this.categories.clear();
         this.categories.addAll(categories.get(0).getCatagories());
         return categories;
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.mErrorHandler = null;
+        this.mAppManager = null;
+        this.mImageLoader = null;
+        this.mApplication = null;
     }
 
 }

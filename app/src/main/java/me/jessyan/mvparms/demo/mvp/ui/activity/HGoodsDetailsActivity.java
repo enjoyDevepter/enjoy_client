@@ -114,6 +114,13 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     @BindView(R.id.specs)
     TagFlowLayout speceflowLayout;
 
+    @BindView(R.id.deposit_tag)
+    TextView depositTagTV;
+    @BindView(R.id.tailMoney_left_tag)
+    TextView tailMoneyLeftTagTV;
+    @BindView(R.id.deposit_buttom_layout)
+    View depositButtomLayoutV;
+
     @BindView(R.id.time_limit_layout)
     View timeLimitLayoutV;
     @BindView(R.id.count_down_view)
@@ -273,8 +280,6 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         saleCountTV.setText(String.valueOf(goods.getSales()));
         detailWV.loadData(goods.getMobileDetail(), "text/html", null);
         tailMoneyButtomTV.setText(String.valueOf(goods.getTailMoney()));
-        depositButtomTV.setText(String.valueOf(goods.getDeposit()));
-
         if (null != goods.getGoodsSpecValue()) {
             goodsSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
             provideCache().put("specValueId", goods.getGoodsSpecValue().getSpecValueId());
@@ -309,9 +314,20 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             tailMoneyButtomTV.setText(String.valueOf(goods.getSalePrice()));
             depositButtomTV.setText(String.valueOf(goods.getVipPrice()));
         } else {
-            depositTV.setText(String.valueOf(goods.getDeposit()));
-            tailMoneyTV.setText(String.valueOf(goods.getTailMoney()));
             spcePriceTV.setText(String.valueOf(goods.getSalePrice()));
+            if (goods.getDeposit() == 0 && goods.getTailMoney() == 0 && ArmsUtils.isEmpty(goods.getAdvanceDepositId())) {
+                depositTagTV.setText("总金额:");
+                priceTagTV.setText("项目总金额");
+                depositButtomTV.setText(String.valueOf(goods.getSalePrice()));
+                depositButtomLayoutV.setVisibility(View.GONE);
+                tailMoneyLeftTagTV.setVisibility(View.INVISIBLE);
+                depositTV.setText(String.valueOf(goods.getSalePrice()));
+                tailMoneyTV.setText("");
+            } else {
+                depositButtomTV.setText(String.valueOf(goods.getDeposit()));
+                tailMoneyTV.setText(String.valueOf(goods.getTailMoney()));
+                depositTV.setText(String.valueOf(goods.getDeposit()));
+            }
         }
     }
 

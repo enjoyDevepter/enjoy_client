@@ -108,8 +108,6 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                 mRootView.showMessage("Need to go to the settings");
             }
         }, mRootView.getRxPermissions(), mErrorHandler);
-
-        getRecommenDiaryList();
     }
 
 
@@ -144,7 +142,7 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                     diaryList.addAll(response.getDiaryList());
                     preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
                     lastPageIndex = diaryList.size() / 10;
-                    if (diaryList.size() <= 10) {
+                    if (lastPageIndex == 1) {
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
