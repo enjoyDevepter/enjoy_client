@@ -30,7 +30,7 @@ import com.jess.arms.utils.ArmsUtils;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderConfirmGoodsListAdapter;
 
 /**
@@ -42,7 +42,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderConfirmGoodsListAdapter;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class OrderConfirmGoodsListItemHolder extends BaseHolder<OrderConfirmInfoResponse.GoodsBean> {
+public class OrderConfirmGoodsListItemHolder extends BaseHolder<Goods> {
     @BindView(R.id.image)
     ImageView imageIV;
     @BindView(R.id.name)
@@ -55,6 +55,8 @@ public class OrderConfirmGoodsListItemHolder extends BaseHolder<OrderConfirmInfo
     View minusV;
     @BindView(R.id.add)
     View addV;
+    @BindView(R.id.operation)
+    View operationV;
     private OrderConfirmGoodsListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
@@ -85,11 +87,19 @@ public class OrderConfirmGoodsListItemHolder extends BaseHolder<OrderConfirmInfo
     }
 
     @Override
-    public void setData(OrderConfirmInfoResponse.GoodsBean data, int position) {
+    public void setData(Goods data, int position) {
+        if (!"1".equals(data.getType())) {
+            operationV.setVisibility(View.INVISIBLE);
+        }
+        if (data.getSecKillPrice() != 0) {
+            priceTV.setText(String.valueOf(data.getSecKillPrice()));
+        } else if (data.getVipPrice() != 0) {
+            priceTV.setText(String.valueOf(data.getVipPrice()));
+        } else {
+            priceTV.setText(String.valueOf(data.getSalePrice()));
+        }
         Observable.just(data.getName())
                 .subscribe(s -> nameTV.setText(String.valueOf(s)));
-        Observable.just(data.getSalePrice())
-                .subscribe(s -> priceTV.setText(String.valueOf(s)));
         Observable.just(data.getNums())
                 .subscribe(s -> countTV.setText(String.valueOf(s)));
 

@@ -50,6 +50,7 @@ dependencies {
     implementation rootProject.ext.dependencies["extendedRecyclerView"]
     implementation rootProject.ext.dependencies["flowlayout"]
     implementation rootProject.ext.dependencies['pickerview']
+    implementation rootProject.ext.dependencies['countdownview']
 
     //support
     implementation(rootProject.ext.dependencies["cardview-v7"]) {

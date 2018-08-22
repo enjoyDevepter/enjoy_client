@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
@@ -146,7 +147,7 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-//                    mPresenter.getOrder(false);
+                    mPresenter.getMyMealAppointment(false);
                 }
 
                 @Override
@@ -197,7 +198,7 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
 
     @Override
     public void onRefresh() {
-        mPresenter.getMyMealAppointment(false);
+        mPresenter.getMyMealAppointment(true);
     }
 
     @Override
@@ -207,16 +208,24 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
             case MAKE_CANCEL_DETAIL: // 取消，预约，详情
                 if ("1".equals(appointment.getStatus())) {
                     // 预约
+                    Intent makeIntent = new Intent(this, ChoiceTimeActivity.class);
+                    makeIntent.putExtra("projectId", appointment.getProjectId());
+                    makeIntent.putExtra("type", "add_appointment_time");
+                    ArmsUtils.startActivity(makeIntent);
                 } else if ("2".equals(appointment.getStatus()) || ("3".equals(appointment.getStatus()))) {
                     // 取消
+                    mPresenter.modifyAppointmentTime();
                 } else if ("4".equals(appointment.getStatus()) || ("5".equals(appointment.getStatus()))) {
                     // 详情
                 }
-
                 break;
             case ITEM:
                 break;
             case CHANGE: //改约
+                Intent makeIntent = new Intent(this, ChoiceTimeActivity.class);
+                makeIntent.putExtra("reservationId", appointment.getReservationId());
+                makeIntent.putExtra("type", "modify_appointment_time");
+                ArmsUtils.startActivity(makeIntent);
                 break;
         }
     }
@@ -235,5 +244,11 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
     }
 }

@@ -14,7 +14,6 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -72,18 +71,7 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
             request.setMoney((Long) mRootView.getCache().get("money"));
         }
         request.setCouponId((String) mRootView.getCache().get("couponId"));
-        List<HGoodsOrderConfirmInfoRequest.HGoods> hGoodsList = new ArrayList<>();
-        HGoodsOrderConfirmInfoRequest.HGoods goods = new HGoodsOrderConfirmInfoRequest.HGoods();
-        goods.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
-        goods.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
-        goods.setAdvanceDepositId(mRootView.getActivity().getIntent().getStringExtra("advanceDepositId"));
-        goods.setDeposit(mRootView.getActivity().getIntent().getDoubleExtra("deposit", 0));
-        goods.setTailMoney(mRootView.getActivity().getIntent().getDoubleExtra("tailMoney", 0));
-        goods.setNums(mRootView.getActivity().getIntent().getIntExtra("nums", 1));
-        goods.setPromotionId(mRootView.getActivity().getIntent().getStringExtra("promotionId"));
-        goods.setSalePrice(mRootView.getActivity().getIntent().getDoubleExtra("salePrice", 0));
-        hGoodsList.add(goods);
-        request.setGoodsList(hGoodsList);
+        request.setGoodsList(mRootView.getActivity().getIntent().getParcelableArrayListExtra("goodsList"));
         mModel.getOrderConfirmInfo(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -137,20 +125,20 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
         request.setRemark((String) mRootView.getCache().get("remark"));
         request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
 
-        List<HGoodsPayOrderRequest.OrderGoods> goodsList = new ArrayList<>();
-        for (HGoodsOrderConfirmInfoResponse.GoodsBean goods : hGoodsOrderConfirmInfoResponse.getGoodsList()) {
-            HGoodsPayOrderRequest.OrderGoods payGoods = new HGoodsPayOrderRequest.OrderGoods();
-            payGoods.setGoodsId(goods.getGoodsId());
-            payGoods.setAdvanceDepositId(goods.getAdvanceDepositId());
-            payGoods.setDeposit(goods.getDeposit());
-            payGoods.setTailMoney(goods.getTailMoney());
-            payGoods.setMerchId(goods.getMerchId());
-            payGoods.setNums(goods.getNums());
-            payGoods.setPromotionId(goods.getPromotionId());
-            payGoods.setSalePrice(goods.getSalePrice());
-            goodsList.add(payGoods);
-        }
-        request.setGoodsList(goodsList);
+//        List<HGoodsPayOrderRequest.OrderGoods> goodsList = new ArrayList<>();
+//        for (HGoodsOrderConfirmInfoResponse.GoodsBean goods : hGoodsOrderConfirmInfoResponse.getGoodsList()) {
+//            HGoodsPayOrderRequest.OrderGoods payGoods = new HGoodsPayOrderRequest.OrderGoods();
+//            payGoods.setGoodsId(goods.getGoodsId());
+//            payGoods.setAdvanceDepositId(goods.getAdvanceDepositId());
+//            payGoods.setDeposit(goods.getDeposit());
+//            payGoods.setTailMoney(goods.getTailMoney());
+//            payGoods.setMerchId(goods.getMerchId());
+//            payGoods.setNums(goods.getNums());
+//            payGoods.setPromotionId(goods.getPromotionId());
+//            payGoods.setSalePrice(goods.getSalePrice());
+//            goodsList.add(payGoods);
+//        }
+        request.setGoodsList(hGoodsOrderConfirmInfoResponse.getGoodsList());
         mRootView.showLoading();
         mModel.placeHGoodsOrder(request)
                 .subscribeOn(Schedulers.io())
@@ -166,24 +154,6 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());
-
-//                                List<PayGoods> goodsList = new ArrayList<>();
-//                                for (HGoodsPayOrderResponse.HGoods goods : response.getGoodsList()) {
-//                                    PayGoods payGoods = new PayGoods();
-//                                    payGoods.setGoodsId(goods.getGoodsId());
-//                                    payGoods.setMerchId(goods.getMerchId());
-//                                    payGoods.setCode(goods.getCode());
-//                                    payGoods.setImage(goods.getImage());
-//                                    payGoods.setMarketPrice(goods.getMarketPrice());
-//                                    payGoods.setCostPrice(goods.getCostPrice());
-//                                    payGoods.setName(goods.getName());
-//                                    payGoods.setSalePrice(goods.getSalePrice());
-//                                    payGoods.setTitle(goods.getTitle());
-//                                    payGoods.setNums(goods.getNums());
-//                                    payGoods.setGoodsSpecValue(goods.getGoodsSpecValue());
-//                                    goodsList.add(payGoods);
-//                                }
-//                                intent.putParcelableArrayListExtra("goodsList", (ArrayList<? extends Parcelable>) goodsList);
                                 intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
                                 ArmsUtils.startActivity(intent);
                             }

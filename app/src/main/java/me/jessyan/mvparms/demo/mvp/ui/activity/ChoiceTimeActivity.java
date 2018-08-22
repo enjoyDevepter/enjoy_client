@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -41,6 +42,8 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
     TextView titleTV;
     @BindView(R.id.confirm)
     TextView confrimTV;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.date)
     RecyclerView dateRV;
     @BindView(R.id.time)
@@ -82,13 +85,14 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        swipeRefreshLayout.setRefreshing(false);
     }
+
 
     @Override
     public void showMessage(@NonNull String message) {
@@ -115,10 +119,14 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
                 killMyself();
                 break;
             case R.id.confirm:
-                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-                cache.put("appointmentsDate", provideCache().get("appointmentsDate"));
-                cache.put("appointmentsTime", provideCache().get("appointmentsTime"));
-                killMyself();
+                if ("choice_time".equals(getActivity().getIntent().getStringExtra("type"))) {
+                    mPresenter.modifyAppointmentTime();
+                } else {
+                    Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+                    cache.put("appointmentsDate", provideCache().get("appointmentsDate"));
+                    cache.put("appointmentsTime", provideCache().get("appointmentsTime"));
+                    killMyself();
+                }
                 break;
         }
     }
@@ -126,6 +134,11 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
     @Override
     public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
     }
 
     @Override
@@ -138,7 +151,7 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
                     appointments.get(i).setChoice(i == position ? true : false);
                 }
                 timeList.clear();
-                timeList.addAll(appointments.get(position).getAppointmentsTimeList());
+                timeList.addAll(appointments.get(position).getReservationTimeList());
                 for (HAppointmentsTime time : timeList) {
                     time.setChoice(false);
                 }

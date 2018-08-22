@@ -29,6 +29,8 @@
         android:id="@+id/desc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
         android:textColor="#FF6A6A6A"

@@ -73,8 +73,9 @@
         <activity android:name=".mvp.ui.activity.ChoiceTimeActivity" />
         <activity android:name=".mvp.ui.activity.MyOrderActivity" />
         <activity android:name=".mvp.ui.activity.OrderDeatilsActivity" />
-        <activity android:name=".mvp.ui.activity.DoctorIntorActivity"></activity>
-        <activity android:name=".mvp.ui.activity.MyMealActivity"></activity>
+        <activity android:name=".mvp.ui.activity.MyMealActivity" />
+        <activity android:name=".mvp.ui.activity.NewlywedsActivity" />
+        <activity android:name=".mvp.ui.activity.TimelimitActivity"/>
     </application>
 
 </manifest>

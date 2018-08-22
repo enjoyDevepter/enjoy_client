@@ -7,18 +7,29 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.ArmsUtils;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceTimeContract;
 import me.jessyan.mvparms.demo.mvp.model.HAppointments;
 import me.jessyan.mvparms.demo.mvp.model.entity.HAppointmentsTime;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.GetAppointmentTimeRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.GetAppointmentTimeResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DateAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.TimeAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
 
 @ActivityScope
@@ -47,14 +58,79 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        appointments.addAll(mRootView.getActivity().getIntent().getParcelableArrayListExtra("appointmnetInfo"));
-        appointments.get(0).setChoice(true);
-        timeList.addAll(appointments.get(0).getAppointmentsTimeList());
-        timeAdapter.notifyDataSetChanged();
-        dateAdapter.notifyDataSetChanged();
-
+        String type = mRootView.getActivity().getIntent().getStringExtra("type");
+        if ("choice_time".equals(type)) {
+            appointments.addAll(mRootView.getActivity().getIntent().getParcelableArrayListExtra("appointmnetInfo"));
+            appointments.get(0).setChoice(true);
+            timeList.addAll(appointments.get(0).getReservationTimeList());
+            timeAdapter.notifyDataSetChanged();
+            dateAdapter.notifyDataSetChanged();
+        } else {
+            getAppointmentTime();
+        }
     }
 
+    private void getAppointmentTime() {
+        GetAppointmentTimeRequest request = new GetAppointmentTimeRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setProjectId(mRootView.getActivity().getIntent().getStringExtra("projectId"));
+        mModel.getAppointmentTime(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).doFinally(() -> {
+            mRootView.hideLoading();//隐藏下拉刷新的进度条
+        }).subscribe(new Consumer<GetAppointmentTimeResponse>() {
+            @Override
+            public void accept(GetAppointmentTimeResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    appointments.clear();
+                    appointments.addAll(response.getReservationDateList());
+                    appointments.get(0).setChoice(true);
+                    timeList.addAll(appointments.get(0).getReservationTimeList());
+                    timeAdapter.notifyDataSetChanged();
+                    dateAdapter.notifyDataSetChanged();
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
+    }
+
+    public void modifyAppointmentTime() {
+        ModifyAppointmentRequest request = new ModifyAppointmentRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        String type = mRootView.getActivity().getIntent().getStringExtra("type");
+        if ("add_appointment_time".equals(type)) {
+            request.setCmd(2106);
+            request.setProjectId(mRootView.getActivity().getIntent().getStringExtra("projectId"));
+        } else if ("modify_appointment_time".equals(type)) {
+            request.setCmd(2107);
+            request.setReservationId(mRootView.getActivity().getIntent().getStringExtra("reservationId"));
+        }
+        request.setReservationDate((String) mRootView.getCache().get("reservationDate"));
+        request.setReservationTime((String) mRootView.getCache().get("reservationTime"));
+        mModel.modifyAppointmentTime(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).doFinally(() -> {
+            mRootView.hideLoading();//隐藏下拉刷新的进度条
+        }).subscribe(new Consumer<BaseResponse>() {
+            @Override
+            public void accept(BaseResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    mRootView.killMyself();
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
+    }
 
     @Override
     public void onDestroy() {

@@ -31,14 +31,24 @@
             android:textColor="#FF333333"
             android:textSize="13sp" />
 
+
+        <TextView
+            android:id="@+id/moduleinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="#FF939393"
+            android:textSize="12sp" />
+
         <TextView
             android:id="@+id/module_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="距离活动结束还有11天"
+            android:text="更多 >"
             android:textColor="#FF939393"
             android:textSize="12sp" />
+
 
     </LinearLayout>
 

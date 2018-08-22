@@ -22,12 +22,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ConfirmOrderActivity;
@@ -79,10 +79,29 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
      * 获取商品详情
      */
     public void getGoodsDetails() {
-
         GoodsDetailsRequest request = new GoodsDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setCmd(403);
+        String promotionId = mRootView.getActivity().getIntent().getStringExtra("promotionId");
+        String token = (String) cache.get(KEY_KEEP + "token");
+        String where = mRootView.getActivity().getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            request.setPromotionId(promotionId);
+            if (ArmsUtils.isEmpty(token)) {
+                request.setCmd(461);
+            } else {
+                request.setCmd(462);
+            }
+        } else if ("newpeople".equals(where)) {
+            request.setPromotionId(promotionId);
+            if (ArmsUtils.isEmpty(token)) {
+                request.setCmd(451);
+            } else {
+                request.setCmd(452);
+            }
+        } else {
+            request.setCmd(403);
+        }
+        request.setToken(token);
         request.setCity((String) (cache.get("city")));
         request.setCounty((String) (cache.get("county")));
         request.setProvince((String) (cache.get("province")));
@@ -97,7 +116,9 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                         if (response.isSuccess()) {
                             goodsDetailsResponse = response;
                             promotionList.clear();
-                            promotionList.addAll(response.getPromotionList());
+                            if (null != response.getPromotionList()) {
+                                promotionList.addAll(response.getPromotionList());
+                            }
                             goodsSpecValues.clear();
                             goodsSpecValues.addAll(response.getGoodsSpecValueList());
                             Cache<String, Object> cache = mRootView.getCache();
@@ -147,6 +168,7 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
         GoodsDetailsRequest request = new GoodsDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setCmd(409);
+        request.setToken((String) cache.get(KEY_KEEP + "token"));
         request.setCity((String) (cache.get("city")));
         request.setCounty((String) (cache.get("county")));
         request.setProvince((String) (cache.get("province")));
@@ -212,33 +234,14 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
             ArmsUtils.startActivity(LoginActivity.class);
             return;
         }
-
-
         Intent intent = new Intent(mRootView.getActivity(), ConfirmOrderActivity.class);
-        ArrayList<OrderConfirmInfoRequest.OrderGoods> goodsList = new ArrayList<>();
-        OrderConfirmInfoRequest.OrderGoods goods = new OrderConfirmInfoRequest.OrderGoods();
-        goods.setGoodsId(goodsDetailsResponse.getGoods().getGoodsId());
-        goods.setMerchId(goodsDetailsResponse.getGoods().getMerchId());
+        ArrayList<Goods> goodsList = new ArrayList<>();
+        Goods goods = goodsDetailsResponse.getGoods();
         goods.setNums(1);
-        goods.setSalePrice(goodsDetailsResponse.getGoods().getSalePrice());
-        goods.setPromotionId((String) mRootView.getCache().get("promotionId"));
         goodsList.add(goods);
+        intent.putExtra("where", mRootView.getActivity().getIntent().getStringExtra("where"));
         intent.putParcelableArrayListExtra("goodsList", goodsList);
         ArmsUtils.startActivity(intent);
-
-
-//        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-//        request.setToken((String) (cache.get(KEY_KEEP+"token")));
-//        request.setProvince((String) (cache.get("province")));
-//        request.setCity((String) (cache.get("city")));
-//        request.setCounty((String) (cache.get("county")));
-//        request.setDeliveryMethod((String) mRootView.getCache().get("deliveryMethod"));
-//        if (mRootView.getCache().get("money") != null) {
-//            request.setMoney((Long) mRootView.getCache().get("money"));
-//        }
-//        request.setCouponId((String) mRootView.getCache().get("couponId"));
-//        request.setGoodsList((List<OrderConfirmInfoRequest.OrderGoods>) mRootView.getCache().get("goodsList"));
-
     }
 
 }

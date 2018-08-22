@@ -25,12 +25,12 @@ public class HAppointments implements Parcelable {
     };
     private String date;
     private boolean choice;
-    private List<HAppointmentsTime> appointmentsTimeList;
+    private List<HAppointmentsTime> reservationTimeList;
 
     protected HAppointments(Parcel in) {
         date = in.readString();
         choice = in.readByte() != 0;
-        appointmentsTimeList = in.createTypedArrayList(HAppointmentsTime.CREATOR);
+        reservationTimeList = in.createTypedArrayList(HAppointmentsTime.CREATOR);
     }
 
     public String getDate() {
@@ -41,14 +41,6 @@ public class HAppointments implements Parcelable {
         this.date = date;
     }
 
-    public List<HAppointmentsTime> getAppointmentsTimeList() {
-        return appointmentsTimeList;
-    }
-
-    public void setAppointmentsTimeList(List<HAppointmentsTime> appointmentsTimeList) {
-        this.appointmentsTimeList = appointmentsTimeList;
-    }
-
     public boolean isChoice() {
         return choice;
     }
@@ -57,6 +49,22 @@ public class HAppointments implements Parcelable {
         this.choice = choice;
     }
 
+    public List<HAppointmentsTime> getReservationTimeList() {
+        return reservationTimeList;
+    }
+
+    public void setReservationTimeList(List<HAppointmentsTime> reservationTimeList) {
+        this.reservationTimeList = reservationTimeList;
+    }
+
+    @Override
+    public String toString() {
+        return "HAppointments{" +
+                "date='" + date + '\'' +
+                ", choice=" + choice +
+                ", reservationTimeList=" + reservationTimeList +
+                '}';
+    }
 
     @Override
     public int describeContents() {
@@ -67,15 +75,6 @@ public class HAppointments implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(date);
         dest.writeByte((byte) (choice ? 1 : 0));
-        dest.writeTypedList(appointmentsTimeList);
-    }
-
-    @Override
-    public String toString() {
-        return "HAppointments{" +
-                "date='" + date + '\'' +
-                ", choice=" + choice +
-                ", appointmentsTimeList=" + appointmentsTimeList +
-                '}';
+        dest.writeTypedList(reservationTimeList);
     }
 }

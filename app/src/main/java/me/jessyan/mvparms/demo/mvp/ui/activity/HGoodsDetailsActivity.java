@@ -30,10 +30,13 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.iwgang.countdownview.CountdownView;
+import cn.iwgang.countdownview.DynamicConfig;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerHGoodsDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.HGoodsDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsDetailsContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsDetailsResponse;
@@ -41,6 +44,7 @@ import me.jessyan.mvparms.demo.mvp.presenter.HGoodsDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
 
+import static android.graphics.Paint.STRIKE_THRU_TEXT_FLAG;
 import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -109,6 +113,30 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     RecyclerView promotionCV;
     @BindView(R.id.specs)
     TagFlowLayout speceflowLayout;
+
+    @BindView(R.id.time_limit_layout)
+    View timeLimitLayoutV;
+    @BindView(R.id.count_down_view)
+    CountdownView countdownView;
+    @BindView(R.id.priceTag)
+    TextView priceTagTV;
+
+    @BindView(R.id.price)
+    TextView vipPriceTV;
+    @BindView(R.id.salePrice_top)
+    TextView salePriceTopTV;
+
+    @BindView(R.id.time_limit_vip_price)
+    TextView timeLimitVipPriceV;
+    @BindView(R.id.time_limit_tailMoney)
+    TextView timeLimitTailMoney;
+
+    @BindView(R.id.timeLimitPrice)
+    View timeLimitPriceV;
+    @BindView(R.id.newlyInfo)
+    View newlyInfoV;
+    @BindView(R.id.priceInfo)
+    View priceInfoV;
     @Inject
     TagAdapter adapter;
     @Inject
@@ -157,6 +185,37 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         promotionAdapter.setOnItemClickListener(this);
         speceflowLayout.setAdapter(adapter);
         speceflowLayout.setOnSelectListener(this);
+
+        String where = getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            timeLimitPriceV.setVisibility(View.VISIBLE);
+            timeLimitLayoutV.setVisibility(View.VISIBLE);
+            cartV.setVisibility(View.GONE);
+            priceInfoV.setVisibility(View.GONE);
+            priceTagTV.setText("限时秒杀价");
+            promotionV.setVisibility(View.GONE);
+            newlyInfoV.setVisibility(View.GONE);
+            speceflowLayout.setMaxSelectCount(0);
+
+        } else if ("newpeople".equals(where)) {
+            cartV.setVisibility(View.GONE);
+            timeLimitPriceV.setVisibility(View.GONE);
+            priceTagTV.setText("新人专享价");
+            promotionV.setVisibility(View.GONE);
+            timeLimitLayoutV.setVisibility(View.GONE);
+            speceflowLayout.setMaxSelectCount(0);
+            newlyInfoV.setVisibility(View.VISIBLE);
+            priceInfoV.setVisibility(View.GONE);
+        } else {
+            timeLimitLayoutV.setVisibility(View.GONE);
+            cartV.setVisibility(View.VISIBLE);
+            timeLimitPriceV.setVisibility(View.GONE);
+            promotionV.setVisibility(View.VISIBLE);
+            priceTagTV.setText("项目预订金");
+            speceflowLayout.setOnSelectListener(this);
+            newlyInfoV.setVisibility(View.GONE);
+            priceInfoV.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -201,31 +260,58 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     @Override
     public void updateUI(HGoodsDetailsResponse response) {
         this.response = response;
+        Goods goods = response.getGoods();
         imagesB.setImages(response.getImages());
         //banner设置方法全部调用完毕时最后调用
         imagesB.start();
         imagesB.isAutoPlay(false);
 
         imageCountTV.setText("1/" + response.getImages().size());
-        nameTV.setText(response.getGoods().getName());
+        nameTV.setText(goods.getName());
 
-        depositTV.setText(String.valueOf(response.getGoods().getDeposit()));
-        tailMoneyTV.setText(String.valueOf(response.getGoods().getTailMoney()));
-        isFavoriteV.setSelected("1".equals(response.getGoods().getIsFavorite()) ? true : false);
-        saleCountTV.setText(String.valueOf(response.getGoods().getSales()));
-        detailWV.loadData(response.getGoods().getMobileDetail(), "text/html", null);
-        tailMoneyButtomTV.setText(String.valueOf(response.getGoods().getTailMoney()));
-        depositButtomTV.setText(String.valueOf(response.getGoods().getDeposit()));
+        isFavoriteV.setSelected("1".equals(goods.getIsFavorite()) ? true : false);
+        saleCountTV.setText(String.valueOf(goods.getSales()));
+        detailWV.loadData(goods.getMobileDetail(), "text/html", null);
+        tailMoneyButtomTV.setText(String.valueOf(goods.getTailMoney()));
+        depositButtomTV.setText(String.valueOf(goods.getDeposit()));
 
-        String specValueId = (String) provideCache().get("specValueId");
-        if (!ArmsUtils.isEmpty(specValueId)) {
-            for (int i = 0; i < response.getGoodsSpecValueList().size(); i++) {
-                if (response.getGoodsSpecValueList().get(i).getSpecValueId().equals(specValueId)) {
-                    adapter.setSelectedList(i);
-                    goodsSpecTV.setText(response.getGoodsSpecValueList().get(i).getSpecValueName());
-                    return;
-                }
+        if (null != goods.getGoodsSpecValue()) {
+            goodsSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
+            provideCache().put("specValueId", goods.getGoodsSpecValue().getSpecValueId());
+        }
+
+        String where = getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            long count = goods.getEndDate() - goods.getSysDate();
+            if (count > 86400) {
+                DynamicConfig.Builder builder = new DynamicConfig.Builder();
+                builder.setShowHour(false)
+                        .setShowSecond(false)
+                        .setShowMinute(false)
+                        .setShowMillisecond(false)
+                        .setShowDay(true)
+                        .setSuffix("天");
+                countdownView.dynamicShow(builder.build());
+                countdownView.start(count);
+            } else {
+                countdownView.start(count);
             }
+            timeLimitVipPriceV.setText(String.valueOf(goods.getSecKillPrice()));
+            timeLimitTailMoney.setText(String.valueOf("￥" + goods.getSalePrice()));
+            tailMoneyButtomTV.setText(String.valueOf(goods.getSalePrice()));
+            depositButtomTV.setText(String.valueOf(goods.getSecKillPrice()));
+            spcePriceTV.setText(String.valueOf(goods.getSecKillPrice()));
+        } else if ("newpeople".equals(where)) {
+            spcePriceTV.setText(String.valueOf(goods.getVipPrice()));
+            vipPriceTV.setText(String.valueOf(goods.getVipPrice()));
+            salePriceTopTV.setText(String.valueOf("￥" + goods.getSalePrice()));
+            salePriceTopTV.getPaint().setFlags(STRIKE_THRU_TEXT_FLAG);
+            tailMoneyButtomTV.setText(String.valueOf(goods.getSalePrice()));
+            depositButtomTV.setText(String.valueOf(goods.getVipPrice()));
+        } else {
+            depositTV.setText(String.valueOf(goods.getDeposit()));
+            tailMoneyTV.setText(String.valueOf(goods.getTailMoney()));
+            spcePriceTV.setText(String.valueOf(goods.getSalePrice()));
         }
     }
 
@@ -326,7 +412,6 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         if (selectPosSet.size() > 0) {
             GoodsSpecValue goodsSpecValue = (GoodsSpecValue) adapter.getItem((int) selectPosSet.toArray()[0]);
             provideCache().put("specValueId", goodsSpecValue.getSpecValueId());
-            goodsSpecTV.setText(goodsSpecValue.getSpecValueName());
             mPresenter.getHCoodsDetailsForSpecValueId();
         } else {
             goodsSpecTV.setText("");

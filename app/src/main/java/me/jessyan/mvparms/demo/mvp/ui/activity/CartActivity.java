@@ -29,7 +29,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerCartComponent;
 import me.jessyan.mvparms.demo.di.module.CartModule;
 import me.jessyan.mvparms.demo.mvp.contract.CartContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.presenter.CartPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
@@ -207,19 +207,19 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
             case R.id.confirm:
                 Intent intent = new Intent(getActivity().getApplication(), ConfirmOrderActivity.class);
                 List<CartBean.CartItem> cartItems = ((CartListAdapter) mAdapter).getInfos();
-                List<OrderConfirmInfoRequest.OrderGoods> goodsList = new ArrayList<>();
+                List<Goods> goodsList = new ArrayList<>();
                 for (CartBean.CartItem cartItem : cartItems) {
-                    for (CartBean.GoodsBean goodsBean : cartItem.getGoodsList()) {
+                    for (Goods goodsBean : cartItem.getGoodsList()) {
                         if ("1".equals(goodsBean.getStatus())) {
-                            OrderConfirmInfoRequest.OrderGoods goods = new OrderConfirmInfoRequest.OrderGoods();
-                            goods.setGoodsId(goodsBean.getGoodsId());
-                            goods.setMerchId(goodsBean.getMerchId());
-                            goods.setNums(goodsBean.getNums());
-                            goods.setSalePrice(goodsBean.getSalePrice());
-                            if (cartItem.getPromotion() != null) {
-                                goods.setPromotionId(cartItem.getPromotion().getPromotionId());
-                            }
-                            goodsList.add(goods);
+//                            Goods goods = new Goods();
+//                            goods.setGoodsId(goodsBean.getGoodsId());
+//                            goods.setMerchId(goodsBean.getMerchId());
+//                            goods.setNums(goodsBean.getNums());
+//                            goods.setSalePrice(goodsBean.getSalePrice());
+//                            if (cartItem.getPromotion() != null) {
+//                                goods.setPromotionId(cartItem.getPromotion().getPromotionId());
+//                            }
+                            goodsList.add(goodsBean);
                         }
                     }
                 }
@@ -245,7 +245,7 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
         payPriceTV.setText(ArmsUtils.formatLong(cartBean.getPayPrice()));
         totalPriceTV.setText(ArmsUtils.formatLong(cartBean.getTotalPrice()));
         for (CartBean.CartItem cartItem : cartBean.getCartItems()) {
-            for (CartBean.GoodsBean goodsBean : cartItem.getGoodsList()) {
+            for (Goods goodsBean : cartItem.getGoodsList()) {
                 if (!"1".equals(goodsBean.getStatus())) {
                     checkV.setSelected(false);
                 }
@@ -279,7 +279,7 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
     @Override
     public void onChildItemClick(View v, CartListAdapter.ViewName viewname, int parentPosition, int childPosition) {
         CartListAdapter adapter = (CartListAdapter) mAdapter;
-        CartBean.GoodsBean goodsBean = adapter.getInfos().get(parentPosition).getGoodsList().get(childPosition);
+        Goods goodsBean = adapter.getInfos().get(parentPosition).getGoodsList().get(childPosition);
         provideCache().put("goodsId", goodsBean.getGoodsId());
         provideCache().put("merchId", goodsBean.getMerchId());
         provideCache().put("nums", goodsBean.getNums());

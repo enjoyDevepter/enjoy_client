@@ -67,6 +67,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/operation"
             android:layout_width="60dp"
             android:layout_height="20dp"
             android:background="@drawable/cart_good_item_add_bg">

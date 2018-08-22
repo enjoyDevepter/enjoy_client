@@ -110,16 +110,20 @@ public class MyMealListHolder extends BaseHolder<Appointment> {
         } else if ("2".equals(appointment.getStatus())) {
             detailV.setText("取消");
             changeV.setText("改约");
+            changeV.setVisibility(View.VISIBLE);
             detailV.setVisibility(View.VISIBLE);
         } else if ("3".equals(appointment.getStatus())) {
             changeV.setVisibility(View.GONE);
             detailV.setText("取消");
+            detailV.setVisibility(View.VISIBLE);
         } else if ("4".equals(appointment.getStatus())) {
             changeV.setVisibility(View.GONE);
             detailV.setText("详情");
+            detailV.setVisibility(View.VISIBLE);
         } else if ("5".equals(appointment.getStatus())) {
             changeV.setVisibility(View.GONE);
             detailV.setText("详情");
+            detailV.setVisibility(View.VISIBLE);
         }
     }
 

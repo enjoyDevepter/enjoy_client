@@ -10,6 +10,9 @@ public class GoodSummary {
     private String image;
     private String redirectType;
     private String goodsId;
+    private String merchId;
+    private String promotionId;
+    private String type;
     private String salePrice;
     private String marketPrice;
 
@@ -61,6 +64,30 @@ public class GoodSummary {
         this.marketPrice = marketPrice;
     }
 
+    public String getMerchId() {
+        return merchId;
+    }
+
+    public void setMerchId(String merchId) {
+        this.merchId = merchId;
+    }
+
+    public String getPromotionId() {
+        return promotionId;
+    }
+
+    public void setPromotionId(String promotionId) {
+        this.promotionId = promotionId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "GoodSummary{" +
@@ -68,6 +95,9 @@ public class GoodSummary {
                 ", image='" + image + '\'' +
                 ", redirectType='" + redirectType + '\'' +
                 ", goodsId='" + goodsId + '\'' +
+                ", merchId='" + merchId + '\'' +
+                ", promotionId='" + promotionId + '\'' +
+                ", type='" + type + '\'' +
                 ", salePrice='" + salePrice + '\'' +
                 ", marketPrice='" + marketPrice + '\'' +
                 '}';

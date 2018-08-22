@@ -56,7 +56,7 @@ public class MyMealListAdapter extends DefaultAdapter<Appointment> {
 
     @Override
     public int getLayoutId(int viewType) {
-        return R.layout.appointment_list_yimei_item;
+        return R.layout.my_meal_list_item;
     }
 
     public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {

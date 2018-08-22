@@ -50,8 +50,8 @@ public class NumberToChn {
             new Test_Data(1040010000, "一十亿四千零一万"),
             new Test_Data(200012301, "二亿零一万二千三百零一"),
             new Test_Data(2005010010, "二十亿零五百零一万零一十")
-//            new Test_Data(4009060200, "四十亿零九百零六万零二百"),
-//            new Test_Data(4294967295, "四十二亿九千四百九十六万七千二百九十五")
+//            newlyweds Test_Data(4009060200, "四十亿零九百零六万零二百"),
+//            newlyweds Test_Data(4294967295, "四十二亿九千四百九十六万七千二百九十五")
 
 
     };

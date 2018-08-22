@@ -53,9 +53,9 @@ public class DiaryImageItemHolder extends BaseHolder<DiaryAlbum> {
         mImageLoader = mAppComponent.imageLoader();
         int screenWidth = ArmsUtils.getScreenWidth(ArmsUtils.getContext());
 //        if (size == 2) {
-//            itemView.setLayoutParams(new RecyclerView.LayoutParams((screenWidth - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_style_margin_left) * 3 - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_margin_left) * 2) / 2, ViewGroup.LayoutParams.WRAP_CONTENT));
+//            itemView.setLayoutParams(newlyweds RecyclerView.LayoutParams((screenWidth - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_style_margin_left) * 3 - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_margin_left) * 2) / 2, ViewGroup.LayoutParams.WRAP_CONTENT));
 //        } else {
-//            itemView.setLayoutParams(new RecyclerView.LayoutParams((screenWidth - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_style_margin_left) * 4 - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_margin_left) * 2) / 3, ViewGroup.LayoutParams.WRAP_CONTENT));
+//            itemView.setLayoutParams(newlyweds RecyclerView.LayoutParams((screenWidth - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_style_margin_left) * 4 - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_margin_left) * 2) / 3, ViewGroup.LayoutParams.WRAP_CONTENT));
 //        }
     }
 

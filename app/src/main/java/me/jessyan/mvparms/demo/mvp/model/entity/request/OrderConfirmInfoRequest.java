@@ -1,9 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.request;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.List;
+
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 
 /**
  * Created by guomin on 2018/7/25.
@@ -19,7 +18,7 @@ public class OrderConfirmInfoRequest extends BaseRequest {
     private long money;
     private String couponId;
     private String token;
-    private List<OrderGoods> goodsList;
+    private List<Goods> goodsList;
 
     public int getCmd() {
         return cmd;
@@ -85,11 +84,11 @@ public class OrderConfirmInfoRequest extends BaseRequest {
         this.token = token;
     }
 
-    public List<OrderGoods> getGoodsList() {
+    public List<Goods> getGoodsList() {
         return goodsList;
     }
 
-    public void setGoodsList(List<OrderGoods> goodsList) {
+    public void setGoodsList(List<Goods> goodsList) {
         this.goodsList = goodsList;
     }
 
@@ -106,100 +105,5 @@ public class OrderConfirmInfoRequest extends BaseRequest {
                 ", token='" + token + '\'' +
                 ", goodsList=" + goodsList +
                 '}';
-    }
-
-    public static class OrderGoods implements Parcelable {
-        public static final Creator<OrderGoods> CREATOR = new Creator<OrderGoods>() {
-            @Override
-            public OrderGoods createFromParcel(Parcel in) {
-                return new OrderGoods(in);
-            }
-
-            @Override
-            public OrderGoods[] newArray(int size) {
-                return new OrderGoods[size];
-            }
-        };
-        private String goodsId;
-        private String merchId;
-        private int nums;
-        private String promotionId;
-        private double salePrice;
-
-        public OrderGoods() {
-        }
-
-        public OrderGoods(Parcel in) {
-            goodsId = in.readString();
-            merchId = in.readString();
-            nums = in.readInt();
-            promotionId = in.readString();
-            salePrice = in.readDouble();
-        }
-
-        public String getGoodsId() {
-            return goodsId;
-        }
-
-        public void setGoodsId(String goodsId) {
-            this.goodsId = goodsId;
-        }
-
-        public String getMerchId() {
-            return merchId;
-        }
-
-        public void setMerchId(String merchId) {
-            this.merchId = merchId;
-        }
-
-        public int getNums() {
-            return nums;
-        }
-
-        public void setNums(int nums) {
-            this.nums = nums;
-        }
-
-        public String getPromotionId() {
-            return promotionId;
-        }
-
-        public void setPromotionId(String promotionId) {
-            this.promotionId = promotionId;
-        }
-
-        public double getSalePrice() {
-            return salePrice;
-        }
-
-        public void setSalePrice(double salePrice) {
-            this.salePrice = salePrice;
-        }
-
-        @Override
-        public String toString() {
-            return "OrderGoods{" +
-                    "goodsId='" + goodsId + '\'' +
-                    ", merchId='" + merchId + '\'' +
-                    ", nums=" + nums +
-                    ", promotionId='" + promotionId + '\'' +
-                    ", salePrice=" + salePrice +
-                    '}';
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(goodsId);
-            dest.writeString(merchId);
-            dest.writeInt(nums);
-            dest.writeString(promotionId);
-            dest.writeDouble(salePrice);
-        }
     }
 }

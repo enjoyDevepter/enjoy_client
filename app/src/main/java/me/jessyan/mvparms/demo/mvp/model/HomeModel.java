@@ -12,7 +12,12 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.HomeContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeResponse;
 
 
@@ -39,6 +44,24 @@ public class HomeModel extends BaseModel implements HomeContract.Model {
     public Observable<HomeResponse> getHomeInfo(HomeRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getHomeInfo(request);
+    }
+
+    @Override
+    public Observable<DiaryListResponse> getDiaryList(DiaryListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .getDiaryList(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> diaryVote(DiaryVoteRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .diaryVote(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> follow(FollowMemberRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .follow(request);
     }
 
 }

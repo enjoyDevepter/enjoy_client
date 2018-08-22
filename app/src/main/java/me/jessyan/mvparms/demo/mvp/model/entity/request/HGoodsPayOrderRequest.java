@@ -2,6 +2,8 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
 
 import java.util.List;
 
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+
 /**
  * Created by guomin on 2018/7/25.
  */
@@ -22,7 +24,7 @@ public class HGoodsPayOrderRequest extends BaseRequest {
     private long payMoney;
     private String remark;
     private String token;
-    private List<OrderGoods> goodsList;
+    private List<Goods> goodsList;
 
     public int getCmd() {
         return cmd;
@@ -144,11 +146,11 @@ public class HGoodsPayOrderRequest extends BaseRequest {
         this.token = token;
     }
 
-    public List<OrderGoods> getGoodsList() {
+    public List<Goods> getGoodsList() {
         return goodsList;
     }
 
-    public void setGoodsList(List<OrderGoods> goodsList) {
+    public void setGoodsList(List<Goods> goodsList) {
         this.goodsList = goodsList;
     }
 
@@ -173,96 +175,5 @@ public class HGoodsPayOrderRequest extends BaseRequest {
                 ", goodsList=" + goodsList +
                 '}';
     }
-
-    public static class OrderGoods {
-
-        private String goodsId;
-        private String advanceDepositId;
-        private double deposit;
-        private double tailMoney;
-        private String merchId;
-        private int nums;
-        private String promotionId;
-        private double salePrice;
-
-        public String getGoodsId() {
-            return goodsId;
-        }
-
-        public void setGoodsId(String goodsId) {
-            this.goodsId = goodsId;
-        }
-
-        public String getAdvanceDepositId() {
-            return advanceDepositId;
-        }
-
-        public void setAdvanceDepositId(String advanceDepositId) {
-            this.advanceDepositId = advanceDepositId;
-        }
-
-        public double getDeposit() {
-            return deposit;
-        }
-
-        public void setDeposit(double deposit) {
-            this.deposit = deposit;
-        }
-
-        public double getTailMoney() {
-            return tailMoney;
-        }
-
-        public void setTailMoney(double tailMoney) {
-            this.tailMoney = tailMoney;
-        }
-
-        public String getMerchId() {
-            return merchId;
-        }
-
-        public void setMerchId(String merchId) {
-            this.merchId = merchId;
-        }
-
-        public int getNums() {
-            return nums;
-        }
-
-        public void setNums(int nums) {
-            this.nums = nums;
-        }
-
-        public String getPromotionId() {
-            return promotionId;
-        }
-
-        public void setPromotionId(String promotionId) {
-            this.promotionId = promotionId;
-        }
-
-        public double getSalePrice() {
-            return salePrice;
-        }
-
-        public void setSalePrice(double salePrice) {
-            this.salePrice = salePrice;
-        }
-
-        @Override
-        public String toString() {
-            return "OrderGoods{" +
-                    "goodsId='" + goodsId + '\'' +
-                    ", advanceDepositId='" + advanceDepositId + '\'' +
-                    ", deposit=" + deposit +
-                    ", tailMoney=" + tailMoney +
-                    ", merchId='" + merchId + '\'' +
-                    ", nums=" + nums +
-                    ", promotionId='" + promotionId + '\'' +
-                    ", salePrice=" + salePrice +
-                    '}';
-        }
-    }
-
 
 }

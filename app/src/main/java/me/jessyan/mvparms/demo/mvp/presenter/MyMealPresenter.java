@@ -21,7 +21,9 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MyMealContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -52,7 +54,7 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
     }
 
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     void onCreate() {
         getMyMealAppointment(true);
     }
@@ -120,6 +122,32 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
                         mAdapter.notifyItemRangeInserted(preEndIndex, appointments.size());
                         mAdapter.notifyDataSetChanged();
                     }
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
+    }
+
+
+    public void modifyAppointmentTime() {
+        ModifyAppointmentRequest request = new ModifyAppointmentRequest();
+        request.setCmd(2108);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setReservationId((String) mRootView.getCache().get("reservationId"));
+        mModel.modifyAppointmentTime(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).doFinally(() -> {
+            mRootView.hideLoading();//隐藏下拉刷新的进度条
+        }).subscribe(new Consumer<BaseResponse>() {
+            @Override
+            public void accept(BaseResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    getMyMealAppointment(false);
                 } else {
                     mRootView.showMessage(response.getRetDesc());
                 }

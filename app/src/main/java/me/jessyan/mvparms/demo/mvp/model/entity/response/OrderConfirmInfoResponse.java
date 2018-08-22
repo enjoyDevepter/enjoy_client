@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.response;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.Coupon;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 
 /**
  * Created by guomin on 2018/7/28.
@@ -20,7 +21,7 @@ public class OrderConfirmInfoResponse extends BaseResponse {
     private String couponId;
     private List<Coupon> couponList;
     private Delivery deliveryMethod;
-    private List<GoodsBean> goodsList;
+    private List<Goods> goodsList;
 
     public long getBalance() {
         return balance;
@@ -110,11 +111,11 @@ public class OrderConfirmInfoResponse extends BaseResponse {
         this.deliveryMethod = deliveryMethod;
     }
 
-    public List<GoodsBean> getGoodsList() {
+    public List<Goods> getGoodsList() {
         return goodsList;
     }
 
-    public void setGoodsList(List<GoodsBean> goodsList) {
+    public void setGoodsList(List<Goods> goodsList) {
         this.goodsList = goodsList;
     }
 
@@ -206,172 +207,5 @@ public class OrderConfirmInfoResponse extends BaseResponse {
         }
     }
 
-    public class GoodsBean {
-        private int attention;
-        private double costPrice;
-        private String goodsId;
-        private String merchId;
-        private String image;
-        private double marketPrice;
-        private String name;
-        private int sales;
-        private double salePrice;
-        private String title;
-        private int nums;
-        private String promotionId;
-        private GoodsSpecValueBean goodsSpecValue;
-
-        public int getAttention() {
-            return attention;
-        }
-
-        public void setAttention(int attention) {
-            this.attention = attention;
-        }
-
-        public double getCostPrice() {
-            return costPrice;
-        }
-
-        public void setCostPrice(double costPrice) {
-            this.costPrice = costPrice;
-        }
-
-        public String getGoodsId() {
-            return goodsId;
-        }
-
-        public void setGoodsId(String goodsId) {
-            this.goodsId = goodsId;
-        }
-
-        public String getMerchId() {
-            return merchId;
-        }
-
-        public void setMerchId(String merchId) {
-            this.merchId = merchId;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
-        }
-
-        public double getMarketPrice() {
-            return marketPrice;
-        }
-
-        public void setMarketPrice(double marketPrice) {
-            this.marketPrice = marketPrice;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getSales() {
-            return sales;
-        }
-
-        public void setSales(int sales) {
-            this.sales = sales;
-        }
-
-        public double getSalePrice() {
-            return salePrice;
-        }
-
-        public void setSalePrice(double salePrice) {
-            this.salePrice = salePrice;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public int getNums() {
-            return nums;
-        }
-
-        public void setNums(int nums) {
-            this.nums = nums;
-        }
-
-        public String getPromotionId() {
-            return promotionId;
-        }
-
-        public void setPromotionId(String promotionId) {
-            this.promotionId = promotionId;
-        }
-
-        public GoodsSpecValueBean getGoodsSpecValue() {
-            return goodsSpecValue;
-        }
-
-        public void setGoodsSpecValue(GoodsSpecValueBean goodsSpecValue) {
-            this.goodsSpecValue = goodsSpecValue;
-        }
-
-        @Override
-        public String toString() {
-            return "GoodsBean{" +
-                    "attention=" + attention +
-                    ", costPrice=" + costPrice +
-                    ", goodsId='" + goodsId + '\'' +
-                    ", merchId='" + merchId + '\'' +
-                    ", image='" + image + '\'' +
-                    ", marketPrice=" + marketPrice +
-                    ", name='" + name + '\'' +
-                    ", sales=" + sales +
-                    ", salePrice=" + salePrice +
-                    ", title='" + title + '\'' +
-                    ", nums=" + nums +
-                    ", promotionId='" + promotionId + '\'' +
-                    ", goodsSpecValue=" + goodsSpecValue +
-                    '}';
-        }
-    }
-
-    public class GoodsSpecValueBean {
-        private String specValueId;
-        private String specValueName;
-
-        public String getSpecValueId() {
-            return specValueId;
-        }
-
-        public void setSpecValueId(String specValueId) {
-            this.specValueId = specValueId;
-        }
-
-        public String getSpecValueName() {
-            return specValueName;
-        }
-
-        public void setSpecValueName(String specValueName) {
-            this.specValueName = specValueName;
-        }
-
-        @Override
-        public String toString() {
-            return "GoodsSpecValueBean{" +
-                    "specValueId='" + specValueId + '\'' +
-                    ", specValueName='" + specValueName + '\'' +
-                    '}';
-        }
-    }
 
 }

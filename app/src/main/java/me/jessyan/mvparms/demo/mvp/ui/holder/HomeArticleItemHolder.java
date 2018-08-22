@@ -63,7 +63,7 @@ public class HomeArticleItemHolder extends BaseHolder<Article> {
     public void setData(Article article, int position) {
         Observable.just(article.getTitle())
                 .subscribe(s -> nameTV.setText(s));
-        Observable.just(article.getTitle())
+        Observable.just(article.getIntro())
                 .subscribe(s -> descTV.setText(s));
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定

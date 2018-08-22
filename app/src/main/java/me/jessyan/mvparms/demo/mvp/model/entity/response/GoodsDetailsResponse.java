@@ -2,7 +2,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.response;
 
 import java.util.List;
 
-import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 
@@ -12,28 +12,17 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 
 public class GoodsDetailsResponse extends BaseResponse {
 
-    private String recom;
-    private GoodsDetails.Goods goods;
-    private List<GoodsDetails.GoodsSpec> goodsSpecList;
+    private Goods goods;
     private List<GoodsSpecValue> goodsSpecValueList;
     private List<String> images;
     private List<Promotion> promotionList;
 
-
-    public GoodsDetails.Goods getGoods() {
+    public Goods getGoods() {
         return goods;
     }
 
-    public void setGoods(GoodsDetails.Goods goods) {
+    public void setGoods(Goods goods) {
         this.goods = goods;
-    }
-
-    public List<GoodsDetails.GoodsSpec> getGoodsSpecList() {
-        return goodsSpecList;
-    }
-
-    public void setGoodsSpecList(List<GoodsDetails.GoodsSpec> goodsSpecList) {
-        this.goodsSpecList = goodsSpecList;
     }
 
     public List<GoodsSpecValue> getGoodsSpecValueList() {
@@ -64,7 +53,6 @@ public class GoodsDetailsResponse extends BaseResponse {
     public String toString() {
         return "GoodsDetailsResponse{" +
                 "goods=" + goods +
-                ", goodsSpecList=" + goodsSpecList +
                 ", goodsSpecValueList=" + goodsSpecValueList +
                 ", images=" + images +
                 ", promotionList=" + promotionList +

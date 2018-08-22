@@ -18,6 +18,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerMyComponent;
 import me.jessyan.mvparms.demo.di.module.MyModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
 import me.jessyan.mvparms.demo.mvp.presenter.MyPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MyMealActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -170,6 +171,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
             case R.id.follow:
                 break;
             case R.id.meal:
+                ArmsUtils.startActivity(getActivity(), MyMealActivity.class);
                 break;
             case R.id.coupon:
                 break;

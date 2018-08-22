@@ -2,6 +2,8 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
 
 import java.util.List;
 
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+
 /**
  * Created by guomin on 2018/7/25.
  */
@@ -21,7 +23,7 @@ public class PayOrderRequest extends BaseRequest {
     private long payMoney;
     private String remark;
     private String token;
-    private List<OrderConfirmInfoRequest.OrderGoods> goodsList;
+    private List<Goods> goodsList;
 
     public int getCmd() {
         return cmd;
@@ -135,11 +137,11 @@ public class PayOrderRequest extends BaseRequest {
         this.token = token;
     }
 
-    public List<OrderConfirmInfoRequest.OrderGoods> getGoodsList() {
+    public List<Goods> getGoodsList() {
         return goodsList;
     }
 
-    public void setGoodsList(List<OrderConfirmInfoRequest.OrderGoods> goodsList) {
+    public void setGoodsList(List<Goods> goodsList) {
         this.goodsList = goodsList;
     }
 

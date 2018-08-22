@@ -220,7 +220,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 //            for (int i = 0; i < ll_tab.getChildCount(); i++) {
 //                View child = ll_tab.getChildAt(i);
 //                child.setPadding(0, 0, 0, 0);
-//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+//                LinearLayout.LayoutParams params = newlyweds LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
 //                params.leftMargin = 60;
 //                params.rightMargin = 45;
 //                child.setLayoutParams(params);

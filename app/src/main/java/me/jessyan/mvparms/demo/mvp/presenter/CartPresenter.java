@@ -22,6 +22,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.CartContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CartListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DeleteCartListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.EidtCartRequest;
@@ -189,7 +190,7 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
 
         List<CartBean.CartItem> cartItems = ((CartListAdapter) mAdapter).getInfos();
         for (CartBean.CartItem cartItem : cartItems) {
-            for (CartBean.GoodsBean goodsBean : cartItem.getGoodsList()) {
+            for (Goods goodsBean : cartItem.getGoodsList()) {
                 if ("1".equals(goodsBean.getStatus())) {
                     DeleteCartListRequest.GoodsBean bean = new DeleteCartListRequest.GoodsBean();
                     bean.setGoodsId(goodsBean.getGoodsId());

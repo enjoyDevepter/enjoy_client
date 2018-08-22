@@ -26,6 +26,7 @@ import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
 import me.jessyan.mvparms.demo.mvp.model.entity.Coupon;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsOrderConfirmInfoResponse;
@@ -194,7 +195,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
     @Override
     public void updateUI(HGoodsOrderConfirmInfoResponse response) {
         this.response = response;
-        HGoodsOrderConfirmInfoResponse.GoodsBean goods = response.getGoodsList().get(0);
+        Goods goods = response.getGoodsList().get(0);
         goodsNameTV.setText(goods.getName());
         depositTV.setText(String.valueOf(goods.getDeposit()));
         numsTV.setText("x" + String.valueOf(goods.getNums()));
@@ -242,6 +243,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                 break;
             case R.id.appointments_layout:
                 Intent appointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
+                appointmentsIntent.putExtra("type", "choice_time");
                 appointmentsIntent.putParcelableArrayListExtra("appointmnetInfo", (ArrayList<? extends Parcelable>) response.getAppointmentsDateList());
                 ArmsUtils.startActivity(appointmentsIntent);
                 break;

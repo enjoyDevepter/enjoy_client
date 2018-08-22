@@ -58,8 +58,8 @@ public class AppLifecyclesImpl implements AppLifecycles {
             //比如添加三个策略,一个打印日志,一个将日志保存本地,一个将日志上传服务器
             Timber.plant(new Timber.DebugTree());
             // 如果你想将框架切换为 Logger 来打印日志,请使用下面的代码,如想切换为其他日志框架请根据下面的方式扩展
-//                    Logger.addLogAdapter(new AndroidLogAdapter());
-//                    Timber.plant(new Timber.DebugTree() {
+//                    Logger.addLogAdapter(newlyweds AndroidLogAdapter());
+//                    Timber.plant(newlyweds Timber.DebugTree() {
 //                        @Override
 //                        protected void log(int priority, String tag, String message, Throwable t) {
 //                            Logger.log(priority, tag, message, t);
@@ -80,7 +80,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
             }
         });
         //Usage:
-        //Message msg = new Message();
+        //Message msg = newlyweds Message();
         //msg.what = 0;
         //AppManager.post(msg); like EventBus
     }

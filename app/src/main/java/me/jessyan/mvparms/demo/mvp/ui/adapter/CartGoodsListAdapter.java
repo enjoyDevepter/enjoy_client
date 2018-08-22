@@ -23,7 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.ui.holder.CartGoodsListItemHolder;
 
 /**
@@ -35,18 +35,18 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.CartGoodsListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class CartGoodsListAdapter extends DefaultAdapter<CartBean.GoodsBean> {
+public class CartGoodsListAdapter extends DefaultAdapter<Goods> {
     private int parentPosition;
     private CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public CartGoodsListAdapter(List<CartBean.GoodsBean> cartItems, CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener, int parentPosition) {
+    public CartGoodsListAdapter(List<Goods> cartItems, CartListAdapter.OnChildItemClickLinstener onChildItemClickLinstener, int parentPosition) {
         super(cartItems);
         this.onChildItemClickLinstener = onChildItemClickLinstener;
         this.parentPosition = parentPosition;
     }
 
     @Override
-    public BaseHolder<CartBean.GoodsBean> getHolder(View v, int viewType) {
+    public BaseHolder<Goods> getHolder(View v, int viewType) {
         return new CartGoodsListItemHolder(v, onChildItemClickLinstener, parentPosition);
     }
 

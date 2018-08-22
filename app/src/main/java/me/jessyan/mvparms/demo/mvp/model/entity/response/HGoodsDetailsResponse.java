@@ -3,8 +3,8 @@ package me.jessyan.mvparms.demo.mvp.model.entity.response;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.mvp.model.HAppointments;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
-import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 
 /**
@@ -13,17 +13,17 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 
 public class HGoodsDetailsResponse extends BaseResponse {
 
-    private HGoods goods;
+    private Goods goods;
     private List<String> images;
     private List<Promotion> promotionList;
     private List<HAppointments> appointmentsDateList;
     private List<GoodsSpecValue> goodsSpecValueList;
 
-    public HGoods getGoods() {
+    public Goods getGoods() {
         return goods;
     }
 
-    public void setGoods(HGoods goods) {
+    public void setGoods(Goods goods) {
         this.goods = goods;
     }
 

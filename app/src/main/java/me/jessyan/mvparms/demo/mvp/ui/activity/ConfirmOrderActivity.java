@@ -28,12 +28,11 @@ import me.jessyan.mvparms.demo.di.component.DaggerConfirmOrderComponent;
 import me.jessyan.mvparms.demo.di.module.ConfirmOrderModule;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.Store;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.ConfirmOrderPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderConfirmGoodsListAdapter;
-import me.jessyan.mvparms.demo.mvp.ui.widget.CustomProgressDailog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -95,7 +94,6 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     RecyclerView.Adapter mAdapter;
-    CustomProgressDailog progressDailog;
     OrderConfirmInfoResponse response;
 
     private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.STORE;
@@ -157,7 +155,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         confirmV.setOnClickListener(this);
 
         provideCache().put("deliveryMethodId", "1");
-        List<OrderConfirmInfoRequest.OrderGoods> goodsList = getIntent().getParcelableArrayListExtra("goodsList");
+        List<Goods> goodsList = getIntent().getParcelableArrayListExtra("goodsList");
         if (goodsList != null) {
             provideCache().put("goodsList", goodsList);
         }
@@ -168,13 +166,10 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
 
     @Override
     public void showLoading() {
-        progressDailog = new CustomProgressDailog(this);
-        progressDailog.show();
     }
 
     @Override
     public void hideLoading() {
-        progressDailog.dismiss();
     }
 
     @Override
@@ -301,7 +296,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         }
 
         balanceTV.setText(String.valueOf(response.getBalance()));
-        totalPrice.setText(ArmsUtils.formatLong(response.getTotalPrice()));
+        totalPrice.setText(ArmsUtils.formatLong(response.getPrice()));
         payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));
         freightTV.setText(ArmsUtils.formatLong(response.getFreight()));
         deductionMoneyTV.setText(ArmsUtils.formatLong(response.getDeductionMoney()));
@@ -321,16 +316,20 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
 
     @Override
     public void onChildItemClick(View v, OrderConfirmGoodsListAdapter.ViewName viewname, int position) {
-        List<OrderConfirmInfoResponse.GoodsBean> goodsList = ((OrderConfirmGoodsListAdapter) mAdapter).getInfos();
+        List<Goods> goodsList = ((OrderConfirmGoodsListAdapter) mAdapter).getInfos();
+        Goods goods = goodsList.get(position);
+        if (!"1".equals(goods.getType())) {
+            return;
+        }
         switch (viewname) {
             case ADD:
-                goodsList.get(position).setNums(goodsList.get(position).getNums() + 1);
+                goods.setNums(goods.getNums() + 1);
                 break;
             case MINUS:
-                if (goodsList.get(position).getNums() == 1) {
+                if (goods.getNums() == 1) {
                     return;
                 }
-                goodsList.get(position).setNums(goodsList.get(position).getNums() - 1);
+                goods.setNums(goods.getNums() - 1);
                 break;
         }
         provideCache().put("goodsList", goodsList);

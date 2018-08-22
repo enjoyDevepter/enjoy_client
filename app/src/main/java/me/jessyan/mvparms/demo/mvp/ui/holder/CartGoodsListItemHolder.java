@@ -30,7 +30,7 @@ import com.jess.arms.utils.ArmsUtils;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
 
 /**
@@ -42,7 +42,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class CartGoodsListItemHolder extends BaseHolder<CartBean.GoodsBean> {
+public class CartGoodsListItemHolder extends BaseHolder<Goods> {
     @BindView(R.id.check)
     View checkV;
     @BindView(R.id.image)
@@ -93,7 +93,7 @@ public class CartGoodsListItemHolder extends BaseHolder<CartBean.GoodsBean> {
     }
 
     @Override
-    public void setData(CartBean.GoodsBean data, int position) {
+    public void setData(Goods data, int position) {
         Observable.just(data.getStatus())
                 .subscribe(s -> checkV.setSelected("1".equals(s) ? true : false));
         Observable.just(data.getName())

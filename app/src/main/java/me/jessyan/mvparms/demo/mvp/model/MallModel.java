@@ -49,7 +49,7 @@ public class MallModel extends BaseModel implements MallContract.Model {
     @Override
     public Observable<GoodsListResponse> getGoodsList(GoodsListRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
-                .getCategory(request);
+                .getGoodsList(request);
     }
 
     @Override

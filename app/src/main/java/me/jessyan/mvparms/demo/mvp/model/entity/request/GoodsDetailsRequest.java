@@ -15,7 +15,7 @@ public class GoodsDetailsRequest extends BaseRequest {
     private String specValueId;
     private String advanceDepositId;
     private String token;
-
+    private String promotionId;
 
     public int getCmd() {
         return cmd;
@@ -97,6 +97,14 @@ public class GoodsDetailsRequest extends BaseRequest {
         this.token = token;
     }
 
+    public String getPromotionId() {
+        return promotionId;
+    }
+
+    public void setPromotionId(String promotionId) {
+        this.promotionId = promotionId;
+    }
+
     @Override
     public String toString() {
         return "GoodsDetailsRequest{" +
@@ -110,6 +118,7 @@ public class GoodsDetailsRequest extends BaseRequest {
                 ", specValueId='" + specValueId + '\'' +
                 ", advanceDepositId='" + advanceDepositId + '\'' +
                 ", token='" + token + '\'' +
+                ", promotionId='" + promotionId + '\'' +
                 '}';
     }
 }

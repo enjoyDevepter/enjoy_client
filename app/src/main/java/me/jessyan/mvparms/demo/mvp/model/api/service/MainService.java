@@ -76,7 +76,7 @@ public interface MainService {
     Observable<HomeResponse> getHomeInfo(@Body HomeRequest request);
 
     @POST("gateway")
-    Observable<GoodsListResponse> getCategory(@Body GoodsListRequest request);
+    Observable<GoodsListResponse> getGoodsList(@Body GoodsListRequest request);
 
 
     @POST("gateway")

@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.response;
 
 import java.util.List;
 
+import me.jessyan.mvparms.demo.mvp.model.entity.Ad;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 
 /**
@@ -11,7 +12,16 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 public class GoodsListResponse extends BaseResponse {
 
     private List<Goods> goodsList;
+    private List<Ad> carouselList;
     private int nextPageIndex;
+
+    public List<Ad> getCarouselList() {
+        return carouselList;
+    }
+
+    public void setCarouselList(List<Ad> carouselList) {
+        this.carouselList = carouselList;
+    }
 
     public List<Goods> getGoodsList() {
         return goodsList;
@@ -33,6 +43,7 @@ public class GoodsListResponse extends BaseResponse {
     public String toString() {
         return "GoodsListResponse{" +
                 "goodsList=" + goodsList +
+                ", carouselList=" + carouselList +
                 ", nextPageIndex=" + nextPageIndex +
                 '}';
     }

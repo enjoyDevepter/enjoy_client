@@ -23,7 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.ui.holder.OrderConfirmGoodsListItemHolder;
 
 /**
@@ -35,15 +35,15 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.OrderConfirmGoodsListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class OrderConfirmGoodsListAdapter extends DefaultAdapter<OrderConfirmInfoResponse.GoodsBean> {
+public class OrderConfirmGoodsListAdapter extends DefaultAdapter<Goods> {
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public OrderConfirmGoodsListAdapter(List<OrderConfirmInfoResponse.GoodsBean> goodsList) {
+    public OrderConfirmGoodsListAdapter(List<Goods> goodsList) {
         super(goodsList);
     }
 
     @Override
-    public BaseHolder<OrderConfirmInfoResponse.GoodsBean> getHolder(View v, int viewType) {
+    public BaseHolder<Goods> getHolder(View v, int viewType) {
         return new OrderConfirmGoodsListItemHolder(v, new OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ViewName viewname, int position) {

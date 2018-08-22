@@ -340,6 +340,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
             case R.layout.goods_list_item:
                 Goods goods = mAdapter.getInfos().get(position);
                 Intent intent = new Intent(getActivity().getApplication(), GoodsDetailsActivity.class);
+                intent.putExtra("type", goods.getType());
                 intent.putExtra("goodsId", goods.getGoodsId());
                 intent.putExtra("merchId", goods.getMerchId());
                 ArmsUtils.startActivity(intent);

@@ -10,6 +10,7 @@ public class GoodsListRequest extends BaseRequest {
     private String province;
     private String city;
     private String county;
+    private String firstCategoryId;
     private String secondCategoryId;
     private String categoryId;
     private int pageIndex = 1;
@@ -54,6 +55,14 @@ public class GoodsListRequest extends BaseRequest {
 
     public void setCounty(String county) {
         this.county = county;
+    }
+
+    public String getFirstCategoryId() {
+        return firstCategoryId;
+    }
+
+    public void setFirstCategoryId(String firstCategoryId) {
+        this.firstCategoryId = firstCategoryId;
     }
 
     public String getSecondCategoryId() {
@@ -104,6 +113,7 @@ public class GoodsListRequest extends BaseRequest {
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", county='" + county + '\'' +
+                ", firstCategoryId='" + firstCategoryId + '\'' +
                 ", secondCategoryId='" + secondCategoryId + '\'' +
                 ", categoryId='" + categoryId + '\'' +
                 ", pageIndex=" + pageIndex +

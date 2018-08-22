@@ -62,14 +62,14 @@ public final class GlobalConfiguration implements ConfigModule {
         builder.baseurl(Api.APP_DOMAIN)
                 //强烈建议自己自定义图片加载逻辑,因为默认提供的 GlideImageLoaderStrategy 并不能满足复杂的需求
                 //请参考 https://github.com/JessYanCoding/MVPArms/wiki#3.4
-//                .imageLoaderStrategy(new CustomLoaderStrategy())
+//                .imageLoaderStrategy(newlyweds CustomLoaderStrategy())
 
                 //想支持多 BaseUrl, 以及运行时动态切换任意一个 BaseUrl, 请使用 https://github.com/JessYanCoding/RetrofitUrlManager
                 //如果 BaseUrl 在 App 启动时不能确定, 需要请求服务器接口动态获取, 请使用以下代码
                 //以下方式是 Arms 框架自带的切换 BaseUrl 的方式, 在整个 App 生命周期内只能切换一次, 若需要无限次的切换 BaseUrl, 以及各种复杂的应用场景还是需要使用 RetrofitUrlManager 框架
                 //以下代码只是配置, 还要使用 Okhttp (AppComponent中提供) 请求服务器获取到正确的 BaseUrl 后赋值给 GlobalConfiguration.sDomain
                 //切记整个过程必须在第一次调用 Retrofit 接口之前完成, 如果已经调用过 Retrofit 接口, 此种方式将不能切换 BaseUrl
-//                .baseurl(new BaseUrl() {
+//                .baseurl(newlyweds BaseUrl() {
 //                    @Override
 //                    public HttpUrl url() {
 //                        return HttpUrl.parse(sDomain);
@@ -77,23 +77,23 @@ public final class GlobalConfiguration implements ConfigModule {
 //                })
 
                 //可根据当前项目的情况以及环境为框架某些部件提供自定义的缓存策略, 具有强大的扩展性
-//                .cacheFactory(new Cache.Factory() {
+//                .cacheFactory(newlyweds Cache.Factory() {
 //                    @NonNull
 //                    @Override
 //                    public Cache build(CacheType type) {
 //                        switch (type.getCacheTypeId()){
 //                            case CacheType.EXTRAS_TYPE_ID:
-//                                return new IntelligentCache(500);
+//                                return newlyweds IntelligentCache(500);
 //                            case CacheType.CACHE_SERVICE_CACHE_TYPE_ID:
-//                                return new Cache(type.calculateCacheSize(context));//自定义 Cache
+//                                return newlyweds Cache(type.calculateCacheSize(context));//自定义 Cache
 //                            default:
-//                                return new LruCache(200);
+//                                return newlyweds LruCache(200);
 //                        }
 //                    }
 //                })
 
                 //若觉得框架默认的打印格式并不能满足自己的需求, 可自行扩展自己理想的打印格式 (以下只是简单实现)
-//                .formatPrinter(new FormatPrinter() {
+//                .formatPrinter(newlyweds FormatPrinter() {
 //                    @Override
 //                    public void printJsonRequest(Request request, String bodyString) {
 //                        Timber.i("printJsonRequest:" + bodyString);
@@ -141,7 +141,7 @@ public final class GlobalConfiguration implements ConfigModule {
                 })
                 .rxCacheConfiguration((context1, rxCacheBuilder) -> {//这里可以自己自定义配置 RxCache 的参数
                     rxCacheBuilder.useExpiredDataIfLoaderNotAvailable(true);
-                    // 想自定义 RxCache 的缓存文件夹或者解析方式, 如改成 fastjson, 请 return rxCacheBuilder.persistence(cacheDirectory, new FastJsonSpeaker());
+                    // 想自定义 RxCache 的缓存文件夹或者解析方式, 如改成 fastjson, 请 return rxCacheBuilder.persistence(cacheDirectory, newlyweds FastJsonSpeaker());
                     // 否则请 return null;
                     return null;
                 });

@@ -10,6 +10,7 @@ public class Appointment {
     private String projectId;
     private String reservationDate;
     private String reservationTime;
+    private String reservationId;
     private int surplusNum;
     private String reservationStatus;
     private String status;
@@ -39,6 +40,14 @@ public class Appointment {
 
     public void setReservationTime(String reservationTime) {
         this.reservationTime = reservationTime;
+    }
+
+    public String getReservationId() {
+        return reservationId;
+    }
+
+    public void setReservationId(String reservationId) {
+        this.reservationId = reservationId;
     }
 
     public int getSurplusNum() {
@@ -95,6 +104,7 @@ public class Appointment {
                 "projectId='" + projectId + '\'' +
                 ", reservationDate='" + reservationDate + '\'' +
                 ", reservationTime='" + reservationTime + '\'' +
+                ", reservationId='" + reservationId + '\'' +
                 ", surplusNum=" + surplusNum +
                 ", reservationStatus='" + reservationStatus + '\'' +
                 ", status='" + status + '\'' +

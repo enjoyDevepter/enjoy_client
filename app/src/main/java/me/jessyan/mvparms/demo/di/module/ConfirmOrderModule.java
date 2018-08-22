@@ -12,7 +12,7 @@ import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.ConfirmOrderModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderConfirmGoodsListAdapter;
 
 
@@ -49,13 +49,13 @@ public class ConfirmOrderModule {
 
     @ActivityScope
     @Provides
-    List<OrderConfirmInfoResponse.GoodsBean> provideGoodsList() {
+    List<Goods> provideGoodsList() {
         return new ArrayList<>();
     }
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideOrderConfirmAdapter(List<OrderConfirmInfoResponse.GoodsBean> list) {
+    RecyclerView.Adapter provideOrderConfirmAdapter(List<Goods> list) {
         return new OrderConfirmGoodsListAdapter(list);
     }
 }

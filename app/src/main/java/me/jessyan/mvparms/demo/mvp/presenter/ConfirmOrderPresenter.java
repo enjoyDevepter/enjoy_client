@@ -24,6 +24,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
@@ -49,7 +50,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
     @Inject
     RecyclerView.Adapter mAdapter;
     @Inject
-    List<OrderConfirmInfoResponse.GoodsBean> goodsBeans;
+    List<Goods> goodsBeans;
 
     private OrderConfirmInfoResponse orderConfirmInfoResponse;
 
@@ -75,8 +76,19 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
     }
 
     public void getOrderConfirmInfo() {
-
+        String where = mRootView.getActivity().getIntent().getStringExtra("where");
         OrderConfirmInfoRequest request = new OrderConfirmInfoRequest();
+
+        if ("timelimitdetail".equals(where)) {
+            request.setCmd(543);
+            request.setGoodsList(mRootView.getActivity().getIntent().getParcelableArrayListExtra("goodsList"));
+        } else if ("newpeople".equals(where)) {
+            request.setCmd(533);
+            request.setGoodsList(mRootView.getActivity().getIntent().getParcelableArrayListExtra("goodsList"));
+        } else {
+            request.setCmd(503);
+            request.setGoodsList((List<Goods>) mRootView.getCache().get("goodsList"));
+        }
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setProvince((String) (cache.get("province")));
@@ -87,7 +99,6 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
             request.setMoney((Long) mRootView.getCache().get("money"));
         }
         request.setCouponId((String) mRootView.getCache().get("couponId"));
-        request.setGoodsList((List<OrderConfirmInfoRequest.OrderGoods>) mRootView.getCache().get("goodsList"));
         mRootView.showLoading();
         mModel.getOrderConfirmInfo(request)
                 .subscribeOn(Schedulers.io())
@@ -112,8 +123,8 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
 
 
     public void placeOrder() {
-        PayOrderRequest request = new PayOrderRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        PayOrderRequest request = new PayOrderRequest();
         if ("1".equals(mRootView.getCache().get("deliveryMethodId"))) {
             if (null == cache.get("memberAddressInfo")) {
                 mRootView.showMessage("请选择地址！");
@@ -129,6 +140,17 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
             Store store = (Store) cache.get(listType.getDataKey());
             request.setStoreId(store.getStoreId());
         }
+        String where = mRootView.getActivity().getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            request.setCmd(544);
+            request.setGoodsList(mRootView.getActivity().getIntent().getParcelableArrayListExtra("goodsList"));
+        } else if ("newpeople".equals(where)) {
+            request.setCmd(534);
+            request.setGoodsList(mRootView.getActivity().getIntent().getParcelableArrayListExtra("goodsList"));
+        } else {
+            request.setCmd(504);
+            request.setGoodsList((List<Goods>) mRootView.getCache().get("goodsList"));
+        }
         request.setDeliveryMethodId((String) mRootView.getCache().get("deliveryMethodId"));
         request.setCouponId((String) mRootView.getCache().get("couponId"));
         request.setCoupon(orderConfirmInfoResponse.getCoupon());
@@ -142,15 +164,12 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
         request.setPayMoney(orderConfirmInfoResponse.getPayMoney());
         request.setRemark((String) mRootView.getCache().get("remark"));
         request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
-        request.setGoodsList((List<OrderConfirmInfoRequest.OrderGoods>) mRootView.getCache().get("goodsList"));
-        mRootView.showLoading();
         mModel.placeOrder(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<PayOrderResponse>() {
                     @Override
                     public void accept(PayOrderResponse response) throws Exception {
-                        mRootView.hideLoading();
                         if (response.isSuccess()) {
                             if ("0".equals(response.getPayStatus())) {
                                 Intent intent = new Intent(mRootView.getActivity(), PayActivity.class);

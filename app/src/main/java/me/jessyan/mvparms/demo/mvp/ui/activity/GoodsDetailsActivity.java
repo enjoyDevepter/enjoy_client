@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -33,11 +34,13 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.iwgang.countdownview.CountdownView;
+import cn.iwgang.countdownview.DynamicConfig;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerGoodsDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.GoodsDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.GoodsDetails;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
@@ -109,6 +112,22 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     TagFlowLayout speceflowLayout;
     @BindView(R.id.promotionCV)
     RecyclerView promotionCV;
+    @BindView(R.id.price_info)
+    View priceInfoV;
+    @BindView(R.id.priceTag)
+    TextView priceTagTV;
+    @BindView(R.id.time_limit_layout)
+    View timeLimitLayoutV;
+    @BindView(R.id.count_down_view)
+    CountdownView countdownView;
+    @BindView(R.id.salePrice)
+    TextView salePriceTV;
+    @BindView(R.id.salePrice_top)
+    TextView salePriceTopTV;
+    @BindView(R.id.newly)
+    View newlyV;
+    @BindView(R.id.secKillPrice)
+    TextView secKillPriceTV;
     @Inject
     TagAdapter adapter;
     @Inject
@@ -169,7 +188,37 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         promotionCV.setAdapter(promotionAdapter);
         promotionAdapter.setOnItemClickListener(this);
         speceflowLayout.setAdapter(adapter);
-        speceflowLayout.setOnSelectListener(this);
+        adapter.setSelectedList(0);
+        String where = getIntent().getStringExtra("where");
+
+        if ("timelimitdetail".equals(where)) {
+            priceInfoV.setVisibility(View.VISIBLE);
+            timeLimitLayoutV.setVisibility(View.VISIBLE);
+            cartV.setVisibility(View.GONE);
+            priceTagTV.setText("限时秒杀价");
+            newlyV.setVisibility(View.GONE);
+            salePriceTopTV.setVisibility(View.GONE);
+            promotionInfosV.setVisibility(View.GONE);
+            speceflowLayout.setMaxSelectCount(0);
+
+        } else if ("newpeople".equals(where)) {
+            priceInfoV.setVisibility(View.VISIBLE);
+            cartV.setVisibility(View.GONE);
+            priceTagTV.setText("新人专享价");
+            promotionInfosV.setVisibility(View.GONE);
+            timeLimitLayoutV.setVisibility(View.GONE);
+            newlyV.setVisibility(View.VISIBLE);
+            salePriceTopTV.setVisibility(View.VISIBLE);
+            speceflowLayout.setMaxSelectCount(0);
+        } else {
+            priceInfoV.setVisibility(View.GONE);
+            timeLimitLayoutV.setVisibility(View.GONE);
+            cartV.setVisibility(View.VISIBLE);
+            promotionInfosV.setVisibility(View.VISIBLE);
+            newlyV.setVisibility(View.GONE);
+            salePriceTopTV.setVisibility(View.GONE);
+            speceflowLayout.setOnSelectListener(this);
+        }
 
     }
 
@@ -220,18 +269,19 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
 
         imageCount.setText("1/" + response.getImages().size());
         nameTV.setText(response.getGoods().getName());
-        priceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
         saleCountTV.setText(String.valueOf(response.getGoods().getSales()));
-        goodSpecTV.setText(response.getGoods().getGoodsSpecValues());
+        goodSpecTV.setText(response.getGoods().getGoodsSpecValue().getSpecValueName());
         detailWV.loadData(response.getGoods().getMobileDetail(), "text/html", null);
 
-        if (response.getPromotionList().size() <= 0) {
+        if (response.getPromotionList() == null || response.getPromotionList().size() <= 0) {
             promotionInfosV.setVisibility(View.GONE);
         }
 
-        if (response.getGoodsSpecValueList().size() <= 0) {
+        if (null == response.getGoods().getGoodsSpecValue()) {
             specV.setVisibility(View.GONE);
         }
+
+        collectV.setSelected("1".equals(response.getGoods().getIsFavorite()) ? true : false);
 
         String specValueId = (String) provideCache().get("specValueId");
         if (!ArmsUtils.isEmpty(specValueId)) {
@@ -242,6 +292,40 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                     return;
                 }
             }
+        }
+
+        String where = getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            long count = response.getGoods().getEndDate() - response.getGoods().getSysDate();
+            if (count > 86400) {
+                DynamicConfig.Builder builder = new DynamicConfig.Builder();
+                builder.setShowHour(false)
+                        .setShowSecond(false)
+                        .setShowMinute(false)
+                        .setShowMillisecond(false)
+                        .setShowDay(true)
+                        .setSuffix("天");
+                countdownView.dynamicShow(builder.build());
+                countdownView.start(count);
+            } else {
+                countdownView.start(count);
+            }
+            priceTV.setText(String.valueOf(response.getGoods().getSecKillPrice()));
+            salePriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
+            salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            secKillPriceTV.setText(String.valueOf(response.getGoods().getSecKillPrice()));
+            spcePriceTV.setText(String.valueOf(response.getGoods().getSecKillPrice()));
+        } else if ("newpeople".equals(where)) {
+            salePriceTopTV.setText("￥" + String.valueOf(response.getGoods().getSalePrice()));
+            salePriceTopTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            salePriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
+            salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            priceTV.setText(String.valueOf(response.getGoods().getVipPrice()));
+            secKillPriceTV.setText(String.valueOf(response.getGoods().getVipPrice()));
+            spcePriceTV.setText(String.valueOf(response.getGoods().getVipPrice()));
+        } else {
+            priceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
+            spcePriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
         }
 
     }
@@ -298,11 +382,10 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
             specLayoutV.setVisibility(View.VISIBLE);
             specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_butom_in));
-            GoodsDetails.Goods goods = ((GoodsDetails.Goods) provideCache().get("goods"));
+            Goods goods = ((Goods) provideCache().get("goods"));
             spceIDTV.setText(goods.getGoodsId());
-            spcePriceTV.setText(String.valueOf(goods.getSalePrice()));
             spceNameTV.setText(goods.getName());
-
+            adapter.setSelectedList(0);
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
             mImageLoader.loadImage(spceImageIV.getContext(),
                     ImageConfigImpl

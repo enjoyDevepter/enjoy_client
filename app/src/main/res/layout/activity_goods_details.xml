@@ -56,7 +56,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
-                        android:layout_marginRight="2dp"
                         android:layout_marginTop="2dp"
                         android:gravity="left"
                         android:text="￥"
@@ -65,12 +64,33 @@
 
                     <TextView
                         android:id="@+id/price"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="left"
                         android:textColor="#FFFF0000"
                         android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/newly"
+                        android:layout_width="70dp"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/order_btn_15_bg"
+                        android:gravity="center"
+                        android:text="新人专享"
+                        android:textColor="#FFFFFFFF" />
+
+                    <TextView
+                        android:id="@+id/salePrice_top"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="#FFABABAB"
+                        android:textSize="12dp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
 
                     <View
                         android:id="@+id/collect"
@@ -161,6 +181,43 @@
                     android:layout_height="5dp"
                     android:layout_marginRight="15dp"
                     android:background="@mipmap/more" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/time_limit_layout"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/main_tab_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="距结束"
+                    android:textColor="#FF333333"
+                    android:textSize="13sp" />
+
+                <cn.iwgang.countdownview.CountdownView
+                    android:id="@+id/count_down_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    app:isHideTimeBackground="false"
+                    app:isShowHour="true"
+                    app:isShowMinute="true"
+                    app:isShowSecond="true"
+                    app:suffixGravity="center"
+                    app:suffixHour=":"
+                    app:suffixMinute=":"
+                    app:suffixTextColor="#FF333333"
+                    app:suffixTextSize="13sp"
+                    app:timeBgColor="#FF333333"
+                    app:timeBgRadius="3dp"
+                    app:timeTextColor="#FFFFFEFE"
+                    app:timeTextSize="13sp" />
 
             </LinearLayout>
 
@@ -307,7 +364,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="3dp"
                     android:text="￥"
                     android:textColor="#FFFF0000"
                     android:textSize="12sp" />
@@ -494,34 +550,105 @@
             android:background="@drawable/main_tab_bg"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/add_cart"
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_weight="1">
 
-                <View
-                    android:layout_width="15dp"
-                    android:layout_height="13dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@mipmap/cart" />
+                <LinearLayout
+                    android:id="@+id/add_cart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="加入购物车"
-                    android:textColor="#FF003333"
-                    android:textSize="13sp" />
+                    <View
+                        android:layout_width="15dp"
+                        android:layout_height="13dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@mipmap/cart" />
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="加入购物车"
+                        android:textColor="#FF003333"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/price_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="商品原价：¥ "
+                            android:textColor="#666666"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/salePrice"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="4dp"
+                            android:layout_weight="1"
+                            android:textColor="#666666"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/priceTag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="1dp"
+                            android:text="限时秒杀价"
+                            android:textColor="#666666"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginRight="1dp"
+                            android:text="￥"
+                            android:textColor="#FFFF0000"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/secKillPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#FFFF0000"
+                            android:textSize="17sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/buy"
-                android:layout_width="0dp"
+                android:layout_width="150dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
                 android:background="#FFFF5656"
                 android:gravity="center"
                 android:text="立即购买"
