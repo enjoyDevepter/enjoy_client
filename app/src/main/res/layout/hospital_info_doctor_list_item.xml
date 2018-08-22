@@ -53,9 +53,8 @@
         android:layout_below="@id/rating"
         android:id="@+id/skill"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_marginTop="9dp"
-        android:padding="10dp"
         android:layout_alignLeft="@id/name"
         app:max_select="0"
         app:tag_gravity="left" />

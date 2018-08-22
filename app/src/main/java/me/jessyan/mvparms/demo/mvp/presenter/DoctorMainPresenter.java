@@ -91,6 +91,7 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
             // 已登录用户
             LoginUserDoctorInfoRequest loginUserDoctorInfoRequest = new LoginUserDoctorInfoRequest();
             loginUserDoctorInfoRequest.setDoctorId(doctorId);
+            loginUserDoctorInfoRequest.setToken(token);
             mModel.requestLoginUserDoctorInfo(loginUserDoctorInfoRequest)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

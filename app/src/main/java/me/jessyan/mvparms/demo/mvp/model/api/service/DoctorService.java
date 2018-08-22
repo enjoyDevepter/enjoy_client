@@ -7,6 +7,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
@@ -41,4 +43,8 @@ public interface DoctorService {
     @POST("gateway")
     // 获取医生详情
     Observable<DoctorIntorResponse> getDoctorIntor(@Body DoctorIntorRequest request);
+
+    @POST("gateway")
+    // 获取医生证书列表
+    Observable<DoctorPaperResponse> getDoctorPaper(@Body DoctorPaperRequest request);
 }

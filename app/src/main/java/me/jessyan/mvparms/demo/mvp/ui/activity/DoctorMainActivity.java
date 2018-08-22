@@ -31,6 +31,7 @@ import me.jessyan.mvparms.demo.di.module.DoctorMainModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorSkill;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.HospitalBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorMainPresenter;
 
 import me.jessyan.mvparms.demo.R;
@@ -74,6 +75,8 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
 
     @BindView(R.id.doctor_intro)
     View doctor_intro;
+    @BindView(R.id.doctor_paper)
+    View doctor_paper;
 
     @Inject
     ImageLoader mImageLoader;
@@ -113,6 +116,14 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
                 }
             }
         });
+        doctor_paper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DoctorMainActivity.this,DoctorPaperActivity.class);
+                intent.putExtra(DoctorPaperActivity.KEY_FOR_DOCTOR_ID,doctorId);
+                ArmsUtils.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -136,7 +147,12 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         comment_count.setText(""+doctorBean.getComment());
         rating.setRating(doctorBean.getStar());
         updateLikeImage(LIKE.equals(doctorBean.getIsPraise()));
-        hosp_info.setText(doctorBean.getHospitalBean().getName());
+        HospitalBean hospitalBean = doctorBean.getHospitalBean();
+        if(hospitalBean != null){
+            hosp_info.setText(hospitalBean.getName());
+        }else{
+            hosp_info.setText("");
+        }
         List<DoctorSkill> doctorSkillList = doctorBean.getDoctorSkillList();
         TagAdapter<DoctorSkill> adapter = new TagAdapter<DoctorSkill>(new ArrayList<>(doctorSkillList)) {
             @Override

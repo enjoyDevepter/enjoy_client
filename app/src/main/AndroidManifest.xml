@@ -147,6 +147,12 @@
         <activity
             android:name=".mvp.ui.activity.RecommendActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.DoctorIntorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.DoctorPaperActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

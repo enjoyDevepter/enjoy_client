@@ -23,6 +23,7 @@ import me.jessyan.mvparms.demo.di.module.DoctorIntorModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorIntorContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.HospitalBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorIntorPresenter;
 
 import me.jessyan.mvparms.demo.R;
@@ -83,7 +84,12 @@ public class DoctorIntorActivity extends BaseActivity<DoctorIntorPresenter> impl
             throw new NullPointerException("doctor bean can't null");
         }
         mPresenter.getDoctorInfo(doctorBean.getDoctorId());
-        hosp_info.setText(doctorBean.getHospitalBean().getName());
+        HospitalBean hospitalBean = doctorBean.getHospitalBean();
+        if(hospitalBean != null){
+            hosp_info.setText(hospitalBean.getName());
+        }else{
+            hosp_info.setText("");
+        }
     }
 
     @Override
