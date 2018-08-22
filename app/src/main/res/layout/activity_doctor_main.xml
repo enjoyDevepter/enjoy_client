@@ -253,9 +253,7 @@
                 android:layout_height="56dp"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/title1"
-                android:paddingBottom="21dp"
                 android:paddingLeft="16dp"
-                android:paddingTop="16dp"
                 app:max_select="0"
                 app:tag_gravity="left" />
 

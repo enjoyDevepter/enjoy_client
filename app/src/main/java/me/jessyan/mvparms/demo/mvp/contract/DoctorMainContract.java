@@ -6,6 +6,8 @@ import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
@@ -31,5 +33,6 @@ public interface DoctorMainContract {
         Observable<LoginUserDoctorInfoResponse> requestLoginUserDoctorInfo(LoginUserDoctorInfoRequest request);
         Observable<LikeDoctorResponse> likeDoctor(LikeDoctorRequest request);
         Observable<UnLikeDoctorResponse> unlikeDoctor(UnLikeDoctorRequest request);
+        Observable<CommentDoctorResponse> commentDoctor(CommentDoctorRequest request);
     }
 }

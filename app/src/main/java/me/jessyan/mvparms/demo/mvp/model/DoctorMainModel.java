@@ -13,6 +13,8 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.DoctorService;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
@@ -46,6 +48,12 @@ public class DoctorMainModel extends BaseModel implements DoctorMainContract.Mod
     public Observable<DoctorInfoResponse> requestDoctorInfo(DoctorInfoRequest request) {
         return mRepositoryManager.obtainRetrofitService(DoctorService.class)
                 .requestDoctorInfo(request);
+    }
+
+    @Override
+    public Observable<CommentDoctorResponse> commentDoctor(CommentDoctorRequest request) {
+        return mRepositoryManager.obtainRetrofitService(DoctorService.class)
+                .commentDoctor(request);
     }
 
     @Override
