@@ -16,10 +16,10 @@ import com.jess.arms.utils.ArmsUtils;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import me.jessyan.mvparms.demo.di.component.DaggerDoctorPaperComponent;
-import me.jessyan.mvparms.demo.di.module.DoctorPaperModule;
-import me.jessyan.mvparms.demo.mvp.contract.DoctorPaperContract;
-import me.jessyan.mvparms.demo.mvp.presenter.DoctorPaperPresenter;
+import me.jessyan.mvparms.demo.di.component.DaggerDoctorHonorComponent;
+import me.jessyan.mvparms.demo.di.module.DoctorHonorModule;
+import me.jessyan.mvparms.demo.mvp.contract.DoctorHonorContract;
+import me.jessyan.mvparms.demo.mvp.presenter.DoctorHonorPresenter;
 
 import me.jessyan.mvparms.demo.R;
 
@@ -27,7 +27,7 @@ import me.jessyan.mvparms.demo.R;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class DoctorPaperActivity extends BaseActivity<DoctorPaperPresenter> implements DoctorPaperContract.View {
+public class DoctorHonorActivity extends BaseActivity<DoctorHonorPresenter> implements DoctorHonorContract.View {
 
     public static final String KEY_FOR_DOCTOR_ID = "key_for_doctor_id";
 
@@ -46,23 +46,22 @@ public class DoctorPaperActivity extends BaseActivity<DoctorPaperPresenter> impl
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
-        DaggerDoctorPaperComponent //如找不到该类,请编译一下项目
+        DaggerDoctorHonorComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .doctorPaperModule(new DoctorPaperModule(this))
+                .doctorHonorModule(new DoctorHonorModule(this))
                 .build()
                 .inject(this);
     }
 
     @Override
     public int initView(@Nullable Bundle savedInstanceState) {
-        return R.layout.activity_doctor_paper; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
-
+        return R.layout.activity_doctor_honor; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        title.setText("医生证件");
+        title.setText("医生荣誉");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

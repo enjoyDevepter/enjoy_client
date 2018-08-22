@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.api.service;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorRequest;
@@ -47,4 +49,8 @@ public interface DoctorService {
     @POST("gateway")
     // 获取医生证书列表
     Observable<DoctorPaperResponse> getDoctorPaper(@Body DoctorPaperRequest request);
+
+    @POST("gateway")
+    // 获取医生荣誉列表
+    Observable<DoctorHonorResponse> getDoctorHonor(@Body DoctorHonorRequest request);
 }

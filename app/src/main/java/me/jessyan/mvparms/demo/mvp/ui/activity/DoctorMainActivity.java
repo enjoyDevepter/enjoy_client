@@ -77,6 +77,8 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     View doctor_intro;
     @BindView(R.id.doctor_paper)
     View doctor_paper;
+    @BindView(R.id.doctor_honor)
+    View doctor_honor;
 
     @Inject
     ImageLoader mImageLoader;
@@ -121,6 +123,14 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
             public void onClick(View v) {
                 Intent intent = new Intent(DoctorMainActivity.this,DoctorPaperActivity.class);
                 intent.putExtra(DoctorPaperActivity.KEY_FOR_DOCTOR_ID,doctorId);
+                ArmsUtils.startActivity(intent);
+            }
+        });
+        doctor_honor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DoctorMainActivity.this,DoctorHonorActivity.class);
+                intent.putExtra(DoctorHonorActivity.KEY_FOR_DOCTOR_ID,doctorId);
                 ArmsUtils.startActivity(intent);
             }
         });
