@@ -25,6 +25,7 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorSkill;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.HospitalBean;
 
 public class DoctorListHolder extends BaseHolder<DoctorBean> {
 
@@ -56,8 +57,11 @@ public class DoctorListHolder extends BaseHolder<DoctorBean> {
     public void setData(DoctorBean data, int position) {
         Observable.just(data.getName())
                 .subscribe(s -> name.setText(String.valueOf(s)));
-        Observable.just(data.getHospitalBean().getName())
+        HospitalBean hospitalBean = data.getHospitalBean();
+        if(hospitalBean != null){
+            Observable.just(hospitalBean.getName())
                 .subscribe(s -> hosptial.setText(String.valueOf(s)));
+        }
         Observable.just(data.getStar())
                 .subscribe(s -> rating.setRating(s));
         Observable.just(data.getStar())

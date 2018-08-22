@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerHospitalInfoComponent;
 import me.jessyan.mvparms.demo.di.module.HospitalInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.HospitalInfoPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
@@ -70,7 +72,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     };
 
     // 第一个页面
-    private TextView hospitalInfo;
+    private WebView hospitalInfo;
 
     // 第二个页面
     private RecyclerView goodsList;
@@ -97,7 +99,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     private void initViewPager() {
         // 初始化第一个页面
-        hospitalInfo = new TextView(this);
+        hospitalInfo = new WebView(this);
         views[0] = hospitalInfo;
 
         // 初始化第二个页面
@@ -138,6 +140,14 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         doctorList = doctorSwipeRefreshLayout.findViewById(R.id.list);
         LinearLayoutManager doctorLayoutManager = new LinearLayoutManager(this);
         ArmsUtils.configRecyclerView(doctorList, doctorLayoutManager);
+        doctorListAdapter.setOnItemClickListener(new DefaultAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int viewType, Object data, int position) {
+                Intent intent = new Intent(HospitalInfoActivity.this,DoctorMainActivity.class);
+                intent.putExtra(DoctorMainActivity.KEY_FOR_DOCTOR_ID,((DoctorBean)data).getDoctorId());
+                ArmsUtils.startActivity(intent);
+            }
+        });
         doctorList.setAdapter(doctorListAdapter);
         views[2] = doctorSwipeRefreshLayout;
         Paginate.Callbacks doctorPaginateCallback = new Paginate.Callbacks() {
@@ -267,6 +277,10 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     }
 
+    public void hideDoctorLoading(){
+        ((SwipeRefreshLayout)views[2]).setRefreshing(false);
+    }
+
     public void startLoadGoodsMore(){
         isGoodsLoadingMore = true;
     }
@@ -322,7 +336,8 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     }
 
     public void updateHosptialInfo(HospitalInfoBean hospital){
-        ((TextView)views[0]).setText(hospital.getIntro());
+        WebView webView = (WebView) views[0];
+        webView.loadData(hospital.getIntro(),"text/html","UTF-8");
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()

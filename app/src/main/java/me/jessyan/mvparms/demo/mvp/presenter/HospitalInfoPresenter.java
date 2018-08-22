@@ -130,6 +130,11 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                         public void accept(LoginUserHospitalInfoResponse baseResponse) throws Exception {
                             if (baseResponse.isSuccess()) {
                                 mRootView.updateHosptialInfo(baseResponse.getHospital());
+                                imageList.clear();
+                                for(HospitalEnvBean env : baseResponse.getHospitalEnvList()){
+                                    imageList.add(env.getImage());
+                                }
+                                hospitalEnvImageAdapter.notifyDataSetChanged();
                             }else{
                                 mRootView.showMessage(baseResponse.getRetDesc());
                             }
@@ -163,7 +168,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (clear)
-                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                        mRootView.hideDoctorLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadDoctorMore();//隐藏上拉加载更多的进度条
                 })

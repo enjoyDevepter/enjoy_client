@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.doctor;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
 public class DoctorListRequest extends BaseRequest {
+    private int cmd = 650;
     private String hospitalId;
     private int pageIndex;
     private int pageSize;
@@ -10,10 +11,19 @@ public class DoctorListRequest extends BaseRequest {
     @Override
     public String toString() {
         return "DoctorListRequest{" +
-                "hospitalId='" + hospitalId + '\'' +
+                "cmd=" + cmd +
+                ", hospitalId='" + hospitalId + '\'' +
                 ", pageIndex=" + pageIndex +
                 ", pageSize=" + pageSize +
                 '}';
+    }
+
+    public int getCmd() {
+        return cmd;
+    }
+
+    public void setCmd(int cmd) {
+        this.cmd = cmd;
     }
 
     public String getHospitalId() {
