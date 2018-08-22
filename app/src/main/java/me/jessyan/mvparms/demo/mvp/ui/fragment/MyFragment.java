@@ -20,6 +20,7 @@ import me.jessyan.mvparms.demo.mvp.contract.MyContract;
 import me.jessyan.mvparms.demo.mvp.presenter.MyPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyMealActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.UserIntegralActivity;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -93,6 +94,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         storeV.setOnClickListener(this);
         settingV.setOnClickListener(this);
         msgV.setOnClickListener(this);
+        bonusTV.setOnClickListener(this);
     }
 
     /**
@@ -176,6 +178,11 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
             case R.id.coupon:
                 break;
             case R.id.store:
+                break;
+            case R.id.bonus:
+                Intent intent = new Intent(getContext(), UserIntegralActivity.class);
+                intent.putExtra(UserIntegralActivity.KEY_FOR_USER_ALL_SCORE,""+bonusTV.getText());
+                ArmsUtils.startActivity(intent);
                 break;
         }
     }
