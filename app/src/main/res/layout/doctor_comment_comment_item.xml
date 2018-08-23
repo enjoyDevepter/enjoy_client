@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
+        android:id="@+id/head"
+        android:layout_width="40dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginLeft="13dp"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_alignTop="@id/head"
+        android:layout_toRightOf="@id/head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="网友178251"
+        android:layout_marginLeft="11dp"
+        android:textColor="#ff000000"
+        android:textSize="12sp"
+        />
+
+    <TextView
+        android:layout_alignLeft="@id/name"
+        android:layout_marginTop="9dp"
+        android:layout_below="@id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="看起来还不错"
+        android:layout_marginBottom="10dp"
+        android:textColor="#ff666666"
+        android:textSize="12sp"
+        />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2017-01-12"
+        android:layout_alignBottom="@id/name"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentRight="true"
+        android:textColor="#ffb3b3b3"
+        android:textSize="10sp"
+        />
+</RelativeLayout>
