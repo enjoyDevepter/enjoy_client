@@ -159,6 +159,9 @@
         <activity
             android:name=".mvp.ui.activity.UserIntegralActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.DoctorAllCommentActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
