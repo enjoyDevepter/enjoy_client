@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:money="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="138dp"
     android:background="@drawable/list_item_bg"
@@ -29,33 +30,19 @@
         android:textColor="#FF000000"
         android:textSize="13sp" />
 
-    <LinearLayout
-        android:id="@+id/price_layout"
+    <com.github.cchao.MoneyView
+        android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/name"
         android:layout_centerVertical="true"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/price_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginRight="3dp"
-            android:text="￥"
-            android:textColor="#FFFF0000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_toRightOf="@id/price_tag"
-            android:textColor="#FFFF0000"
-            android:textSize="17sp" />
-    </LinearLayout>
+        money:cent_size="14sp"
+        money:money_color="#FFFF0000"
+        money:point_padding_left="1dp"
+        money:point_padding_right="5dp"
+        money:prefix_padding="2dp"
+        money:prefix_size="12sp"
+        money:yuan_size="17sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"

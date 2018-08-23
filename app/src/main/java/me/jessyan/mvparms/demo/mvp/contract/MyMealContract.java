@@ -7,10 +7,10 @@ import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 
 import io.reactivex.Observable;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentAndMealRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MyMealResponse;
 
 
 public interface MyMealContract {
@@ -31,7 +31,7 @@ public interface MyMealContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-        Observable<AppointmentResponse> getMyMealAppointment(AppointmentRequest request);
+        Observable<MyMealResponse> getMyMealAppointment(AppointmentAndMealRequest request);
 
         Observable<BaseResponse> modifyAppointmentTime(ModifyAppointmentRequest request);
     }

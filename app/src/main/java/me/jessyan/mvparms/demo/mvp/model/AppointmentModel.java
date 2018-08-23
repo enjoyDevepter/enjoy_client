@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.AppointmentContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.AppointmentService;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentAndMealRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 
 
@@ -36,7 +36,7 @@ public class AppointmentModel extends BaseModel implements AppointmentContract.M
     }
 
     @Override
-    public Observable<AppointmentResponse> getAppointment(AppointmentRequest request) {
+    public Observable<AppointmentResponse> getAppointment(AppointmentAndMealRequest request) {
         return mRepositoryManager.obtainRetrofitService(AppointmentService.class)
                 .getAppointment(request);
     }

@@ -4,11 +4,12 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
  * Created by guomin on 2018/7/25.
  */
 
-public class AppointmentRequest extends BaseRequest {
+public class AppointmentAndMealRequest extends BaseRequest {
     private String token;
     private int pageIndex = 1;
     private int pageSize = 10;
-    private int cmd;
+    private int cmd = 575;
+    private String orderStatus;
 
     public String getToken() {
         return token;
@@ -42,13 +43,22 @@ public class AppointmentRequest extends BaseRequest {
         this.cmd = cmd;
     }
 
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     @Override
     public String toString() {
-        return "AppointmentRequest{" +
+        return "AppointmentAndMealRequest{" +
                 "token='" + token + '\'' +
                 ", pageIndex=" + pageIndex +
                 ", pageSize=" + pageSize +
                 ", cmd=" + cmd +
+                ", orderStatus='" + orderStatus + '\'' +
                 '}';
     }
 }

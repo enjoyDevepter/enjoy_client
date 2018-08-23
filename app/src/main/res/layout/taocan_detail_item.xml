@@ -18,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="玻尿酸修复"
         android:textColor="#FF555555"
         android:textSize="11sp" />
 
@@ -32,7 +31,6 @@
             android:id="@+id/totalPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="￥228.00"
             android:textColor="#FF333333"
             android:textSize="12sp" />
 
@@ -41,7 +39,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="x1"
             android:textColor="#FFA0A0A0"
             android:textSize="12sp" />
     </LinearLayout>

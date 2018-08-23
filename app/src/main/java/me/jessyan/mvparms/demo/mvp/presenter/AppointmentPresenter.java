@@ -18,7 +18,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.AppointmentContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentAndMealRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -54,7 +54,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
 
 
     public void getAppointment(boolean pullToRefresh) {
-        AppointmentRequest request = new AppointmentRequest();
+        AppointmentAndMealRequest request = new AppointmentAndMealRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         int type = 0;

@@ -28,7 +28,7 @@ import me.jessyan.mvparms.demo.mvp.presenter.MealOrderConfirmPresenter;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPresenter> implements MealOrderConfirmContract.View, View.OnClickListener {
+public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPresenter> implements MealOrderConfirmContract.View, View.OnClickListener, View.OnFocusChangeListener {
 
     @BindView(R.id.back)
     View backV;
@@ -67,6 +67,7 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
     @BindView(R.id.image)
     ImageView imageIV;
 
+    private volatile boolean shouldSubmit;
 
     private MealOrderConfirmResponse response;
 
@@ -92,6 +93,7 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
         confirmV.setOnClickListener(this);
         noAddressV.setOnClickListener(this);
         addressInfoV.setOnClickListener(this);
+        moneyET.setOnFocusChangeListener(this);
     }
 
     @Override
@@ -153,7 +155,7 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
     public void updateUI(MealOrderConfirmResponse response) {
         this.response = response;
 
-        balanceTV.setText(String.valueOf(response.getBalance()));
+        balanceTV.setText(ArmsUtils.formatLong(response.getBalance()));
         priceTV.setText(ArmsUtils.formatLong(response.getPrice()));
         payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));
         moneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
@@ -184,13 +186,26 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
                 ArmsUtils.startActivity(AddressListActivity.class);
                 break;
             case R.id.confirm:
-                String m = moneyET.getText().toString();
-                if (!ArmsUtils.isEmpty(m)) {
-                    provideCache().put("money", Long.valueOf(m));
-                }
                 provideCache().put("remark", remarkET.getText().toString());
                 mPresenter.placeMealOrder();
                 break;
+        }
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            shouldSubmit = hasFocus;
+        } else {
+            if (shouldSubmit) {
+                String m = moneyET.getText().toString();
+                if (!ArmsUtils.isEmpty(m)) {
+                    moneyET.setText("");
+                    provideCache().put("money", Long.valueOf(m) * 100);
+                }
+                shouldSubmit = hasFocus;
+                mPresenter.getMealOrderConfirmInfo();
+            }
         }
     }
 }

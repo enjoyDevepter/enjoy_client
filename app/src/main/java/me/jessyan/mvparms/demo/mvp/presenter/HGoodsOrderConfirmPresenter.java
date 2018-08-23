@@ -14,6 +14,7 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,12 +23,14 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
+import me.jessyan.mvparms.demo.mvp.model.entity.PayEntry;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HGoodsOrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HGoodsPayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsOrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsPayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -136,20 +139,6 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
         request.setPayMoney(hGoodsOrderConfirmInfoResponse.getPayMoney());
         request.setRemark((String) mRootView.getCache().get("remark"));
         request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
-
-//        List<HGoodsPayOrderRequest.OrderGoods> goodsList = new ArrayList<>();
-//        for (HGoodsOrderConfirmInfoResponse.GoodsBean goods : hGoodsOrderConfirmInfoResponse.getGoodsList()) {
-//            HGoodsPayOrderRequest.OrderGoods payGoods = new HGoodsPayOrderRequest.OrderGoods();
-//            payGoods.setGoodsId(goods.getGoodsId());
-//            payGoods.setAdvanceDepositId(goods.getAdvanceDepositId());
-//            payGoods.setDeposit(goods.getDeposit());
-//            payGoods.setTailMoney(goods.getTailMoney());
-//            payGoods.setMerchId(goods.getMerchId());
-//            payGoods.setNums(goods.getNums());
-//            payGoods.setPromotionId(goods.getPromotionId());
-//            payGoods.setSalePrice(goods.getSalePrice());
-//            goodsList.add(payGoods);
-//        }
         request.setGoodsList(hGoodsOrderConfirmInfoResponse.getGoodsList());
         mRootView.showLoading();
         mModel.placeHGoodsOrder(request)
@@ -167,6 +156,16 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());
                                 intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
+                                ArmsUtils.startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(mRootView.getActivity(), PayResultActivity.class);
+                                intent.putExtra("orderId", response.getOrderId());
+                                intent.putExtra("payMoney", response.getPayMoney());
+                                intent.putExtra("orderTime", response.getOrderTime());
+                                List<PayEntry> payEntryList = response.getPayEntryList();
+                                if (payEntryList != null && payEntryList.size() > 0) {
+                                    intent.putExtra("payName", payEntryList.get(0).getName());
+                                }
                                 ArmsUtils.startActivity(intent);
                             }
                         } else {

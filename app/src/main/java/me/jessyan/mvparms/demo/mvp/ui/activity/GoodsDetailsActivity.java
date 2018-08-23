@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -71,7 +72,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     @BindView(R.id.name)
     TextView nameTV;
     @BindView(R.id.price)
-    TextView priceTV;
+    MoneyView priceTV;
     @BindView(R.id.saleCount)
     TextView saleCountTV;
     @BindView(R.id.promotion_name)
@@ -121,13 +122,13 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     @BindView(R.id.count_down_view)
     CountdownView countdownView;
     @BindView(R.id.salePrice)
-    TextView salePriceTV;
+    MoneyView salePriceTV;
     @BindView(R.id.salePrice_top)
     TextView salePriceTopTV;
     @BindView(R.id.newly)
     View newlyV;
     @BindView(R.id.secKillPrice)
-    TextView secKillPriceTV;
+    MoneyView secKillPriceTV;
     @Inject
     TagAdapter adapter;
     @Inject
@@ -273,8 +274,14 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         goodSpecTV.setText(response.getGoods().getGoodsSpecValue().getSpecValueName());
         detailWV.loadData(response.getGoods().getMobileDetail(), "text/html", null);
 
-        if (response.getPromotionList() == null || response.getPromotionList().size() <= 0) {
+        List<Promotion> promotions = response.getPromotionList();
+        if (promotions == null || promotions.size() <= 0) {
             promotionInfosV.setVisibility(View.GONE);
+        } else {
+            promotionInfosV.setVisibility(View.VISIBLE);
+            promotionContentV.setVisibility(View.VISIBLE);
+            promotionTV.setText(promotions.get(0).getTitle());
+            provideCache().put("promotionId", promotions.get(0).getPromotionId());
         }
 
         if (null == response.getGoods().getGoodsSpecValue()) {
@@ -310,21 +317,21 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             } else {
                 countdownView.start(count);
             }
-            priceTV.setText(String.valueOf(response.getGoods().getSecKillPrice()));
-            salePriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
+            priceTV.setMoneyText(String.valueOf(response.getGoods().getSecKillPrice()));
+            salePriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
             salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            secKillPriceTV.setText(String.valueOf(response.getGoods().getSecKillPrice()));
+            secKillPriceTV.setMoneyText(String.valueOf(response.getGoods().getSecKillPrice()));
             spcePriceTV.setText(String.valueOf(response.getGoods().getSecKillPrice()));
         } else if ("newpeople".equals(where)) {
             salePriceTopTV.setText("￥" + String.valueOf(response.getGoods().getSalePrice()));
             salePriceTopTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            salePriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
+            salePriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
             salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            priceTV.setText(String.valueOf(response.getGoods().getVipPrice()));
-            secKillPriceTV.setText(String.valueOf(response.getGoods().getVipPrice()));
+            priceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
+            secKillPriceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
             spcePriceTV.setText(String.valueOf(response.getGoods().getVipPrice()));
         } else {
-            priceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
+            priceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
             spcePriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
         }
 

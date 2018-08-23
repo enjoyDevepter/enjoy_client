@@ -285,6 +285,16 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             provideCache().put("specValueId", goods.getGoodsSpecValue().getSpecValueId());
         }
 
+        List<Promotion> promotions = response.getPromotionList();
+        if (promotions == null || promotions.size() <= 0) {
+            promotionV.setVisibility(View.GONE);
+        } else {
+            promotionV.setVisibility(View.VISIBLE);
+            promotionInfoV.setVisibility(View.VISIBLE);
+            promotionNameTV.setText(promotions.get(0).getTitle());
+            provideCache().put("promotionId", promotions.get(0).getPromotionId());
+        }
+
         String where = getIntent().getStringExtra("where");
         if ("timelimitdetail".equals(where)) {
             long count = goods.getEndDate() - goods.getSysDate();

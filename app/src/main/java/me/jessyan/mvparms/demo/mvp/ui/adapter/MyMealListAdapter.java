@@ -23,7 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
 import me.jessyan.mvparms.demo.mvp.ui.holder.MyMealListHolder;
 
 /**
@@ -35,15 +35,15 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.MyMealListHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class MyMealListAdapter extends DefaultAdapter<Appointment> {
+public class MyMealListAdapter extends DefaultAdapter<Order> {
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public MyMealListAdapter(List<Appointment> appointmentList) {
+    public MyMealListAdapter(List<Order> appointmentList) {
         super(appointmentList);
     }
 
     @Override
-    public BaseHolder<Appointment> getHolder(View v, int viewType) {
+    public BaseHolder<Order> getHolder(View v, int viewType) {
         return new MyMealListHolder(v, new OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ViewName viewname, int position) {

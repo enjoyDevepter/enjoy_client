@@ -27,9 +27,11 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
+import java.text.SimpleDateFormat;
+
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
 
 /**
@@ -41,7 +43,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class MyMealListHolder extends BaseHolder<Appointment> {
+public class MyMealListHolder extends BaseHolder<Order> {
     @BindView(R.id.time)
     TextView timeTV;
     @BindView(R.id.status)
@@ -59,6 +61,7 @@ public class MyMealListHolder extends BaseHolder<Appointment> {
     @BindView(R.id.price)
     TextView priceTV;
 
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 
     private MyMealListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
     private AppComponent mAppComponent;
@@ -90,37 +93,29 @@ public class MyMealListHolder extends BaseHolder<Appointment> {
     }
 
     @Override
-    public void setData(Appointment appointment, int position) {
+    public void setData(Order appointment, int position) {
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
+        Order.MealGoods mealGoods = appointment.getSetMealGoodsList().get(0);
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .url(appointment.getGoods().getImage())
+                        .url(mealGoods.getImage())
                         .imageView(imageIV)
                         .build());
-        timeTV.setText(appointment.getCreateDate());
-        statusTV.setText(appointment.getStatusDesc());
-        nameTV.setText(appointment.getGoods().getName());
-        priceTV.setText(String.valueOf(appointment.getGoods().getSalePrice()));
-        countTV.setText(String.valueOf(appointment.getSurplusNum()));
+        timeTV.setText(sdf.format(appointment.getOrderTime()));
+        statusTV.setText(appointment.getOrderTypeDesc());
+        nameTV.setText(mealGoods.getName());
+        priceTV.setText(String.valueOf(mealGoods.getSalePrice()));
+        countTV.setText(String.valueOf(mealGoods.getNums()));
 
-        if ("1".equals(appointment.getStatus())) {
+        if ("1".equals(appointment.getOrderStatus())) {
             changeV.setVisibility(View.GONE);
-            detailV.setText("预约");
-        } else if ("2".equals(appointment.getStatus())) {
-            detailV.setText("取消");
-            changeV.setText("改约");
-            changeV.setVisibility(View.VISIBLE);
-            detailV.setVisibility(View.VISIBLE);
-        } else if ("3".equals(appointment.getStatus())) {
-            changeV.setVisibility(View.GONE);
-            detailV.setText("取消");
-            detailV.setVisibility(View.VISIBLE);
-        } else if ("4".equals(appointment.getStatus())) {
+            detailV.setText("支付");
+        } else if ("3".equals(appointment.getOrderStatus())) {
             changeV.setVisibility(View.GONE);
             detailV.setText("详情");
             detailV.setVisibility(View.VISIBLE);
-        } else if ("5".equals(appointment.getStatus())) {
+        } else if ("5".equals(appointment.getOrderStatus())) {
             changeV.setVisibility(View.GONE);
             detailV.setText("详情");
             detailV.setVisibility(View.VISIBLE);

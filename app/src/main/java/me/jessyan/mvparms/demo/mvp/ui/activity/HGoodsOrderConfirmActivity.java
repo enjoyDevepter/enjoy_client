@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
@@ -33,7 +34,7 @@ import me.jessyan.mvparms.demo.mvp.presenter.HGoodsOrderConfirmPresenter;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmPresenter> implements HGoodsOrderConfirmContract.View, View.OnClickListener {
+public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmPresenter> implements HGoodsOrderConfirmContract.View, View.OnClickListener, View.OnFocusChangeListener {
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
@@ -43,7 +44,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
     @BindView(R.id.goods_name)
     TextView goodsNameTV;
     @BindView(R.id.deposit)
-    TextView depositTV;
+    MoneyView depositTV;
     @BindView(R.id.nums)
     TextView numsTV;
     @BindView(R.id.tailMoney)
@@ -108,6 +109,8 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
     @BindView(R.id.tailMoney_layout)
     View tailMoneyLayoutV;
 
+    private volatile boolean shouldSubmit;
+
     private HGoodsOrderConfirmInfoResponse response;
 
     private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.HOP;
@@ -139,6 +142,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         confirmV.setOnClickListener(this);
         hospitalV.setOnClickListener(this);
         hospitalTV.setOnClickListener(this);
+        moneyET.setOnFocusChangeListener(this);
     }
 
     @Override
@@ -210,7 +214,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         tailMoneyTV.setText(String.valueOf(goods.getTailMoney()));
         goodsSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
 
-        balanceTV.setText(String.valueOf(response.getBalance()));
+        balanceTV.setText(ArmsUtils.formatLong(response.getBalance()));
         tailMoneyButtomTV.setText(String.valueOf(goods.getTailMoney()));
         moneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
         couponButtomTV.setText(ArmsUtils.formatLong(response.getCoupon()));
@@ -228,7 +232,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         boolean payAll = getIntent().getBooleanExtra("payAll", false);
         if (payAll) {
             tailMoneyLayoutV.setVisibility(View.INVISIBLE);
-            depositTV.setText(String.valueOf(goods.getSalePrice()));
+            depositTV.setMoneyText(String.valueOf(goods.getSalePrice()));
             depositTVTV.setText("总金额");
             depositTagTV.setText("总金额");
             tailMoney_layout_xxV.setVisibility(View.GONE);
@@ -243,7 +247,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
             tailMoney_layout_xxV.setVisibility(View.VISIBLE);
             tailMoneyLayoutV.setVisibility(View.VISIBLE);
             depositButtomTV.setText(String.valueOf(goods.getDeposit()));
-            depositTV.setText(String.valueOf(goods.getDeposit()));
+            depositTV.setMoneyText(String.valueOf(goods.getDeposit()));
         }
     }
 
@@ -285,13 +289,24 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                 ArmsUtils.startActivity(intent);
                 break;
             case R.id.confirm:
-                String m = moneyET.getText().toString();
-                if (!ArmsUtils.isEmpty(m)) {
-                    provideCache().put("money", Long.valueOf(m));
-                }
                 provideCache().put("remark", remarkET.getText().toString());
                 mPresenter.placeHGoodsOrder();
                 break;
+        }
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            shouldSubmit = hasFocus;
+        } else {
+            if (shouldSubmit) {
+                String m = moneyET.getText().toString();
+                moneyET.setText("");
+                provideCache().put("money", Long.valueOf(m) * 100);
+                shouldSubmit = hasFocus;
+                mPresenter.getOrderConfirmInfo();
+            }
         }
     }
 
@@ -304,6 +319,5 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
     public Cache getCache() {
         return provideCache();
     }
-
 
 }

@@ -12,7 +12,7 @@ import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.MyMealContract;
 import me.jessyan.mvparms.demo.mvp.model.MyMealModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
 
 
@@ -49,13 +49,13 @@ public class MyMealModule {
 
     @ActivityScope
     @Provides
-    List<Appointment> provideUserList() {
+    List<Order> provideUserList() {
         return new ArrayList<>();
     }
 
     @ActivityScope
     @Provides
-    MyMealListAdapter provideUserAdapter(List<Appointment> list) {
+    MyMealListAdapter provideUserAdapter(List<Order> list) {
         return new MyMealListAdapter(list);
     }
 }

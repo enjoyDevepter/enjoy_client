@@ -24,7 +24,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerMyMealComponent;
 import me.jessyan.mvparms.demo.di.module.MyMealModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyMealContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
 import me.jessyan.mvparms.demo.mvp.presenter.MyMealPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -42,11 +42,10 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
     TabLayout tabLayout;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.no_data)
+    @BindView(R.id.no_date)
     View noDataV;
     @BindView(R.id.meals)
     RecyclerView mRecyclerView;
-
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
@@ -76,11 +75,10 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
         titleTV.setText("我的套餐");
         backV.setOnClickListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
-        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("可预约"));
-        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("预约中"));
-        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
-        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已服务"));
-        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已转赠"));
+        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
+        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("待付款"));
+        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("待预约"));
+        tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已完成"));
         tabLayout.addOnTabSelectedListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -203,19 +201,19 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
 
     @Override
     public void onChildItemClick(View v, MyMealListAdapter.ViewName viewname, int position) {
-        Appointment appointment = mAdapter.getInfos().get(position);
+        Order appointment = mAdapter.getInfos().get(position);
         switch (viewname) {
             case MAKE_CANCEL_DETAIL: // 取消，预约，详情
-                if ("1".equals(appointment.getStatus())) {
+                if ("1".equals(appointment.getOrderStatus())) {
                     // 预约
                     Intent makeIntent = new Intent(this, ChoiceTimeActivity.class);
-                    makeIntent.putExtra("projectId", appointment.getProjectId());
+                    makeIntent.putExtra("projectId", appointment.getOrderId());
                     makeIntent.putExtra("type", "add_appointment_time");
                     ArmsUtils.startActivity(makeIntent);
-                } else if ("2".equals(appointment.getStatus()) || ("3".equals(appointment.getStatus()))) {
+                } else if ("2".equals(appointment.getOrderStatus()) || ("3".equals(appointment.getOrderStatus()))) {
                     // 取消
                     mPresenter.modifyAppointmentTime();
-                } else if ("4".equals(appointment.getStatus()) || ("5".equals(appointment.getStatus()))) {
+                } else if ("4".equals(appointment.getOrderStatus()) || ("5".equals(appointment.getOrderStatus()))) {
                     // 详情
                 }
                 break;
@@ -223,7 +221,7 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
                 break;
             case CHANGE: //改约
                 Intent makeIntent = new Intent(this, ChoiceTimeActivity.class);
-                makeIntent.putExtra("reservationId", appointment.getReservationId());
+                makeIntent.putExtra("reservationId", appointment.getOrderId());
                 makeIntent.putExtra("type", "modify_appointment_time");
                 ArmsUtils.startActivity(makeIntent);
                 break;

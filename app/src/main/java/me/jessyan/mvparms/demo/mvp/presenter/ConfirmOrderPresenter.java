@@ -25,12 +25,14 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.PayEntry;
 import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -155,9 +157,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
         request.setCouponId((String) mRootView.getCache().get("couponId"));
         request.setCoupon(orderConfirmInfoResponse.getCoupon());
         request.setDeductionMoney(orderConfirmInfoResponse.getDeductionMoney());
-        if (mRootView.getCache().get("money") != null) {
-            request.setMoney((Long) mRootView.getCache().get("money"));
-        }
+        request.setMoney(orderConfirmInfoResponse.getMoney());
         request.setFreight(orderConfirmInfoResponse.getFreight());
         request.setPrice(orderConfirmInfoResponse.getPrice());
         request.setTotalPrice(orderConfirmInfoResponse.getTotalPrice());
@@ -178,6 +178,16 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());
                                 intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
+                                ArmsUtils.startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(mRootView.getActivity(), PayResultActivity.class);
+                                intent.putExtra("orderId", response.getOrderId());
+                                intent.putExtra("payMoney", response.getPayMoney());
+                                intent.putExtra("orderTime", response.getOrderTime());
+                                List<PayEntry> payEntryList = response.getPayEntryList();
+                                if (payEntryList != null && payEntryList.size() > 0) {
+                                    intent.putExtra("payName", payEntryList.get(0).getName());
+                                }
                                 ArmsUtils.startActivity(intent);
                             }
                         } else {

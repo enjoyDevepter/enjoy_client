@@ -116,8 +116,9 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                         if (response.isSuccess()) {
                             goodsDetailsResponse = response;
                             promotionList.clear();
-                            if (null != response.getPromotionList()) {
+                            if (null != response.getPromotionList() && response.getPromotionList().size() > 0) {
                                 promotionList.addAll(response.getPromotionList());
+                                promotionList.get(0).setCheck(true);
                             }
                             goodsSpecValues.clear();
                             goodsSpecValues.addAll(response.getGoodsSpecValueList());

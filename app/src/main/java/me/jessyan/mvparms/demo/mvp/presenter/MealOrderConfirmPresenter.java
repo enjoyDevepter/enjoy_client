@@ -61,13 +61,16 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
         getMealOrderConfirmInfo();
     }
 
-    private void getMealOrderConfirmInfo() {
+    public void getMealOrderConfirmInfo() {
 
         MealOrderConfrimRequest request = new MealOrderConfrimRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
 
         MealOrderConfrimRequest.MealGoods mealGoods = new MealOrderConfrimRequest.MealGoods();
+        if (mRootView.getCache().get("money") != null) {
+            request.setMoney((Long) mRootView.getCache().get("money"));
+        }
         mealGoods.setNums(mRootView.getActivity().getIntent().getIntExtra("nums", 1));
         mealGoods.setTotalPrice(mRootView.getActivity().getIntent().getDoubleExtra("totalPrice", 0));
         mealGoods.setSetMealId(mRootView.getActivity().getIntent().getStringExtra("setMealId"));
@@ -102,10 +105,7 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
         }
         Address address = (Address) cache.get("memberAddressInfo");
         request.setMemberAddressId(address.getAddressId());
-
-        if (mRootView.getCache().get("money") != null) {
-            request.setMoney((Long) mRootView.getCache().get("money"));
-        }
+        request.setMoney(orderConfirmInfoResponse.getMoney());
         request.setPrice(orderConfirmInfoResponse.getPrice());
         request.setTotalPrice(orderConfirmInfoResponse.getTotalPrice());
         request.setPayMoney(orderConfirmInfoResponse.getPayMoney());

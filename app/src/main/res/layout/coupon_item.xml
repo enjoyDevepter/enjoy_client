@@ -36,7 +36,6 @@
                     android:id="@+id/money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="228.00"
                     android:textColor="#FFFFFEFE"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -47,7 +46,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
-                android:text="满减券"
                 android:textColor="#FFFFFEFE"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -78,7 +76,6 @@
             android:layout_marginRight="15dp"
             android:layout_marginTop="5dp"
             android:lines="2"
-            android:text="在各大商场或是快餐店都可以通过手机优惠券app获得优惠"
             android:textColor="#FF333333"
             android:textSize="11sp" />
 
@@ -96,7 +93,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:text="有效期至2018-07-29"
                 android:textColor="#FF737373"
                 android:textSize="11sp" />
 
@@ -106,7 +102,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:singleLine="true"
-                android:text="未使用"
                 android:textColor="#FF666666"
                 android:textSize="11sp" />
 

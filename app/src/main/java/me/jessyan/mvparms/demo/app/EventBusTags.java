@@ -37,4 +37,9 @@ public interface EventBusTags {
      * 登录状态改变
      */
     String LOGIN_STATUS_CHANGE_EVENT = "login_status_change_Event";
+
+    /**
+     * genh
+     */
+    String CHANGE_COUPON = "change_coupon";
 }

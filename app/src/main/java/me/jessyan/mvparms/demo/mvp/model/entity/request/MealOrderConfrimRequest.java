@@ -6,7 +6,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
 
 public class MealOrderConfrimRequest extends BaseRequest {
     private int cmd = 513;
-    private int money;
+    private long money;
     private String token;
     private MealGoods setMealGoods;
 
@@ -26,11 +26,11 @@ public class MealOrderConfrimRequest extends BaseRequest {
         this.token = token;
     }
 
-    public int getMoney() {
+    public long getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(long money) {
         this.money = money;
     }
 

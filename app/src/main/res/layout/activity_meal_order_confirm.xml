@@ -42,7 +42,6 @@
                     android:layout_marginLeft="12dp"
                     android:layout_toRightOf="@id/image"
                     android:lines="2"
-                    android:text="湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
                     android:textColor="#FF000000"
                     android:textSize="13sp" />
 
@@ -77,7 +76,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="x1"
                         android:textColor="#FFABABAB"
                         android:textSize="12sp" />
 

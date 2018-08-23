@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -48,7 +49,7 @@ public class GoodsListItemHolder extends BaseHolder<Goods> {
     @BindView(R.id.name)
     TextView nameTV;
     @BindView(R.id.price)
-    TextView priceTV;
+    MoneyView priceTV;
     @BindView(R.id.sale)
     TextView saleTV;
     private AppComponent mAppComponent;
@@ -68,7 +69,7 @@ public class GoodsListItemHolder extends BaseHolder<Goods> {
         Observable.just(goods.getSales())
                 .subscribe(s -> saleTV.setText(String.valueOf(s)));
         Observable.just(goods.getSalePrice())
-                .subscribe(s -> priceTV.setText(String.valueOf(s)));
+                .subscribe(s -> priceTV.setMoneyText(String.valueOf(s)));
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),

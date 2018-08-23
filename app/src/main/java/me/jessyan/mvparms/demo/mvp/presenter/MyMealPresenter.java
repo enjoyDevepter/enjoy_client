@@ -19,11 +19,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MyMealContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentAndMealRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MyMealResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -41,7 +41,7 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
     @Inject
     ImageLoader mImageLoader;
     @Inject
-    List<Appointment> appointments;
+    List<Order> appointments;
     @Inject
     MyMealListAdapter mAdapter;
 
@@ -61,7 +61,7 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
 
 
     public void getMyMealAppointment(boolean pullToRefresh) {
-        AppointmentRequest request = new AppointmentRequest();
+        AppointmentAndMealRequest request = new AppointmentAndMealRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         int type = 0;
@@ -70,19 +70,15 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
         }
         switch (type) {
             case 0:
-                request.setCmd(2102);
                 break;
             case 1:
-                request.setCmd(2100);
+                request.setOrderStatus("1");
                 break;
             case 2:
-                request.setCmd(2101);
+                request.setOrderStatus("3");
                 break;
             case 3:
-                request.setCmd(2104);
-                break;
-            case 4:
-                request.setCmd(2103);
+                request.setOrderStatus("5");
                 break;
         }
 
@@ -104,16 +100,16 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<AppointmentResponse>() {
+                }).subscribe(new Consumer<MyMealResponse>() {
             @Override
-            public void accept(AppointmentResponse response) throws Exception {
+            public void accept(MyMealResponse response) throws Exception {
                 if (response.isSuccess()) {
-                    mRootView.showConent(response.getOrderProjectDetailList().size() > 0);
+                    mRootView.showConent(response.getOrderList().size() > 0);
                     if (pullToRefresh) {
                         appointments.clear();
                     }
                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    appointments.addAll(response.getOrderProjectDetailList());
+                    appointments.addAll(response.getOrderList());
                     preEndIndex = appointments.size();//更新之前列表总长度,用于确定加载更多的起始位置
                     lastPageIndex = appointments.size() / 10;
                     if (pullToRefresh) {
