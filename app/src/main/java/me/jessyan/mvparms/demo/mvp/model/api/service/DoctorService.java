@@ -3,6 +3,8 @@ package me.jessyan.mvparms.demo.mvp.model.api.service;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorAllCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorAllCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentRequest;
@@ -17,6 +19,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
@@ -73,4 +77,12 @@ public interface DoctorService {
         // 登陆用户请求热门评论
     Observable<LoginUserDoctorHotCommentResponse> loginUserRequestHotComment(@Body LoginUserDoctorHotCommentRequest request);
 
+
+    @POST("gateway")
+        // 未登陆用户请求全部评论
+    Observable<DoctorAllCommentResponse> requestAllComment(@Body DoctorAllCommentRequest request);
+
+    @POST("gateway")
+        // 登陆用户请求全部评论
+    Observable<LoginUserDoctorAllCommentResponse> loginUserRequestAllComment(@Body LoginUserDoctorAllCommentRequest request);
 }

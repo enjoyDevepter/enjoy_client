@@ -101,6 +101,9 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     @BindView(R.id.comment_star)
     RatingBar comment_star;
 
+    @BindView(R.id.all_comment)
+    TextView all_comment;
+
     @Inject
     ImageLoader mImageLoader;
 
@@ -122,6 +125,14 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         doctorId = getIntent().getStringExtra(KEY_FOR_DOCTOR_ID);
+        all_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DoctorMainActivity.this,DoctorAllCommentActivity.class);
+                intent.putExtra(DoctorAllCommentActivity.KEY_FOR_DOCTOR_ID,doctorId);
+                ArmsUtils.startActivity(intent);
+            }
+        });
         title.setText("医生主页");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
