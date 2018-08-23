@@ -39,6 +39,9 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
     @BindView(R.id.qiandao_btn)
     View qiandao_btn;
 
+    @BindView(R.id.back)
+    View back;
+
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
@@ -107,6 +110,13 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
             }
         });
         initPaginate();
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                killMyself();
+            }
+        });
     }
 
     @Override
