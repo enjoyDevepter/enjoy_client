@@ -9,10 +9,14 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorRequest;
@@ -26,6 +30,9 @@ public interface DoctorMainContract {
         void updateDoctorInfo(DoctorBean doctorBean);
         void updateLikeImage(boolean isLike);
         void commentOk();
+        void endLoadMore();
+        void setEnd(boolean isEnd);
+        void startLoadMore();
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -35,5 +42,7 @@ public interface DoctorMainContract {
         Observable<LikeDoctorResponse> likeDoctor(LikeDoctorRequest request);
         Observable<UnLikeDoctorResponse> unlikeDoctor(UnLikeDoctorRequest request);
         Observable<CommentDoctorResponse> commentDoctor(CommentDoctorRequest request);
+        Observable<LoginUserDoctorHotCommentResponse> loginUserRequestDoctorHotComment(LoginUserDoctorHotCommentRequest request);
+        Observable<DoctorHotCommentResponse> requestDoctorHotComment(DoctorHotCommentRequest request);
     }
 }

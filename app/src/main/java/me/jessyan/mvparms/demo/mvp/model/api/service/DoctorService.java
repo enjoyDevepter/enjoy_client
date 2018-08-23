@@ -17,6 +17,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorRequest;
@@ -63,7 +65,12 @@ public interface DoctorService {
     Observable<CommentDoctorResponse> commentDoctor(@Body CommentDoctorRequest request);
 
     @POST("gateway")
-    // 请求热门评论
+    // 未登陆用户请求热门评论
     Observable<DoctorHotCommentResponse> requestHotComment(@Body DoctorHotCommentRequest request);
+
+
+    @POST("gateway")
+        // 登陆用户请求热门评论
+    Observable<LoginUserDoctorHotCommentResponse> loginUserRequestHotComment(@Body LoginUserDoctorHotCommentRequest request);
 
 }

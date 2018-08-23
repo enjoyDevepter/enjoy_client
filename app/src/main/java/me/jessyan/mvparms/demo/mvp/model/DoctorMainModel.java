@@ -15,10 +15,14 @@ import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.DoctorService;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorRequest;
@@ -72,5 +76,17 @@ public class DoctorMainModel extends BaseModel implements DoctorMainContract.Mod
     public Observable<UnLikeDoctorResponse> unlikeDoctor(UnLikeDoctorRequest request) {
         return mRepositoryManager.obtainRetrofitService(DoctorService.class)
                 .unlikeDoctor(request);
+    }
+
+    @Override
+    public Observable<LoginUserDoctorHotCommentResponse> loginUserRequestDoctorHotComment(LoginUserDoctorHotCommentRequest request) {
+        return mRepositoryManager.obtainRetrofitService(DoctorService.class)
+                .loginUserRequestHotComment(request);
+    }
+
+    @Override
+    public Observable<DoctorHotCommentResponse> requestDoctorHotComment(DoctorHotCommentRequest request) {
+        return mRepositoryManager.obtainRetrofitService(DoctorService.class)
+                .requestHotComment(request);
     }
 }

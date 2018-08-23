@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
 import com.jess.arms.integration.AppManager;
@@ -11,16 +12,24 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
+
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorCommentBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorRequest;
@@ -68,6 +77,7 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void initDoctorInfo(){
+        requestDoctorHotComment();
         String doctorId = mRootView.getActivity().getIntent().getStringExtra(DoctorMainActivity.KEY_FOR_DOCTOR_ID);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
@@ -182,5 +192,104 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                 });
     }
 
+    @Inject
+    RecyclerView.Adapter mAdapter;
+    @Inject
+    List<DoctorCommentBean> orderBeanList;
 
+    private int nextDoctorHotCommentPageIndex = 1;
+    public void requestDoctorHotComment(){
+        requestDoctorHotCommentInner(1,true);
+    }
+
+    public void nextDoctorHotComment(){
+        requestDoctorHotCommentInner(nextDoctorHotCommentPageIndex,false);
+    }
+
+    private void requestDoctorHotCommentInner(int pageIndex,boolean clear){
+        String doctorId = mRootView.getActivity().getIntent().getStringExtra(DoctorMainActivity.KEY_FOR_DOCTOR_ID);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+
+        if(TextUtils.isEmpty(token)){
+            DoctorHotCommentRequest request = new DoctorHotCommentRequest();
+            request.setPageIndex(pageIndex);
+            request.setDoctorId(doctorId);
+
+            mModel.requestDoctorHotComment(request)
+                    .subscribeOn(Schedulers.io())
+                    .doOnSubscribe(disposable -> {
+                        if (clear) {
+//                        mRootView.showLoading();//显示下拉刷新的进度条
+                        }else
+                            mRootView.startLoadMore();//显示上拉加载更多的进度条
+                    }).subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                        if (clear)
+                            mRootView.hideLoading();//隐藏下拉刷新的进度条
+                        else
+                            mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                    })
+                    .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                    .subscribe(new Consumer<DoctorHotCommentResponse>() {
+                        @Override
+                        public void accept(DoctorHotCommentResponse response) throws Exception {
+                            if (response.isSuccess()) {
+                                if(clear){
+                                    orderBeanList.clear();
+                                }
+                                nextDoctorHotCommentPageIndex = response.getNextPageIndex();
+                                mRootView.setEnd(nextDoctorHotCommentPageIndex == -1);
+                                List<DoctorCommentBean> orderList = response.getDoctorCommentList();
+                                orderBeanList.addAll(orderList);
+                                mAdapter.notifyDataSetChanged();
+                                mRootView.hideLoading();
+                            } else {
+                                mRootView.showMessage(response.getRetDesc());
+                            }
+                        }
+                    });
+        }else{
+            LoginUserDoctorHotCommentRequest request = new LoginUserDoctorHotCommentRequest();
+            request.setPageIndex(pageIndex);
+            request.setDoctorId(doctorId);
+            request.setToken(token);
+
+            mModel.loginUserRequestDoctorHotComment(request)
+                    .subscribeOn(Schedulers.io())
+                    .doOnSubscribe(disposable -> {
+                        if (clear) {
+//                        mRootView.showLoading();//显示下拉刷新的进度条
+                        }else
+                            mRootView.startLoadMore();//显示上拉加载更多的进度条
+                    }).subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                        if (clear)
+                            mRootView.hideLoading();//隐藏下拉刷新的进度条
+                        else
+                            mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                    })
+                    .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                    .subscribe(new Consumer<LoginUserDoctorHotCommentResponse>() {
+                        @Override
+                        public void accept(LoginUserDoctorHotCommentResponse response) throws Exception {
+                            if (response.isSuccess()) {
+                                if(clear){
+                                    orderBeanList.clear();
+                                }
+                                nextDoctorHotCommentPageIndex = response.getNextPageIndex();
+                                mRootView.setEnd(nextDoctorHotCommentPageIndex == -1);
+                                List<DoctorCommentBean> orderList = response.getDoctorCommentList();
+                                orderBeanList.addAll(orderList);
+                                mAdapter.notifyDataSetChanged();
+                                mRootView.hideLoading();
+                            } else {
+                                mRootView.showMessage(response.getRetDesc());
+                            }
+                        }
+                    });
+        }
+    }
 }

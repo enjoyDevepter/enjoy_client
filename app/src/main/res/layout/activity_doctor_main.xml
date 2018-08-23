@@ -304,17 +304,25 @@
                 android:textColor="#666666"
                 android:textSize="12sp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/comment_list"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:layout_below="@id/title2"
+                android:id="@+id/swipeRefreshLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@id/title2" />
+                android:layout_height="match_parent"
+                >
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/contentList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+            </android.support.v4.widget.SwipeRefreshLayout>
 
             <View
                 android:id="@+id/divide3"
                 style="@style/divider_3"
-                android:layout_below="@id/comment_list" />
+                android:layout_below="@id/swipeRefreshLayout" />
 
             <TextView
                 android:id="@+id/rating_title"
@@ -361,6 +369,8 @@
 
             <TextView
                 android:id="@+id/project"
+                android:drawableRight="@mipmap/drop_down_icon"
+                android:drawablePadding="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/project_title"

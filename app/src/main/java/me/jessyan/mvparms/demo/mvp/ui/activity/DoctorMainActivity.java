@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -24,6 +25,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -92,9 +94,6 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     @BindView(R.id.doctor_honor)
     View doctor_honor;
 
-    @BindView(R.id.comment_list)
-    RecyclerView comment_list;
-
     @BindView(R.id.comment_commit_btn)
     View comment_commit_btn;
     @BindView(R.id.comment_edit)
@@ -156,6 +155,18 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
                 ArmsUtils.startActivity(intent);
             }
         });
+
+        ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+        contentList.setAdapter(mAdapter);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.requestDoctorHotComment();
+            }
+        });
+        initPaginate();
+
     }
 
     @Override
@@ -163,10 +174,6 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
 
     }
 
-    @Override
-    public void hideLoading() {
-
-    }
 
     private DoctorSkillAdapter doctorSkillAdapter;
 
@@ -265,11 +272,6 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         finish();
     }
 
-    public Activity getActivity(){
-        return this;
-    }
-
-
     private PopupWindow popupWindow;
 
     private void showType() {
@@ -305,4 +307,76 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         comment_edit.setText("");
         ArmsUtils.makeText(this,"提交评论成功");
     }
+
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+    @Inject
+    RecyclerView.Adapter mAdapter;
+    @BindView(R.id.contentList)
+    RecyclerView contentList;
+
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean isEnd;
+
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.nextDoctorHotComment();
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return isEnd;
+                }
+            };
+
+            mPaginate = Paginate.with(contentList, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
+    }
+
+    @Override
+    public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    public Activity getActivity(){
+        return this;
+    }
+
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+    @Override
+    public void setEnd(boolean isEnd) {
+        this.isEnd = isEnd;
+    }
+    @Override
+    protected void onDestroy() {
+        DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
+        this.mPaginate = null;
+    }
+
 }
