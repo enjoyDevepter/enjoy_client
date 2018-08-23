@@ -5,6 +5,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorRequest;
@@ -59,4 +61,9 @@ public interface DoctorService {
     @POST("gateway")
     // 评论医生
     Observable<CommentDoctorResponse> commentDoctor(@Body CommentDoctorRequest request);
+
+    @POST("gateway")
+    // 请求热门评论
+    Observable<DoctorHotCommentResponse> requestHotComment(@Body DoctorHotCommentRequest request);
+
 }

@@ -352,6 +352,7 @@
 
             <include
                 layout="@layout/star_layout"
+                android:id="@+id/comment_star"
                 android:layout_width="wrap_content"
                 android:layout_height="14dp"
                 android:layout_alignBottom="@id/rating_title"
@@ -359,6 +360,7 @@
                 android:isIndicator="true" />
 
             <TextView
+                android:id="@+id/project"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/project_title"

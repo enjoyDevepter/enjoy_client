@@ -16,6 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
@@ -148,6 +149,32 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                     public void accept(UnLikeDoctorResponse baseResponse) throws Exception {
                         if (baseResponse.isSuccess()) {
                             mRootView.updateLikeImage(false);
+                        }else{
+                            mRootView.showMessage(baseResponse.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    public void commentDoctor(String doctorId,String content,int star,String projectId){
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+
+        CommentDoctorRequest commentDoctorRequest = new CommentDoctorRequest();
+        commentDoctorRequest.setContent(content);
+        commentDoctorRequest.setDoctorId(doctorId);
+        commentDoctorRequest.setProjectId(projectId);
+        commentDoctorRequest.setStar(star);
+        commentDoctorRequest.setToken(token);
+
+        mModel.commentDoctor(commentDoctorRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CommentDoctorResponse>() {
+                    @Override
+                    public void accept(CommentDoctorResponse baseResponse) throws Exception {
+                        if (baseResponse.isSuccess()) {
+                            mRootView.commentOk();
                         }else{
                             mRootView.showMessage(baseResponse.getRetDesc());
                         }
