@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -30,6 +29,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorCommentInfoPresenter;
 
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -107,7 +107,7 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
                         .build());
         name.setText(member.getNickName());
         time.setText(simpleDateFormat.format(new Date(data.getCreateDate())));
-        rating.setRating(data.getStar());
+        rating.setStar(data.getStar());
         content.setText(data.getContent());
         view_count.setText(""+data.getViews());
         comment_count.setText(""+data.getComment());

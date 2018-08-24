@@ -3,7 +3,6 @@ package me.jessyan.mvparms.demo.mvp.ui.holder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
@@ -26,6 +25,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorSkill;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.HospitalBean;
+import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
 
 public class DoctorListHolder extends BaseHolder<DoctorBean> {
 
@@ -63,9 +63,9 @@ public class DoctorListHolder extends BaseHolder<DoctorBean> {
                 .subscribe(s -> hosptial.setText(String.valueOf(s)));
         }
         Observable.just(data.getStar())
-                .subscribe(s -> rating.setRating(s));
+                .subscribe(s -> rating.setStar(s));
         Observable.just(data.getStar())
-                .subscribe(s -> rating.setRating(s));
+                .subscribe(s -> rating.setStar(s));
 
         List<DoctorSkill> doctorSkillList = data.getDoctorSkillList();
         List<String> skillList = new ArrayList<>(doctorSkillList.size());

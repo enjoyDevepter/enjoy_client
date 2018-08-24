@@ -13,10 +13,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -47,6 +48,7 @@ import me.jessyan.mvparms.demo.mvp.presenter.DoctorMainPresenter;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CodeAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorSkillAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 
 
@@ -185,6 +187,18 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
 
     }
 
+    public void updateRecyclerViewHeight(){
+        RecyclerView.Adapter adapter = contentList.getAdapter();
+        int height = 0;
+        if(adapter != null && adapter.getItemCount() != 0){
+            height = adapter.getItemCount() > 5 ? 5 : adapter.getItemCount();
+            height *= ArmsUtils.dip2px(this,133);
+        }
+        ViewGroup.LayoutParams layoutParams = swipeRefreshLayout.getLayoutParams();
+        layoutParams.height = height;
+        swipeRefreshLayout.setLayoutParams(layoutParams);
+    }
+
 
     private DoctorSkillAdapter doctorSkillAdapter;
 
@@ -197,7 +211,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
                         .build());
         doctor_name.setText(doctorBean.getName());
         comment_count.setText(""+doctorBean.getComment());
-        rating.setRating(doctorBean.getStar());
+        rating.setStar(doctorBean.getStar());
         updateLikeImage(LIKE.equals(doctorBean.getIsPraise()));
         HospitalBean hospitalBean = doctorBean.getHospitalBean();
         if(hospitalBean != null){
@@ -246,7 +260,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
                     return;
                 }
 
-                mPresenter.commentDoctor(doctorId,str,comment_star.getNumStars(),currDoctorSkill.getProjectId());
+                mPresenter.commentDoctor(doctorId,str,comment_star.getStar(),currDoctorSkill.getProjectId());
 
             }
 

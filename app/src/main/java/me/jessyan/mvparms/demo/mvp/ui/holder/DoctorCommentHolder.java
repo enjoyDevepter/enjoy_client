@@ -2,7 +2,6 @@ package me.jessyan.mvparms.demo.mvp.ui.holder;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
@@ -18,6 +17,7 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentMemberBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorCommentBean;
+import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
 
 public class DoctorCommentHolder extends BaseHolder<DoctorCommentBean> {
 
@@ -61,7 +61,7 @@ public class DoctorCommentHolder extends BaseHolder<DoctorCommentBean> {
                         .build());
         name.setText(member.getNickName());
         time.setText(simpleDateFormat.format(new Date(data.getCreateDate())));
-        rating.setRating(data.getStar());
+        rating.setStar(data.getStar());
         content.setText(data.getContent());
         view_count.setText(""+data.getViews());
         comment_count.setText(""+data.getComment());

@@ -366,14 +366,23 @@
                 android:textColor="#666666"
                 android:textSize="12sp" />
 
-            <include
-                layout="@layout/star_layout"
+            <me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar
                 android:id="@+id/comment_star"
-                android:layout_width="wrap_content"
-                android:layout_height="14dp"
                 android:layout_alignBottom="@id/rating_title"
                 android:layout_toRightOf="@id/rating_title"
-                android:isIndicator="true" />
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:a_zhon="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                a_zhon:clickable="true"
+                a_zhon:image_height="17dp"
+                a_zhon:image_padding="3dp"
+                a_zhon:image_width="17dp"
+                a_zhon:star="3"
+                a_zhon:star_count="5"
+                a_zhon:star_img="@mipmap/doctor_star"
+                a_zhon:unstar_img="@mipmap/doctor_no_star"
+                />
 
             <TextView
                 android:id="@+id/project"

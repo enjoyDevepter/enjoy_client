@@ -244,6 +244,7 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                                 List<DoctorCommentBean> orderList = response.getDoctorCommentList();
                                 orderBeanList.addAll(orderList);
                                 mAdapter.notifyDataSetChanged();
+                                mRootView.updateRecyclerViewHeight();
                                 mRootView.hideLoading();
                             } else {
                                 mRootView.showMessage(response.getRetDesc());
@@ -284,6 +285,7 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                                 List<DoctorCommentBean> orderList = response.getDoctorCommentList();
                                 orderBeanList.addAll(orderList);
                                 mAdapter.notifyDataSetChanged();
+                                mRootView.updateRecyclerViewHeight();
                                 mRootView.hideLoading();
                             } else {
                                 mRootView.showMessage(response.getRetDesc());

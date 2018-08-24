@@ -7,4 +7,23 @@
         </attr>
         <attr name="radius" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="a_zhon">
+        <!--填充图片-->
+        <attr name="star_img" format="reference" />
+        <!--默认图片-->
+        <attr name="unstar_img" format="reference" />
+        <!--图片宽度-->
+        <attr name="image_width" format="dimension" />
+        <!--图片高度-->
+        <attr name="image_height" format="dimension" />
+        <!--图片之间的间距-->
+        <attr name="image_padding" format="dimension" />
+        <!--图片总数-->
+        <attr name="star_count" format="integer" />
+        <!--填充的图片数量-->
+        <attr name="star" format="integer" />
+        <!--是否可以点击-->
+        <attr name="clickable" format="boolean" />
+    </declare-styleable>
 </resources>

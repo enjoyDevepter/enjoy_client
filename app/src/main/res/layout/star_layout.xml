@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RatingBar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rating"
+<me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:a_zhon="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="14dp"
-    android:isIndicator="false"
-    android:max="5"
-    android:numColumns="5"
-    android:numStars="3"
-    android:progressDrawable="@mipmap/doctor_star"
-    android:stepSize="1" />
+    android:layout_height="wrap_content"
+    a_zhon:clickable="false"
+    a_zhon:image_height="20dp"
+    a_zhon:image_padding="3dp"
+    a_zhon:image_width="20dp"
+    a_zhon:star="3"
+    a_zhon:star_count="5"
+    a_zhon:star_img="@mipmap/doctor_star"
+    android:id="@+id/rating"
+    a_zhon:unstar_img="@mipmap/doctor_no_star"
+    />
