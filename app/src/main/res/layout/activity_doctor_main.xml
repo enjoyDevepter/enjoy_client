@@ -247,20 +247,27 @@
                 <View style="@style/divider_1" />
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:gravity="left|center"
+                android:id="@+id/skill_list_parent"
+                android:layout_below="@id/title1"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="16dp"
+                android:layout_height="56dp">
+
             <com.zhy.view.flowlayout.TagFlowLayout
                 android:id="@+id/skill_list"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@id/title1"
-                android:paddingLeft="16dp"
+                android:layout_height="wrap_content"
                 app:max_select="0"
                 app:tag_gravity="left" />
 
+            </RelativeLayout>
             <View
                 android:id="@+id/divide2"
                 style="@style/divider_3"
-                android:layout_below="@id/skill_list" />
+                android:layout_below="@id/skill_list_parent" />
 
             <LinearLayout
                 android:id="@+id/title2"
