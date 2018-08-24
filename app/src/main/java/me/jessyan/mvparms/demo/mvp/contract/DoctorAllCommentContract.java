@@ -8,8 +8,12 @@ import com.jess.arms.mvp.IModel;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorAllCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorAllCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentResponse;
 
 
 public interface DoctorAllCommentContract {
@@ -26,5 +30,7 @@ public interface DoctorAllCommentContract {
     interface Model extends IModel {
         Observable<DoctorAllCommentResponse> requestAllComment(DoctorAllCommentRequest request);
         Observable<LoginUserDoctorAllCommentResponse> loginUserRequestAllComment(LoginUserDoctorAllCommentRequest request);
+        Observable<LikeDoctorCommentResponse> likeDoctorComment(LikeDoctorCommentRequest request);
+        Observable<UnLikeDoctorCommentResponse> unLikeDoctorComment(UnLikeDoctorCommentRequest request);
     }
 }

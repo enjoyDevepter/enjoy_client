@@ -37,12 +37,17 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.AddressEditListItemHolder;
  */
 public class AddressEditListAdapter extends DefaultAdapter<Address> {
 
-    private OnChildItemClickLinstener onChildItemClickLinstener;
 
     public AddressEditListAdapter(List<Address> addresses) {
         super(addresses);
     }
 
+    @Override
+    public int getLayoutId(int viewType) {
+        return R.layout.addrsss_edit_list_item;
+    }
+
+    private OnChildItemClickLinstener onChildItemClickLinstener;
     @Override
     public BaseHolder<Address> getHolder(View v, int viewType) {
         return new AddressEditListItemHolder(v, new OnChildItemClickLinstener() {
@@ -53,11 +58,6 @@ public class AddressEditListAdapter extends DefaultAdapter<Address> {
                 }
             }
         });
-    }
-
-    @Override
-    public int getLayoutId(int viewType) {
-        return R.layout.addrsss_edit_list_item;
     }
 
     public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {

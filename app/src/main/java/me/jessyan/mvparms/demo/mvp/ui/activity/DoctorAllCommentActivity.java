@@ -22,9 +22,11 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorAllCommentComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorAllCommentModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorAllCommentContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorAllCommentPresenter;
 
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorCommentHolderAdapter;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -107,7 +109,26 @@ public class DoctorAllCommentActivity extends BaseActivity<DoctorAllCommentPrese
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);
-
+        ((DoctorCommentHolderAdapter)mAdapter).setOnChildItemClickLinstener(new DoctorCommentHolderAdapter.OnChildItemClickLinstener() {
+            @Override
+            public void onChildItemClick(View v, DoctorCommentHolderAdapter.ViewName viewname, int position) {
+                DoctorCommentBean item = ((DoctorCommentHolderAdapter) mAdapter).getItem(position);
+                switch (viewname){
+                    case ITEM:
+                        Intent intent = new Intent(DoctorAllCommentActivity.this,DoctorCommentInfoActivity.class);
+                        intent.putExtra(DoctorCommentInfoActivity.KEY_FOR_DOCTOR_COMMENT_BEAN, item);
+                        ArmsUtils.startActivity(intent);
+                        break;
+                    case LIKE:
+                        if("1".equals(item.getIsPraise())){
+                            mPresenter.unlikeDoctorComment(item.getDoctorId(), item.getCommentId());
+                        }else{
+                            mPresenter.likeDoctorComment(item.getDoctorId(), item.getCommentId());
+                        }
+                        break;
+                }
+            }
+        });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

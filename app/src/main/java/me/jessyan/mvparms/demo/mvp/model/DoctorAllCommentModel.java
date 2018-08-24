@@ -15,8 +15,12 @@ import me.jessyan.mvparms.demo.mvp.contract.DoctorAllCommentContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.DoctorService;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorAllCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorAllCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentResponse;
 
 
 @ActivityScope
@@ -48,6 +52,18 @@ public class DoctorAllCommentModel extends BaseModel implements DoctorAllComment
     public Observable<LoginUserDoctorAllCommentResponse> loginUserRequestAllComment(LoginUserDoctorAllCommentRequest request) {
         return mRepositoryManager.obtainRetrofitService(DoctorService.class)
                 .loginUserRequestAllComment(request);
+    }
+
+    @Override
+    public Observable<LikeDoctorCommentResponse> likeDoctorComment(LikeDoctorCommentRequest request) {
+        return mRepositoryManager.obtainRetrofitService(DoctorService.class)
+                .likeDoctorComment(request);
+    }
+
+    @Override
+    public Observable<UnLikeDoctorCommentResponse> unLikeDoctorComment(UnLikeDoctorCommentRequest request) {
+        return mRepositoryManager.obtainRetrofitService(DoctorService.class)
+                .unLikeDoctorComment(request);
     }
 
 }

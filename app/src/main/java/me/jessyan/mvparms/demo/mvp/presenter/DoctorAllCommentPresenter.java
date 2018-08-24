@@ -24,10 +24,14 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorAllCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorAllCommentActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorMainActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -165,5 +169,50 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
                         }
                     });
         }
+    }
+
+
+    public void unlikeDoctorComment(String doctorId,String commentId){
+        UnLikeDoctorCommentRequest unLikeDoctorCommentRequest = new UnLikeDoctorCommentRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+
+        unLikeDoctorCommentRequest.setToken(token);
+        unLikeDoctorCommentRequest.setDoctorId(doctorId);
+        unLikeDoctorCommentRequest.setCommentId(commentId);
+
+        mModel.unLikeDoctorComment(unLikeDoctorCommentRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<UnLikeDoctorCommentResponse>() {
+                    @Override
+                    public void accept(UnLikeDoctorCommentResponse baseResponse) throws Exception {
+                        if (baseResponse.isSuccess()) {
+                        }else{
+                        }
+                    }
+                });
+    }
+
+    public void likeDoctorComment(String doctorId,String commentId){
+        LikeDoctorCommentRequest likeDoctorCommentRequest = new LikeDoctorCommentRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+
+        likeDoctorCommentRequest.setToken(token);
+        likeDoctorCommentRequest.setDoctorId(doctorId);
+        likeDoctorCommentRequest.setCommentId(commentId);
+
+        mModel.likeDoctorComment(likeDoctorCommentRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<LikeDoctorCommentResponse>() {
+                    @Override
+                    public void accept(LikeDoctorCommentResponse baseResponse) throws Exception {
+                        if (baseResponse.isSuccess()) {
+                        }else{
+                        }
+                    }
+                });
     }
 }

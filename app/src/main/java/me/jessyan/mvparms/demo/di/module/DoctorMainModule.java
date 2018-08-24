@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.di.module;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.jess.arms.di.scope.ActivityScope;
 
@@ -45,7 +46,8 @@ public class DoctorMainModule {
     @ActivityScope
     @Provides
     RecyclerView.Adapter provideStoreAdapter(List<DoctorCommentBean> list) {
-        return new DoctorCommentHolderAdapter(list);
+        DoctorCommentHolderAdapter doctorCommentHolderAdapter = new DoctorCommentHolderAdapter(list);
+        return doctorCommentHolderAdapter;
     }
 
 

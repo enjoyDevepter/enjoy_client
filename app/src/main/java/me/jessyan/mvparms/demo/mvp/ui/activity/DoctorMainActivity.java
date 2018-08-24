@@ -47,6 +47,7 @@ import me.jessyan.mvparms.demo.mvp.presenter.DoctorMainPresenter;
 
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CodeAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorCommentHolderAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorSkillAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
@@ -170,6 +171,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         });
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+
         contentList.setAdapter(mAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -209,6 +211,25 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
                         .url(doctorBean.getHeadImage())
                         .imageView(head_image)
                         .build());
+        ((DoctorCommentHolderAdapter)mAdapter).setOnChildItemClickLinstener(new DoctorCommentHolderAdapter.OnChildItemClickLinstener() {
+            @Override
+            public void onChildItemClick(View v, DoctorCommentHolderAdapter.ViewName viewname, int position) {
+                switch (viewname){
+                    case ITEM:
+                        Intent intent = new Intent(DoctorMainActivity.this,DoctorCommentInfoActivity.class);
+                        intent.putExtra(DoctorCommentInfoActivity.KEY_FOR_DOCTOR_COMMENT_BEAN,((DoctorCommentHolderAdapter) mAdapter).getItem(position));
+                        ArmsUtils.startActivity(intent);
+                        break;
+                    case LIKE:
+                        if("1".equals(((DoctorCommentHolderAdapter) mAdapter).getItem(position).getIsPraise())){
+                            mPresenter.unlikeDoctorComment(doctorId,((DoctorCommentHolderAdapter) mAdapter).getItem(position).getCommentId());
+                        }else{
+                            mPresenter.likeDoctorComment(doctorId,((DoctorCommentHolderAdapter) mAdapter).getItem(position).getCommentId());
+                        }
+                        break;
+                }
+            }
+        });
         doctor_name.setText(doctorBean.getName());
         comment_count.setText(""+doctorBean.getComment());
         rating.setStar(doctorBean.getStar());

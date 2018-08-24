@@ -13,12 +13,16 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorResponse;
 
@@ -45,5 +49,7 @@ public interface DoctorMainContract {
         Observable<CommentDoctorResponse> commentDoctor(CommentDoctorRequest request);
         Observable<LoginUserDoctorHotCommentResponse> loginUserRequestDoctorHotComment(LoginUserDoctorHotCommentRequest request);
         Observable<DoctorHotCommentResponse> requestDoctorHotComment(DoctorHotCommentRequest request);
+        Observable<LikeDoctorCommentResponse> likeDoctorComment(LikeDoctorCommentRequest request);
+        Observable<UnLikeDoctorCommentResponse> unLikeDoctorComment(UnLikeDoctorCommentRequest request);
     }
 }
