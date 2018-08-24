@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     a_zhon:clickable="false"
     a_zhon:image_height="20dp"
-    a_zhon:image_padding="3dp"
+    a_zhon:image_padding="1dp"
     a_zhon:image_width="20dp"
     a_zhon:star="3"
     a_zhon:star_count="5"

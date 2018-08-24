@@ -17,6 +17,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentRequest;
@@ -25,6 +27,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotComment
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorResponse;
 import retrofit2.http.Body;
@@ -74,15 +78,23 @@ public interface DoctorService {
 
 
     @POST("gateway")
-        // 登陆用户请求热门评论
+    // 登陆用户请求热门评论
     Observable<LoginUserDoctorHotCommentResponse> loginUserRequestHotComment(@Body LoginUserDoctorHotCommentRequest request);
 
 
     @POST("gateway")
-        // 未登陆用户请求全部评论
+    // 未登陆用户请求全部评论
     Observable<DoctorAllCommentResponse> requestAllComment(@Body DoctorAllCommentRequest request);
 
     @POST("gateway")
-        // 登陆用户请求全部评论
+    // 登陆用户请求全部评论
     Observable<LoginUserDoctorAllCommentResponse> loginUserRequestAllComment(@Body LoginUserDoctorAllCommentRequest request);
+
+    @POST("gateway")
+    // 点赞医生评论
+    Observable<LikeDoctorCommentResponse> likeDoctorComment(@Body LikeDoctorCommentRequest request);
+
+    @POST("gateway")
+    // 取消点赞医生评论
+    Observable<UnLikeDoctorCommentResponse> unLikeDoctorComment(@Body UnLikeDoctorCommentRequest request);
 }
