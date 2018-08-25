@@ -110,6 +110,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         bottomBarLayout.setCurrentItem(1);
     }
 
+    @Subscriber(tag = EventBusTags.CHANGE_APPOINTMENT_TIME)
+    private void updateTime() {
+        changeFragment(3);
+        bottomBarLayout.setCurrentItem(3);
+    }
+
     @Override
     public void showLoading() {
 

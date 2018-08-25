@@ -233,6 +233,9 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
             @Override
             public void accept(DiaryListResponse response) throws Exception {
                 if (response.isSuccess()) {
+                    if (lastPageIndex == 1) {
+                        diaryList.clear();
+                    }
                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                     diaryList.addAll(response.getDiaryList());
                     mRootView.updateDiaryUI(response.getDiaryList().size() > 0);

@@ -29,6 +29,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayMealOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ReleaseDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -55,8 +56,11 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayMealOrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
+import okhttp3.MultipartBody;
 import retrofit2.http.Body;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 /**
  * Created by guomin on 2018/1/29.
@@ -127,6 +131,13 @@ public interface MainService {
 
     @POST("gateway")
     Observable<DiaryTypeListResponse> getDiaryType(@Body SimpleRequest request);
+
+    @Multipart
+    @POST("file/imageUpload")
+    Observable<BaseResponse> uploadImage(@Part MultipartBody.Part imgs);
+
+    @POST("gateway")
+    Observable<BaseResponse> releaseDiary(@Body ReleaseDiaryRequest request);
 
     @POST("gateway")
     Observable<DiaryNaviListResponse> getDiaryNaviType(@Body SimpleRequest request);

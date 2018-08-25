@@ -40,6 +40,17 @@
             android:value="1920" />
         -->
         <!-- arms配置 -->
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="cn.ehanmy.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
+
         <meta-data
             android:name="me.jessyan.mvparms.demo.app.GlobalConfiguration"
             android:value="ConfigModule" />
@@ -172,7 +183,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.AddBankCardActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.ReleaseDiaryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.MyDiaryActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

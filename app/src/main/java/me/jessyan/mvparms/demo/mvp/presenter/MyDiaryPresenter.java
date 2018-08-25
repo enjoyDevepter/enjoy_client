@@ -18,16 +18,18 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.contract.NewlywedsContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsNewlyListAdapter;
+import me.jessyan.mvparms.demo.mvp.contract.MyDiaryContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
 
 @ActivityScope
-public class NewlywedsPresenter extends BasePresenter<NewlywedsContract.Model, NewlywedsContract.View> {
+public class MyDiaryPresenter extends BasePresenter<MyDiaryContract.Model, MyDiaryContract.View> {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -37,44 +39,37 @@ public class NewlywedsPresenter extends BasePresenter<NewlywedsContract.Model, N
     @Inject
     ImageLoader mImageLoader;
     @Inject
-    List<Goods> mGoods;
+    DiaryListAdapter mAdapter;
     @Inject
-    GoodsNewlyListAdapter mAdapter;
+    List<Diary> diaryList;
+
     private int preEndIndex;
     private int lastPageIndex = 1;
 
     @Inject
-    public NewlywedsPresenter(NewlywedsContract.Model model, NewlywedsContract.View rootView) {
+    public MyDiaryPresenter(MyDiaryContract.Model model, MyDiaryContract.View rootView) {
         super(model, rootView);
     }
 
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        getTimeLimitGoodsList(true);
+        getMyDiaryList(true);
     }
 
-    public void getTimeLimitGoodsList(boolean pullToRefresh) {
-        GoodsListRequest request = new GoodsListRequest();
+
+    public void getMyDiaryList(boolean pullToRefresh) {
+
+        DiaryListRequest request = new DiaryListRequest();
+
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setCmd(450);
-        request.setProvince(String.valueOf(cache.get("province")));
-        request.setCity(String.valueOf(cache.get("city")));
-        request.setCounty(String.valueOf(cache.get("county")));
-        request.setCategoryId((String) mRootView.getCache().get("categoryId"));
-        request.setSecondCategoryId((String) (mRootView.getCache().get("secondCategoryId")));
-        request.setFirstCategoryId((String) (mRootView.getCache().get("firstCategoryId")));
-        if (!ArmsUtils.isEmpty(String.valueOf(mRootView.getCache().get("orderByField")))) {
-            GoodsListRequest.OrderBy orderBy = new GoodsListRequest.OrderBy();
-            orderBy.setField((String) mRootView.getCache().get("orderByField"));
-            orderBy.setAsc((Boolean) mRootView.getCache().get("orderByAsc"));
-            request.setOrderBy(orderBy);
-        }
+        String token = (String) (cache.get(KEY_KEEP + "token"));
+        request.setToken(token);
+        request.setCmd(823);
 
         if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
-        mModel.getNewlywedsGoodsList(request)
+        mModel.getMyDiaryList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
@@ -88,22 +83,22 @@ public class NewlywedsPresenter extends BasePresenter<NewlywedsContract.Model, N
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<GoodsListResponse>() {
+                }).subscribe(new Consumer<DiaryListResponse>() {
             @Override
-            public void accept(GoodsListResponse response) throws Exception {
+            public void accept(DiaryListResponse response) throws Exception {
                 if (response.isSuccess()) {
                     if (pullToRefresh) {
-                        mGoods.clear();
+                        diaryList.clear();
                     }
+                    mRootView.showError(response.getDiaryList().size() <= 0);
                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    mRootView.updateUI(response.getCarouselList());
-                    mGoods.addAll(response.getGoodsList());
-                    preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = mGoods.size() / 10;
+                    diaryList.addAll(response.getDiaryList());
+                    preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = diaryList.size() / 10;
                     if (pullToRefresh) {
                         mAdapter.notifyDataSetChanged();
                     } else {
-                        mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
+                        mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
                     }
                 } else {
                     mRootView.showMessage(response.getRetDesc());
@@ -111,7 +106,6 @@ public class NewlywedsPresenter extends BasePresenter<NewlywedsContract.Model, N
             }
         });
     }
-
 
     @Override
     public void onDestroy() {

@@ -18,6 +18,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerMyComponent;
 import me.jessyan.mvparms.demo.di.module.MyModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
 import me.jessyan.mvparms.demo.mvp.presenter.MyPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MyDiaryActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyMealActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.UserIntegralActivity;
@@ -167,6 +168,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
             case R.id.friend:
                 break;
             case R.id.diary:
+                ArmsUtils.startActivity(MyDiaryActivity.class);
                 break;
             case R.id.collect:
                 break;
@@ -181,7 +183,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 break;
             case R.id.bonus:
                 Intent intent = new Intent(getContext(), UserIntegralActivity.class);
-                intent.putExtra(UserIntegralActivity.KEY_FOR_USER_ALL_SCORE,""+bonusTV.getText());
+                intent.putExtra(UserIntegralActivity.KEY_FOR_USER_ALL_SCORE, "" + bonusTV.getText());
                 ArmsUtils.startActivity(intent);
                 break;
         }

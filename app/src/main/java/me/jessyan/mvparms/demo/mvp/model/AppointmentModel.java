@@ -13,7 +13,9 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.AppointmentContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.AppointmentService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentAndMealRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 
 
 @ActivityScope
@@ -39,5 +41,11 @@ public class AppointmentModel extends BaseModel implements AppointmentContract.M
     public Observable<AppointmentResponse> getAppointment(AppointmentAndMealRequest request) {
         return mRepositoryManager.obtainRetrofitService(AppointmentService.class)
                 .getAppointment(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> cancelAppointment(ModifyAppointmentRequest request) {
+        return mRepositoryManager.obtainRetrofitService(AppointmentService.class)
+                .cancelAppointment(request);
     }
 }

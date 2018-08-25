@@ -140,18 +140,6 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
         mPresenter.getCategory();
     }
 
-
-    @Override
-    public void showLoading() {
-        swipeRefreshLayout.setRefreshing(true);
-    }
-
-    @Override
-    public void hideLoading() {
-        swipeRefreshLayout.setRefreshing(false);
-    }
-
-
     @Override
     public Activity getActivity() {
         return this;
@@ -179,6 +167,17 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
     public void launchActivity(@NonNull Intent intent) {
         checkNotNull(intent);
         ArmsUtils.startActivity(intent);
+    }
+
+
+    @Override
+    public void showLoading() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     /**

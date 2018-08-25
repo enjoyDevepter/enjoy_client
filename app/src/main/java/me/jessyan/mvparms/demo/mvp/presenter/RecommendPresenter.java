@@ -129,7 +129,6 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
-                        mAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mRootView.showMessage(response.getRetDesc());

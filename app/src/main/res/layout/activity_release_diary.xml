@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:money="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/choice"
+                android:layout_width="match_parent"
+                android:layout_height="136dp"
+                android:background="@color/white"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/project"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="选择项目"
+                    android:textColor="#FF333333"
+                    android:textSize="13sp" />
+
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="7dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="3dp"
+                    android:background="@mipmap/more_right" />
+
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/project"
+                    android:layout_marginTop="12dp"
+                    android:scaleType="fitXY" />
+
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/image"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@id/image"
+                    android:lines="2"
+                    android:textColor="#FF000000"
+                    android:textSize="13sp" />
+
+                <com.github.cchao.MoneyView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/image"
+                    android:layout_alignLeft="@id/name"
+                    android:layout_marginBottom="3dp"
+                    money:cent_size="14sp"
+                    money:money_color="#FFFF0000"
+                    money:money_text="0.00"
+                    money:point_padding_left="1dp"
+                    money:point_padding_right="5dp"
+                    money:prefix_padding="2dp"
+                    money:prefix_size="12sp"
+                    money:yuan_size="17sp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="日记标题"
+                    android:textColor="#FF333333"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/diary_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/diary_input_bg"
+                    android:lines="1"
+                    android:textColor="#FF333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="日记照片"
+                    android:textColor="#FF333333"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/add"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@mipmap/diray_add" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/images"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="日记内容"
+                    android:textColor="#FF333333"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="124dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/diary_input_bg"
+                    android:gravity="top"
+                    android:textColor="#FF333333"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/add_address_btn_bg"
+        android:gravity="center"
+        android:text="发表"
+        android:textColor="@color/white"
+        android:textSize="13sp" />
+</LinearLayout>

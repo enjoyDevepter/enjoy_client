@@ -155,7 +155,6 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
-                        mAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mRootView.showMessage(response.getRetDesc());

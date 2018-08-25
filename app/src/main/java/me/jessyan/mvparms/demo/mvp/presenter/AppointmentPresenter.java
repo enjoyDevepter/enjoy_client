@@ -19,7 +19,9 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.AppointmentContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentAndMealRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -117,8 +119,35 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, appointments.size());
-                        mAdapter.notifyDataSetChanged();
                     }
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
+    }
+
+    /**
+     * 取消预约
+     */
+    public void cancelAppointment() {
+        ModifyAppointmentRequest request = new ModifyAppointmentRequest();
+        request.setCmd(2108);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setReservationId((String) mRootView.getCache().get("reservationId"));
+        mModel.cancelAppointment(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).doFinally(() -> {
+            mRootView.hideLoading();//隐藏下拉刷新的进度条
+        }).subscribe(new Consumer<BaseResponse>() {
+            @Override
+            public void accept(BaseResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    getAppointment(false);
                 } else {
                     mRootView.showMessage(response.getRetDesc());
                 }

@@ -45,7 +45,9 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
     @BindView(R.id.no)
     TextView noTV;
     @BindView(R.id.make)
-    View makeV;
+    TextView makeV;
+    @BindView(R.id.cancel)
+    View cancelV;
     @BindView(R.id.image)
     ImageView imageIV;
     @BindView(R.id.name)
@@ -56,6 +58,8 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
     TextView countTV;
     @BindView(R.id.price)
     TextView priceTV;
+    @BindView(R.id.time_layout)
+    View timeV;
 
 
     private AppointmentListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
@@ -66,6 +70,7 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
         super(itemView);
         this.onChildItemClickLinstener = onChildItemClickLinstener;
         makeV.setOnClickListener(this);
+        cancelV.setOnClickListener(this);
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
@@ -77,6 +82,9 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
             switch (view.getId()) {
                 case R.id.make:
                     onChildItemClickLinstener.onChildItemClick(view, AppointmentListAdapter.ViewName.MAKE, getAdapterPosition());
+                    return;
+                case R.id.cancel:
+                    onChildItemClickLinstener.onChildItemClick(view, AppointmentListAdapter.ViewName.CANCEL, getAdapterPosition());
                     return;
             }
         }
@@ -93,7 +101,17 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
                         .imageView(imageIV)
                         .build());
         noTV.setText(appointment.getProjectId());
-        timeTV.setText(appointment.getReservationDate() + " " + appointment.getReservationTime());
+        if ("1".equals(appointment.getStatus())) {
+            makeV.setText("预约");
+            timeV.setVisibility(View.INVISIBLE);
+            cancelV.setVisibility(View.INVISIBLE);
+        } else if ("2".equals(appointment.getStatus())) {
+            cancelV.setVisibility(View.VISIBLE);
+            makeV.setVisibility(View.VISIBLE);
+            makeV.setText("改约");
+            timeV.setVisibility(View.VISIBLE);
+            timeTV.setText(appointment.getReservationDate() + " " + appointment.getReservationTime());
+        }
         nameTV.setText(appointment.getGoods().getName());
         priceTV.setText(String.valueOf(appointment.getGoods().getSalePrice()));
         countTV.setText(String.valueOf(appointment.getSurplusNum()));
@@ -118,5 +136,7 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
         this.nameTV = null;
         this.priceTV = null;
         this.countTV = null;
+        this.cancelV = null;
+        this.timeV = null;
     }
 }

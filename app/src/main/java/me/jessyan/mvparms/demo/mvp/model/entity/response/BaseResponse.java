@@ -40,6 +40,7 @@ public class BaseResponse implements Serializable {
     private String deviceNumber;
     private int retCode;
     private String retDesc;
+    private ImageUrl result;
 
     public String getSequence() {
         return sequence;
@@ -121,6 +122,14 @@ public class BaseResponse implements Serializable {
         this.retDesc = retDesc;
     }
 
+    public ImageUrl getResult() {
+        return result;
+    }
+
+    public void setResult(ImageUrl result) {
+        this.result = result;
+    }
+
     /**
      * 请求是否成功
      *
@@ -131,6 +140,25 @@ public class BaseResponse implements Serializable {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public class ImageUrl {
+        private String url;
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        @Override
+        public String toString() {
+            return "ImageUrl{" +
+                    "url='" + url + '\'' +
+                    '}';
         }
     }
 }

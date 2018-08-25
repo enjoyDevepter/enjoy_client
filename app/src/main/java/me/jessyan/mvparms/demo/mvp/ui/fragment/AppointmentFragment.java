@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.base.DefaultAdapter;
@@ -17,14 +18,19 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.Subscriber;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerAppointmentComponent;
 import me.jessyan.mvparms.demo.di.module.AppointmentModule;
 import me.jessyan.mvparms.demo.mvp.contract.AppointmentContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.presenter.AppointmentPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.activity.ChoiceTimeActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
@@ -32,7 +38,10 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class AppointmentFragment extends BaseFragment<AppointmentPresenter> implements AppointmentContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, AppointmentListAdapter.OnChildItemClickLinstener, TabLayout.OnTabSelectedListener {
-
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
     @BindView(R.id.shengmei)
     View shengmeiV;
     @BindView(R.id.yimei1)
@@ -78,6 +87,8 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        backV.setVisibility(View.INVISIBLE);
+        titleTV.setText("预约");
         shengmeiV.setOnClickListener(this);
         yimei1V.setOnClickListener(this);
         yimei2V.setOnClickListener(this);
@@ -95,8 +106,14 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
         provideCache().put("status", 0);
         initPaginate();
         mPresenter.getAppointment(true);
-
     }
+
+
+    @Subscriber(tag = EventBusTags.CHANGE_APPOINTMENT_TIME)
+    private void updateTime() {
+        mPresenter.getAppointment(false);
+    }
+
 
     /**
      * 此方法是让外部调用使fragment做一些操作的,比如说外部的activity想让fragment对象执行一些方法,
@@ -120,6 +137,17 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
     @Override
     public void startLoadMore() {
         isLoadingMore = true;
+    }
+
+
+    @Override
+    public void showLoading() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     /**
@@ -225,10 +253,29 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
 
     @Override
     public void onChildItemClick(View v, AppointmentListAdapter.ViewName viewname, int position) {
+        Appointment appointment = mAdapter.getInfos().get(position);
         switch (viewname) {
             case MAKE:
+                if (appointment.getStatus().equals("1")) {
+                    // 预约
+                    Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
+                    addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
+                    addappointmentsIntent.putExtra("type", "add_appointment_time");
+                    ArmsUtils.startActivity(addappointmentsIntent);
+                } else if (appointment.getStatus().equals("2")) {
+                    // 改约
+                    Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
+                    addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
+                    addappointmentsIntent.putExtra("type", "modify_appointment_time");
+                    ArmsUtils.startActivity(addappointmentsIntent);
+                }
                 break;
             case ITEM:
+                break;
+            case CANCEL:
+                // 取消预约
+                provideCache().put("reservationId", appointment.getReservationId());
+                mPresenter.cancelAppointment();
                 break;
         }
     }

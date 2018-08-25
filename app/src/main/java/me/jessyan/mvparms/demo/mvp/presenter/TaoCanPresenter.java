@@ -106,7 +106,6 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
-                        mAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mRootView.showMessage(response.getRetDesc());

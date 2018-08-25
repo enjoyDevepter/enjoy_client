@@ -109,7 +109,6 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, cartItems.size());
-                        mAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mRootView.showMessage(response.getRetDesc());

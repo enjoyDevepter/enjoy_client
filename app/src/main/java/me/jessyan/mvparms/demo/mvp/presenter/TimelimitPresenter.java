@@ -102,7 +102,6 @@ public class TimelimitPresenter extends BasePresenter<TimelimitContract.Model, T
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
-                        mAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mRootView.showMessage(response.getRetDesc());

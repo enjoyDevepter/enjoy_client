@@ -215,8 +215,6 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
             case LEFT:
                 if ("1".equals(appointment.getOrderStatus())) {
                     // 取消订单
-                } else if ("5".equals(appointment.getOrderStatus())) {
-                    // 写日记
                 }
                 break;
             case RIGHT:
@@ -234,6 +232,16 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
                     makeIntent.putExtra("orderId", appointment.getOrderId());
                     makeIntent.putExtra("mealName", appointment.getSetMealGoodsList().get(0).getName());
                     ArmsUtils.startActivity(makeIntent);
+                } else if ("5".equals(appointment.getOrderStatus())) {
+                    // 写日记
+                    Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
+                    intent.putExtra("imageURl", appointment.getSetMealGoodsList().get(0).getImage());
+                    intent.putExtra("name", appointment.getSetMealGoodsList().get(0).getName());
+                    intent.putExtra("price", appointment.getSetMealGoodsList().get(0).getSalePrice());
+                    intent.putExtra("goodsId", appointment.getSetMealGoodsList().get(0).getSetMealId());
+                    intent.putExtra("merchId", appointment.getSetMealGoodsList().get(0).getSetMealId());
+                    intent.putExtra("orderId", appointment.getOrderId());
+                    ArmsUtils.startActivity(intent);
                 }
                 break;
             case ITEM:

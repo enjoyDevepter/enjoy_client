@@ -11,6 +11,8 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.EventBus;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,6 +20,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceTimeContract;
 import me.jessyan.mvparms.demo.mvp.model.HAppointments;
 import me.jessyan.mvparms.demo.mvp.model.entity.HAppointmentsTime;
@@ -124,6 +127,7 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
             @Override
             public void accept(BaseResponse response) throws Exception {
                 if (response.isSuccess()) {
+                    EventBus.getDefault().post(EventBusTags.CHANGE_APPOINTMENT_TIME);
                     mRootView.killMyself();
                 } else {
                     mRootView.showMessage(response.getRetDesc());

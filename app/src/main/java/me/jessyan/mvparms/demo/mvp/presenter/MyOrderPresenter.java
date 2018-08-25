@@ -140,7 +140,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, orderList.size());
-                        mAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mRootView.showMessage(response.getRetDesc());
@@ -215,7 +214,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, orderList.size());
-                        mAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mRootView.showMessage(response.getRetDesc());

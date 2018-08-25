@@ -116,7 +116,6 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, appointments.size());
-                        mAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mRootView.showMessage(response.getRetDesc());

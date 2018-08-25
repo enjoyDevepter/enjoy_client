@@ -31,6 +31,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.User;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -104,6 +105,9 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
 
         RequestBody requestBody = request.body();
 
+        if (requestBody instanceof MultipartBody) {
+            return request;
+        }
         if (null != requestBody) {
             okio.Buffer buffer = new okio.Buffer();
             try {

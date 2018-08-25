@@ -138,6 +138,9 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
             @Override
             public void accept(DiaryListResponse response) throws Exception {
                 if (response.isSuccess()) {
+                    if (lastPageIndex == 1) {
+                        diaryList.clear();
+                    }
                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                     diaryList.addAll(response.getDiaryList());
                     preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
