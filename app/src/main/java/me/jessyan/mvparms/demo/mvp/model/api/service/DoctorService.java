@@ -110,6 +110,6 @@ public interface DoctorService {
 
     @POST("gateway")
     // 获取医生评论的回复列表
-    Observable<GetDoctorCommentReplyPageResponse> getDoctorComment(@Body GetDoctorCommentReplyPageRequest request);
+    Observable<GetDoctorCommentReplyPageResponse> getDoctorCommentReply(@Body GetDoctorCommentReplyPageRequest request);
 
 }
