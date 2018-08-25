@@ -1,8 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/title" />
+
+        <View style="@style/divider_3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="现金币"
+                android:textColor="#ff333333"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/all_cash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5000"
+                android:textColor="#ffff5656"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="14dp"
+                android:text="元"
+                android:textColor="#ffff5656"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <View style="@style/divider_3" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="109dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="17dp"
+                android:text="转换消费币金额"
+                android:textColor="#ff333333"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/edit_parent"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_below="@id/title"
+                android:layout_marginTop="14dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/icon"
+                    android:layout_width="16dp"
+                    android:layout_height="14dp"
+                    android:layout_marginLeft="19dp"
+                    android:layout_marginRight="6dp"
+                    android:background="@mipmap/cash_convert_page_icon" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="24dp"
+                    android:layout_toRightOf="@id/icon"
+                    android:background="#ffdbdbdb" />
+
+                <EditText
+                    android:id="@+id/et_money"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null" />
+
+            </LinearLayout>
+            <View
+                android:id="@+id/divide"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/edit_parent"
+                style="@style/divider_1"/>
+
+            <TextView
+                android:id="@+id/all_convert"
+                android:layout_below="@id/divide"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:text="全部转换"
+                android:layout_alignRight="@id/divide"
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/convert_btn"
+            android:text="确认转换"
+            android:textColor="#ffffffff"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/cash_convert_btn_back"
+            android:layout_width="330dp"
+            android:layout_height="44dp"
+        />
+    </LinearLayout>
+</FrameLayout>

@@ -30,8 +30,6 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements CashCoinContract.View {
 
-    public static final String KEY_FOR_CASH_STR = "KEY_FOR_CASH_STR";
-
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
@@ -89,6 +87,7 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);
 

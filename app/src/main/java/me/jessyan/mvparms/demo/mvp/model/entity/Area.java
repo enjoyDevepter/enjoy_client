@@ -1,9 +1,11 @@
 package me.jessyan.mvparms.demo.mvp.model.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by guomin on 2018/7/29.
  */
-public class Area {
+public class Area implements Serializable {
     private String code;
     private String id;
     private String name;

@@ -6,17 +6,24 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerMyComponent;
 import me.jessyan.mvparms.demo.di.module.MyModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Member;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.MyPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CashCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ConsumeCoinActivity;
@@ -25,7 +32,6 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.UserIntegralActivity;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
-import static me.jessyan.mvparms.demo.mvp.ui.activity.CashCoinActivity.KEY_FOR_CASH_STR;
 
 
 public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.View, View.OnClickListener {
@@ -67,6 +73,15 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     View consume;
     @BindView(R.id.cash)
     View cash;
+
+    @BindView(R.id.image)
+    ImageView image;
+    @BindView(R.id.level_icon)
+    ImageView level_icon;
+
+
+    @Inject
+    ImageLoader mImageLoader;
 
     public static MyFragment newInstance() {
         MyFragment fragment = new MyFragment();
@@ -196,14 +211,46 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 break;
             case R.id.consume:
                 Intent consumeIntent = new Intent(getContext(), ConsumeCoinActivity.class);
-                consumeIntent.putExtra(ConsumeCoinActivity.KEY_FOR_CONSUME_COIN,memberMoneyTV.getText());
                 ArmsUtils.startActivity(consumeIntent);
                 break;
             case R.id.cash:
                 Intent cashIntent = new Intent(getContext(), CashCoinActivity.class);
-                cashIntent.putExtra(KEY_FOR_CASH_STR,moneyTV.getText());
                 ArmsUtils.startActivity(cashIntent);
                 break;
         }
+    }
+
+    public void updateUserInfo(Member member, MemberAccount account){
+        mImageLoader.loadImage(getContext(),
+                ImageConfigImpl
+                        .builder()
+                        .url(member.getHeadImage())
+                        .imageView(image)
+                        .build());
+        nickNameTV.setText(member.getNickName());
+        int levelIcon = 0;
+        switch (member.getRank().getPointLevelId()){
+            case "1":
+                levelIcon = R.mipmap.user_level_1;
+                break;
+            case "2":
+                levelIcon = R.mipmap.user_level_2;
+                break;
+            case "3":
+                levelIcon = R.mipmap.user_level_3;
+                break;
+            case "4":
+                levelIcon = R.mipmap.user_level_4;
+                break;
+            case "5":
+                levelIcon = R.mipmap.user_level_5;
+                break;
+            case "6":
+                break;
+        }
+        level_icon.setBackground(getResources().getDrawable(levelIcon));
+        moneyTV.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
+        memberMoneyTV.setText(String.format("%.2f",account.getTotal() * 1.0 / 100));
+        bonusTV.setText(account.getPoint()+"");
     }
 }
