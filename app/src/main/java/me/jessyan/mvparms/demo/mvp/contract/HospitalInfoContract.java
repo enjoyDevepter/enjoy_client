@@ -11,8 +11,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoReq
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 

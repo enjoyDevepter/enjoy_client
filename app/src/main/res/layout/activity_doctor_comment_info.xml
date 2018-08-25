@@ -7,9 +7,7 @@
 
     <include layout="@layout/title"/>
     <View style="@style/divider_3"/>
-    <include layout="@layout/doctor_comment_item"/>
-    <View style="@style/divider_3"/>
-
+    <include layout="@layout/doctor_comment_item" />
     <LinearLayout
         android:id="@+id/title2"
         android:layout_width="match_parent"
@@ -40,6 +38,8 @@
 
         <View style="@style/divider_1" />
     </LinearLayout>
+
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
@@ -69,6 +69,7 @@
             android:layout_marginRight="11dp"
             android:layout_gravity="center_vertical"
             android:layout_width="0dp"
+            android:imeOptions="actionSend"
             android:textColor="#ff333333"
             android:textSize="12sp"
             android:layout_weight="1"

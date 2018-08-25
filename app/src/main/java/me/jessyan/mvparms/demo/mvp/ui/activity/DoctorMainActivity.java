@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -40,13 +39,12 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorMainComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorMainModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorSkill;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.HospitalBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorSkill;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.HospitalBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorMainPresenter;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.CodeAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorCommentHolderAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorSkillAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
@@ -194,7 +192,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         int height = 0;
         if(adapter != null && adapter.getItemCount() != 0){
             height = adapter.getItemCount() > 5 ? 5 : adapter.getItemCount();
-            height *= ArmsUtils.dip2px(this,133);
+            height *= ArmsUtils.dip2px(this,140);
         }
         ViewGroup.LayoutParams layoutParams = swipeRefreshLayout.getLayoutParams();
         layoutParams.height = height;

@@ -23,10 +23,8 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIdentificationBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorHonorBean;
 import me.jessyan.mvparms.demo.mvp.ui.holder.DoctorHonorHolder;
-import me.jessyan.mvparms.demo.mvp.ui.holder.DoctorPaperHolder;
 
 /**
  * ================================================

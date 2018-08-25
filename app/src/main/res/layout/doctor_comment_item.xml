@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/doctor_parent"
     android:layout_width="match_parent"
-    android:layout_height="133dp">
+    android:layout_height="140dp">
 
     <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
         android:id="@+id/head"
@@ -13,7 +13,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="13dp"
         android:layout_marginTop="16dp"
-        android:background="#ff0000"
         app:shape_type="circle" />
 
     <TextView
@@ -41,7 +40,7 @@
     <include
         layout="@layout/star_layout"
         android:layout_width="wrap_content"
-        android:layout_height="14dp"
+        android:layout_height="wrap_content"
         android:layout_alignLeft="@id/name"
         android:layout_below="@id/name"
         android:layout_marginBottom="7dp"

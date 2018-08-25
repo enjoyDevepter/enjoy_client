@@ -9,8 +9,6 @@ import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
-import me.jessyan.mvparms.demo.mvp.ui.holder.DoctorListHolder;
 import me.jessyan.mvparms.demo.mvp.ui.holder.HospitalGoodsListHolder;
 
 public class HospitalGoodsListAdapter extends DefaultAdapter<Goods> {

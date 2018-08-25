@@ -16,8 +16,8 @@ import java.util.Date;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentMemberBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorCommentBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.CommentMemberBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorCommentHolderAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
 

@@ -34,14 +34,12 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerHospitalInfoComponent;
 import me.jessyan.mvparms.demo.di.module.HospitalInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.HospitalInfoPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalEnvImageAdapter;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalGoodsListAdapter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 

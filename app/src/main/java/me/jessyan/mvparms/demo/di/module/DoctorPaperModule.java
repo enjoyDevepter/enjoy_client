@@ -13,7 +13,7 @@ import dagger.Provides;
 
 import me.jessyan.mvparms.demo.mvp.contract.DoctorPaperContract;
 import me.jessyan.mvparms.demo.mvp.model.DoctorPaperModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIdentificationBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorIdentificationBean;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorPaperAdapter;
 
 

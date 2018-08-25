@@ -21,9 +21,9 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorIntorComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorIntorModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorIntorContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.HospitalBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorIntorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.HospitalBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorIntorPresenter;
 
 import me.jessyan.mvparms.demo.R;

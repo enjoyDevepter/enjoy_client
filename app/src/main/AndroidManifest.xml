@@ -190,6 +190,16 @@
         <activity
             android:name=".mvp.ui.activity.MyDiaryActivity"
             android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.ConsumeCoinActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.CashCoinActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.CashConvertActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

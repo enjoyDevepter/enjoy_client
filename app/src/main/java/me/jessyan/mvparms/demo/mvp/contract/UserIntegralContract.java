@@ -8,6 +8,8 @@ import com.jess.arms.mvp.IModel;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
 
 
 public interface UserIntegralContract {
@@ -22,5 +24,6 @@ public interface UserIntegralContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<UserScorePageResponse> requestScorePage(UserScorePageRequest request);
+        Observable<QiandaoResponse> qiandao(QiandaoRequest request);
     }
 }

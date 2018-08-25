@@ -61,7 +61,7 @@ public class UserScoreHolder extends BaseHolder<ScorePointBean> {
 
     @Override
     public void setData(ScorePointBean scorePointBean, int position) {
-        type.setText(scorePointBean.getType());
+        type.setText(scorePointBean.getTypeDesc());
         time.setText(simpleDateFormat.format(new Date(scorePointBean.getCreateDate())));
         long inMoney = scorePointBean.getInMoney();
         if(inMoney == 0){

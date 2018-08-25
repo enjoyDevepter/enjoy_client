@@ -16,14 +16,10 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIdentificationBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorHonorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorHonorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorHonorResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorHonorActivity;
-import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorPaperActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;

@@ -23,8 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorSkill;
-import me.jessyan.mvparms.demo.mvp.ui.holder.CodeItemHolder;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorSkill;
 import me.jessyan.mvparms.demo.mvp.ui.holder.DoctorProjectItemHolder;
 
 /**
