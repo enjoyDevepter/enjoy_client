@@ -13,6 +13,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoRe
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 
 
 public interface HospitalInfoContract {
@@ -27,6 +29,7 @@ public interface HospitalInfoContract {
         void endLoadGoodsMore();
         void startLoadGoodsMore();
         void hideDoctorLoading();
+        void hideGoodsLoading();
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -34,5 +37,6 @@ public interface HospitalInfoContract {
         Observable<LoginUserHospitalInfoResponse> requestHospitalByUser(LoginUserHospitalInfoRequest request);
         Observable<HospitalInfoResponse> requestHospital(HospitalInfoRequest request);
         Observable<DoctorListResponse> requestDoctorPage(DoctorListRequest request);
+        Observable<HGoodsListResponse> getHGoodsList(GoodsListRequest request);
     }
 }

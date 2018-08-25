@@ -19,6 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalEnvBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoRequest;
@@ -27,8 +28,12 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoRe
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalEnvImageAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalGoodsListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -53,9 +58,9 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
 
     // 第二个页面
     @Inject
-    HospitalGoodsListAdapter hospitalGoodsListAdapter;
+    HGoodsListAdapter hospitalGoodsListAdapter;
     @Inject
-    List<Goods> hospitalList;
+    List<HGoods> hospitalList;
     private int goodsNextPageIndex = 1;
 
     // 第三个页面
@@ -89,6 +94,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
     public void init(){
         initHospital();
         nextDoctorPage();
+        getHGoodsList(true);
     }
 
     private void initHospital(){
@@ -192,4 +198,60 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                     }
                 });
     }
+
+    public void getHGoodsList(final boolean pullToRefresh) {
+        GoodsListRequest request = new GoodsListRequest();
+        request.setCmd(440);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+
+        GoodsListRequest.OrderBy orderBy = new GoodsListRequest.OrderBy();
+        orderBy.setAsc(false);
+        orderBy.setField("sales");
+        request.setOrderBy(orderBy);
+
+        mModel.getHGoodsList(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh){
+
+                    }
+//                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadGoodsMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideGoodsLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadGoodsMore();//隐藏上拉加载更多的进度条
+                }).subscribe(new Consumer<HGoodsListResponse>() {
+            @Override
+            public void accept(HGoodsListResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    if (pullToRefresh) {
+                        hospitalList.clear();
+                    }
+//                    mRootView.showError(response.getGoodsList().size() > 0);
+                    if (response.getGoodsList().size() <= 0) {
+                        return;
+                    }
+                    mRootView.endGoods(response.getNextPageIndex() == -1);
+                    hospitalList.addAll(response.getGoodsList());
+                    preEndIndex = hospitalList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = hospitalList.size() / 10;
+                    if (pullToRefresh) {
+                        hospitalGoodsListAdapter.notifyDataSetChanged();
+                    } else {
+                        hospitalGoodsListAdapter.notifyItemRangeInserted(preEndIndex, hospitalList.size());
+                    }
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
+    }
+
+    private int preEndIndex;
+    private int lastPageIndex;
 }

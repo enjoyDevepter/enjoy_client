@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.DoctorService;
+import me.jessyan.mvparms.demo.mvp.model.api.service.HGoodsService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.HospitalService;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
@@ -20,6 +21,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoRe
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 
 
 @ActivityScope
@@ -61,4 +64,9 @@ public class HospitalInfoModel extends BaseModel implements HospitalInfoContract
                 .requestDoctorPage(request);
     }
 
+    @Override
+    public Observable<HGoodsListResponse> getHGoodsList(GoodsListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(HGoodsService.class)
+                .getHGoodsList(request);
+    }
 }

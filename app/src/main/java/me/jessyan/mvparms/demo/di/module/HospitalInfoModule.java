@@ -13,8 +13,10 @@ import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.HospitalInfoModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalEnvImageAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalGoodsListAdapter;
 
@@ -47,14 +49,14 @@ public class HospitalInfoModule {
     // 第二个页面
     @ActivityScope
     @Provides
-    List<Goods> provideGoodsList() {
-        ArrayList<Goods> orderBeans = new ArrayList<>();
+    List<HGoods> provideGoodsList() {
+        ArrayList<HGoods> orderBeans = new ArrayList<>();
         return orderBeans;
     }
     @ActivityScope
     @Provides
-    HospitalGoodsListAdapter provideGoodsAdapter(List<Goods> list) {
-        HospitalGoodsListAdapter orderCenterListAdapter = new HospitalGoodsListAdapter(list);
+    HGoodsListAdapter provideGoodsAdapter(List<HGoods> list) {
+        HGoodsListAdapter orderCenterListAdapter = new HGoodsListAdapter(list);
         return orderCenterListAdapter;
     }
 

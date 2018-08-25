@@ -39,6 +39,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.HospitalInfoPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalEnvImageAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalGoodsListAdapter;
 
@@ -78,7 +79,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     private RecyclerView goodsList;
     private SwipeRefreshLayout goodsSwipeRefreshLayout;
     @Inject
-    HospitalGoodsListAdapter hospitalGoodsListAdapter;
+    HGoodsListAdapter hospitalGoodsListAdapter;
     private Paginate goodsPaginate;
     private boolean isGoodsLoadingMore;
     private boolean isGoodsEnd;
@@ -112,6 +113,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         Paginate.Callbacks goodsPaginateCallback = new Paginate.Callbacks() {
             @Override
             public void onLoadMore() {
+                mPresenter.getHGoodsList(false);
             }
 
             @Override
@@ -132,6 +134,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         goodsSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mPresenter.getHGoodsList(true);
             }
         });
 
@@ -279,6 +282,10 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     public void hideDoctorLoading(){
         ((SwipeRefreshLayout)views[2]).setRefreshing(false);
+    }
+
+    public void hideGoodsLoading(){
+        ((SwipeRefreshLayout)views[1]).setRefreshing(false);
     }
 
     public void startLoadGoodsMore(){
