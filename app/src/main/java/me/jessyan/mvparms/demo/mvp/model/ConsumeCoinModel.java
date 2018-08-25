@@ -10,7 +10,11 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
 
 
 @ActivityScope
@@ -31,4 +35,11 @@ public class ConsumeCoinModel extends BaseModel implements ConsumeCoinContract.M
         this.mGson = null;
         this.mApplication = null;
     }
+
+     @Override
+    public Observable<GetConsumeInfoPageResponse> getconsumeInfoPage(GetConsumeInfoPageRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+	                .getConsumeInfoPage(request);
+    }
+
 }
