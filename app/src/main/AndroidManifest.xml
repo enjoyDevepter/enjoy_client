@@ -175,7 +175,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.ConsumeCoinActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.CashCoinActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
