@@ -9,6 +9,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DeleteCartListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryCommentListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryImagesRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
@@ -132,6 +133,9 @@ public interface MainService {
 
     @POST("gateway")
     Observable<DiaryListResponse> getDiaryList(@Body DiaryListRequest request);
+
+    @POST("gateway")
+    Observable<DiaryListResponse> getDiaryForGoodsIdList(@Body DiaryForGoodsRequest request);
 
     @POST("gateway")
     Observable<BaseResponse> diaryVote(@Body DiaryVoteRequest request);

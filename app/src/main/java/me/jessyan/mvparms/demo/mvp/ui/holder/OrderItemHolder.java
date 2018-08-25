@@ -53,12 +53,10 @@ public class OrderItemHolder extends BaseHolder<Order> {
     TextView timeTV;
     @BindView(R.id.status)
     TextView statusTV;
-    @BindView(R.id.pay)
-    View payV;
-    @BindView(R.id.logistics)
-    View logisticsV;
-    @BindView(R.id.take_over)
-    View takeOverV;
+    @BindView(R.id.left)
+    TextView leftTV;
+    @BindView(R.id.right)
+    TextView rightTV;
     @BindView(R.id.more_layout)
     View moreV;
     @BindView(R.id.images)
@@ -88,7 +86,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
     @BindColor(R.color.order_item_color)
     int textColor;
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     private MyOrderAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
     private AppComponent mAppComponent;
@@ -97,9 +95,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
     public OrderItemHolder(View itemView, MyOrderAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
         this.onChildItemClickLinstener = onChildItemClickLinstener;
-        payV.setOnClickListener(this);
-        logisticsV.setOnClickListener(this);
-        takeOverV.setOnClickListener(this);
+        leftTV.setOnClickListener(this);
+        rightTV.setOnClickListener(this);
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
@@ -109,15 +106,12 @@ public class OrderItemHolder extends BaseHolder<Order> {
     public void onClick(View view) {
         if (null != onChildItemClickLinstener) {
             switch (view.getId()) {
-                case R.id.pay:
-                    onChildItemClickLinstener.onChildItemClick(view, MyOrderAdapter.ViewName.PAY, getAdapterPosition());
+                case R.id.left:
+                    onChildItemClickLinstener.onChildItemClick(view, MyOrderAdapter.ViewName.LEFT, getAdapterPosition());
                     return;
-                case R.id.logistics:
-                    onChildItemClickLinstener.onChildItemClick(view, MyOrderAdapter.ViewName.LOGISTICS, getAdapterPosition());
+                case R.id.right:
+                    onChildItemClickLinstener.onChildItemClick(view, MyOrderAdapter.ViewName.RIGHT, getAdapterPosition());
                     return;
-                case R.id.take_over:
-                    onChildItemClickLinstener.onChildItemClick(view, MyOrderAdapter.ViewName.TAKE_OVER, getAdapterPosition());
-                    break;
             }
         }
         onChildItemClickLinstener.onChildItemClick(view, MyOrderAdapter.ViewName.ITEM, getAdapterPosition());
@@ -139,9 +133,58 @@ public class OrderItemHolder extends BaseHolder<Order> {
             single_price_tagTV.setTextColor(textColor);
             single_price_infoTV.setTextColor(textColor);
             payPriceTV.setText(String.valueOf(order.getGoodsList().get(0).getSalePrice()));
+
+            if (order.getOrderStatus().equals("1")) {
+                statusTV.setText("待付款");
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("取消订单");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("去支付");
+            } else if (order.getOrderStatus().equals("2")) {
+                statusTV.setText("二次付款");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("付尾款");
+                leftTV.setVisibility(View.GONE);
+            } else if (order.getOrderStatus().equals("3")) {
+                statusTV.setText("待预约");
+                leftTV.setVisibility(View.GONE);
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("预约");
+            } else if (order.getOrderStatus().equals("5")) {
+                statusTV.setText("已完成");
+                rightTV.setText("写日记");
+                rightTV.setVisibility(View.VISIBLE);
+                leftTV.setVisibility(View.GONE);
+            }
+
         } else {
             single_price_infoTV.setVisibility(View.GONE);
+
+            if (order.getOrderStatus().equals("1")) {
+                statusTV.setText("待付款");
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("取消订单");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("去支付");
+            } else if (order.getOrderStatus().equals("3")) {
+                statusTV.setText("待发货");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("提醒发货");
+                leftTV.setVisibility(View.GONE);
+            } else if (order.getOrderStatus().equals("4")) {
+                statusTV.setText("待收货");
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("查看物流");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("确认收货");
+            } else if (order.getOrderStatus().equals("5")) {
+                statusTV.setText("已完成");
+                rightTV.setText("写日记");
+                rightTV.setVisibility(View.VISIBLE);
+                leftTV.setVisibility(View.GONE);
+            }
         }
+
 
         if (order.getGoodsList().size() > 1) {
             itemLayoutParams.height = ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_item_height);
@@ -150,6 +193,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
             List<OrderGoods> goodsList = order.getGoodsList();
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_image_height), ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_image_height));
             layoutParams.rightMargin = ArmsUtils.getDimens(itemView.getContext(), R.dimen.plus_width);
+            imageLL.removeAllViews();
             for (OrderGoods goods : goodsList) {
                 ImageView imageView = new ImageView(itemView.getContext());
                 imageView.setLayoutParams(layoutParams);
@@ -193,24 +237,6 @@ public class OrderItemHolder extends BaseHolder<Order> {
 
         }
 
-        if (order.getOrderStatus().equals("1")) {
-            statusTV.setText("待付款");
-            logisticsV.setVisibility(View.GONE);
-            takeOverV.setVisibility(View.GONE);
-        } else if (order.getOrderStatus().equals("3")) {
-            statusTV.setText("待发货");
-            takeOverV.setVisibility(View.GONE);
-            payV.setVisibility(View.GONE);
-        } else if (order.getOrderStatus().equals("4")) {
-            statusTV.setText("待收货");
-            payV.setVisibility(View.GONE);
-        } else if (order.getOrderStatus().equals("5")) {
-            statusTV.setText("已完成");
-            payV.setVisibility(View.GONE);
-            logisticsV.setVisibility(View.GONE);
-            takeOverV.setVisibility(View.GONE);
-        }
-
         itemView.setLayoutParams(itemLayoutParams);
     }
 
@@ -227,9 +253,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 .build());
         this.timeTV = null;
         this.statusTV = null;
-        this.payV = null;
-        this.logisticsV = null;
-        this.takeOverV = null;
+        this.leftTV = null;
+        this.rightTV = null;
         this.moreV = null;
         this.imageLL = null;
         this.morePriceTV = null;
@@ -239,5 +264,9 @@ public class OrderItemHolder extends BaseHolder<Order> {
         this.nameTV = null;
         this.priceTV = null;
         this.countTV = null;
+        this.payPriceV = null;
+        this.payPriceTV = null;
+        this.single_price_infoTV = null;
+        this.single_price_tagTV = null;
     }
 }

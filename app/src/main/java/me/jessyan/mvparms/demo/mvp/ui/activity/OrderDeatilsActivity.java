@@ -89,13 +89,12 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     TextView freightTV;
     @BindView(R.id.payMoney)
     TextView payMoneyTV;
-    @BindView(R.id.pay_btn)
-    TextView payV;
-    @BindView(R.id.cancel)
-    View cancelV;
+    @BindView(R.id.right)
+    TextView rightTV;
+    @BindView(R.id.left)
+    TextView leftTV;
     @BindView(R.id.operation)
     View operationV;
-
     @BindView(R.id.meal_order_pay_layout)
     View mealOrderV;
     @BindView(R.id.meal_price)
@@ -107,7 +106,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     @Inject
     RecyclerView.Adapter mAdapter;
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     private OrderDetailsResponse response;
 
@@ -130,8 +129,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     public void initData(Bundle savedInstanceState) {
         titleTV.setText("订单详情");
         backV.setOnClickListener(this);
-        payV.setOnClickListener(this);
-        cancelV.setOnClickListener(this);
+        leftTV.setOnClickListener(this);
+        rightTV.setOnClickListener(this);
 
         ArmsUtils.configRecyclerView(ordersRV, mLayoutManager);
         ordersRV.setAdapter(mAdapter);
@@ -172,9 +171,9 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             case R.id.back:
                 killMyself();
                 break;
-            case R.id.pay:
+            case R.id.left:
                 break;
-            case R.id.cancel:
+            case R.id.right:
                 break;
         }
     }
@@ -198,13 +197,24 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
         String status = response.getOrder().getOrderStatus();
         switch (orderType) {
             case 0:
-                if ("".equals(status)) {
-                } else if ("1".equals(status)) {
-
+                if ("1".equals(status)) {
+                    leftTV.setVisibility(View.VISIBLE);
+                    leftTV.setText("取消订单");
+                    rightTV.setVisibility(View.VISIBLE);
+                    rightTV.setText("去支付");
                 } else if ("3".equals(status)) {
+                    rightTV.setVisibility(View.VISIBLE);
+                    rightTV.setText("提醒发货");
+                    leftTV.setVisibility(View.GONE);
                 } else if ("4".equals(status)) {
+                    leftTV.setVisibility(View.VISIBLE);
+                    leftTV.setText("查看物流");
+                    rightTV.setVisibility(View.VISIBLE);
+                    rightTV.setText("确认收货");
                 } else if ("5".equals(status)) {
-                    operationV.setVisibility(View.GONE);
+                    rightTV.setText("写日记");
+                    rightTV.setVisibility(View.VISIBLE);
+                    leftTV.setVisibility(View.GONE);
                 }
                 orderV.setVisibility(View.VISIBLE);
                 hOrderV.setVisibility(View.GONE);
@@ -217,14 +227,24 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             case 1:
                 break;
             case 2:
-                if ("".equals(status)) {
-                } else if ("1".equals(status)) {
 
-                } else if ("2".equals(status)) {
-                    payV.setText("二次付款");
-                    cancelV.setVisibility(View.GONE);
-                } else if ("5".equals(status)) {
-                    operationV.setVisibility(View.GONE);
+                if (status.equals("1")) {
+                    leftTV.setVisibility(View.VISIBLE);
+                    leftTV.setText("取消订单");
+                    rightTV.setVisibility(View.VISIBLE);
+                    rightTV.setText("去支付");
+                } else if (status.equals("2")) {
+                    rightTV.setVisibility(View.VISIBLE);
+                    rightTV.setText("付尾款");
+                    leftTV.setVisibility(View.GONE);
+                } else if (status.equals("3")) {
+                    leftTV.setVisibility(View.GONE);
+                    rightTV.setVisibility(View.VISIBLE);
+                    rightTV.setText("预约");
+                } else if (status.equals("5")) {
+                    rightTV.setText("写日记");
+                    rightTV.setVisibility(View.VISIBLE);
+                    leftTV.setVisibility(View.GONE);
                 }
                 if (response.getOrder().equals("7")) {
                     orderV.setVisibility(View.GONE);

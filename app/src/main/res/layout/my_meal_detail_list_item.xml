@@ -38,7 +38,6 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
             android:gravity="center"
-            android:text="预约"
             android:textColor="#FF333333"
             android:textSize="13sp" />
 
@@ -101,7 +100,6 @@
             android:layout_marginRight="15dp"
             android:layout_toRightOf="@id/image"
             android:lines="2"
-            android:text="湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
             android:textColor="#FF000000"
             android:textSize="13sp" />
 
@@ -147,7 +145,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                android:text="5"
                 android:textColor="#FF666666"
                 android:textSize="13sp" />
         </LinearLayout>

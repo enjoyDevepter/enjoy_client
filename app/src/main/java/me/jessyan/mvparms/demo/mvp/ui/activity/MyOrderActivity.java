@@ -110,6 +110,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("二次付款"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待预约"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                 tab3.select();
                 break;
@@ -179,6 +180,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("二次付款"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待预约"));
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                     break;
             }
@@ -279,7 +281,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
     public void onChildItemClick(View v, MyOrderAdapter.ViewName viewname, int position) {
         Order order = mAdapter.getInfos().get(position);
         switch (viewname) {
-            case PAY:
+            case LEFT:
                 Intent payIntent = new Intent(this, PayActivity.class);
                 payIntent.putExtra("orderId", order.getOrderId());
                 payIntent.putExtra("payMoney", order.getPayMoney());
@@ -292,10 +294,6 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                 detailIntent.putExtra("type", (int) provideCache().get("type"));
                 detailIntent.putExtra("isMeal", "6".equals(order.getOrderType()) ? true : false);
                 ArmsUtils.startActivity(detailIntent);
-                break;
-            case LOGISTICS:
-                break;
-            case TAKE_OVER:
                 break;
         }
     }

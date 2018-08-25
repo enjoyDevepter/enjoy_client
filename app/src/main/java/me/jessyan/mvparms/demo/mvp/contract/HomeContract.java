@@ -39,6 +39,8 @@ public interface HomeContract {
         RxPermissions getRxPermissions();
 
         void refreshUI(List<NaviInfo> firstNavList, List<Ad> ads, List<Module> moduleList, List<NaviInfo> secondNavList);
+
+        void updateDiaryUI(int count);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存

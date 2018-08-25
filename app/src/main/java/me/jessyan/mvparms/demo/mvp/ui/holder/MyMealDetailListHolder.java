@@ -31,8 +31,9 @@ import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealDetailListAdapter;
 
 /**
  * ================================================
@@ -43,7 +44,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class MyMealListHolder extends BaseHolder<Order> {
+public class MyMealDetailListHolder extends BaseHolder<Appointment> {
     @BindView(R.id.time)
     TextView timeTV;
     @BindView(R.id.status)
@@ -63,11 +64,11 @@ public class MyMealListHolder extends BaseHolder<Order> {
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    private MyMealListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
+    private MyMealDetailListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
 
-    public MyMealListHolder(View itemView, MyMealListAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
+    public MyMealDetailListHolder(View itemView, MyMealDetailListAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
         this.onChildItemClickLinstener = onChildItemClickLinstener;
         leftTV.setOnClickListener(this);
@@ -82,48 +83,57 @@ public class MyMealListHolder extends BaseHolder<Order> {
         if (null != onChildItemClickLinstener) {
             switch (view.getId()) {
                 case R.id.left:
-                    onChildItemClickLinstener.onChildItemClick(view, MyMealListAdapter.ViewName.LEFT, getAdapterPosition());
+                    onChildItemClickLinstener.onChildItemClick(view, MyMealDetailListAdapter.ViewName.LEFT, getAdapterPosition());
                     return;
                 case R.id.right:
-                    onChildItemClickLinstener.onChildItemClick(view, MyMealListAdapter.ViewName.RIGHT, getAdapterPosition());
+                    onChildItemClickLinstener.onChildItemClick(view, MyMealDetailListAdapter.ViewName.RIGHT, getAdapterPosition());
                     return;
             }
         }
-        onChildItemClickLinstener.onChildItemClick(view, MyMealListAdapter.ViewName.ITEM, getAdapterPosition());
+        onChildItemClickLinstener.onChildItemClick(view, MyMealDetailListAdapter.ViewName.ITEM, getAdapterPosition());
     }
 
     @Override
-    public void setData(Order appointment, int position) {
+    public void setData(Appointment appointment, int position) {
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
-        Order.MealGoods mealGoods = appointment.getSetMealGoodsList().get(0);
+        Goods mealGoods = appointment.getGoods();
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
                         .url(mealGoods.getImage())
                         .imageView(imageIV)
                         .build());
-        timeTV.setText(sdf.format(appointment.getOrderTime()));
-        statusTV.setText(appointment.getOrderTypeDesc());
+        timeTV.setText(sdf.format(appointment.getCreateDate()));
+        statusTV.setText(appointment.getStatusDesc());
         nameTV.setText(mealGoods.getName());
         priceTV.setText(String.valueOf(mealGoods.getSalePrice()));
         countTV.setText(String.valueOf(mealGoods.getNums()));
 
-        if (appointment.getOrderStatus().equals("1")) {
-            statusTV.setText("待付款");
+        if (appointment.getStatus().equals("1")) {
+            statusTV.setText("可预约");
             leftTV.setVisibility(View.VISIBLE);
-            leftTV.setText("取消订单");
-            rightTV.setVisibility(View.VISIBLE);
-            rightTV.setText("去支付");
-        } else if (appointment.getOrderStatus().equals("31")) {
-            statusTV.setText("待预约");
-            leftTV.setVisibility(View.GONE);
+            leftTV.setText("复制");
             rightTV.setVisibility(View.VISIBLE);
             rightTV.setText("预约");
-        } else if (appointment.getOrderStatus().equals("5")) {
-            statusTV.setText("已完成");
-            rightTV.setText("写日记");
+        } else if (appointment.getStatus().equals("2")) {
+            statusTV.setText("预约中");
+            leftTV.setVisibility(View.VISIBLE);
+            leftTV.setText("取消");
             rightTV.setVisibility(View.VISIBLE);
+            rightTV.setText("改约");
+        } else if (appointment.getStatus().equals("3")) {
+            statusTV.setText("已预约");
             leftTV.setVisibility(View.GONE);
+            rightTV.setVisibility(View.VISIBLE);
+            rightTV.setText("取消");
+        } else if (appointment.getStatus().equals("4")) {
+            statusTV.setText("已服务");
+            leftTV.setVisibility(View.GONE);
+            rightTV.setVisibility(View.GONE);
+        } else if (appointment.getStatus().equals("5")) {
+            statusTV.setText("已转赠");
+            leftTV.setVisibility(View.GONE);
+            rightTV.setVisibility(View.GONE);
         }
     }
 

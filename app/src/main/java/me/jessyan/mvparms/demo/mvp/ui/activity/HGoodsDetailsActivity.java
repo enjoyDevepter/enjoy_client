@@ -4,12 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -19,11 +29,13 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,6 +53,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.HGoodsDetailsPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
 
@@ -59,8 +72,8 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     View buyV;
     @BindView(R.id.tab)
     TabLayout tabLayout;
-    @BindView(R.id.detail)
-    WebView detailWV;
+    @BindView(R.id.viewpager)
+    ViewPager viewpager;
     @BindView(R.id.goods_iamges)
     Banner imagesB;
     @BindView(R.id.image_count)
@@ -153,7 +166,26 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
 
+    @Inject
+    DiaryListAdapter mAdapter;
     HGoodsDetailsResponse response;
+    private List<View> views = new ArrayList<>();
+    private String[] titles = new String[]{"商品详情", "相关日志"};
+    // 第一个页面
+    private WebView detailWV;
+    // 第二个页面
+    private RecyclerView dirayRV;
+    private SwipeRefreshLayout diraySRL;
+    private Mobile mobile = new Mobile();
+    private WebViewClient mClient = new WebViewClient() {
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            mobile.onGetWebContentHeight();
+        }
+    };
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -226,15 +258,113 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     }
 
 
+    private void initViewPage() {
+
+        viewpager.removeAllViews();
+
+        // 初始化商品详情
+        detailWV = new WebView(this);
+        views.add(detailWV);
+        detailWV.addJavascriptInterface(mobile, "mobile");
+        detailWV.setWebViewClient(mClient);
+
+        // 初始化viewPager
+        viewpager.setAdapter(new PagerAdapter() {
+            @Override
+            public int getCount() {
+                return views.size();
+            }
+
+            @Override
+            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+                return view == object;
+            }
+
+            @Nullable
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return titles[position];
+            }
+
+            @NonNull
+            @Override
+            public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                View view = views.get(position);
+                container.addView(view);
+                return view;
+            }
+
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                container.removeView((View) object);
+            }
+        });
+
+        tabLayout.setupWithViewPager(viewpager);
+
+    }
+
+    /**
+     * 开始加载更多
+     */
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    @Override
+    public void setLoadedAllItems(boolean has) {
+        this.hasLoadedAllItems = has;
+    }
+
+
+    /**
+     * 初始化Paginate,用于加载更多
+     */
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.getGoodsForDiary();
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return hasLoadedAllItems;
+                }
+            };
+
+            mPaginate = Paginate.with(dirayRV, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
+    }
+
     @Override
     public void showLoading() {
-
+        diraySRL.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        diraySRL.setRefreshing(false);
     }
+
 
     @Override
     public void showMessage(@NonNull String message) {
@@ -278,7 +408,10 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
 
         isFavoriteV.setSelected("1".equals(goods.getIsFavorite()) ? true : false);
         saleCountTV.setText(String.valueOf(goods.getSales()));
-        detailWV.loadData(goods.getMobileDetail(), "text/html", null);
+
+        initViewPage();
+        detailWV.loadData(response.getGoods().getMobileDetail(), "text/html", "UTF-8");
+
         tailMoneyButtomTV.setText(String.valueOf(goods.getTailMoney()));
         if (null != goods.getGoodsSpecValue()) {
             goodsSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
@@ -338,6 +471,19 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                 tailMoneyTV.setText(String.valueOf(goods.getTailMoney()));
                 depositTV.setText(String.valueOf(goods.getDeposit()));
             }
+        }
+    }
+
+    @Override
+    public void updateDiaryUI(boolean hasDate) {
+        if (hasDate && views.size() < 2) {
+            tabLayout.addTab(tabLayout.newTab().setText(titles[1]));
+            diraySRL = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview, null);
+            dirayRV = diraySRL.findViewById(R.id.list);
+            dirayRV.setAdapter(mAdapter);
+            ArmsUtils.configRecyclerView(dirayRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+            initPaginate();
+            views.add(diraySRL);
         }
     }
 
@@ -449,5 +595,25 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     protected void onDestroy() {
         super.onDestroy();
         DefaultAdapter.releaseAllHolder(promotionCV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        DefaultAdapter.releaseAllHolder(dirayRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+
+    }
+
+    private class Mobile {
+        @JavascriptInterface
+        public void onGetWebContentHeight() {
+            //重新调整webview高度
+            detailWV.post(() -> {
+                detailWV.measure(0, 0);
+                int measuredHeight = detailWV.getMeasuredHeight();
+                ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) detailWV.getLayoutParams();
+                layoutParams.height = measuredHeight;
+                detailWV.setLayoutParams(layoutParams);
+
+                LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
+                layoutParams1.height = measuredHeight;
+                viewpager.setLayoutParams(layoutParams1);
+            });
+        }
     }
 }

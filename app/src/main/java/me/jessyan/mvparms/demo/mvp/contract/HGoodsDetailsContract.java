@@ -7,7 +7,9 @@ import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsDetailsResponse;
 
 
@@ -19,6 +21,14 @@ public interface HGoodsDetailsContract {
         Cache getCache();
 
         void updateUI(HGoodsDetailsResponse response);
+
+        void updateDiaryUI(boolean hasDate);
+
+        void startLoadMore();
+
+        void endLoadMore();
+
+        void setLoadedAllItems(boolean has);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -26,5 +36,6 @@ public interface HGoodsDetailsContract {
 
         Observable<HGoodsDetailsResponse> getHGoodsDetails(GoodsDetailsRequest request);
 
+        Observable<DiaryListResponse> getDiaryForGoodsIdList(DiaryForGoodsRequest request);
     }
 }

@@ -111,8 +111,8 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
             request.setCmd(2107);
             request.setReservationId(mRootView.getActivity().getIntent().getStringExtra("reservationId"));
         }
-        request.setReservationDate((String) mRootView.getCache().get("reservationDate"));
-        request.setReservationTime((String) mRootView.getCache().get("reservationTime"));
+        request.setReservationDate((String) mRootView.getCache().get("appointmentsDate"));
+        request.setReservationTime((String) mRootView.getCache().get("appointmentsTime"));
         mModel.modifyAppointmentTime(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -33,7 +34,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.presenter.CartPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
-import me.jessyan.mvparms.demo.mvp.ui.widget.CustomProgressDailog;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -57,11 +57,11 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
     @BindView(R.id.cartList)
     RecyclerView cartRV;
     @BindView(R.id.deductionMoney)
-    TextView deductionMoneyTV;
+    MoneyView deductionMoneyTV;
     @BindView(R.id.payPrice)
-    TextView payPriceTV;
+    MoneyView payPriceTV;
     @BindView(R.id.totalPrice)
-    TextView totalPriceTV;
+    MoneyView totalPriceTV;
     @BindView(R.id.check)
     View checkV;
     @BindView(R.id.pay_info)
@@ -71,7 +71,6 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     CustomDialog dialog = null;
-    CustomProgressDailog progressDailog;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
@@ -106,6 +105,7 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
         cartRV.setAdapter(mAdapter);
         cartRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         swipeRefreshLayout.setOnRefreshListener(this);
+        initPaginate();
     }
 
 
@@ -129,7 +129,6 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
     public void setLoadedAllItems(boolean has) {
         this.hasLoadedAllItems = has;
     }
-
 
     /**
      * 初始化Paginate,用于加载更多
@@ -211,14 +210,6 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
                 for (CartBean.CartItem cartItem : cartItems) {
                     for (Goods goodsBean : cartItem.getGoodsList()) {
                         if ("1".equals(goodsBean.getStatus())) {
-//                            Goods goods = new Goods();
-//                            goods.setGoodsId(goodsBean.getGoodsId());
-//                            goods.setMerchId(goodsBean.getMerchId());
-//                            goods.setNums(goodsBean.getNums());
-//                            goods.setSalePrice(goodsBean.getSalePrice());
-//                            if (cartItem.getPromotion() != null) {
-//                                goods.setPromotionId(cartItem.getPromotion().getPromotionId());
-//                            }
                             goodsList.add(goodsBean);
                         }
                     }
@@ -241,9 +232,9 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
 
     @Override
     public void updateUI(CartBean cartBean) {
-        deductionMoneyTV.setText(ArmsUtils.formatLong(cartBean.getDeductionMoney()));
-        payPriceTV.setText(ArmsUtils.formatLong(cartBean.getPayPrice()));
-        totalPriceTV.setText(ArmsUtils.formatLong(cartBean.getTotalPrice()));
+        deductionMoneyTV.setMoneyText(ArmsUtils.formatLong(cartBean.getDeductionMoney()));
+        payPriceTV.setMoneyText(ArmsUtils.formatLong(cartBean.getPayPrice()));
+        totalPriceTV.setMoneyText(ArmsUtils.formatLong(cartBean.getTotalPrice()));
         for (CartBean.CartItem cartItem : cartBean.getCartItems()) {
             for (Goods goodsBean : cartItem.getGoodsList()) {
                 if (!"1".equals(goodsBean.getStatus())) {

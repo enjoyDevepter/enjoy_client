@@ -43,43 +43,31 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/pay"
-            android:layout_width="54dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/order_btn_bg"
-            android:gravity="center"
-            android:text="支付"
-            android:textColor="#FFFFFFFF"
-            android:textSize="13sp" />
-
-
-        <TextView
-            android:id="@+id/logistics"
+            android:id="@+id/right"
             android:layout_width="76dp"
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/order_btn_bg"
             android:gravity="center"
-            android:text="查看物流"
+            android:text="去支付"
             android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
-
 
         <TextView
-            android:id="@+id/take_over"
+            android:id="@+id/left"
             android:layout_width="76dp"
             android:layout_height="20dp"
-            android:layout_alignBottom="@id/logistics"
-            android:layout_marginRight="4dp"
-            android:layout_toLeftOf="@id/logistics"
+            android:layout_alignBottom="@id/right"
+            android:layout_toLeftOf="@id/right"
             android:background="@drawable/order_btn_bg"
             android:gravity="center"
-            android:text="查看物流"
+            android:text="取消订单"
             android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
+
+
     </RelativeLayout>
 
     <FrameLayout
@@ -100,7 +88,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
                 android:layout_marginTop="15dp"
-                android:paddingLeft="15dp">
+                android:paddingLeft="15dp"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/images"

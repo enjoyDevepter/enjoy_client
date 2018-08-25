@@ -161,7 +161,7 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
             statusInt = (int) mRootView.getCache().get("status");
         }
         String status = "";
-//        1,2,5
+//        1,2,3,5
         switch (statusInt) {
             case 0:
                 status = "";
@@ -173,6 +173,9 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                 status = "2";
                 break;
             case 3:
+                status = "3";
+                break;
+            case 4:
                 status = "5";
                 break;
         }

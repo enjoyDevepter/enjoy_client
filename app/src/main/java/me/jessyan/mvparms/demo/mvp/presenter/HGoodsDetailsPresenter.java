@@ -22,13 +22,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsDetailsContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsOrderConfirmActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -53,8 +57,13 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
     TagAdapter adapter;
     @Inject
     GoodsPromotionAdapter goodsPromotionAdapter;
-
+    @Inject
+    DiaryListAdapter mAdapter;
+    @Inject
+    List<Diary> diaryList;
     HGoodsDetailsResponse hGoodsDetailsResponse;
+    private int preEndIndex;
+    private int lastPageIndex = 1;
 
     @Inject
     public HGoodsDetailsPresenter(HGoodsDetailsContract.Model model, HGoodsDetailsContract.View rootView) {
@@ -132,6 +141,7 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
                             mRootView.updateUI(response);
                             adapter.notifyDataChanged();
                             goodsPromotionAdapter.notifyDataSetChanged();
+                            getGoodsForDiary();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -193,6 +203,53 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
                     }
                 });
     }
+
+
+    public void getGoodsForDiary() {
+        DiaryForGoodsRequest request = new DiaryForGoodsRequest();
+
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) (cache.get(KEY_KEEP + "token"));
+        if (ArmsUtils.isEmpty(token)) {
+            request.setCmd(819);
+        } else {
+            request.setCmd(820);
+        }
+        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
+        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        request.setToken(token);
+
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
+        mModel.getDiaryForGoodsIdList(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                }).subscribe(new Consumer<DiaryListResponse>() {
+            @Override
+            public void accept(DiaryListResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                    diaryList.addAll(response.getDiaryList());
+                    mRootView.updateDiaryUI(response.getDiaryList().size() > 0);
+                    preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = diaryList.size() / 10 == 0 ? 1 : diaryList.size() / 10;
+                    if (lastPageIndex == 1) {
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
+                    }
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
+    }
+
 
     public void goOrderConfirm() {
         String specValueId = (String) mRootView.getCache().get("specValueId");

@@ -12,7 +12,10 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.HGoodsService;
+import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsDetailsResponse;
 
 
@@ -39,5 +42,11 @@ public class HGoodsDetailsModel extends BaseModel implements HGoodsDetailsContra
     public Observable<HGoodsDetailsResponse> getHGoodsDetails(GoodsDetailsRequest request) {
         return mRepositoryManager.obtainRetrofitService(HGoodsService.class)
                 .getHGoodsDetails(request);
+    }
+
+    @Override
+    public Observable<DiaryListResponse> getDiaryForGoodsIdList(DiaryForGoodsRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .getDiaryForGoodsIdList(request);
     }
 }

@@ -141,8 +141,9 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                     diaryList.addAll(response.getDiaryList());
                     preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = diaryList.size() / 10;
+                    lastPageIndex = diaryList.size() / 10 == 0 ? 1 : diaryList.size() / 10;
                     if (lastPageIndex == 1) {
+                        mRootView.updateDiaryUI(diaryList.size());
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());

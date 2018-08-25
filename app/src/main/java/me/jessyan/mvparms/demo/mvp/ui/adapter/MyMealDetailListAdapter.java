@@ -23,8 +23,8 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
-import me.jessyan.mvparms.demo.mvp.ui.holder.MyMealListHolder;
+import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
+import me.jessyan.mvparms.demo.mvp.ui.holder.MyMealDetailListHolder;
 
 /**
  * ================================================
@@ -35,16 +35,16 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.MyMealListHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class MyMealListAdapter extends DefaultAdapter<Order> {
+public class MyMealDetailListAdapter extends DefaultAdapter<Appointment> {
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public MyMealListAdapter(List<Order> appointmentList) {
+    public MyMealDetailListAdapter(List<Appointment> appointmentList) {
         super(appointmentList);
     }
 
     @Override
-    public BaseHolder<Order> getHolder(View v, int viewType) {
-        return new MyMealListHolder(v, new OnChildItemClickLinstener() {
+    public BaseHolder<Appointment> getHolder(View v, int viewType) {
+        return new MyMealDetailListHolder(v, new OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ViewName viewname, int position) {
                 if (onChildItemClickLinstener != null) {
@@ -56,7 +56,7 @@ public class MyMealListAdapter extends DefaultAdapter<Order> {
 
     @Override
     public int getLayoutId(int viewType) {
-        return R.layout.my_meal_list_item;
+        return R.layout.my_meal_detail_list_item;
     }
 
     public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
@@ -64,10 +64,10 @@ public class MyMealListAdapter extends DefaultAdapter<Order> {
     }
 
     public enum ViewName {
-        ITEM, RIGHT, LEFT
+        LEFT, RIGHT, ITEM
     }
 
     public interface OnChildItemClickLinstener {
-        void onChildItemClick(View v, MyMealListAdapter.ViewName viewname, int position);
+        void onChildItemClick(View v, MyMealDetailListAdapter.ViewName viewname, int position);
     }
 }

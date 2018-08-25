@@ -17,13 +17,17 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.Subscriber;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMyMealComponent;
 import me.jessyan.mvparms.demo.di.module.MyMealModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyMealContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Coupon;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
 import me.jessyan.mvparms.demo.mvp.presenter.MyMealPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealListAdapter;
@@ -167,6 +171,11 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
     }
 
 
+    @Subscriber(tag = EventBusTags.MEAL_PAY_SUCCESS)
+    private void updateCoupon(Coupon coupon) {
+        mPresenter.getMyMealAppointment(true);
+    }
+
     @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
@@ -203,27 +212,31 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
     public void onChildItemClick(View v, MyMealListAdapter.ViewName viewname, int position) {
         Order appointment = mAdapter.getInfos().get(position);
         switch (viewname) {
-            case MAKE_CANCEL_DETAIL: // 取消，预约，详情
+            case LEFT:
                 if ("1".equals(appointment.getOrderStatus())) {
+                    // 取消订单
+                } else if ("5".equals(appointment.getOrderStatus())) {
+                    // 写日记
+                }
+                break;
+            case RIGHT:
+                if ("1".equals(appointment.getOrderStatus())) {
+                    // 支付
+                    Intent intent = new Intent(getActivity(), MealOrderConfirmActivity.class);
+                    intent.putExtra("setMealId", appointment.getSetMealGoodsList().get(0).getSetMealId());
+                    intent.putExtra("nums", appointment.getSetMealGoodsList().get(0).getNums());
+                    intent.putExtra("totalPrice", appointment.getSetMealGoodsList().get(0).getTotalPrice());
+                    intent.putExtra("salePrice", appointment.getSetMealGoodsList().get(0).getSalePrice());
+                    ArmsUtils.startActivity(intent);
+                } else if ("31".equals(appointment.getOrderStatus())) {
                     // 预约
-                    Intent makeIntent = new Intent(this, ChoiceTimeActivity.class);
-                    makeIntent.putExtra("projectId", appointment.getOrderId());
-                    makeIntent.putExtra("type", "add_appointment_time");
+                    Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
+                    makeIntent.putExtra("orderId", appointment.getOrderId());
+                    makeIntent.putExtra("mealName", appointment.getSetMealGoodsList().get(0).getName());
                     ArmsUtils.startActivity(makeIntent);
-                } else if ("2".equals(appointment.getOrderStatus()) || ("3".equals(appointment.getOrderStatus()))) {
-                    // 取消
-                    mPresenter.modifyAppointmentTime();
-                } else if ("4".equals(appointment.getOrderStatus()) || ("5".equals(appointment.getOrderStatus()))) {
-                    // 详情
                 }
                 break;
             case ITEM:
-                break;
-            case CHANGE: //改约
-                Intent makeIntent = new Intent(this, ChoiceTimeActivity.class);
-                makeIntent.putExtra("reservationId", appointment.getOrderId());
-                makeIntent.putExtra("type", "modify_appointment_time");
-                ArmsUtils.startActivity(makeIntent);
                 break;
         }
     }
@@ -233,6 +246,7 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
         provideCache().put("type", tab.getPosition());
         mPresenter.getMyMealAppointment(true);
     }
+
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {

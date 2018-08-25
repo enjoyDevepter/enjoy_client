@@ -717,6 +717,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
                     android:text="支付金额"
@@ -726,6 +727,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginRight="3dp"
                     android:text="￥"
                     android:textColor="#FFFF0000"
@@ -735,6 +737,7 @@
                     android:id="@+id/payMoney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginRight="15dp"
                     android:textColor="#FFFF0000"
                     android:textSize="15sp" />
@@ -751,7 +754,7 @@
         android:layout_height="50dp">
 
         <TextView
-            android:id="@+id/pay_btn"
+            android:id="@+id/right"
             android:layout_width="100dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
@@ -764,12 +767,12 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/cancel"
+            android:id="@+id/left"
             android:layout_width="100dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="6dp"
-            android:layout_toLeftOf="@id/pay_btn"
+            android:layout_toLeftOf="@id/right"
             android:background="@drawable/order_cancel_btn_bg"
             android:gravity="center"
             android:text="取消订单"

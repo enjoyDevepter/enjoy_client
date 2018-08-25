@@ -15,7 +15,7 @@ public class Diary {
     private List<String> imageList;
     private String title;
     private DiaryMember member;
-    private DiaryGoods goods;
+    private Goods goods;
     private int browse;
     private String intro;
 
@@ -91,11 +91,11 @@ public class Diary {
         this.member = member;
     }
 
-    public DiaryGoods getGoods() {
+    public Goods getGoods() {
         return goods;
     }
 
-    public void setGoods(DiaryGoods goods) {
+    public void setGoods(Goods goods) {
         this.goods = goods;
     }
 

@@ -64,7 +64,7 @@ public class MyOrderAdapter extends DefaultAdapter<Order> {
     }
 
     public enum ViewName {
-        PAY, ITEM, LOGISTICS, TAKE_OVER
+        LEFT, RIGHT, ITEM
     }
 
     public interface OnChildItemClickLinstener {

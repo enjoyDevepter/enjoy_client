@@ -13,6 +13,8 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.MealOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.PayEntry;
@@ -137,6 +140,7 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                                 intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
                                 ArmsUtils.startActivity(intent);
                             } else {
+                                EventBus.getDefault().post(EventBusTags.MEAL_PAY_SUCCESS);
                                 Intent intent = new Intent(mRootView.getActivity(), PayResultActivity.class);
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getPayMoney());

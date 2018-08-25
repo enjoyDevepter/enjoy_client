@@ -30,6 +30,7 @@ import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -138,6 +139,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mPresenter.updateHomeInfo();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (null != tabLayout.getTabAt(0)) {
+            tabLayout.getTabAt(0).select();
+        }
+        if (null != tabLayoutTwo.getTabAt(0)) {
+            tabLayoutTwo.getTabAt(0).select();
+        }
+    }
+
     /**
      * 开始加载更多
      */
@@ -204,21 +216,21 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         // 一级导航
         tabLayout.removeAllTabs();
         for (NaviInfo naviInfo : firstNavList) {
-            tabLayout.addTab(tabLayout.newTab().setText(naviInfo.getTitle()));
+            tabLayout.addTab(tabLayout.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
         }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0:
-                        break;
-                    case 1:
-                        ArmsUtils.startActivity(TaoCanActivity.class);
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
+                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
+                String tag = (String) tab.getTag();
+                if ("".equals(tab.getTag())) {
+                } else if ("combo".equals(tag)) {
+                    ArmsUtils.startActivity(TaoCanActivity.class);
+                } else if ("medicalcosmetology".equals(tag)) {
+                    cache.put("defaultIndex", 2);
+                    EventBus.getDefault().post(EventBusTags.CHANGE_MAIN_INDEX);
+                } else if ("shop".equals(tag)) {
+                    EventBus.getDefault().post(EventBusTags.CHANGE_MAIN_INDEX);
                 }
             }
 
@@ -315,8 +327,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
     @Override
-    public void setData(@Nullable Object data) {
+    public void updateDiaryUI(int count) {
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mRecyclerView.getLayoutParams();
+        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count;
+        mRecyclerView.setLayoutParams(layoutParams);
+    }
 
+    @Override
+    public void setData(@Nullable Object data) {
     }
 
     @Subscriber(tag = EventBusTags.CITY_CHANGE_EVENT)

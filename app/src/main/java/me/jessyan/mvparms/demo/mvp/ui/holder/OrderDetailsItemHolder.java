@@ -98,10 +98,11 @@ public class OrderDetailsItemHolder extends BaseHolder<OrderGoods> {
             price_tagTV.setTextColor(textColor);
             priceTV.setTextColor(textColor);
         } else {
+            payPriceV.setVisibility(View.GONE);
             price_infoTV.setVisibility(View.GONE);
             specTV.setVisibility(View.VISIBLE);
-            specTV.setText(goods.getGoodsSpecValue().getSpecValueName());
-            countTV.setText("数量：x" + String.valueOf(goods.getNums()));
+            specTV.setText("规格: " + goods.getGoodsSpecValue().getSpecValueName());
+            countTV.setText("数量: x" + String.valueOf(goods.getNums()));
             priceTV.setText(String.valueOf(goods.getSalePrice()));
         }
 

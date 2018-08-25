@@ -15,7 +15,8 @@ public class Appointment {
     private String reservationStatus;
     private String status;
     private String statusDesc;
-    private String createDate;
+    private long createDate;
+    private String code;
     private Goods goods;
 
     public String getProjectId() {
@@ -82,12 +83,20 @@ public class Appointment {
         this.statusDesc = statusDesc;
     }
 
-    public String getCreateDate() {
+    public long getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(long createDate) {
         this.createDate = createDate;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Goods getGoods() {
@@ -110,6 +119,7 @@ public class Appointment {
                 ", status='" + status + '\'' +
                 ", statusDesc='" + statusDesc + '\'' +
                 ", createDate='" + createDate + '\'' +
+                ", code='" + code + '\'' +
                 ", goods=" + goods +
                 '}';
     }

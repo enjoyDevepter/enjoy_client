@@ -90,6 +90,7 @@ public class HGoodsListItemHolder extends BaseHolder<HGoods> {
             Observable.just(goods.getSalePrice())
                     .subscribe(s -> tailMoneyTV.setText(String.valueOf(s)));
         } else {
+            depositV.setVisibility(View.VISIBLE);
 //            tailMoneyTV.setTextSize(ArmsUtils.getDimens(tailMoneyTV.getContext(), R.dimen.price_nor_text_size));
             tailMoneyTV.setTextColor(norColor);
             priceTagTV.setTextColor(norColor);
@@ -125,6 +126,9 @@ public class HGoodsListItemHolder extends BaseHolder<HGoods> {
         this.depositTV = null;
         this.tailMoneyTV = null;
         this.saleTV = null;
+        this.doctorT = null;
+        this.priceTagTV = null;
+        this.depositV = null;
         this.mAppComponent = null;
         this.mImageLoader = null;
     }

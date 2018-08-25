@@ -117,7 +117,6 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
 
-
     public static MallFragment newInstance() {
         MallFragment fragment = new MallFragment();
         return fragment;
@@ -371,6 +370,11 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
             if ("0".equals(category.getParentId())) {
                 tabLayout.addTab(tabLayout.newTab().setTag(category.getBusType()).setText(category.getName()));
             }
+        }
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
+        if (cache.get("defaultIndex") != null) {
+            tabLayout.getTabAt((int) cache.get("defaultIndex")).select();
+            cache.put("defaultIndex", null);
         }
     }
 

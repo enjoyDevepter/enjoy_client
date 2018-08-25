@@ -53,7 +53,6 @@ public class HomeModule {
     RecyclerView.LayoutManager provideLayoutManager() {
         return new LinearLayoutManager(view.getActivity(), LinearLayoutManager.VERTICAL, false);
     }
-
     @ActivityScope
     @Provides
     List<Diary> provideDiariesList() {

@@ -19,9 +19,11 @@ import dagger.Provides;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.GoodsDetailsModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
 
 
@@ -92,6 +94,18 @@ public class GoodsDetailsModule {
     @Provides
     GoodsPromotionAdapter providePromotionAdapter(List<Promotion> list) {
         return new GoodsPromotionAdapter(list);
+    }
+
+    @ActivityScope
+    @Provides
+    List<Diary> provideDiariesList() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    DiaryListAdapter provideGoodsListAdapter(List<Diary> diaries) {
+        return new DiaryListAdapter(diaries);
     }
 
 

@@ -101,6 +101,7 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
                         cartItems.clear();
                     }
                     mRootView.setLoadedAllItems(true);
+                    mRootView.updateUI(response.getCart());
                     cartItems.addAll(response.getCart().getCartItems());
                     preEndIndex = cartItems.size();//更新之前列表总长度,用于确定加载更多的起始位置
                     lastPageIndex = cartItems.size() / 10;

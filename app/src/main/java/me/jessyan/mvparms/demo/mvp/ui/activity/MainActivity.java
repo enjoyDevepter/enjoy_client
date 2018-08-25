@@ -13,11 +13,14 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMainComponent;
 import me.jessyan.mvparms.demo.di.module.MainModule;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
@@ -53,6 +56,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public int initView(Bundle savedInstanceState) {
         return R.layout.activity_main; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        changeFragment(0);
+        bottomBarLayout.setCurrentItem(0);
     }
 
     @Override
@@ -94,6 +104,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         transaction.commit();
     }
 
+    @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
+    public void updateIndex() {
+        changeFragment(1);
+        bottomBarLayout.setCurrentItem(1);
+    }
 
     @Override
     public void showLoading() {
