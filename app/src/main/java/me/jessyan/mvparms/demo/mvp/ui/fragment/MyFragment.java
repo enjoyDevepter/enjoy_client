@@ -18,12 +18,14 @@ import me.jessyan.mvparms.demo.di.component.DaggerMyComponent;
 import me.jessyan.mvparms.demo.di.module.MyModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
 import me.jessyan.mvparms.demo.mvp.presenter.MyPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.activity.CashCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ConsumeCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyMealActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.UserIntegralActivity;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.CashCoinActivity.KEY_FOR_CASH_STR;
 
 
 public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.View, View.OnClickListener {
@@ -63,6 +65,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     @BindView(R.id.consume)
     View consume;
+    @BindView(R.id.cash)
+    View cash;
 
     public static MyFragment newInstance() {
         MyFragment fragment = new MyFragment();
@@ -100,6 +104,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         msgV.setOnClickListener(this);
         bonusTV.setOnClickListener(this);
         consume.setOnClickListener(this);
+        cash.setOnClickListener(this);
     }
 
     /**
@@ -193,6 +198,11 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 Intent consumeIntent = new Intent(getContext(), ConsumeCoinActivity.class);
                 consumeIntent.putExtra(ConsumeCoinActivity.KEY_FOR_CONSUME_COIN,memberMoneyTV.getText());
                 ArmsUtils.startActivity(consumeIntent);
+                break;
+            case R.id.cash:
+                Intent cashIntent = new Intent(getContext(), CashCoinActivity.class);
+                cashIntent.putExtra(KEY_FOR_CASH_STR,moneyTV.getText());
+                ArmsUtils.startActivity(cashIntent);
                 break;
         }
     }

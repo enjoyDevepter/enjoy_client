@@ -14,7 +14,7 @@
             android:id="@+id/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="今日消费"
+            android:text="每日签到领取积分"
             android:textColor="#ff676767"
             android:textSize="13sp"
             />
