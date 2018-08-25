@@ -26,6 +26,12 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AddBankCardRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.DelBankCardRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.DelBankCardResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 import retrofit2.Retrofit;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -62,5 +68,16 @@ public interface UserService {
     @POST("gateway")
     Observable<AllAddressResponse> getAllAddressList(@Body SimpleRequest request);
 
+    @POST("gateway")
+    // 获取银行卡列表
+    Observable<GetAllBankCardListResponse> getAllBankCard(@Body GetAllBankCardListRequest request);
+
+    @POST("gateway")
+    // 添加银行卡
+    Observable<AddBankCardResponse> addBankCard(@Body AddBankCardRequest request);
+
+    @POST("gateway")
+    // 删除银行卡
+    Observable<DelBankCardResponse> delBankCard(@Body DelBankCardRequest request);
 
 }

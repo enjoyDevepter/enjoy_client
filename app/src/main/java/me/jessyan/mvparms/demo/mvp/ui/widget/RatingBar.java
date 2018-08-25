@@ -127,6 +127,8 @@ public class RatingBar extends LinearLayout implements View.OnClickListener {
         Integer index = (Integer) v.getTag();
         star = index;
         fillingImage(index);
+
+        System.out.println("star = "+star);
     }
 
     /**
@@ -174,7 +176,11 @@ public class RatingBar extends LinearLayout implements View.OnClickListener {
         if (star > starCount) {
             throw new RuntimeException("star填充数量不能大于总数starCount");
         }
+        if(star <= 0){
+            star = 1;
+        }
         this.star = star;
+
         if (star != 0) {
             if (star <= starCount) {
                 //填充图片
@@ -191,7 +197,7 @@ public class RatingBar extends LinearLayout implements View.OnClickListener {
      * @return 当前星级
      */
     public int getStar() {
-        return star;
+        return star + 1;
     }
 
     /**
