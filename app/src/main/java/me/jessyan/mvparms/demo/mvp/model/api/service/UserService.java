@@ -30,10 +30,12 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AddBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.DelBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.DelBankCardResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
 import retrofit2.Retrofit;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -85,5 +87,9 @@ public interface UserService {
     @POST("gateway")
     // 获取消费币详情
     Observable<GetConsumeInfoPageResponse> getConsumeInfoPage(@Body GetConsumeInfoPageRequest request);
+
+    @POST("gateway")
+    // 签到
+    Observable<QiandaoResponse> qiandao(@Body QiandaoRequest request);
 
 }

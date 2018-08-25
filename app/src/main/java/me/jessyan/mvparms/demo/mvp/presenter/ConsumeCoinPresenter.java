@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.integration.AppManager;
@@ -62,6 +64,7 @@ public class ConsumeCoinPresenter extends BasePresenter<ConsumeCoinContract.Mode
         requestOrderList(1,true);
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void nextPage(){
         requestOrderList(nextPageIndex,false);
     }

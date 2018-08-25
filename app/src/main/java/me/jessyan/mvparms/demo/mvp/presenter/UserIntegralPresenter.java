@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.integration.AppManager;
@@ -19,6 +21,8 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.ScorePointBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
@@ -64,11 +68,40 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
         requestOrderList(1,true);
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void nextPage(){
         requestOrderList(nextPageIndex,false);
     }
 
     private int nextPageIndex = 1;
+
+    public void qiandao(){
+
+        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token=(String)cache.get(KEY_KEEP+"token");
+
+        QiandaoRequest request = new QiandaoRequest();
+        request.setToken(token);
+
+        mModel.qiandao(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new Consumer<QiandaoResponse>() {
+                    @Override
+                    public void accept(QiandaoResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            ArmsUtils.makeText(ArmsUtils.getContext(),"签到成功");
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
 
     private void requestOrderList(int pageIndex,final boolean clear) {
         UserScorePageRequest userScorePageRequest = new UserScorePageRequest();

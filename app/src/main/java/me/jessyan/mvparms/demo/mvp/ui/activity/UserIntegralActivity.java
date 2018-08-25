@@ -56,6 +56,9 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
     private boolean isLoadingMore;
     private boolean isEnd;
 
+    @BindView(R.id.qianming)
+    View qianming;
+
     private void initPaginate() {
         if (mPaginate == null) {
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
@@ -115,6 +118,12 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
             @Override
             public void onClick(View v) {
                 killMyself();
+            }
+        });
+        qianming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.qiandao();
             }
         });
     }
