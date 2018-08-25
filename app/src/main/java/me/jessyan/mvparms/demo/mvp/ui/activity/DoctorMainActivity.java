@@ -194,7 +194,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         int height = 0;
         if(adapter != null && adapter.getItemCount() != 0){
             height = adapter.getItemCount() > 5 ? 5 : adapter.getItemCount();
-            height *= ArmsUtils.dip2px(this,133);
+            height *= ArmsUtils.dip2px(this,140);
         }
         ViewGroup.LayoutParams layoutParams = swipeRefreshLayout.getLayoutParams();
         layoutParams.height = height;
