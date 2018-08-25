@@ -56,14 +56,14 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
     HospitalGoodsListAdapter hospitalGoodsListAdapter;
     @Inject
     List<Goods> hospitalList;
-    private int goodsNextPageIndex = -1;
+    private int goodsNextPageIndex = 1;
 
     // 第三个页面
     @Inject
     DoctorListAdapter doctorListAdapter;
     @Inject
     List<DoctorBean> doctorBeans;
-    private int doctorNextPageIndex = -1;
+    private int doctorNextPageIndex = 1;
 
     // 第四个页面
     @Inject
