@@ -6,25 +6,25 @@ import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.CommentDoctorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.CommentDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorHotCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LikeDoctorCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LikeDoctorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LikeDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LoginUserDoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LoginUserDoctorHotCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LoginUserDoctorInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LoginUserDoctorInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.UnLikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.UnLikeDoctorCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.UnLikeDoctorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.UnLikeDoctorResponse;
 
 
 public interface DoctorMainContract {

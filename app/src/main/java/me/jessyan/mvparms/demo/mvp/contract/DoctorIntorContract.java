@@ -6,9 +6,9 @@ import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorIntorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorIntorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorIntorResponse;
 
 
 public interface DoctorIntorContract {

@@ -6,8 +6,8 @@ import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorHonorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorHonorResponse;
 
 
 public interface DoctorHonorContract {

@@ -2,7 +2,6 @@ package me.jessyan.mvparms.demo.di.module;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.jess.arms.di.scope.ActivityScope;
 
@@ -14,7 +13,7 @@ import dagger.Provides;
 
 import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
 import me.jessyan.mvparms.demo.mvp.model.DoctorMainModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorCommentBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorCommentHolderAdapter;
 
 

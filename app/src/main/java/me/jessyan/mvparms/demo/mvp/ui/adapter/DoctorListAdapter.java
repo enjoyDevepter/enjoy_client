@@ -8,7 +8,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.ui.holder.DoctorListHolder;
 
 public class DoctorListAdapter extends DefaultAdapter<DoctorBean> {

@@ -1,36 +1,40 @@
 package me.jessyan.mvparms.demo.mvp.model.api.service;
 
 import io.reactivex.Observable;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentDoctorResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorAllCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorAllCommentResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHonorResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorHotCommentResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorListResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorCommentResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LikeDoctorResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorAllCommentResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorHotCommentResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorCommentResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.UnLikeDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.CommentDoctorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.GetDoctorCommentReplyPageRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.ReplyDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.CommentDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorAllCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorAllCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorHonorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorHonorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorHotCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorIntorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorIntorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorPaperRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorPaperResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.GetDoctorCommentReplyPageResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LikeDoctorCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LikeDoctorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LikeDoctorResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LoginUserDoctorAllCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LoginUserDoctorAllCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LoginUserDoctorHotCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LoginUserDoctorHotCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LoginUserDoctorInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LoginUserDoctorInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.UnLikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.ReplyDoctorCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.UnLikeDoctorCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.UnLikeDoctorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.UnLikeDoctorResponse;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
@@ -97,4 +101,15 @@ public interface DoctorService {
     @POST("gateway")
     // 取消点赞医生评论
     Observable<UnLikeDoctorCommentResponse> unLikeDoctorComment(@Body UnLikeDoctorCommentRequest request);
+
+
+    @POST("gateway")
+    // 评论医生评论
+    Observable<ReplyDoctorCommentResponse> replyDoctorComment(@Body ReplyDoctorCommentRequest request);
+
+
+    @POST("gateway")
+    // 获取医生评论的回复列表
+    Observable<GetDoctorCommentReplyPageResponse> getDoctorComment(@Body GetDoctorCommentReplyPageRequest request);
+
 }

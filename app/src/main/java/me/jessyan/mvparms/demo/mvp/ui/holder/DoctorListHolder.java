@@ -17,14 +17,12 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorSkill;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.HospitalBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorSkill;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.HospitalBean;
 import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
 
 public class DoctorListHolder extends BaseHolder<DoctorBean> {

@@ -1,7 +1,5 @@
 package me.jessyan.mvparms.demo.di.module;
 
-import android.support.v7.widget.RecyclerView;
-
 import com.jess.arms.di.scope.ActivityScope;
 
 import java.util.ArrayList;
@@ -12,13 +10,11 @@ import dagger.Provides;
 
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.HospitalInfoModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalEnvImageAdapter;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalGoodsListAdapter;
 
 
 @Module

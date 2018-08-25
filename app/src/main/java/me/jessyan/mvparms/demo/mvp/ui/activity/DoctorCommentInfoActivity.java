@@ -14,7 +14,6 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,8 +23,8 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorCommentInfoComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorCommentInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorCommentInfoContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.CommentMemberBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorCommentBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.CommentMemberBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorCommentInfoPresenter;
 
 import me.jessyan.mvparms.demo.R;

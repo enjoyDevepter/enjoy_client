@@ -13,7 +13,7 @@ import dagger.Provides;
 
 import me.jessyan.mvparms.demo.mvp.contract.DoctorAllCommentContract;
 import me.jessyan.mvparms.demo.mvp.model.DoctorAllCommentModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorCommentBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorCommentHolderAdapter;
 
 

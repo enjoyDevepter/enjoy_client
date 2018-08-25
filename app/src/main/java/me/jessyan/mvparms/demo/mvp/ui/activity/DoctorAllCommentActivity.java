@@ -22,7 +22,7 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorAllCommentComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorAllCommentModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorAllCommentContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorCommentBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorAllCommentPresenter;
 
 import me.jessyan.mvparms.demo.R;

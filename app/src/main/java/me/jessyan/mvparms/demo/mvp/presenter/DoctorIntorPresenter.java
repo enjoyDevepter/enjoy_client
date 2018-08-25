@@ -1,34 +1,22 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.OnLifecycleEvent;
-import android.text.TextUtils;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.utils.ArmsUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorInfoResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.LoginUserDoctorInfoResponse;
-import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorMainActivity;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorIntorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorIntorResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
 import me.jessyan.mvparms.demo.mvp.contract.DoctorIntorContract;
-
-import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
 
 @ActivityScope

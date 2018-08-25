@@ -13,10 +13,8 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorPaperContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.DoctorService;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIntorResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorPaperResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorPaperRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorPaperResponse;
 
 
 @ActivityScope

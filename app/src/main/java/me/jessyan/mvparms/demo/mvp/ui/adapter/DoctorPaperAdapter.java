@@ -23,9 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.HAppointments;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.DoctorIdentificationBean;
-import me.jessyan.mvparms.demo.mvp.ui.holder.DateHolder;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorIdentificationBean;
 import me.jessyan.mvparms.demo.mvp.ui.holder.DoctorPaperHolder;
 
 /**
