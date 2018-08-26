@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
@@ -20,11 +21,14 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerCashCoinComponent;
 import me.jessyan.mvparms.demo.di.module.CashCoinModule;
 import me.jessyan.mvparms.demo.mvp.contract.CashCoinContract;
+import me.jessyan.mvparms.demo.mvp.model.MyModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.CashCoinPresenter;
 
 import me.jessyan.mvparms.demo.R;
 
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -87,6 +91,9 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+
+        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        MemberAccount memberAccount = (MemberAccount) cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT);
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);

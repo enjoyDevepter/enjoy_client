@@ -10,12 +10,16 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
+
+import org.simple.eventbus.EventBus;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
 import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
@@ -60,14 +64,22 @@ public class MyPresenter extends BasePresenter<MyContract.Model, MyContract.View
 
         mModel.getUserInfo(request)
                 .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new Consumer<UserInfoResponse>() {
                     @Override
                     public void accept(UserInfoResponse response) throws Exception {
                         if (response.isSuccess()) {
                             cache.put(KEY_KEEP+ MyModel.KEY_FOR_USER_INFO,response.getMember());
                             cache.put(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT,response.getMemberAccount());
-                            mRootView.updateUserInfo(response.getMember(),response.getMemberAccount());
+                            EventBus.getDefault().post(response.getMember(), EventBusTags.USER_INFO_CHANGE);
+                            EventBus.getDefault().post(response.getMemberAccount(), EventBusTags.USER_ACCOUNT_CHANGE);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

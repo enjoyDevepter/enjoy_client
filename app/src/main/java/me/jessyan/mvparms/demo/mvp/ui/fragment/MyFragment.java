@@ -15,10 +15,13 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.Subscriber;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMyComponent;
 import me.jessyan.mvparms.demo.di.module.MyModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
@@ -220,7 +223,15 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         }
     }
 
-    public void updateUserInfo(Member member, MemberAccount account){
+    @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
+    public void updateUserAccount(MemberAccount account){
+        moneyTV.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
+        memberMoneyTV.setText(String.format("%.2f",account.getTotal() * 1.0 / 100));
+        bonusTV.setText(account.getPoint()+"");
+    }
+
+    @Subscriber(tag = EventBusTags.USER_INFO_CHANGE)
+    public void updateUserInfo(Member member){
         mImageLoader.loadImage(getContext(),
                 ImageConfigImpl
                         .builder()
@@ -249,8 +260,5 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 break;
         }
         level_icon.setBackground(getResources().getDrawable(levelIcon));
-        moneyTV.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
-        memberMoneyTV.setText(String.format("%.2f",account.getTotal() * 1.0 / 100));
-        bonusTV.setText(account.getPoint()+"");
     }
 }
