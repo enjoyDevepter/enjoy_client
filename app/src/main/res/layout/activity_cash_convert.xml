@@ -162,10 +162,17 @@
                 android:textSize="13sp"
                 />
             <View
+                android:layout_marginTop="13dp"
+                android:layout_marginLeft="13dp"
                 android:background="@mipmap/cash_convert_close"
                 android:id="@+id/close"
                 android:layout_width="9dp"
                 android:layout_height="9dp"/>
+
+            <View
+                android:layout_marginTop="12dp"
+                android:layout_below="@id/tishi"
+                style="@style/divider_1"/>
         </RelativeLayout>
     </RelativeLayout>
 </FrameLayout>

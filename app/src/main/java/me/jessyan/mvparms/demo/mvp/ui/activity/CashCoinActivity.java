@@ -28,6 +28,7 @@ import me.jessyan.mvparms.demo.di.module.CashCoinModule;
 import me.jessyan.mvparms.demo.mvp.contract.CashCoinContract;
 import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.CashConvertRequest;
 import me.jessyan.mvparms.demo.mvp.presenter.CashCoinPresenter;
 
 import me.jessyan.mvparms.demo.R;
@@ -60,6 +61,9 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean isEnd;
+
+    @BindView(R.id.convert)
+    View convert;
 
     private void initPaginate() {
         if (mPaginate == null) {
@@ -106,6 +110,12 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         title.setText("现金币");
+        convert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArmsUtils.startActivity(CashConvertActivity.class);
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

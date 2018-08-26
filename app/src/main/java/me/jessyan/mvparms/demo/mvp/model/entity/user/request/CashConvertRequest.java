@@ -5,7 +5,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 /**现金币转消费币*/
 public class CashConvertRequest extends BaseRequest {
     private final int cmd = 1250;
-    private int money;  // 单位元
+    private int money;  // 单位分
     private String token;
 
     @Override

@@ -55,7 +55,7 @@ public class CashConvertPresenter extends BasePresenter<CashConvertContract.Mode
         this.mApplication = null;
     }
 
-    public void convertCash(int money){  // 单位元
+    public void convertCash(int money){  // 单位分
         CashConvertRequest request = new CashConvertRequest();
         Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
         String token=(String)cache.get(KEY_KEEP+"token");

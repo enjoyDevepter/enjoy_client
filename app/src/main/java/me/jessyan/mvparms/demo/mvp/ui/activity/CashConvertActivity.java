@@ -94,13 +94,20 @@ public class CashConvertActivity extends BaseActivity<CashConvertPresenter> impl
                     ArmsUtils.makeText(ArmsUtils.getContext(),"请输入金额");
                     return;
                 }
-                int money = Integer.parseInt(s);
+                int money = 0;
+                try{
+                    money = Integer.parseInt(s);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"金额输入有误");
+                    return;
+                }
                 if(money * 100 > account.getBonus()){
                     ArmsUtils.makeText(ArmsUtils.getContext(),"现金币不足");
                     return;
                 }
 
-                mPresenter.convertCash(money);
+                mPresenter.convertCash(money * 100);
             }
         });
         all_convert.setOnClickListener(new View.OnClickListener() {
@@ -143,11 +150,12 @@ public class CashConvertActivity extends BaseActivity<CashConvertPresenter> impl
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
     public void updateUserAccount(MemberAccount account){
         this.account = account;
-        all_cash.setText(String.format("%d",account.getBonus() / 100));
+        all_cash.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
     }
 
     public void showConvertOk(){
         convert_ok.setVisibility(View.VISIBLE);
+        et_money.setText("");
     }
 
 }
