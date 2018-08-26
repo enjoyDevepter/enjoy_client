@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -39,6 +41,14 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
 
     @BindView(R.id.yue)
     TextView yue;  // 余额，1888.99
+    @BindView(R.id.convert_btn)
+    View convert_btn;
+    @BindView(R.id.add_card)
+    View add_card;
+    @BindView(R.id.all_convert)
+    View all_convert;
+    @BindView(R.id.et_money)
+    EditText et_money;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -66,6 +76,44 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
         });
         Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
         updateUserAccount ((MemberAccount)cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT));
+
+        add_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArmsUtils.startActivity(ChooseBankActivity.class);
+            }
+        });
+        all_convert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_money.setText(String.format("%d",account.getBonus() / 100));
+            }
+        });
+
+        convert_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = et_money.getText().toString();
+                if(TextUtils.isEmpty(s)){
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入金额");
+                    return;
+                }
+                int money = 0;
+                try{
+                    money = Integer.parseInt(s);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"金额输入有误");
+                    return;
+                }
+                if(money * 100 > account.getBonus()){
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"现金币不足");
+                    return;
+                }
+
+//                mPresenter.convertCash(money * 100);
+            }
+        });
     }
 
     @Override
