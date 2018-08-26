@@ -103,6 +103,7 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                         if (response.isSuccess()) {
                             ArmsUtils.makeText(ArmsUtils.getContext(),"签到成功");
                             initUser();
+                            requestOrderList();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
