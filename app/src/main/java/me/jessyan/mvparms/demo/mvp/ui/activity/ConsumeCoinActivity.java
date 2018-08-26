@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
@@ -22,17 +23,18 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerConsumeCoinComponent;
 import me.jessyan.mvparms.demo.di.module.ConsumeCoinModule;
 import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinContract;
+import me.jessyan.mvparms.demo.mvp.model.MyModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.ConsumeCoinPresenter;
 
 import me.jessyan.mvparms.demo.R;
 
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 /**消费币页面*/
 public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> implements ConsumeCoinContract.View {
-
-    public static final String KEY_FOR_CONSUME_COIN = "KEY_FOR_CONSUME_COIN";
 
     @BindView(R.id.back)
     View back;
@@ -99,10 +101,14 @@ public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> impl
         return R.layout.activity_consume_coin; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    private long amount;
+
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        String str = getIntent().getStringExtra(KEY_FOR_CONSUME_COIN);
-        consume_count.setText(str);
+        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        MemberAccount memberAccount = (MemberAccount) cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT);
+        amount = memberAccount.getAmount();
+        consume_count.setText(String.format("%.2f", amount * 1.0 / 100));
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

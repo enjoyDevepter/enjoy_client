@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class CashBean implements Serializable {
     private long inMoney;
     private long outMoney;
-    private long createDate;
+    private String createDate;
     private String desc;
 
     @Override
@@ -34,11 +34,11 @@ public class CashBean implements Serializable {
         this.outMoney = outMoney;
     }
 
-    public long getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(long createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 

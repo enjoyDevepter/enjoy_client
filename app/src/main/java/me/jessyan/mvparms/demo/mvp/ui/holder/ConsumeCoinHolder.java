@@ -40,10 +40,10 @@ public class ConsumeCoinHolder extends BaseHolder<BalanceBean> {
         type.setText(data.getDesc());
         if(data.getInMoney() == 0){
             fuhao.setText("-");
-            score_num.setText(String.format("%.0f",data.getOutMoney() / 100));
+            score_num.setText(String.format("%.2f",data.getOutMoney() * 1.0 / 100));
         }else{
             fuhao.setText("+");
-            score_num.setText(String.format("%.0f",data.getInMoney() / 100));
+            score_num.setText(String.format("%.2f",data.getInMoney() * 1.0 / 100));
         }
     }
 

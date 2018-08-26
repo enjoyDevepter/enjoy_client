@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background"
     android:orientation="vertical">
 
@@ -46,13 +47,13 @@
         </LinearLayout>
 
 
-        <ImageView
+        <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
             android:id="@+id/image"
+            app:shape_type="circle"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:background="@mipmap/img" />
+            android:layout_marginTop="25dp" />
 
         <LinearLayout
             android:id="@+id/info"
@@ -71,6 +72,7 @@
 
             <View
                 android:layout_width="1dp"
+                android:layout_gravity="center_vertical"
                 android:layout_height="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -105,12 +107,11 @@
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
-            <TextView
+            <ImageView
+                android:id="@+id/level_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="等级："
-                android:textColor="#FFFFFFFF"
-                android:textSize="11sp" />
+                />
 
         </LinearLayout>
 

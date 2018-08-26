@@ -28,8 +28,6 @@ public class CashCoinItemHolder extends BaseHolder<CashBean> {
     @BindView(R.id.score_num)
     TextView score_num;
 
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;
 
@@ -43,13 +41,13 @@ public class CashCoinItemHolder extends BaseHolder<CashBean> {
     @Override
     public void setData(CashBean data, int position) {
         type.setText(data.getDesc());
-        time.setText(simpleDateFormat.format(new Date(data.getCreateDate())));
+        time.setText(data.getCreateDate());
         if(data.getInMoney() == 0){
             fuhao.setText("-");
-            score_num.setText(String.format("%.0f",data.getOutMoney() / 100));
+            score_num.setText(String.format("%.2f",data.getOutMoney() * 1.0 / 100));
         }else{
             fuhao.setText("+");
-            score_num.setText(String.format("%.0f",data.getInMoney() / 100));
+            score_num.setText(String.format("%.2f",data.getInMoney() * 1.0 / 100));
         }
 
     }

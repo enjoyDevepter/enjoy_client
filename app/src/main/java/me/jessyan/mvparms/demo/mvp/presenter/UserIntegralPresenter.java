@@ -13,16 +13,22 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import org.simple.eventbus.EventBus;
+
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.EventBusTags;
+import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.ScorePointBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
@@ -96,6 +102,8 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                     public void accept(QiandaoResponse response) throws Exception {
                         if (response.isSuccess()) {
                             ArmsUtils.makeText(ArmsUtils.getContext(),"签到成功");
+                            initUser();
+                            requestOrderList();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -147,4 +155,36 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                     }
                 });
     }
+
+    public void initUser(){
+        UserInfoRequest request = new UserInfoRequest();
+        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        String token=(String)cache.get(KEY_KEEP+"token");
+        request.setToken(token);
+
+        mModel.getUserInfo(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new Consumer<UserInfoResponse>() {
+                    @Override
+                    public void accept(UserInfoResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            cache.put(KEY_KEEP+ MyModel.KEY_FOR_USER_INFO,response.getMember());
+                            cache.put(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT,response.getMemberAccount());
+                            EventBus.getDefault().post(response.getMember(), EventBusTags.USER_INFO_CHANGE);
+                            EventBus.getDefault().post(response.getMemberAccount(), EventBusTags.USER_ACCOUNT_CHANGE);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
 }

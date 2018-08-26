@@ -13,26 +13,32 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
+
+import org.simple.eventbus.Subscriber;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerUserIntegralComponent;
 import me.jessyan.mvparms.demo.di.module.UserIntegralModule;
 import me.jessyan.mvparms.demo.mvp.contract.UserIntegralContract;
+import me.jessyan.mvparms.demo.mvp.model.MyModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.UserIntegralPresenter;
 
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.mvp.ui.fragment.MyFragment;
 
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> implements UserIntegralContract.View {
-
-    public static final String KEY_FOR_USER_ALL_SCORE = "KEY_FOR_USER_ALL_SCORE";
 
     @BindView(R.id.score)
     TextView score;
@@ -102,8 +108,10 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        String stringExtra = getIntent().getStringExtra(KEY_FOR_USER_ALL_SCORE);
-        score.setText(stringExtra);
+
+        Cache<String,Object> cache=ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        updateUserAccount((MemberAccount) cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT));
+
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -184,5 +192,10 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
 
     public Activity getActivity(){
         return this;
+    }
+
+    @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
+    public void updateUserAccount(MemberAccount account){
+        score.setText(account.getPoint()+"");
     }
 }
