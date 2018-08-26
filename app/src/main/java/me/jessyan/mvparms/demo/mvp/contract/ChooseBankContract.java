@@ -7,8 +7,10 @@ import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.DelBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.DelBankCardResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 
 
@@ -25,5 +27,6 @@ public interface ChooseBankContract {
     interface Model extends IModel {
         Observable<GetAllBankCardListResponse> getBankList(GetAllBankCardListRequest request);
         Observable<BankListResponse> getBankList(BankListRequest request);
+        Observable<DelBankCardResponse> delBankCard(DelBankCardRequest request);
     }
 }

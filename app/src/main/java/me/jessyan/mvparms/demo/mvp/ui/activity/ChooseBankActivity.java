@@ -23,6 +23,7 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerChooseBankComponent;
 import me.jessyan.mvparms.demo.di.module.ChooseBankModule;
 import me.jessyan.mvparms.demo.mvp.contract.ChooseBankContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankCardBean;
 import me.jessyan.mvparms.demo.mvp.presenter.ChooseBankPresenter;
 
 import me.jessyan.mvparms.demo.R;
@@ -125,6 +126,8 @@ public class ChooseBankActivity extends BaseActivity<ChooseBankPresenter> implem
                         killMyself();
                         break;
                     case DELETE:
+                        BankCardBean bankCardBean = ((ChooseBankAdapter) mAdapter).getItem(position);
+                        mPresenter.delBankCard(bankCardBean.getId());
                         break;
                 }
             }

@@ -16,8 +16,10 @@ import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.DelBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.DelBankCardResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 
 
@@ -53,5 +55,11 @@ public class ChooseBankModel extends BaseModel implements ChooseBankContract.Mod
     public Observable<BankListResponse> getBankList(BankListRequest request) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
                 .getBackList(request);
+    }
+
+    @Override
+    public Observable<DelBankCardResponse> delBankCard(DelBankCardRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .delBankCard(request);
     }
 }

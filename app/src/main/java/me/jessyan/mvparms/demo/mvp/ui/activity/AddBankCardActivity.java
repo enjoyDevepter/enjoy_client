@@ -173,7 +173,7 @@ public class AddBankCardActivity extends BaseActivity<AddBankCardPresenter> impl
                 bank_list_parent.setVisibility(View.VISIBLE);
                 et_name.clearFocus();
                 num_bank.clearFocus();
-
+                hideImm();
             }
         });
 

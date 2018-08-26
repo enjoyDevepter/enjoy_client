@@ -91,6 +91,7 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+
         title.setText("提现");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +100,7 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
             }
         });
         Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        cache.put(KEY_FOR_CHOOSE_BANK,null);
         updateUserAccount ((MemberAccount)cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT));
 
         choose.setOnClickListener(new View.OnClickListener() {

@@ -87,6 +87,7 @@
                     android:background="#ffdbdbdb" />
 
                 <EditText
+                    android:layout_marginLeft="6dp"
                     android:id="@+id/et_money"
                     android:inputType="number"
                     android:layout_width="match_parent"

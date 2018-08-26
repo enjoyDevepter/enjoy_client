@@ -162,6 +162,7 @@
                     android:background="#ffdbdbdb" />
 
                 <EditText
+                    android:layout_marginLeft="6dp"
                     android:id="@+id/et_money"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
