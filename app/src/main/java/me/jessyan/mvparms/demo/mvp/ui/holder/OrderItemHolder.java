@@ -126,6 +126,25 @@ public class OrderItemHolder extends BaseHolder<Order> {
         if ("6".equals(order.getOrderType())) { // 医美套餐
             countTV.setVisibility(View.INVISIBLE);
             payPriceV.setVisibility(View.INVISIBLE);
+
+            if (order.getOrderStatus().equals("1")) {
+                statusTV.setText("待付款");
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("取消订单");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("去支付");
+            } else if (order.getOrderStatus().equals("3")) {
+                statusTV.setText("待预约");
+                leftTV.setVisibility(View.GONE);
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("预约");
+            } else if (order.getOrderStatus().equals("5")) {
+                statusTV.setText("已完成");
+                rightTV.setText("写日记");
+                rightTV.setVisibility(View.VISIBLE);
+                leftTV.setVisibility(View.GONE);
+            }
+
         } else if ("7".equals(order.getOrderType())) { // 医美定金预售
             countTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.VISIBLE);

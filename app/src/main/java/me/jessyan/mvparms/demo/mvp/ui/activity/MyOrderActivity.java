@@ -92,19 +92,19 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
         provideCache().put("type", type);
         switch (type) {
             case 0:
-                tab1.select();
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待发货"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待收货"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
+                tab1.select();
                 break;
             case 1:
-                tab2.select();
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("可消费"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
+                tab2.select();
                 break;
             case 2:
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));

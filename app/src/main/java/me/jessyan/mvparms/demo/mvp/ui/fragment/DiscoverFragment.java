@@ -214,7 +214,7 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
                     default:
                         try {
                             JSONObject object = new JSONObject(diaryNavis.get(tab.getPosition() - 2).getExtendParam());
-                            provideCache().put("type", object.optString("object"));
+                            provideCache().put("type", object.optString("typeId"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
