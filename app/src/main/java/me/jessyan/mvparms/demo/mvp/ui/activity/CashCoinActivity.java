@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
@@ -15,9 +17,12 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.Subscriber;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerCashCoinComponent;
 import me.jessyan.mvparms.demo.di.module.CashCoinModule;
 import me.jessyan.mvparms.demo.mvp.contract.CashCoinContract;
@@ -34,12 +39,21 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements CashCoinContract.View {
 
+    @BindView(R.id.title)
+    TextView title;
+
+    @BindView(R.id.title)
+    View back;
+
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     RecyclerView.Adapter mAdapter;
     @BindView(R.id.contentList)
     RecyclerView contentList;
+
+    @BindView(R.id.consume_count)
+    TextView consume_count;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -91,9 +105,16 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        title.setText("现金币");
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                killMyself();
+            }
+        });
 
         Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        MemberAccount memberAccount = (MemberAccount) cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT);
+        updateUserAccount ((MemberAccount)cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT));
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);
@@ -162,5 +183,10 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     @Override
     public void killMyself() {
         finish();
+    }
+
+    @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
+    public void updateUserAccount(MemberAccount account){
+        consume_count.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
     }
 }

@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.integration.AppManager;
@@ -58,9 +60,11 @@ public class CashCoinPresenter extends BasePresenter<CashCoinContract.Model, Cas
     @Inject
     List<CashBean> orderBeanList;
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void requestOrderList(){
         requestOrderList(1,true);
     }
+
 
     public void nextPage(){
         requestOrderList(nextPageIndex,false);
