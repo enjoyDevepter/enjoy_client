@@ -18,12 +18,31 @@ public class ChooseBankAdapter extends DefaultAdapter<BankCardBean> {
 
     @Override
     public BaseHolder<BankCardBean> getHolder(View v, int viewType) {
-        return new ChooseBankHolder(v);
+        return new ChooseBankHolder(v,onChildItemClickLinstener);
     }
 
     @Override
     public int getLayoutId(int viewType) {
         return R.layout.choose_bank_item;
+    }
+
+    public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
+    }
+
+    private OnChildItemClickLinstener onChildItemClickLinstener;
+
+    public OnChildItemClickLinstener getOnChildItemClickLinstener() {
+        return onChildItemClickLinstener;
+    }
+
+    public interface OnChildItemClickLinstener {
+        void onChildItemClick(View v, ViewName viewname, int position);
+    }
+
+
+    public enum ViewName {
+        DELETE,ITEM
     }
 }
 

@@ -18,6 +18,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.ChooseBankModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankCardBean;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.ChooseBankAdapter;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -32,14 +33,20 @@ public class ChooseBankHolder extends BaseHolder<BankCardBean> {
     @BindView(R.id.delete)
     TextView delete;
 
+    @BindView(R.id.parent)
+    View parent;
+
 
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;
     private List<BankBean> bankBeanList;
 
+    private ChooseBankAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public ChooseBankHolder(View itemView) {
+
+    public ChooseBankHolder(View itemView, ChooseBankAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
         Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
@@ -67,6 +74,18 @@ public class ChooseBankHolder extends BaseHolder<BankCardBean> {
         name.setText(data.getBankName());
         String cardNo = data.getCardNo();
         card_num.setText(cardNo.substring(cardNo.length() - 4));
+        parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onChildItemClickLinstener.onChildItemClick(parent, ChooseBankAdapter.ViewName.ITEM,position);
+            }
+        });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onChildItemClickLinstener.onChildItemClick(delete, ChooseBankAdapter.ViewName.DELETE,position);
+            }
+        });
     }
 
     @Override
@@ -75,6 +94,7 @@ public class ChooseBankHolder extends BaseHolder<BankCardBean> {
         this.name = null;
         this.card_num = null;
         this.delete = null;
+        this.parent = null;
     }
 }
 

@@ -201,6 +201,9 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
 
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
     public void updateUserAccount(MemberAccount account){
+        if(account == null){
+            return;
+        }
         consume_count.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
     }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
@@ -25,12 +26,15 @@ import me.jessyan.mvparms.demo.mvp.contract.ChooseBankContract;
 import me.jessyan.mvparms.demo.mvp.presenter.ChooseBankPresenter;
 
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.ChooseBankAdapter;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class ChooseBankActivity extends BaseActivity<ChooseBankPresenter> implements ChooseBankContract.View {
+
+    public static final String KEY_FOR_CHOOSE_BANK = "KEY_FOR_CHOOSE_BANK";
 
     @BindView(R.id.title)
     TextView title;
@@ -111,6 +115,20 @@ public class ChooseBankActivity extends BaseActivity<ChooseBankPresenter> implem
         });
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+        ((ChooseBankAdapter)mAdapter).setOnChildItemClickLinstener(new ChooseBankAdapter.OnChildItemClickLinstener() {
+            @Override
+            public void onChildItemClick(View v, ChooseBankAdapter.ViewName viewname, int position) {
+                switch (viewname){
+                    case ITEM:
+                        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+                        cache.put(KEY_FOR_CHOOSE_BANK,((ChooseBankAdapter) mAdapter).getItem(position));
+                        killMyself();
+                        break;
+                    case DELETE:
+                        break;
+                }
+            }
+        });
         contentList.setAdapter(mAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
