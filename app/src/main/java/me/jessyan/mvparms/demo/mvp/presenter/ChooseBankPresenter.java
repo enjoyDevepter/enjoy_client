@@ -18,8 +18,12 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.mvp.model.ChooseBankModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankCardBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -61,6 +65,40 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
     List<BankCardBean> orderBeanList;
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    public void getBankList(){
+        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        Object o = cache.get(KEY_KEEP+ ChooseBankModel.KEY_FOR_BANK_LIST);
+        if(o != null){
+            requestOrderList();
+            return;
+        }
+
+        BankListRequest request = new BankListRequest();
+        mModel.getBankList(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new Consumer<BankListResponse>() {
+                    @Override
+                    public void accept(BankListResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            List<BankBean> bankList = response.getBankList();
+                            cache.put(KEY_KEEP+ ChooseBankModel.KEY_FOR_BANK_LIST,bankList);
+                            requestOrderList();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void requestOrderList(){
         requestOrderList(1,true);
     }
@@ -79,8 +117,7 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
         String token=(String)cache.get(KEY_KEEP+"token");
         request.setToken(token);
 
-
-        mModel.getAllBankCard(request)
+        mModel.getBankList(request)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     if (clear) {

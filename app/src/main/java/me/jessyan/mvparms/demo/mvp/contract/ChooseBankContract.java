@@ -6,7 +6,9 @@ import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 
 
@@ -21,6 +23,7 @@ public interface ChooseBankContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-        Observable<GetAllBankCardListResponse> getAllBankCard(GetAllBankCardListRequest request);
+        Observable<GetAllBankCardListResponse> getBankList(GetAllBankCardListRequest request);
+        Observable<BankListResponse> getBankList(BankListRequest request);
     }
 }

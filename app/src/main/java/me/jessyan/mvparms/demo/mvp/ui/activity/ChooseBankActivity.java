@@ -106,7 +106,7 @@ public class ChooseBankActivity extends BaseActivity<ChooseBankPresenter> implem
         add_card_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ArmsUtils.startActivity(AddBankCardActivity.class);
             }
         });
 

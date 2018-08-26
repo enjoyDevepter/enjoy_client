@@ -28,6 +28,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AddBankCardRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.CashConvertRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.DelBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
@@ -39,6 +40,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.CashConvertResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.DelBankCardResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
@@ -83,6 +85,11 @@ public interface UserService {
 
     @POST("gateway")
     Observable<AllAddressResponse> getAllAddressList(@Body SimpleRequest request);
+
+
+    @POST("gateway")
+        // 获取银行列表
+    Observable<BankListResponse> getBackList(@Body BankListRequest request);
 
     @POST("gateway")
         // 获取银行卡列表

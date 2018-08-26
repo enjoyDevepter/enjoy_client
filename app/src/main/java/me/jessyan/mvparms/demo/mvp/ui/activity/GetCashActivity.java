@@ -86,7 +86,9 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
         all_convert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                et_money.setText(String.format("%d",account.getBonus() / 100));
+                String format = String.format("%d", account.getBonus() / 100);
+                et_money.setText(format);
+                et_money.setSelection(format.length());
             }
         });
 

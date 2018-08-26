@@ -15,7 +15,9 @@ import me.jessyan.mvparms.demo.mvp.contract.ChooseBankContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 
 
@@ -25,6 +27,8 @@ public class ChooseBankModel extends BaseModel implements ChooseBankContract.Mod
     Gson mGson;
     @Inject
     Application mApplication;
+
+    public static final String KEY_FOR_BANK_LIST = "KEY_FOR_BANK_LIST";
 
     @Inject
     public ChooseBankModel(IRepositoryManager repositoryManager) {
@@ -39,9 +43,15 @@ public class ChooseBankModel extends BaseModel implements ChooseBankContract.Mod
     }
 
     @Override
-    public Observable<GetAllBankCardListResponse> getAllBankCard(GetAllBankCardListRequest request) {
+    public Observable<GetAllBankCardListResponse> getBankList(GetAllBankCardListRequest request) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
                 .getAllBankCard(request);
     }
 
+
+    @Override
+    public Observable<BankListResponse> getBankList(BankListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getBackList(request);
+    }
 }
