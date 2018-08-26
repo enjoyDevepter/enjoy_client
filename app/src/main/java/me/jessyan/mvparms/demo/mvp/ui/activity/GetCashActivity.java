@@ -4,23 +4,41 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.Subscriber;
+
+import butterknife.BindView;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerGetCashComponent;
 import me.jessyan.mvparms.demo.di.module.GetCashModule;
 import me.jessyan.mvparms.demo.mvp.contract.GetCashContract;
+import me.jessyan.mvparms.demo.mvp.model.MyModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.GetCashPresenter;
 
 import me.jessyan.mvparms.demo.R;
 
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class GetCashActivity extends BaseActivity<GetCashPresenter> implements GetCashContract.View {
+
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.back)
+    View back;
+
+    @BindView(R.id.yue)
+    TextView yue;  // 余额，1888.99
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -39,7 +57,15 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+        title.setText("提现");
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                killMyself();
+            }
+        });
+        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        updateUserAccount ((MemberAccount)cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT));
     }
 
     @Override
@@ -67,5 +93,13 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
     @Override
     public void killMyself() {
         finish();
+    }
+
+    private MemberAccount account;
+
+    @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
+    public void updateUserAccount(MemberAccount account){
+        this.account = account;
+        yue.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
     }
 }
