@@ -333,8 +333,8 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         DefaultAdapter.releaseAllHolder(cartRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
 
     }
 

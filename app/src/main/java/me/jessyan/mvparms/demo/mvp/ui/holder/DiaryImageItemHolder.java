@@ -18,6 +18,7 @@ package me.jessyan.mvparms.demo.mvp.ui.holder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
@@ -51,12 +52,9 @@ public class DiaryImageItemHolder extends BaseHolder<DiaryAlbum> {
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
-        int screenWidth = ArmsUtils.getScreenWidth(ArmsUtils.getContext());
-//        if (size == 2) {
-//            itemView.setLayoutParams(newlyweds RecyclerView.LayoutParams((screenWidth - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_style_margin_left) * 3 - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_margin_left) * 2) / 2, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        } else {
-//            itemView.setLayoutParams(newlyweds RecyclerView.LayoutParams((screenWidth - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_style_margin_left) * 4 - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_margin_left) * 2) / 3, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        }
+        LinearLayout.LayoutParams linearLayout = (LinearLayout.LayoutParams) itemView.getLayoutParams();
+        linearLayout.width = (ArmsUtils.getScreenWidth(ArmsUtils.getContext()) - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.plus_width)) / 2;
+        itemView.setLayoutParams(linearLayout);
     }
 
     @Override

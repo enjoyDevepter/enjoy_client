@@ -26,8 +26,10 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsOrderConfirmActivity;
@@ -279,6 +281,35 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
         intent.putParcelableArrayListExtra("goodsList", goodsList);
         intent.putExtra("payAll", ArmsUtils.isEmpty(advanceDepositId));
         ArmsUtils.startActivity(intent);
+    }
+
+
+    public void collectGoods(boolean collect) {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        if (cache.get(KEY_KEEP + "token") == null) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+
+        CollectGoodsRequest request = new CollectGoodsRequest();
+        request.setCmd(collect ? 407 : 408);
+        request.setToken((String) cache.get(KEY_KEEP + "token"));
+        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
+        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        mModel.collectGoods(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            mRootView.updateCollect(collect);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+
     }
 
     @Override

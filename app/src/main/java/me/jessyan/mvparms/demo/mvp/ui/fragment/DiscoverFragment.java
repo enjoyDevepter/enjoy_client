@@ -275,9 +275,9 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-        this.mPaginate = null;
         DefaultAdapter.releaseAllHolder(diaryRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        this.mPaginate = null;
+        super.onDestroy();
     }
 
     @Override

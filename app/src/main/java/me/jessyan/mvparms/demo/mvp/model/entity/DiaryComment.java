@@ -8,7 +8,7 @@ public class DiaryComment {
 
     private String commentDate;
     private String content;
-    private DiaryMember member;
+    private Member member;
 
     public String getCommentDate() {
         return commentDate;
@@ -26,11 +26,11 @@ public class DiaryComment {
         this.content = content;
     }
 
-    public DiaryMember getMember() {
+    public Member getMember() {
         return member;
     }
 
-    public void setMember(DiaryMember member) {
+    public void setMember(Member member) {
         this.member = member;
     }
 

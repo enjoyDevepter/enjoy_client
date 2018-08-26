@@ -156,8 +156,8 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         DefaultAdapter.releaseAllHolder(contentRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
 
     }
 

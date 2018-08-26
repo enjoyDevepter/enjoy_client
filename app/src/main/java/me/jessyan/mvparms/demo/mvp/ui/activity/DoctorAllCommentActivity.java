@@ -19,15 +19,13 @@ import com.paginate.Paginate;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorAllCommentComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorAllCommentModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorAllCommentContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorAllCommentPresenter;
-
-import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorCommentHolderAdapter;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -167,8 +165,8 @@ public class DoctorAllCommentActivity extends BaseActivity<DoctorAllCommentPrese
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
-        super.onDestroy();
         this.mPaginate = null;
+        super.onDestroy();
     }
 
 

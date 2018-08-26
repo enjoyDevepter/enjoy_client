@@ -29,16 +29,14 @@ import java.util.Date;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorCommentInfoComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorCommentInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorCommentInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.CommentMemberBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorCommentInfoPresenter;
-
-import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -82,14 +80,14 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    private Paginate mPaginate;
-    private boolean isLoadingMore;
-    private boolean isEnd;
-
     @BindView(R.id.comment)
     EditText comment;
     @BindView(R.id.good)
     View good;
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean isEnd;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private void initPaginate() {
         if (mPaginate == null) {
@@ -116,7 +114,6 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
             mPaginate.setHasMoreDataToLoad(false);
         }
     }
-
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -172,9 +169,6 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
             }
         });
     }
-
-
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private void setData(DoctorCommentBean data) {
         CommentMemberBean member = data.getMember();
@@ -283,8 +277,8 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
-        super.onDestroy();
         this.mPaginate = null;
+        super.onDestroy();
     }
 
     public void clear(){

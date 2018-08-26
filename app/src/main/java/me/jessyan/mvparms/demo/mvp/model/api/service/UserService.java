@@ -26,12 +26,16 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AddBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.CashConvertRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.DelBankCardRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashCoinRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
@@ -40,6 +44,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.DelBankCardRespons
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashCoinResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyCouponListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFollowListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 import retrofit2.Retrofit;
@@ -79,28 +85,44 @@ public interface UserService {
     Observable<AllAddressResponse> getAllAddressList(@Body SimpleRequest request);
 
     @POST("gateway")
-    // 获取银行卡列表
+        // 获取银行卡列表
     Observable<GetAllBankCardListResponse> getAllBankCard(@Body GetAllBankCardListRequest request);
 
     @POST("gateway")
-    // 添加银行卡
+        // 添加银行卡
     Observable<AddBankCardResponse> addBankCard(@Body AddBankCardRequest request);
 
     @POST("gateway")
-    // 删除银行卡
+        // 删除银行卡
     Observable<DelBankCardResponse> delBankCard(@Body DelBankCardRequest request);
 
     @POST("gateway")
-    // 获取消费币详情
+        // 获取消费币详情
     Observable<GetConsumeInfoPageResponse> getConsumeInfoPage(@Body GetConsumeInfoPageRequest request);
 
     @POST("gateway")
-    // 签到
+        // 签到
     Observable<QiandaoResponse> qiandao(@Body QiandaoRequest request);
 
     @POST("gateway")
     // 获取现金币详情
     Observable<GetCashCoinResponse> getCashCoin(@Body GetCashCoinRequest request);
+
+    @POST("gateway")
+        // 优惠卷
+    Observable<MyCouponListResponse> getMyCouponList(@Body MyCouponListRequest request);
+
+    @POST("gateway")
+        // 我的收藏
+    Observable<GoodsListResponse> getMyFarvirate(@Body MyCouponListRequest request);
+
+    @POST("gateway")
+        // 我的关注
+    Observable<MyFollowListResponse> getMyFollows(@Body MyFollowRequest request);
+
+    @POST("gateway")
+        // 关注
+    Observable<BaseResponse> follow(@Body FollowRequest request);
 
     @POST("gateway")
     // 获取用户详情

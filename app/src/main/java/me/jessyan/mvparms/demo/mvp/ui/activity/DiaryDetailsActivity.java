@@ -270,7 +270,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         DefaultAdapter.releaseAllHolder(commentRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
     }
 }

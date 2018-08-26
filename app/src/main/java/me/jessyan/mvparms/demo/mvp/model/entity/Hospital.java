@@ -16,6 +16,10 @@ public class Hospital {
     private String hospitalId;
     private String distance;
     private String distanceDesc;
+    private String image;
+    private String followDate;
+    private String isFollow;
+
 
     public String getAddress() {
         return address;
@@ -105,6 +109,30 @@ public class Hospital {
         this.distanceDesc = distanceDesc;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getFollowDate() {
+        return followDate;
+    }
+
+    public void setFollowDate(String followDate) {
+        this.followDate = followDate;
+    }
+
+    public String getIsFollow() {
+        return isFollow;
+    }
+
+    public void setIsFollow(String isFollow) {
+        this.isFollow = isFollow;
+    }
+
     @Override
     public String toString() {
         return "Hospital{" +
@@ -119,6 +147,9 @@ public class Hospital {
                 ", hospitalId='" + hospitalId + '\'' +
                 ", distance='" + distance + '\'' +
                 ", distanceDesc='" + distanceDesc + '\'' +
+                ", image='" + image + '\'' +
+                ", followDate='" + followDate + '\'' +
+                ", isFollow='" + isFollow + '\'' +
                 '}';
     }
 }

@@ -136,19 +136,23 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
                         .imageView(headImageIV)
                         .build());
 
-        mImageLoader.loadImage(itemView.getContext(),
-                ImageConfigImpl
-                        .builder()
-                        .url(diary.getImageList().get(0))
-                        .imageView(leftIV)
-                        .build());
+        if (diary.getImageList() != null && diary.getImageList().size() > 0) {
+            mImageLoader.loadImage(itemView.getContext(),
+                    ImageConfigImpl
+                            .builder()
+                            .url(diary.getImageList().get(0))
+                            .imageView(leftIV)
+                            .build());
+        }
+        if (diary.getImageList() != null && diary.getImageList().size() > 1) {
+            mImageLoader.loadImage(itemView.getContext(),
+                    ImageConfigImpl
+                            .builder()
+                            .url(diary.getImageList().get(1))
+                            .imageView(rightIV)
+                            .build());
+        }
 
-        mImageLoader.loadImage(itemView.getContext(),
-                ImageConfigImpl
-                        .builder()
-                        .url(diary.getImageList().get(1))
-                        .imageView(rightIV)
-                        .build());
 
     }
 

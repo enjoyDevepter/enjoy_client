@@ -9,7 +9,11 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.CouponContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyCouponListResponse;
 
 
 @ActivityScope
@@ -31,4 +35,9 @@ public class CouponModel extends BaseModel implements CouponContract.Model {
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<MyCouponListResponse> getMyCouponList(MyCouponListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getMyCouponList(request);
+    }
 }

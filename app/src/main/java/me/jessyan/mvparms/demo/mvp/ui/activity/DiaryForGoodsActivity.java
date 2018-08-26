@@ -258,13 +258,15 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                         .build());
         nickNameTV.setText(response.getMember().getNickName());
         followV.setSelected("1".equals(response.getMember().getIsFollow()) ? true : false);
-        mImageLoader.loadImage(this,
-                ImageConfigImpl
-                        .builder()
-                        .url(response.getDiaryAlbumList().get(0).getImage())
-                        .imageView(leftIV)
-                        .build());
-        leftCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(0).getNum()));
+        if (response.getDiaryAlbumList().size() > 0) {
+            mImageLoader.loadImage(this,
+                    ImageConfigImpl
+                            .builder()
+                            .url(response.getDiaryAlbumList().get(0).getImage())
+                            .imageView(leftIV)
+                            .build());
+            leftCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(0).getNum()));
+        }
         if (response.getDiaryAlbumList().size() > 1) {
             rightCountTV.setVisibility(View.VISIBLE);
             mImageLoader.loadImage(this,
@@ -314,8 +316,8 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        this.mPaginate = null;
         DefaultAdapter.releaseAllHolder(diaryRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        this.mPaginate = null;
+        super.onDestroy();
     }
 }

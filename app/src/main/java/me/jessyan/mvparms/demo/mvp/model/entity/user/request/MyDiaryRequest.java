@@ -1,4 +1,6 @@
-package me.jessyan.mvparms.demo.mvp.model.entity.request;
+package me.jessyan.mvparms.demo.mvp.model.entity.user.request;
+
+import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
 /**
  * Created by guomin on 2018/7/25.

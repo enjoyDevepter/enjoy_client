@@ -271,9 +271,9 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
 
     @Override
     protected void onDestroy() {
+        DefaultAdapter.releaseAllHolder(ordersRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
         this.mPaginate = null;
-        DefaultAdapter.releaseAllHolder(ordersRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
 
     }
 

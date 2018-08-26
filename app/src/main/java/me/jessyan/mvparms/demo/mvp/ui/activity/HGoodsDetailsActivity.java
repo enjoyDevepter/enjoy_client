@@ -484,7 +484,13 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             ArmsUtils.configRecyclerView(dirayRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             initPaginate();
             views.add(diraySRL);
+            viewpager.getAdapter().notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void updateCollect(boolean collect) {
+        isFavoriteV.setSelected(collect);
     }
 
     @Override
@@ -504,6 +510,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                 showSpec();
                 break;
             case R.id.isFavorite: // 缺接口
+                mPresenter.collectGoods(!isFavoriteV.isSelected());
                 break;
             case R.id.buy:
                 mPresenter.goOrderConfirm();
@@ -593,9 +600,9 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         DefaultAdapter.releaseAllHolder(promotionCV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         DefaultAdapter.releaseAllHolder(dirayRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
 
     }
 

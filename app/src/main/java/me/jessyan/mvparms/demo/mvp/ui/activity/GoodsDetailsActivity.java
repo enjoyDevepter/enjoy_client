@@ -470,6 +470,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             ArmsUtils.configRecyclerView(dirayRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             initPaginate();
             views.add(diraySRL);
+            viewpager.getAdapter().notifyDataSetChanged();
         }
     }
 
@@ -598,8 +599,8 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         DefaultAdapter.releaseAllHolder(promotionCV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
     }
 
     private class Mobile {

@@ -1,8 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.response;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
-import me.jessyan.mvparms.demo.mvp.model.entity.DiaryMember;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.Member;
 
 /**
  * Created by guomin on 2018/7/28.
@@ -11,7 +11,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 public class DiaryDetailsResponse extends BaseResponse {
 
     private Diary diary;
-    private DiaryMember member;
+    private Member member;
     private Goods goods;
 
     public Diary getDiary() {
@@ -22,11 +22,11 @@ public class DiaryDetailsResponse extends BaseResponse {
         this.diary = diary;
     }
 
-    public DiaryMember getMember() {
+    public Member getMember() {
         return member;
     }
 
-    public void setMember(DiaryMember member) {
+    public void setMember(Member member) {
         this.member = member;
     }
 

@@ -285,6 +285,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                 break;
             case R.id.coupon_layout:
                 Intent intent = new Intent(this, CouponActivity.class);
+                intent.putExtra("type", "优惠券");
                 intent.putParcelableArrayListExtra("coupons", (ArrayList<? extends Parcelable>) response.getCouponList());
                 ArmsUtils.startActivity(intent);
                 break;

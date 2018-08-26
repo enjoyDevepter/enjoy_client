@@ -68,7 +68,7 @@ public class CouponListItemHolder extends BaseHolder<Coupon> {
                 .subscribe(s -> remarkTV.setText(s));
         Observable.just(coupon.getEndDate())
                 .subscribe(s -> endDateTV.setText("有效期至" + sdf.format(s)));
-        Observable.just(coupon.getStatus())
+        Observable.just(coupon.getStatusDesc())
                 .subscribe(s -> statusTV.setText(s));
     }
 

@@ -190,7 +190,7 @@
         <activity
             android:name=".mvp.ui.activity.MyDiaryActivity"
             android:screenOrientation="portrait" />
-            android:screenOrientation="portrait" />
+        android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.ConsumeCoinActivity"
             android:screenOrientation="portrait" />
@@ -202,6 +202,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.GetCashActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.MyFarvirateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.MyFollowActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.RecommenderActivity"
             android:screenOrientation="portrait" />
     </application>
 

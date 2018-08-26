@@ -15,10 +15,10 @@ import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.MyDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyDiaryRequest;
 
 
 @ActivityScope

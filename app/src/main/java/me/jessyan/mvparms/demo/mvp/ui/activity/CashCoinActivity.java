@@ -22,17 +22,14 @@ import org.simple.eventbus.Subscriber;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerCashCoinComponent;
 import me.jessyan.mvparms.demo.di.module.CashCoinModule;
 import me.jessyan.mvparms.demo.mvp.contract.CashCoinContract;
 import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.request.CashConvertRequest;
 import me.jessyan.mvparms.demo.mvp.presenter.CashCoinPresenter;
-
-import me.jessyan.mvparms.demo.R;
-
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -58,12 +55,11 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.convert)
+    View convert;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean isEnd;
-
-    @BindView(R.id.convert)
-    View convert;
 
     private void initPaginate() {
         if (mPaginate == null) {
@@ -173,8 +169,8 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
-        super.onDestroy();
         this.mPaginate = null;
+        super.onDestroy();
     }
 
 

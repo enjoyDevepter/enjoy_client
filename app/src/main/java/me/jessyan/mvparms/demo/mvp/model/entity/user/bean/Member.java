@@ -6,6 +6,8 @@ import java.util.List;
 import me.jessyan.mvparms.demo.mvp.model.entity.Area;
 
 public class Member implements Serializable {
+    private String memberId;
+    private String isSignin;
     private String userName;
     private String nickName;
     private PointLevel rank;
@@ -26,12 +28,19 @@ public class Member implements Serializable {
     private String constellation;  // 星座
     private String occupation;  // 职业
     private List<String> hobbyList;  // 爱好列表
+    private Member recomMember;
+    private String isModifyRealName;
+    private String isModifyNickName;
+    private GrowthRankBean growthRank; // 成长等级
+    private DistributionRankBean distributionRank;// 分销等级
 
 
     @Override
     public String toString() {
         return "Member{" +
-                "userName='" + userName + '\'' +
+                "memberId='" + memberId + '\'' +
+                ", isSignin='" + isSignin + '\'' +
+                ", userName='" + userName + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", rank=" + rank +
                 ", headImage='" + headImage + '\'' +
@@ -51,7 +60,28 @@ public class Member implements Serializable {
                 ", constellation='" + constellation + '\'' +
                 ", occupation='" + occupation + '\'' +
                 ", hobbyList=" + hobbyList +
+                ", recomMember=" + recomMember +
+                ", isModifyRealName='" + isModifyRealName + '\'' +
+                ", isModifyNickName='" + isModifyNickName + '\'' +
+                ", growthRank=" + growthRank +
+                ", distributionRank=" + distributionRank +
                 '}';
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
+    public Member getRecomMember() {
+        return recomMember;
+    }
+
+    public void setRecomMember(Member recomMember) {
+        this.recomMember = recomMember;
     }
 
     public String getUserName() {
@@ -214,4 +244,101 @@ public class Member implements Serializable {
         this.hobbyList = hobbyList;
     }
 
+    public String getIsSignin() {
+        return isSignin;
+    }
+
+    public void setIsSignin(String isSignin) {
+        this.isSignin = isSignin;
+    }
+
+    public String getIsModifyRealName() {
+        return isModifyRealName;
+    }
+
+    public void setIsModifyRealName(String isModifyRealName) {
+        this.isModifyRealName = isModifyRealName;
+    }
+
+    public String getIsModifyNickName() {
+        return isModifyNickName;
+    }
+
+    public void setIsModifyNickName(String isModifyNickName) {
+        this.isModifyNickName = isModifyNickName;
+    }
+
+    public GrowthRankBean getGrowthRank() {
+        return growthRank;
+    }
+
+    public void setGrowthRank(GrowthRankBean growthRank) {
+        this.growthRank = growthRank;
+    }
+
+    public DistributionRankBean getDistributionRank() {
+        return distributionRank;
+    }
+
+    public void setDistributionRank(DistributionRankBean distributionRank) {
+        this.distributionRank = distributionRank;
+    }
+
+    public class GrowthRankBean {
+        private String growthLevelId;
+        private String growthLevelName;
+
+        public String getGrowthLevelId() {
+            return growthLevelId;
+        }
+
+        public void setGrowthLevelId(String growthLevelId) {
+            this.growthLevelId = growthLevelId;
+        }
+
+        public String getGrowthLevelName() {
+            return growthLevelName;
+        }
+
+        public void setGrowthLevelName(String growthLevelName) {
+            this.growthLevelName = growthLevelName;
+        }
+
+        @Override
+        public String toString() {
+            return "GrowthRankBean{" +
+                    "growthLevelId='" + growthLevelId + '\'' +
+                    ", growthLevelName='" + growthLevelName + '\'' +
+                    '}';
+        }
+    }
+
+    public class DistributionRankBean {
+        private String distributionLevelId;
+        private String distributionLevelName;
+
+        public String getDistributionLevelId() {
+            return distributionLevelId;
+        }
+
+        public void setDistributionLevelId(String distributionLevelId) {
+            this.distributionLevelId = distributionLevelId;
+        }
+
+        public String getDistributionLevelName() {
+            return distributionLevelName;
+        }
+
+        public void setDistributionLevelName(String distributionLevelName) {
+            this.distributionLevelName = distributionLevelName;
+        }
+
+        @Override
+        public String toString() {
+            return "DistributionRankBean{" +
+                    "distributionLevelId='" + distributionLevelId + '\'' +
+                    ", distributionLevelName='" + distributionLevelName + '\'' +
+                    '}';
+        }
+    }
 }

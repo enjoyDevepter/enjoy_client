@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background"
     android:orientation="vertical">
 
@@ -49,11 +49,11 @@
 
         <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
             android:id="@+id/image"
-            app:shape_type="circle"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp" />
+            android:layout_marginTop="25dp"
+            app:shape_type="circle" />
 
         <LinearLayout
             android:id="@+id/info"
@@ -72,8 +72,8 @@
 
             <View
                 android:layout_width="1dp"
-                android:layout_gravity="center_vertical"
                 android:layout_height="8dp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@color/white" />
@@ -94,7 +94,6 @@
             android:layout_below="@id/info"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
-            android:text="雪怡gril"
             android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
 
@@ -139,7 +138,6 @@
                 android:id="@+id/money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="230.00"
                 android:textColor="#FF333333"
                 android:textSize="13sp" />
 
@@ -165,7 +163,6 @@
                 android:id="@+id/member_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="230.00"
                 android:textColor="#FF333333"
                 android:textSize="13sp" />
 
@@ -190,7 +187,6 @@
                 android:id="@+id/bonus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="230.00"
                 android:textColor="#FF333333"
                 android:textSize="13sp" />
 
@@ -483,12 +479,28 @@
 
             </LinearLayout>
 
-            <View
+            <LinearLayout
+                android:id="@+id/recommender"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="25dp"
+                    android:layout_height="24dp"
+                    android:background="@mipmap/recommender" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="推荐上属"
+                    android:textColor="#FF333333"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
 
             <View
                 android:layout_width="0dp"

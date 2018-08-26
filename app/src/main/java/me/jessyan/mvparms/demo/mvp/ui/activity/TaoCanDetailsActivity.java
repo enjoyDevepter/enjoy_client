@@ -171,7 +171,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         DefaultAdapter.releaseAllHolder(detailRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
     }
 }

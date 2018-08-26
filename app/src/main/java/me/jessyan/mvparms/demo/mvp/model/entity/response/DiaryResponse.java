@@ -4,7 +4,7 @@ import java.util.List;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.DiaryAlbum;
 import me.jessyan.mvparms.demo.mvp.model.entity.DiaryGoods;
-import me.jessyan.mvparms.demo.mvp.model.entity.DiaryMember;
+import me.jessyan.mvparms.demo.mvp.model.entity.Member;
 
 /**
  * Created by guomin on 2018/7/28.
@@ -12,15 +12,15 @@ import me.jessyan.mvparms.demo.mvp.model.entity.DiaryMember;
 
 public class DiaryResponse extends BaseResponse {
 
-    private DiaryMember member;
+    private Member member;
     private List<DiaryAlbum> diaryAlbumList;
     private DiaryGoods goods;
 
-    public DiaryMember getMember() {
+    public Member getMember() {
         return member;
     }
 
-    public void setMember(DiaryMember member) {
+    public void setMember(Member member) {
         this.member = member;
     }
 

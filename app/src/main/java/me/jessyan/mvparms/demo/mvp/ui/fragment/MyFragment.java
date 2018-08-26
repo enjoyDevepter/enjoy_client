@@ -13,6 +13,7 @@ import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import org.simple.eventbus.Subscriber;
@@ -25,16 +26,22 @@ import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMyComponent;
 import me.jessyan.mvparms.demo.di.module.MyModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
+import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Member;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.MyPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CashCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ConsumeCoinActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.CouponActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyDiaryActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MyFarvirateActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MyFollowActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyMealActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.RecommenderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.UserIntegralActivity;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -72,7 +79,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     View couponV;
     @BindView(R.id.store)
     View storeV;
-
+    @BindView(R.id.recommender)
+    View recommenderV;
     @BindView(R.id.consume)
     View consume;
     @BindView(R.id.cash)
@@ -122,6 +130,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         settingV.setOnClickListener(this);
         msgV.setOnClickListener(this);
         bonusTV.setOnClickListener(this);
+        recommenderV.setOnClickListener(this);
         consume.setOnClickListener(this);
         cash.setOnClickListener(this);
     }
@@ -146,12 +155,10 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     @Override
     public void showLoading() {
-
     }
 
     @Override
     public void hideLoading() {
-
     }
 
     @Override
@@ -199,22 +206,29 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 ArmsUtils.startActivity(MyDiaryActivity.class);
                 break;
             case R.id.collect:
+                ArmsUtils.startActivity(MyFarvirateActivity.class);
                 break;
             case R.id.follow:
+                ArmsUtils.startActivity(MyFollowActivity.class);
                 break;
             case R.id.meal:
-                ArmsUtils.startActivity(getActivity(), MyMealActivity.class);
+                ArmsUtils.startActivity(MyMealActivity.class);
                 break;
             case R.id.coupon:
+                ArmsUtils.startActivity(CouponActivity.class);
                 break;
             case R.id.store:
+                break;
+            case R.id.recommender:
+                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+                Member member = (Member) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_INFO);
+                Intent recommenderIntent = new Intent(getContext(), RecommenderActivity.class);
+                recommenderIntent.putExtra("recommender", member.getRecomMember().getUserName());
+                ArmsUtils.startActivity(recommenderIntent);
                 break;
             case R.id.bonus:
                 Intent bonusIntent = new Intent(getContext(), UserIntegralActivity.class);
                 ArmsUtils.startActivity(bonusIntent);
-                Intent intent = new Intent(getContext(), UserIntegralActivity.class);
-                intent.putExtra(UserIntegralActivity.KEY_FOR_USER_ALL_SCORE, "" + bonusTV.getText());
-                ArmsUtils.startActivity(intent);
                 break;
             case R.id.consume:
                 Intent consumeIntent = new Intent(getContext(), ConsumeCoinActivity.class);
@@ -228,14 +242,15 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     }
 
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
-    public void updateUserAccount(MemberAccount account){
-        moneyTV.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
-        memberMoneyTV.setText(String.format("%.2f",account.getTotal() * 1.0 / 100));
-        bonusTV.setText(account.getPoint()+"");
+    public void updateUserAccount(MemberAccount account) {
+        moneyTV.setText(String.format("%.2f", account.getBonus() * 1.0 / 100));
+        memberMoneyTV.setText(String.format("%.2f", account.getTotal() * 1.0 / 100));
+        bonusTV.setText(account.getPoint() + "");
     }
 
+
     @Subscriber(tag = EventBusTags.USER_INFO_CHANGE)
-    public void updateUserInfo(Member member){
+    public void updateUserInfo(Member member) {
         mImageLoader.loadImage(getContext(),
                 ImageConfigImpl
                         .builder()
@@ -244,7 +259,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                         .build());
         nickNameTV.setText(member.getNickName());
         int levelIcon = 0;
-        switch (member.getRank().getPointLevelId()){
+        switch (member.getRank().getPointLevelId()) {
             case "1":
                 levelIcon = R.mipmap.user_level_1;
                 break;
@@ -264,5 +279,9 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 break;
         }
         level_icon.setBackground(getResources().getDrawable(levelIcon));
+
+        if (null == member.getRecomMember()) {
+            recommenderV.setVisibility(View.INVISIBLE);
+        }
     }
 }

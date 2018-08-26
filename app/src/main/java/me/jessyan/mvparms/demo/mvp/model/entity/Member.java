@@ -4,11 +4,12 @@ package me.jessyan.mvparms.demo.mvp.model.entity;
 /**
  * 日志
  */
-public class DiaryMember {
+public class Member {
     private String headImage;
     private String isFollow;
     private String memberId;
     private String nickName;
+    private String followDate;
 
     public String getHeadImage() {
         return headImage;
@@ -42,6 +43,14 @@ public class DiaryMember {
         this.nickName = nickName;
     }
 
+    public String getFollowDate() {
+        return followDate;
+    }
+
+    public void setFollowDate(String followDate) {
+        this.followDate = followDate;
+    }
+
     @Override
     public String toString() {
         return "Member{" +
@@ -49,6 +58,7 @@ public class DiaryMember {
                 ", isFollow='" + isFollow + '\'' +
                 ", memberId='" + memberId + '\'' +
                 ", nickName='" + nickName + '\'' +
+                ", followDate='" + followDate + '\'' +
                 '}';
     }
 }

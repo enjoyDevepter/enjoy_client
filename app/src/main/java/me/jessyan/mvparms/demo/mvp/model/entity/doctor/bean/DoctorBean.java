@@ -3,11 +3,13 @@ package me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean;
 import java.io.Serializable;
 import java.util.List;
 
-public class DoctorBean implements Serializable{
+public class DoctorBean implements Serializable {
     private String doctorId;
     private String headImage;
     private String name;
     private int star;
+    private String followDate;
+    private String isFollow;
     private List<DoctorSkill> doctorSkillList;
     private HospitalBean hospitalBean;
 
@@ -21,11 +23,21 @@ public class DoctorBean implements Serializable{
                 ", headImage='" + headImage + '\'' +
                 ", name='" + name + '\'' +
                 ", star=" + star +
+                ", followDate='" + followDate + '\'' +
+                ", isFollow='" + isFollow + '\'' +
                 ", doctorSkillList=" + doctorSkillList +
                 ", hospitalBean=" + hospitalBean +
                 ", comment=" + comment +
                 ", isPraise='" + isPraise + '\'' +
                 '}';
+    }
+
+    public String getFollowDate() {
+        return followDate;
+    }
+
+    public void setFollowDate(String followDate) {
+        this.followDate = followDate;
     }
 
     public String getDoctorId() {
@@ -90,5 +102,13 @@ public class DoctorBean implements Serializable{
 
     public void setIsPraise(String isPraise) {
         this.isPraise = isPraise;
+    }
+
+    public String getIsFollow() {
+        return isFollow;
+    }
+
+    public void setIsFollow(String isFollow) {
+        this.isFollow = isFollow;
     }
 }

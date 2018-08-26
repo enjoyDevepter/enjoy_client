@@ -7,17 +7,17 @@
 
     <include layout="@layout/title"/>
     <RelativeLayout
-        android:background="@mipmap/consume_coin_back"
         android:layout_width="match_parent"
-        android:layout_height="130dp">
+        android:layout_height="130dp"
+        android:background="@mipmap/consume_coin_back">
 
         <TextView
             android:id="@+id/consume_count_title"
-            android:layout_marginTop="32dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
             android:text="消费币余额"
             android:textColor="#ffffffff"
             android:textSize="13sp"
@@ -25,11 +25,11 @@
 
         <TextView
             android:id="@+id/consume_count"
-            android:layout_marginTop="15dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/consume_count_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/consume_count_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
             android:text="1280.00"
             android:textColor="#ffffffff"
             android:textSize="28sp"
@@ -37,15 +37,15 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:paddingLeft="14dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:paddingLeft="14dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,10 +58,10 @@
                 android:textSize="14sp" />
 
             <View
-                android:background="#3DBFE8"
-                android:layout_marginTop="11dp"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"/>
+                android:layout_height="2dp"
+                android:layout_marginTop="11dp"
+                android:background="#3DBFE8" />
         </LinearLayout>
 
         <View style="@style/divider_1"/>
@@ -69,8 +69,8 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_weight="1"
         android:layout_height="0dp"
+        android:layout_weight="1"
         >
 
         <android.support.v7.widget.RecyclerView
@@ -78,23 +78,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="9dp"
-            android:scrollbars="vertical"
+            android:scrollbars="none"
             tools:listitem="@layout/recycle_list" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/commit"
-        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/add_address_btn_bg"
+        android:gravity="center"
         android:text="充值"
         android:textColor="#ffffffff"
         android:textSize="13sp"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:layout_marginTop="35dp"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@drawable/add_address_btn_bg"
         />
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -35,13 +36,15 @@ import static android.view.View.VISIBLE;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class CouponActivity extends BaseActivity<CouponPresenter> implements CouponContract.View, DefaultAdapter.OnRecyclerViewItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class CouponActivity extends BaseActivity<CouponPresenter> implements CouponContract.View, DefaultAdapter.OnRecyclerViewItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TabLayout.OnTabSelectedListener {
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
     TextView titleTV;
-    @BindView(R.id.no_date)
+    @BindView(R.id.no_data)
     View onDate;
+    @BindView(R.id.tab)
+    TabLayout tab;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.coupon)
@@ -74,12 +77,19 @@ public class CouponActivity extends BaseActivity<CouponPresenter> implements Cou
         backV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(this);
         String type = getIntent().getStringExtra("type");
-        titleTV.setText("优惠券");
         if ("优惠券".equals(type)) {
-
+            titleTV.setText("优惠券");
+            tab.setVisibility(View.GONE);
+            mAdapter.setOnItemClickListener(this);
         } else {
+            titleTV.setText("我的优惠券");
+            tab.setVisibility(View.VISIBLE);
+            provideCache().put("status", "1");
+            tab.addTab(tab.newTab().setText("未使用"));
+            tab.addTab(tab.newTab().setText("已使用"));
+            tab.addTab(tab.newTab().setText("已过期"));
+            tab.addOnTabSelectedListener(this);
             initPaginate();
             swipeRefreshLayout.setOnRefreshListener(this);
         }
@@ -159,7 +169,7 @@ public class CouponActivity extends BaseActivity<CouponPresenter> implements Cou
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-//                    mPresenter.getRecommendGoodsList(false);
+                    mPresenter.getMyCouponList(false);
                 }
 
                 @Override
@@ -182,7 +192,7 @@ public class CouponActivity extends BaseActivity<CouponPresenter> implements Cou
 
     @Override
     public void onRefresh() {
-//        mPresenter.getRecommendGoodsList(true);
+        mPresenter.getMyCouponList(true);
     }
 
 
@@ -205,7 +215,23 @@ public class CouponActivity extends BaseActivity<CouponPresenter> implements Cou
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        provideCache().put("status", tab.getPosition() + 1 + "");
+        mPresenter.getMyCouponList(true);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }
