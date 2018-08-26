@@ -42,7 +42,7 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     @BindView(R.id.title)
     TextView title;
 
-    @BindView(R.id.title)
+    @BindView(R.id.back)
     View back;
 
     @Inject

@@ -208,9 +208,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
             case R.id.store:
                 break;
             case R.id.bonus:
-                Intent intent = new Intent(getContext(), UserIntegralActivity.class);
-                intent.putExtra(UserIntegralActivity.KEY_FOR_USER_ALL_SCORE,""+bonusTV.getText());
-                ArmsUtils.startActivity(intent);
+                Intent bonusIntent = new Intent(getContext(), UserIntegralActivity.class);
+                ArmsUtils.startActivity(bonusIntent);
                 break;
             case R.id.consume:
                 Intent consumeIntent = new Intent(getContext(), ConsumeCoinActivity.class);
