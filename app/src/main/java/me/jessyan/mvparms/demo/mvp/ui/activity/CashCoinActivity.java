@@ -52,6 +52,8 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
 
     @BindView(R.id.consume_count)
     TextView consume_count;
+    @BindView(R.id.get_cash)
+    View get_cash;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -116,6 +118,12 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
             @Override
             public void onClick(View v) {
                 killMyself();
+            }
+        });
+        get_cash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArmsUtils.startActivity(GetCashActivity.class);
             }
         });
 
@@ -193,6 +201,9 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
 
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
     public void updateUserAccount(MemberAccount account){
+        if(account == null){
+            return;
+        }
         consume_count.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
     }
 }

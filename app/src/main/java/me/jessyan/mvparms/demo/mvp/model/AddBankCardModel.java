@@ -10,7 +10,13 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.AddBankCardContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AddBankCardRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
 
 
 @ActivityScope
@@ -31,4 +37,11 @@ public class AddBankCardModel extends BaseModel implements AddBankCardContract.M
         this.mGson = null;
         this.mApplication = null;
     }
+
+    @Override
+    public Observable<AddBankCardResponse> addBankCard(AddBankCardRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .addBankCard(request);
+    }
+
 }

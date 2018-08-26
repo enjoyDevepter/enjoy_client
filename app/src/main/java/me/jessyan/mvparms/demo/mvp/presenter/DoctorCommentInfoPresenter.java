@@ -68,11 +68,11 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
         this.mApplication = null;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void initDoctorInfo(){
         nextPage();
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void requestOrderList(){
         requestOrderList(1,true);
     }

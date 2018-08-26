@@ -2,7 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#F5F5F5"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/title"/>
+    <View style="@style/divider_3"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:background="@color/white"
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/contentList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="9dp"
+            />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/add_card_btn"
+        android:text="添加新卡"
+        android:textColor="#ffffffff"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/cash_convert_btn_back"
+        android:layout_width="330dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="10dp"
+        />
 </LinearLayout>
