@@ -9,7 +9,9 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 
 
 public interface UserIntegralContract {
@@ -25,5 +27,6 @@ public interface UserIntegralContract {
     interface Model extends IModel {
         Observable<UserScorePageResponse> requestScorePage(UserScorePageRequest request);
         Observable<QiandaoResponse> qiandao(QiandaoRequest request);
+        Observable<UserInfoResponse> getUserInfo(UserInfoRequest request);
     }
 }
