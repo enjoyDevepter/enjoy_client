@@ -68,6 +68,7 @@ public class PayGoodsListItemHolder extends BaseHolder<PayGoods> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(data.getImage())
                         .imageView(imageIV)
                         .build());

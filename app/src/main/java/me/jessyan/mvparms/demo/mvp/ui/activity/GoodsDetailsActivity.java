@@ -205,7 +205,6 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         collectV.setOnClickListener(this);
         spceCloseV.setOnClickListener(this);
         promotionCloseV.setOnClickListener(this);
-        tabLayout.addTab(tabLayout.newTab().setText(titles[0]));
 
         ArmsUtils.configRecyclerView(promotionCV, mLayoutManager);
         promotionCV.setAdapter(promotionAdapter);
@@ -248,12 +247,14 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     private void initViewPage() {
 
         viewpager.removeAllViews();
-
+        views.clear();
         // 初始化商品详情
         detailWV = new WebView(this);
         views.add(detailWV);
         detailWV.addJavascriptInterface(mobile, "mobile");
         detailWV.setWebViewClient(mClient);
+        tabLayout.addTab(tabLayout.newTab().setText(titles[0]));
+
 
         // 初始化viewPager
         viewpager.setAdapter(new PagerAdapter() {
@@ -534,6 +535,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             mImageLoader.loadImage(spceImageIV.getContext(),
                     ImageConfigImpl
                             .builder()
+                            .placeholder(R.mipmap.place_holder_img)
                             .url(goods.getImage())
                             .imageView(spceImageIV)
                             .build());

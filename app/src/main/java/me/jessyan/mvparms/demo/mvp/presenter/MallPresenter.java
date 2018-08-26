@@ -8,6 +8,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -131,6 +133,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
         mModel.getGoodsList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh)
                         mRootView.showLoading();//显示下拉刷新的进度条
@@ -142,28 +145,30 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<GoodsListResponse>() {
-            @Override
-            public void accept(GoodsListResponse response) throws Exception {
-                if (response.isSuccess()) {
-                    if (pullToRefresh) {
-                        mGoods.clear();
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new Consumer<GoodsListResponse>() {
+                    @Override
+                    public void accept(GoodsListResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                mGoods.clear();
+                            }
+                            mRootView.showError(response.getGoodsList().size() > 0);
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            mGoods.addAll(response.getGoodsList());
+                            preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = mGoods.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
                     }
-                    mRootView.showError(response.getGoodsList().size() > 0);
-                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    mGoods.addAll(response.getGoodsList());
-                    preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = mGoods.size() / 10;
-                    if (pullToRefresh) {
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
-                    }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
+                });
     }
 
     public void getHGoodsList(final boolean pullToRefresh) {
@@ -186,6 +191,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
         mModel.getHGoodsList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh)
                         mRootView.showLoading();//显示下拉刷新的进度条
@@ -197,31 +203,33 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<HGoodsListResponse>() {
-            @Override
-            public void accept(HGoodsListResponse response) throws Exception {
-                if (response.isSuccess()) {
-                    if (pullToRefresh) {
-                        mHGoods.clear();
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new Consumer<HGoodsListResponse>() {
+                    @Override
+                    public void accept(HGoodsListResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                mHGoods.clear();
+                            }
+                            mRootView.showError(response.getGoodsList().size() > 0);
+                            if (response.getGoodsList().size() <= 0) {
+                                return;
+                            }
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            mHGoods.addAll(response.getGoodsList());
+                            preEndIndex = mHGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = mHGoods.size() / 10;
+                            if (pullToRefresh) {
+                                mHAdapter.notifyDataSetChanged();
+                            } else {
+                                mHAdapter.notifyItemRangeInserted(preEndIndex, mHGoods.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
                     }
-                    mRootView.showError(response.getGoodsList().size() > 0);
-                    if (response.getGoodsList().size() <= 0) {
-                        return;
-                    }
-                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    mHGoods.addAll(response.getGoodsList());
-                    preEndIndex = mHGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = mHGoods.size() / 10;
-                    if (pullToRefresh) {
-                        mHAdapter.notifyDataSetChanged();
-                    } else {
-                        mHAdapter.notifyItemRangeInserted(preEndIndex, mHGoods.size());
-                    }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
+                });
     }
 
     private List<Category> sortCategory(List<Category> categoryList) {

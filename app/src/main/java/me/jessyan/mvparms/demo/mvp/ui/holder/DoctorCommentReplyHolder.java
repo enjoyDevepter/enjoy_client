@@ -21,9 +21,6 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 public class DoctorCommentReplyHolder extends BaseHolder<DoctorCommentReplyBean> {
 
 
-    private AppComponent mAppComponent;
-    private ImageLoader mImageLoader;
-
     @BindView(R.id.image)
     ShapeImageView image;
     @BindView(R.id.name)
@@ -32,7 +29,8 @@ public class DoctorCommentReplyHolder extends BaseHolder<DoctorCommentReplyBean>
     TextView content;
     @BindView(R.id.time)
     TextView time;
-
+    private AppComponent mAppComponent;
+    private ImageLoader mImageLoader;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
@@ -50,6 +48,7 @@ public class DoctorCommentReplyHolder extends BaseHolder<DoctorCommentReplyBean>
             mImageLoader.loadImage(itemView.getContext(),
                     ImageConfigImpl
                             .builder()
+                            .placeholder(R.mipmap.place_holder_user)
                             .url(member.getHeadImage())
                             .imageView(image)
                             .build());

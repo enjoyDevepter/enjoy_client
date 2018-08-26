@@ -3,10 +3,10 @@ ext {
     android = [
             compileSdkVersion: 27,
             buildToolsVersion: "27.0.3",
-            minSdkVersion    : 16,
+            minSdkVersion    : 19,
             targetSdkVersion : 27,
-            versionCode      : 156,
-            versionName      : "2.4.1"
+            versionCode      : 100,
+            versionName      : "1.0.0"
     ]
 
     version = [
@@ -58,6 +58,7 @@ ext {
             "flowlayout"               : "com.hyman:flowlayout-lib:1.1.2",
             "countdownview"            : "com.github.iwgang:countdownview:2.1.6",
             "moneyview"                : "com.github.cchao:moneyview:1.0.1",
+            "actionsheet"              : "com.guoqi.widget:actionsheet:1.0",
 
             //rx1
             "rxandroid"                : "io.reactivex:rxandroid:1.2.1",

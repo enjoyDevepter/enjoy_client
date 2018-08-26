@@ -58,6 +58,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.DiaryForGoodsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.NewlywedsActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.PlatformActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.RecommendActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.TaoCanActivity;
@@ -132,8 +133,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         banner.setImageLoader(new GlideImageLoader());
         banner.setIndicatorGravity(BannerConfig.CENTER);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         mAdapter.setOnChildItemClickLinstener(this);
         initPaginate();
         mPresenter.updateHomeInfo();
@@ -329,7 +330,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void updateDiaryUI(int count) {
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mRecyclerView.getLayoutParams();
-        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count;
+        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1);
         mRecyclerView.setLayoutParams(layoutParams);
     }
 
@@ -438,7 +439,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         switch (viewType) {
             case R.layout.home_article_item: // 文章
                 Article article = (Article) data;
-                showMessage(article.getTitle());
+                Intent articleIntent = new Intent(getContext(), PlatformActivity.class);
+                articleIntent.putExtra("title", article.getTitle());
+                articleIntent.putExtra("url", article.getUrl());
+                ArmsUtils.startActivity(articleIntent);
                 break;
             default:
                 GoodSummary good = (GoodSummary) data;

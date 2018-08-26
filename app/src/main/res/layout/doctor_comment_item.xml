@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="13dp"
         android:layout_marginTop="16dp"
+        android:background="@mipmap/place_holder_user"
         app:shape_type="circle" />
 
     <TextView

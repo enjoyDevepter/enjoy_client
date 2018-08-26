@@ -18,7 +18,8 @@
         <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
             android:id="@+id/headImage"
             android:layout_width="20dp"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:background="@mipmap/place_holder_user" />
 
         <TextView
             android:id="@+id/nickName"
@@ -60,6 +61,7 @@
             android:layout_height="match_parent"
             android:layout_marginRight="12dp"
             android:layout_weight="1"
+            android:background="@mipmap/place_holder_img"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -67,6 +69,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@mipmap/place_holder_img"
             android:scaleType="fitXY" />
     </LinearLayout>
 

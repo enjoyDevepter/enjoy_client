@@ -10,6 +10,7 @@ public class Article {
     private String title;
     private String redirectType;
     private String intro;
+    private String url;
 
     public String getArticleId() {
         return articleId;
@@ -51,6 +52,14 @@ public class Article {
         this.intro = intro;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @Override
     public String toString() {
         return "Article{" +
@@ -59,6 +68,7 @@ public class Article {
                 ", title='" + title + '\'' +
                 ", redirectType='" + redirectType + '\'' +
                 ", intro='" + intro + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 }

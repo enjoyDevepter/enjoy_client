@@ -107,6 +107,7 @@ public class CartGoodsListItemHolder extends BaseHolder<Goods> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(data.getImage())
                         .imageView(imageIV)
                         .build());

@@ -115,6 +115,7 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(getIntent().getStringExtra("imageURl"))
                         .imageView(imageIV)
                         .build());

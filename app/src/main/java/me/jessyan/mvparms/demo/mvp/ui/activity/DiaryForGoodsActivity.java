@@ -253,6 +253,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_user)
                         .url(response.getMember().getHeadImage())
                         .imageView(headImageIV)
                         .build());
@@ -262,6 +263,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
             mImageLoader.loadImage(this,
                     ImageConfigImpl
                             .builder()
+                            .placeholder(R.mipmap.place_holder_img)
                             .url(response.getDiaryAlbumList().get(0).getImage())
                             .imageView(leftIV)
                             .build());
@@ -272,6 +274,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
             mImageLoader.loadImage(this,
                     ImageConfigImpl
                             .builder()
+                            .placeholder(R.mipmap.place_holder_img)
                             .url(response.getDiaryAlbumList().get(1).getImage())
                             .imageView(rightIV)
                             .build());
@@ -283,6 +286,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(response.getGoods().getImage())
                         .imageView(goodsImageIV)
                         .build());

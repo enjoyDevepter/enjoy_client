@@ -39,6 +39,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.MyFollowActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyMealActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.RecommenderActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.SettingActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.UserIntegralActivity;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
@@ -182,6 +183,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.setting:
+                ArmsUtils.startActivity(SettingActivity.class);
                 break;
             case R.id.msg:
                 break;
@@ -254,6 +256,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         mImageLoader.loadImage(getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_user)
                         .url(member.getHeadImage())
                         .imageView(image)
                         .build());

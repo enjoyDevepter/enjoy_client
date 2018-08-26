@@ -93,6 +93,7 @@ public class MyFollowDocterItemHolder extends BaseHolder<DoctorBean> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(doctorBean.getHeadImage())
                         .imageView(headImageIV)
                         .build());

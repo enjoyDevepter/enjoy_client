@@ -53,6 +53,7 @@
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="25dp"
+            android:background="@mipmap/place_holder_user"
             app:shape_type="circle" />
 
         <LinearLayout
@@ -109,8 +110,7 @@
             <ImageView
                 android:id="@+id/level_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

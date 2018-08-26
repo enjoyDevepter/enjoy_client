@@ -93,6 +93,7 @@ public class MyFollowMemberItemHolder extends BaseHolder<Member> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_user)
                         .url(member.getHeadImage())
                         .imageView(headImageIV)
                         .build());

@@ -36,6 +36,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorMainComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorMainModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
@@ -43,13 +44,10 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorSkill;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.HospitalBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorMainPresenter;
-
-import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorCommentHolderAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorSkillAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -60,16 +58,12 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
 
     public static final String LIKE = "1";
     public static final String UNLIKE = "0";
-
-    private String doctorId;
-
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.back)
     View back;
     @BindView(R.id.project)
     TextView project;
-
     @BindView(R.id.head_image)
     ShapeImageView head_image;
     @BindView(R.id.doctor_name)
@@ -87,26 +81,37 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     TextView addr_info;
     @BindView(R.id.skill_list)
     TagFlowLayout skill_list;
-
     @BindView(R.id.doctor_intro)
     View doctor_intro;
     @BindView(R.id.doctor_paper)
     View doctor_paper;
     @BindView(R.id.doctor_honor)
     View doctor_honor;
-
     @BindView(R.id.comment_commit_btn)
     View comment_commit_btn;
     @BindView(R.id.comment_edit)
     EditText comment_edit;
     @BindView(R.id.comment_star)
     RatingBar comment_star;
-
     @BindView(R.id.all_comment)
     TextView all_comment;
-
     @Inject
     ImageLoader mImageLoader;
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+    @Inject
+    RecyclerView.Adapter mAdapter;
+    @BindView(R.id.contentList)
+    RecyclerView contentList;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    private String doctorId;
+    private DoctorSkillAdapter doctorSkillAdapter;
+    private DoctorSkill currDoctorSkill;
+    private PopupWindow popupWindow;
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean isEnd;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -199,13 +204,11 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         swipeRefreshLayout.setLayoutParams(layoutParams);
     }
 
-
-    private DoctorSkillAdapter doctorSkillAdapter;
-
     public void updateDoctorInfo(DoctorBean doctorBean){
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_user)
                         .url(doctorBean.getHeadImage())
                         .imageView(head_image)
                         .build());
@@ -291,8 +294,6 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         project.setText(currDoctorSkill.getProjectName());
     }
 
-    private DoctorSkill currDoctorSkill;
-
     @Override
     public void updateLikeImage(boolean isLike) {
         this.isLike = isLike;
@@ -315,8 +316,6 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     public void killMyself() {
         finish();
     }
-
-    private PopupWindow popupWindow;
 
     private void showType() {
         if (popupWindow != null && popupWindow.isShowing()) {
@@ -351,19 +350,6 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         comment_edit.setText("");
         ArmsUtils.makeText(this,"提交评论成功");
     }
-
-    @Inject
-    RecyclerView.LayoutManager mLayoutManager;
-    @Inject
-    RecyclerView.Adapter mAdapter;
-    @BindView(R.id.contentList)
-    RecyclerView contentList;
-
-    @BindView(R.id.swipeRefreshLayout)
-    SwipeRefreshLayout swipeRefreshLayout;
-    private Paginate mPaginate;
-    private boolean isLoadingMore;
-    private boolean isEnd;
 
     private void initPaginate() {
         if (mPaginate == null) {

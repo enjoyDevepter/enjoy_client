@@ -209,8 +209,6 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         specV.setOnClickListener(this);
         imagesB.setImageLoader(new GlideImageLoader());
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
-        tabLayout.addTab(tabLayout.newTab().setText("商品详情"));
-        tabLayout.addTab(tabLayout.newTab().setText("相关日志"));
 
         maskProV.setOnClickListener(this);
         maskSpecV.setOnClickListener(this);
@@ -261,6 +259,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     private void initViewPage() {
 
         viewpager.removeAllViews();
+        views.clear();
 
         // 初始化商品详情
         detailWV = new WebView(this);
@@ -553,6 +552,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             mImageLoader.loadImage(spceImageIV.getContext(),
                     ImageConfigImpl
                             .builder()
+                            .placeholder(R.mipmap.place_holder_img)
                             .url(response.getGoods().getImage())
                             .imageView(spceImageIV)
                             .build());

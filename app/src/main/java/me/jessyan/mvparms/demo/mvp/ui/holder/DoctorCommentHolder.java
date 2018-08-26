@@ -62,6 +62,7 @@ public class DoctorCommentHolder extends BaseHolder<DoctorCommentBean> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_user)
                         .url(member.getHeadImage())
                         .imageView(head)
                         .build());

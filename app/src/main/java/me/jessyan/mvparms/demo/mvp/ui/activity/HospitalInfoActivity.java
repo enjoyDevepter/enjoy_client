@@ -61,7 +61,12 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     ViewPager viewpager;
     @Inject
     ImageLoader mImageLoader;
-
+    @Inject
+    HGoodsListAdapter hospitalGoodsListAdapter;
+    @Inject
+    DoctorListAdapter doctorListAdapter;
+    @Inject
+    HospitalEnvImageAdapter hospitalEnvImageAdapter;
     private View[] views = new View[4];
     private String[] titles = new String[]{
             "医院介绍",
@@ -69,32 +74,22 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
             "医生列表",
             "医院环境"
     };
-
     // 第一个页面
     private WebView hospitalInfo;
-
     // 第二个页面
     private RecyclerView goodsList;
     private SwipeRefreshLayout goodsSwipeRefreshLayout;
-    @Inject
-    HGoodsListAdapter hospitalGoodsListAdapter;
     private Paginate goodsPaginate;
     private boolean isGoodsLoadingMore;
     private boolean isGoodsEnd;
-
     // 第三个页面
     private RecyclerView doctorList;
     private SwipeRefreshLayout doctorSwipeRefreshLayout;
-    @Inject
-    DoctorListAdapter doctorListAdapter;
     private Paginate doctorPaginate;
     private boolean isDoctorLoadingMore;
     private boolean isDoctorEnd;
-
     // 第四个页面
     private RecyclerView envList;
-    @Inject
-    HospitalEnvImageAdapter hospitalEnvImageAdapter;
 
     private void initViewPager() {
         // 初始化第一个页面
@@ -346,6 +341,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(hospital.getImage())
                         .imageView(hot_img)
                         .build());

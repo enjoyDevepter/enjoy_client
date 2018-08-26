@@ -82,6 +82,7 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(goods.getImage())
                         .imageView(imageIV)
                         .build());

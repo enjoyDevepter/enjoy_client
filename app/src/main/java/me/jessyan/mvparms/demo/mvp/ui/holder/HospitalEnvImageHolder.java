@@ -18,7 +18,6 @@ package me.jessyan.mvparms.demo.mvp.ui.holder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
@@ -28,8 +27,6 @@ import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 import me.jessyan.mvparms.demo.R;
 
 /**
@@ -64,6 +61,7 @@ public class HospitalEnvImageHolder extends BaseHolder<String> {
                 ImageConfigImpl
                         .builder()
                         .url(data)
+                        .placeholder(R.mipmap.place_holder_img)
                         .imageView(hospital_evn_image)
                         .build());
     }

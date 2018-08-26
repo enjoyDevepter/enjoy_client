@@ -62,6 +62,7 @@ public class DoctorPaperHolder extends BaseHolder<DoctorIdentificationBean> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(doctorIdentificationBean.getImage())
                         .imageView(image)
                         .build());

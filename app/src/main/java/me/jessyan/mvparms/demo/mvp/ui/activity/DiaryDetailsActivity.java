@@ -216,6 +216,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_user)
                         .url(response.getMember().getHeadImage())
                         .imageView(headImageIV)
                         .build());
@@ -223,6 +224,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(response.getGoods().getImage())
                         .imageView(goodsImageIV)
                         .build());
@@ -230,6 +232,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(response.getDiary().getImageList().get(0))
                         .imageView(leftIV)
                         .build());
@@ -237,6 +240,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(response.getDiary().getImageList().size() > 1 ? response.getDiary().getImageList().get(1) : response.getDiary().getImageList().get(0))
                         .imageView(rightIV)
                         .build());

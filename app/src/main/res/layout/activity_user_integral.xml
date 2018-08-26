@@ -105,7 +105,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="28dp"
             android:layout_marginTop="25dp"
-            android:background="#ff66a4fd"
+            android:background="@mipmap/place_holder_user"
             app:radius="15dp"
             app:shape_type="round" />
 

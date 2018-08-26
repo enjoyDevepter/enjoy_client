@@ -99,6 +99,7 @@ public class MyMealListHolder extends BaseHolder<Order> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(mealGoods.getImage())
                         .imageView(imageIV)
                         .build());

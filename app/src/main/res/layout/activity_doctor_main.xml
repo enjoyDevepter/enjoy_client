@@ -31,7 +31,7 @@
                 android:layout_alignTop="@id/blue_back"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="46dp"
-                android:background="#ffffff"
+                android:background="@mipmap/place_holder_user"
                 app:radius="17dp"
                 app:shape_type="round" />
 
@@ -42,7 +42,7 @@
                 android:layout_alignTop="@id/blue_back"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="14dp"
-                android:background="#ff0000"
+                android:background="@mipmap/place_holder_user"
                 app:shape_type="circle" />
 
             <TextView

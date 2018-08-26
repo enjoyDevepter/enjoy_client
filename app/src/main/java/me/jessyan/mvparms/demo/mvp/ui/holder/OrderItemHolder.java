@@ -200,6 +200,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 mImageLoader.loadImage(itemView.getContext(),
                         ImageConfigImpl
                                 .builder()
+                                .placeholder(R.mipmap.place_holder_img)
                                 .url(goods.getImage())
                                 .imageView(imageView)
                                 .build());
@@ -228,6 +229,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
                     ImageConfigImpl
                             .builder()
                             .url(image)
+                            .placeholder(R.mipmap.place_holder_img)
                             .imageView(imageIV)
                             .build());
 

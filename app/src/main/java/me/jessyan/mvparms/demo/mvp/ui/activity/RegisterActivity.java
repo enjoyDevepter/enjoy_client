@@ -117,6 +117,14 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
 
     @Override
     public void killMyself() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
         finish();
     }
 

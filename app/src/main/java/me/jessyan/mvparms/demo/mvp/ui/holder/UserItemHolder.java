@@ -66,6 +66,7 @@ public class UserItemHolder extends BaseHolder<User> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(data.getAvatarUrl())
                         .imageView(mAvatar)
                         .build());

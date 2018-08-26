@@ -22,7 +22,9 @@ public class GlideImageLoader extends ImageLoader {
          */
 
         //Glide 加载图片简单用法
-        Glide.with(context).load(path).into(imageView);
+        Glide.with(context)
+                .load(path)
+                .into(imageView);
 
 //        Picasso 加载图片简单用法
 //        Picasso.with(context).load(path).into(imageView);

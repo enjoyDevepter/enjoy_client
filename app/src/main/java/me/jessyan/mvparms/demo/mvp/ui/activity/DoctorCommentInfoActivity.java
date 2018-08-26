@@ -175,6 +175,7 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_user)
                         .url(member.getHeadImage())
                         .imageView(head)
                         .build());

@@ -76,6 +76,7 @@ public class DoctorListHolder extends BaseHolder<DoctorBean> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_img)
                         .url(data.getHeadImage())
                         .imageView(image)
                         .build());

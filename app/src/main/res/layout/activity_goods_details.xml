@@ -301,7 +301,7 @@
         <RelativeLayout
             android:id="@+id/spec_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="280dp"
             android:background="#FFFFFFFF"
             android:clickable="true"
             android:visibility="gone">
@@ -443,7 +443,7 @@
         <RelativeLayout
             android:id="@+id/promotion_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:background="#FFFFFFFF"
             android:clickable="true"
             android:visibility="gone">

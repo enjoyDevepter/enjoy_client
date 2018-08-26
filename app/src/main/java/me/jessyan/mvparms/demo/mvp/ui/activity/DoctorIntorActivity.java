@@ -18,6 +18,7 @@ import com.jess.arms.utils.ArmsUtils;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorIntorComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorIntorModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorIntorContract;
@@ -25,9 +26,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorIntorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.HospitalBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorIntorPresenter;
-
-import me.jessyan.mvparms.demo.R;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -48,12 +46,9 @@ public class DoctorIntorActivity extends BaseActivity<DoctorIntorPresenter> impl
     TextView doctor_name;
     @BindView(R.id.hosp_info)
     TextView hosp_info;
-
-    private DoctorBean doctorBean;
     @Inject
     ImageLoader mImageLoader;
-
-
+    private DoctorBean doctorBean;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -106,6 +101,7 @@ public class DoctorIntorActivity extends BaseActivity<DoctorIntorPresenter> impl
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_user)
                         .url(doctorIntorBean.getHeadImage())
                         .imageView(head_image)
                         .build());
