@@ -5,27 +5,26 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BalanceBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinContract;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -40,6 +39,11 @@ public class ConsumeCoinPresenter extends BasePresenter<ConsumeCoinContract.Mode
     ImageLoader mImageLoader;
     @Inject
     AppManager mAppManager;
+    @Inject
+    RecyclerView.Adapter mAdapter;
+    @Inject
+    List<BalanceBean> orderBeanList;
+    private int nextPageIndex = 1;
 
     @Inject
     public ConsumeCoinPresenter(ConsumeCoinContract.Model model, ConsumeCoinContract.View rootView) {
@@ -55,23 +59,16 @@ public class ConsumeCoinPresenter extends BasePresenter<ConsumeCoinContract.Mode
         this.mApplication = null;
     }
 
-    @Inject
-    RecyclerView.Adapter mAdapter;
-    @Inject
-    List<BalanceBean> orderBeanList;
-
-    public void requestOrderList(){
-        requestOrderList(1,true);
+    public void requestOrderList() {
+        requestOrderList(1, true);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    public void nextPage(){
-        requestOrderList(nextPageIndex,false);
+    public void nextPage() {
+        requestOrderList(nextPageIndex, false);
     }
 
-    private int nextPageIndex = 1;
-
-    private void requestOrderList(int pageIndex,final boolean clear) {
+    private void requestOrderList(int pageIndex, final boolean clear) {
         GetConsumeInfoPageRequest request = new GetConsumeInfoPageRequest();
         request.setPageIndex(pageIndex);
         request.setPageSize(10);
@@ -84,8 +81,8 @@ public class ConsumeCoinPresenter extends BasePresenter<ConsumeCoinContract.Mode
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     if (clear) {
-                        //                        mRootView.showLoading();//显示下拉刷新的进度条
-                    }else
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    } else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -100,9 +97,10 @@ public class ConsumeCoinPresenter extends BasePresenter<ConsumeCoinContract.Mode
                     @Override
                     public void accept(GetConsumeInfoPageResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            if(clear){
+                            if (clear) {
                                 orderBeanList.clear();
                             }
+                            mRootView.showError(response.getBalanceList().size() > 0);
                             nextPageIndex = response.getNextPageIndex();
                             mRootView.setEnd(nextPageIndex == -1);
                             orderBeanList.addAll(response.getBalanceList());

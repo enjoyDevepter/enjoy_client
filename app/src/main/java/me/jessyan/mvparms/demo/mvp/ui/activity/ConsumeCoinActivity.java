@@ -20,6 +20,7 @@ import com.paginate.Paginate;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerConsumeCoinComponent;
 import me.jessyan.mvparms.demo.di.module.ConsumeCoinModule;
 import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinContract;
@@ -27,13 +28,14 @@ import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.ConsumeCoinPresenter;
 
-import me.jessyan.mvparms.demo.R;
-
-
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-/**消费币页面*/
+/**
+ * 消费币页面
+ */
 public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> implements ConsumeCoinContract.View {
 
     @BindView(R.id.back)
@@ -53,11 +55,14 @@ public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> impl
     @BindView(R.id.contentList)
     RecyclerView contentList;
 
+    @BindView(R.id.no_date)
+    View onDateV;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean isEnd;
+    private long amount;
 
     private void initPaginate() {
         if (mPaginate == null) {
@@ -85,7 +90,6 @@ public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> impl
         }
     }
 
-
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerConsumeCoinComponent //如找不到该类,请编译一下项目
@@ -101,12 +105,10 @@ public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> impl
         return R.layout.activity_consume_coin; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
-    private long amount;
-
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        MemberAccount memberAccount = (MemberAccount) cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        MemberAccount memberAccount = (MemberAccount) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT);
         amount = memberAccount.getAmount();
         consume_count.setText(String.format("%.2f", amount * 1.0 / 100));
         back.setOnClickListener(new View.OnClickListener() {
@@ -140,13 +142,14 @@ public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> impl
     public void showLoading() {
 
     }
+
     @Override
     public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
@@ -162,10 +165,12 @@ public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> impl
     public void endLoadMore() {
         isLoadingMore = false;
     }
+
     @Override
     public void setEnd(boolean isEnd) {
         this.isEnd = isEnd;
     }
+
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
@@ -173,6 +178,11 @@ public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> impl
         this.mPaginate = null;
     }
 
+    @Override
+    public void showError(boolean hasDate) {
+        onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
+        swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+    }
 
     @Override
     public void showMessage(@NonNull String message) {

@@ -22,6 +22,7 @@ import org.simple.eventbus.Subscriber;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerUserIntegralComponent;
 import me.jessyan.mvparms.demo.di.module.UserIntegralModule;
@@ -30,10 +31,8 @@ import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.UserIntegralPresenter;
 
-import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.ui.fragment.MyFragment;
-
-
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -48,6 +47,8 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
     @BindView(R.id.back)
     View back;
 
+    @BindView(R.id.no_date)
+    View onDateV;
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
@@ -58,12 +59,11 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.qianming)
+    View qianming;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean isEnd;
-
-    @BindView(R.id.qianming)
-    View qianming;
 
     private void initPaginate() {
         if (mPaginate == null) {
@@ -109,8 +109,8 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
 
-        Cache<String,Object> cache=ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        updateUserAccount((MemberAccount) cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT));
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        updateUserAccount((MemberAccount) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT));
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);
@@ -138,7 +138,7 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     /**
@@ -158,6 +158,12 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
         ArmsUtils.snackbarText(message);
+    }
+
+    @Override
+    public void showError(boolean hasDate) {
+        onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
+        swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
     }
 
     @Override
@@ -182,6 +188,7 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
         super.onDestroy();
         this.mPaginate = null;
     }
+
     /**
      * 开始加载更多
      */
@@ -190,12 +197,12 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
         isLoadingMore = true;
     }
 
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
-    public void updateUserAccount(MemberAccount account){
-        score.setText(account.getPoint()+"");
+    public void updateUserAccount(MemberAccount account) {
+        score.setText(account.getPoint() + "");
     }
 }

@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/title"/>
+    <include layout="@layout/title" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="130dp"
@@ -20,8 +21,7 @@
             android:layout_marginTop="32dp"
             android:text="消费币余额"
             android:textColor="#ffffffff"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/consume_count"
@@ -32,13 +32,14 @@
             android:layout_marginTop="15dp"
             android:text="1280.00"
             android:textColor="#ffffffff"
-            android:textSize="28sp"
-            />
+            android:textSize="28sp" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -64,24 +65,57 @@
                 android:background="#3DBFE8" />
         </LinearLayout>
 
-        <View style="@style/divider_1"/>
+        <View style="@style/divider_1" />
     </LinearLayout>
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        >
+        android:background="@color/white">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/contentList"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contentList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="9dp"
+                android:scrollbars="none"
+                tools:listitem="@layout/recycle_list" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/no_date"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="9dp"
-            android:scrollbars="none"
-            tools:listitem="@layout/recycle_list" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            <View
+                android:layout_width="94dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="150dp"
+                android:background="@mipmap/nodata" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="暂无数据"
+                android:textColor="#FF666666"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
 
     <TextView
         android:id="@+id/commit"
@@ -95,6 +129,5 @@
         android:gravity="center"
         android:text="充值"
         android:textColor="#ffffffff"
-        android:textSize="13sp"
-        />
+        android:textSize="13sp" />
 </LinearLayout>
