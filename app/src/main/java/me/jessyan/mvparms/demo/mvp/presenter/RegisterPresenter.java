@@ -70,6 +70,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
                             cache.put(KEY_KEEP + "signkey", registerResponse.getSignkey());
                             mRootView.killMyself();
                         } else {
+                            mRootView.showVerity();
                             mRootView.showMessage(registerResponse.getRetDesc());
                         }
                     }
@@ -78,10 +79,8 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
 
 
     public void getVerify(String mobile) {
-
         VeritfyRequest request = new VeritfyRequest();
         request.setMobile(mobile);
-
         mModel.getVerify(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -89,6 +88,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
                     @Override
                     public void accept(BaseResponse baseResponse) throws Exception {
                         if (!baseResponse.isSuccess()) {
+                            mRootView.showVerity();
                             mRootView.showMessage(baseResponse.getRetDesc());
                         }
                     }

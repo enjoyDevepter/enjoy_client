@@ -21,6 +21,9 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -44,7 +47,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     @BindView(R.id.choice)
     TextView choiceV;
     @BindView(R.id.get_validate)
-    View getValidateV;
+    TextView getValidateV;
     @BindView(R.id.validate)
     EditText validateET;
     @BindView(R.id.mobile)
@@ -57,6 +60,10 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     RecyclerView.Adapter mAdapter;
     @Inject
     RxPermissions mRxPermissions;
+
+    private int time = 30;
+    private Timer timer;
+    private TimerTask timerTask;
 
     private PopupWindow popupWindow;
 
@@ -135,13 +142,66 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         }
     }
 
+    private void getVerify() {
+        if (ArmsUtils.isEmpty(mobileET.getText().toString())) {
+            showMessage("请输入手机号码");
+            return;
+        }
+
+        if (!ArmsUtils.isPhoneNum(mobileET.getText().toString())) {
+            showMessage("手机号码格式不正确");
+            return;
+        }
+        if (time == 30 || time <= 0) {
+            time = 29;
+            initTimer();
+            timer.schedule(timerTask, 0, 1000);
+            mPresenter.getVerify(mobileET.getText().toString());
+        }
+    }
+
+    private void initTimer() {
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                getValidateV.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (time <= 0 && timer != null) {
+                            timer.cancel();
+                            timer = null;
+                            timerTask.cancel();
+                            timerTask = null;
+                            getValidateV.setText("重新获取");
+                        } else {
+                            getValidateV.setText(time + "s");
+                        }
+                        time--;
+                    }
+                });
+            }
+        };
+
+        timer = new Timer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+    }
+
     private void register() {
         mPresenter.register(mobileET.getText().toString(), passwordET.getText().toString(), validateET.getText().toString(), String.valueOf(1), contentET.getText().toString());
     }
 
-    private void getVerify() {
-        mPresenter.getVerify(mobileET.getText().toString());
-    }
 
     private void showType() {
 
@@ -172,6 +232,11 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     @Override
     public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public void showVerity() {
+        time = 0;
     }
 
     @Override

@@ -60,7 +60,7 @@
                 android:layout_marginLeft="9dp"
                 android:background="@android:color/transparent"
                 android:hint="请输入手机号"
-                android:text="18600474095"
+                android:inputType="number"
                 android:textSize="13sp" />
 
         </LinearLayout>
@@ -104,14 +104,15 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="请输入验证码"
-                android:text="1234"
+                android:inputType="number"
                 android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/get_validate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
+                android:gravity="center"
                 android:text="获取验证码"
                 android:textColor="#FF50C8F5"
                 android:textSize="13sp" />
@@ -156,7 +157,6 @@
                 android:layout_marginLeft="9dp"
                 android:background="@android:color/transparent"
                 android:hint="请输入密码"
-                android:text="123456"
                 android:textSize="13sp" />
 
         </LinearLayout>

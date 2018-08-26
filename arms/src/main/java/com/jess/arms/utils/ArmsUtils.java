@@ -43,6 +43,8 @@ import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.jess.arms.integration.AppManager.APP_EXIT;
 import static com.jess.arms.integration.AppManager.KILL_ALL;
@@ -446,6 +448,12 @@ public class ArmsUtils {
         Message message = new Message();
         message.what = KILL_ALL;
         AppManager.post(message);
+    }
+
+    public static boolean isPhoneNum(String str) {
+        Pattern p = Pattern.compile("[1][0-9]\\d{9}");
+        Matcher m = p.matcher(str);
+        return m.matches();
     }
 
     /**

@@ -57,6 +57,7 @@ public class ForgetPresenter extends BasePresenter<ForgetContract.Model, ForgetC
                     @Override
                     public void accept(BaseResponse baseResponse) throws Exception {
                         if (!baseResponse.isSuccess()) {
+                            mRootView.showVerity();
                             mRootView.showMessage(baseResponse.getRetDesc());
                         }
                     }
@@ -78,6 +79,7 @@ public class ForgetPresenter extends BasePresenter<ForgetContract.Model, ForgetC
                             // 跳转到主页面
                             mRootView.killMyself();
                         } else {
+                            mRootView.showVerity();
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }

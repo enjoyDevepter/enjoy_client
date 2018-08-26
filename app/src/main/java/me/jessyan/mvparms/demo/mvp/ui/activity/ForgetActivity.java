@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
@@ -28,9 +32,13 @@ public class ForgetActivity extends BaseActivity<ForgetPresenter> implements For
     @BindView(R.id.vertify)
     EditText veritfyET;
     @BindView(R.id.get_vertify)
-    View getVertifyV;
+    TextView getVertifyV;
     @BindView(R.id.forget)
     View forgetV;
+
+    private int time = 30;
+    private Timer timer;
+    private TimerTask timerTask;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -93,8 +101,70 @@ public class ForgetActivity extends BaseActivity<ForgetPresenter> implements For
                 mPresenter.find(mobileET.getText().toString(), veritfyET.getText().toString());
                 break;
             case R.id.get_vertify:
-                mPresenter.getVerifyForFind(mobileET.getText().toString());
+                getVerify();
                 break;
         }
+    }
+
+    private void getVerify() {
+        if (ArmsUtils.isEmpty(mobileET.getText().toString())) {
+            showMessage("请输入手机号码");
+            return;
+        }
+
+        if (!ArmsUtils.isPhoneNum(mobileET.getText().toString())) {
+            showMessage("手机号码格式不正确");
+            return;
+        }
+
+        if (time == 30 || time <= 0) {
+            time = 29;
+            initTimer();
+            timer.schedule(timerTask, 0, 1000);
+            mPresenter.getVerifyForFind(mobileET.getText().toString());
+        }
+    }
+
+    private void initTimer() {
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                getVertifyV.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (time <= 0 && timer != null) {
+                            timer.cancel();
+                            timer = null;
+                            timerTask.cancel();
+                            timerTask = null;
+                            getVertifyV.setText("重新获取");
+                        } else {
+                            getVertifyV.setText(time + "s");
+                        }
+                        time--;
+                    }
+                });
+            }
+        };
+
+        timer = new Timer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+    }
+
+    @Override
+    public void showVerity() {
+        time = 0;
     }
 }

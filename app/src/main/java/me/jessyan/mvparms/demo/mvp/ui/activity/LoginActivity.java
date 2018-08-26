@@ -15,6 +15,9 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -23,7 +26,6 @@ import me.jessyan.mvparms.demo.di.component.DaggerLoginComponent;
 import me.jessyan.mvparms.demo.di.module.LoginModule;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
 import me.jessyan.mvparms.demo.mvp.presenter.LoginPresenter;
-import me.jessyan.mvparms.demo.mvp.ui.widget.CustomProgressDailog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -49,15 +51,16 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @BindView(R.id.byUserName)
     View byUserNameV;
     @BindView(R.id.get_validate)
-    View getValidateV;
+    TextView getValidateV;
     @BindView(R.id.login)
     View loginV;
     @BindView(R.id.close)
     View closeV;
     @Inject
     RxPermissions mRxPermissions;
-
-    CustomProgressDailog progressDailog;
+    private int time = 30;
+    private Timer timer;
+    private TimerTask timerTask;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -114,16 +117,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         }
     }
 
-
     @Override
     public void showLoading() {
-        progressDailog = new CustomProgressDailog(this);
-        progressDailog.show();
     }
 
     @Override
     public void hideLoading() {
-        progressDailog.dismiss();
     }
 
     @Override
@@ -143,7 +142,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         finish();
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -162,11 +160,68 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 login();
                 break;
             case R.id.get_validate:
-                mPresenter.getVerifyForUser(userNameET.getText().toString());
+                getVerify();
                 break;
             case R.id.close:
                 killMyself();
                 break;
+        }
+    }
+
+    private void getVerify() {
+        if (ArmsUtils.isEmpty(userNameET.getText().toString())) {
+            showMessage("请输入手机号码");
+            return;
+        }
+
+        if (!ArmsUtils.isPhoneNum(userNameET.getText().toString())) {
+            showMessage("手机号码格式不正确");
+            return;
+        }
+
+        if (time == 30 || time <= 0) {
+            time = 29;
+            initTimer();
+            timer.schedule(timerTask, 0, 1000);
+            mPresenter.getVerifyForUser(userNameET.getText().toString());
+        }
+    }
+
+    private void initTimer() {
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                getValidateV.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (time <= 0 && timer != null) {
+                            timer.cancel();
+                            timer = null;
+                            timerTask.cancel();
+                            timerTask = null;
+                            getValidateV.setText("重新获取");
+                        } else {
+                            getValidateV.setText(time + "s");
+                        }
+                        time--;
+                    }
+                });
+            }
+        };
+
+        timer = new Timer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
         }
     }
 
@@ -183,6 +238,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public void showVerity() {
+        time = 0;
     }
 
     @Override

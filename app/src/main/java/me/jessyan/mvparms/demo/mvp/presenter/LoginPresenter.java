@@ -74,7 +74,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     }
 
     public void loginByPhone(String mobile, String verifyCode) {
-        mRootView.showLoading();
         LoginByPhoneRequest request = new LoginByPhoneRequest();
         request.setMobile(mobile);
         request.setVerifyCode(verifyCode);
@@ -90,6 +89,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                             cacheUserInfo(response.getToken(), response.getSignkey());
                             mRootView.killMyself();
                         } else {
+                            mRootView.showVerity();
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }
@@ -133,6 +133,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                     @Override
                     public void accept(BaseResponse baseResponse) throws Exception {
                         if (!baseResponse.isSuccess()) {
+                            mRootView.showVerity();
                             mRootView.showMessage(baseResponse.getRetDesc());
                         }
                     }
