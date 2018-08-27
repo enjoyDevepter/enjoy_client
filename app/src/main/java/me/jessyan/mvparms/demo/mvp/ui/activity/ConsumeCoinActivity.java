@@ -17,10 +17,13 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.Subscriber;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerConsumeCoinComponent;
 import me.jessyan.mvparms.demo.di.module.ConsumeCoinModule;
 import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinContract;
@@ -105,12 +108,22 @@ public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> impl
         return R.layout.activity_consume_coin; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
+    public void updateUserAccount(MemberAccount account){
+        if(account == null){
+            return;
+        }
+        this.memberAccount = account;
+        amount = memberAccount.getAmount();
+        consume_count.setText(String.format("%.2f", amount * 1.0 / 100));
+    }
+
+    private MemberAccount memberAccount;
+
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        MemberAccount memberAccount = (MemberAccount) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT);
-        amount = memberAccount.getAmount();
-        consume_count.setText(String.format("%.2f", amount * 1.0 / 100));
+        updateUserAccount((MemberAccount)cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT));
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +134,7 @@ public class ConsumeCoinActivity extends BaseActivity<ConsumeCoinPresenter> impl
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ArmsUtils.startActivity(ConsumeCoinInputActivity.class);
             }
         });
 

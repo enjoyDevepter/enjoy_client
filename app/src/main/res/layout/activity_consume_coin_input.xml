@@ -5,4 +5,284 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/title" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:background="@mipmap/consume_coin_back">
+
+        <TextView
+            android:id="@+id/consume_count_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:text="消费币余额"
+            android:textColor="#ffffffff"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/consume_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/consume_count_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="1280.00"
+            android:textColor="#ffffffff"
+            android:textSize="28sp" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="52dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="充值金额"
+                android:layout_marginLeft="16dp"
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                />
+
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="136dp"
+                android:layout_height="23dp"
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/add_bank_card_edit_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="元 = "
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:id="@+id/money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 消费币"
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="请选择支付方式"
+                    android:textColor="#3DBFE8"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="11dp"
+                    android:background="#3DBFE8" />
+            </LinearLayout>
+
+            <View style="@style/divider_1" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/pay_for_zfb"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_marginLeft="15dp"
+                android:background="@mipmap/pay_zfb" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:text="支付宝支付"
+                android:textColor="#FF333333"
+                android:textSize="12sp" />
+
+            <View
+                android:id="@+id/zfb"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/check_bg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pay_for_wx"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_marginLeft="15dp"
+                android:background="@mipmap/pay_wx" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:text="微信支付"
+                android:textColor="#FF333333"
+                android:textSize="12sp" />
+
+            <View
+                android:id="@+id/wx"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/check_bg" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="14dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="消费记录"
+                android:textColor="#3DBFE8"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="11dp"
+                android:background="#3DBFE8" />
+        </LinearLayout>
+
+        <View style="@style/divider_1" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contentList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="9dp"
+                android:scrollbars="none"
+                tools:listitem="@layout/recycle_list" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/no_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="94dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="150dp"
+                android:background="@mipmap/nodata" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="暂无数据"
+                android:textColor="#FF666666"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/commit"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/add_address_btn_bg"
+        android:gravity="center"
+        android:text="立即充值"
+        android:textColor="#ffffffff"
+        android:textSize="13sp" />
 </LinearLayout>
