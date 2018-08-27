@@ -27,6 +27,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AddBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.CashConvertRequest;
@@ -35,6 +36,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashCoinRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetMyMemberListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFollowRequest;
@@ -44,6 +46,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.CashConvertResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.CommonUserInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.DelBankCardResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashCoinResponse;
@@ -73,6 +76,15 @@ import retrofit2.http.Query;
  */
 public interface UserService {
     String HEADER_API_VERSION = "Accept: application/vnd.github.v3+json";
+
+    @POST("gateway")
+    Observable<BaseResponse> modifyUserInfo(@Body ModifyUserInfoRequest request);
+
+    @POST("gateway")
+    Observable<RegisterResponse> modifyPasswordInfo(@Body ModifyUserInfoRequest request);
+
+    @POST("gateway")
+    Observable<CommonUserInfoResponse> getCommonUserInfo(@Body SimpleRequest request);
 
     @Headers({HEADER_API_VERSION})
     @GET("/users")
@@ -116,11 +128,11 @@ public interface UserService {
     Observable<QiandaoResponse> qiandao(@Body QiandaoRequest request);
 
     @POST("gateway")
-    // 签到详情
+        // 签到详情
     Observable<QiandaoInfoResponse> getQiandaoInfo(@Body QiandaoInfoRequest request);
 
     @POST("gateway")
-    // 获取现金币详情
+        // 获取现金币详情
     Observable<GetCashCoinResponse> getCashCoin(@Body GetCashCoinRequest request);
 
     @POST("gateway")
@@ -140,7 +152,7 @@ public interface UserService {
     Observable<BaseResponse> follow(@Body FollowRequest request);
 
     @POST("gateway")
-    // 获取用户详情
+        // 获取用户详情
     Observable<UserInfoResponse> getUserInfo(@Body UserInfoRequest request);
 
     @POST("gateway")
@@ -150,4 +162,6 @@ public interface UserService {
     @POST("gateway")
     // 获取下属会员列表
     Observable<GetMyMemberListResponse> getMyMemberList(@Body GetMyMemberListRequest request);
+
+
 }

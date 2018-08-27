@@ -26,8 +26,11 @@ public class Member implements Serializable {
     private Area county;
     private int age;
     private String constellation;  // 星座
+    private String constellationDesc;
     private String occupation;  // 职业
+    private String occupationDesc;
     private List<String> hobbyList;  // 爱好列表
+    private List<String> hobbyDescList;
     private Member recomMember;
     private String isModifyRealName;
     private String isModifyNickName;
@@ -58,8 +61,11 @@ public class Member implements Serializable {
                 ", county=" + county +
                 ", age=" + age +
                 ", constellation='" + constellation + '\'' +
+                ", constellationDesc='" + constellationDesc + '\'' +
                 ", occupation='" + occupation + '\'' +
+                ", occupationDesc='" + occupationDesc + '\'' +
                 ", hobbyList=" + hobbyList +
+                ", hobbyDescList=" + hobbyDescList +
                 ", recomMember=" + recomMember +
                 ", isModifyRealName='" + isModifyRealName + '\'' +
                 ", isModifyNickName='" + isModifyNickName + '\'' +
@@ -266,6 +272,30 @@ public class Member implements Serializable {
 
     public void setIsModifyNickName(String isModifyNickName) {
         this.isModifyNickName = isModifyNickName;
+    }
+
+    public String getConstellationDesc() {
+        return constellationDesc;
+    }
+
+    public void setConstellationDesc(String constellationDesc) {
+        this.constellationDesc = constellationDesc;
+    }
+
+    public String getOccupationDesc() {
+        return occupationDesc;
+    }
+
+    public void setOccupationDesc(String occupationDesc) {
+        this.occupationDesc = occupationDesc;
+    }
+
+    public List<String> getHobbyDescList() {
+        return hobbyDescList;
+    }
+
+    public void setHobbyDescList(List<String> hobbyDescList) {
+        this.hobbyDescList = hobbyDescList;
     }
 
     public GrowthRankBean getGrowthRank() {

@@ -603,7 +603,6 @@ public class DeviceUtils {
         context.startActivity(intent);
     }
 
-    @SuppressLint("MissingPermission")
     public static String getIMEI(Context context) {
         TelephonyManager tel = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return tel.getDeviceId();

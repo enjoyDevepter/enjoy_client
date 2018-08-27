@@ -9,7 +9,13 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.ModifyUserInfoContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.CommonUserInfoResponse;
 
 
 @ActivityScope
@@ -31,4 +37,15 @@ public class ModifyUserInfoModel extends BaseModel implements ModifyUserInfoCont
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<BaseResponse> modifyUserInfo(ModifyUserInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .modifyUserInfo(request);
+    }
+
+    @Override
+    public Observable<CommonUserInfoResponse> getCommonUserInfo(SimpleRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getCommonUserInfo(request);
+    }
 }

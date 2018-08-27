@@ -9,7 +9,12 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.AuthenticationContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AuthenticationRequest;
+import okhttp3.MultipartBody;
 
 
 @ActivityScope
@@ -31,4 +36,15 @@ public class AuthenticationModel extends BaseModel implements AuthenticationCont
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<BaseResponse> uploadImage(MultipartBody.Part imgs) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .uploadImage(imgs);
+    }
+
+    @Override
+    public Observable<BaseResponse> auth(AuthenticationRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .auth(request);
+    }
 }

@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -48,17 +50,22 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
 
 
     @Inject
-    public AppointmentPresenter(AppointmentContract.Model model, AppointmentContract.View rootView
-            , RxErrorHandler handler, Application application
-            , ImageLoader imageLoader, AppManager appManager) {
+    public AppointmentPresenter(AppointmentContract.Model model, AppointmentContract.View rootView) {
         super(model, rootView);
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void initAppointment() {
+        getAppointment(true);
+    }
 
     public void getAppointment(boolean pullToRefresh) {
         AppointmentAndMealRequest request = new AppointmentAndMealRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        if (ArmsUtils.isEmpty(request.getToken())) {
+            return;
+        }
         int type = 0;
         if (null != mRootView.getCache().get("type")) {
             type = (int) mRootView.getCache().get("type");

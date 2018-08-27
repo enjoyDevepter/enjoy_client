@@ -13,6 +13,7 @@ import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import javax.inject.Inject;
 
@@ -22,7 +23,6 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
 import me.jessyan.mvparms.demo.mvp.model.MyModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -55,11 +55,23 @@ public class MyPresenter extends BasePresenter<MyContract.Model, MyContract.View
         this.mApplication = null;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    public void initUser(){
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void initUser() {
+        getUserInfo();
+    }
+
+    @Subscriber(tag = EventBusTags.USER_BASE_INFO_CHANGE)
+    public void updateUserInfo(int type) {
+        getUserInfo();
+    }
+
+    public void getUserInfo() {
         UserInfoRequest request = new UserInfoRequest();
-        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        String token=(String)cache.get(KEY_KEEP+"token");
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+        if (ArmsUtils.isEmpty(token)) {
+            return;
+        }
         request.setToken(token);
 
         mModel.getUserInfo(request)
@@ -76,8 +88,8 @@ public class MyPresenter extends BasePresenter<MyContract.Model, MyContract.View
                     @Override
                     public void accept(UserInfoResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            cache.put(KEY_KEEP+ MyModel.KEY_FOR_USER_INFO,response.getMember());
-                            cache.put(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT,response.getMemberAccount());
+                            cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_INFO, response.getMember());
+                            cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT, response.getMemberAccount());
                             EventBus.getDefault().post(response.getMember(), EventBusTags.USER_INFO_CHANGE);
                             EventBus.getDefault().post(response.getMemberAccount(), EventBusTags.USER_ACCOUNT_CHANGE);
                         } else {

@@ -52,10 +52,19 @@ public interface EventBusTags {
      */
     String CHANGE_APPOINTMENT_TIME = "change_appointment_time";
 
-    /**更新用户信息*/
+    /**
+     * 更新用户信息
+     */
     String USER_INFO_CHANGE = "user_info_change";
 
-    /**更新用户账户信息*/
+    /**
+     * 更新用户账户信息
+     */
     String USER_ACCOUNT_CHANGE = "user_account_change";
+
+    /**
+     * 更新用户基本信息
+     */
+    String USER_BASE_INFO_CHANGE = "user_base_info_change";
 
 }

@@ -3,8 +3,10 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 
 import com.chaychan.library.BottomBarItem;
 import com.chaychan.library.BottomBarLayout;
@@ -35,10 +37,12 @@ import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View {
+public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, ViewPager.OnPageChangeListener {
 
     @BindView(R.id.bbl)
     BottomBarLayout bottomBarLayout;
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
 
     private List<Fragment> mFragmentList = new ArrayList<>();
 
@@ -61,14 +65,29 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     protected void onResume() {
         super.onResume();
-        changeFragment(0);
-        bottomBarLayout.setCurrentItem(0);
     }
 
     @Override
     public void initData(Bundle savedInstanceState) {
-
         initFragment();
+        viewPager.setAdapter(new FragmentStatePagerAdapter((getSupportFragmentManager())) {
+            @Override
+            public int getCount() {
+                return mFragmentList.size();
+            }
+
+            @Nullable
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return "";
+            }
+
+            @Override
+            public Fragment getItem(int position) {
+                return mFragmentList.get(position);
+            }
+        });
+        viewPager.addOnPageChangeListener(this);
         bottomBarLayout.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
             @Override
             public void onItemSelected(BottomBarItem bottomBarItem, int previousPosition, int currentPosition) {
@@ -78,15 +97,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 if (currentPosition == 3 || currentPosition == 4) {
                     Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
                     if (ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
-                        bottomBarLayout.setCurrentItem(previousPosition);
                         ArmsUtils.startActivity(LoginActivity.class);
                         return;
                     }
                 }
-                changeFragment(currentPosition);
             }
         });
-        changeFragment(0);
+        bottomBarLayout.setViewPager(viewPager);
+        viewPager.setCurrentItem(0);
     }
 
 
@@ -98,22 +116,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         mFragmentList.add(MyFragment.newInstance());
     }
 
-    private void changeFragment(int currentPosition) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fl_content, mFragmentList.get(currentPosition));
-        transaction.commit();
-    }
 
     @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
     public void updateIndex() {
-        changeFragment(1);
-        bottomBarLayout.setCurrentItem(1);
-    }
-
-    @Subscriber(tag = EventBusTags.CHANGE_APPOINTMENT_TIME)
-    private void updateTime() {
-        changeFragment(3);
-        bottomBarLayout.setCurrentItem(3);
+        viewPager.setCurrentItem(1);
     }
 
     @Override
@@ -143,4 +149,17 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         finish();
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

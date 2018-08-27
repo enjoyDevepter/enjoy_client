@@ -9,7 +9,11 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.ModifyPasswordContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoRequest;
 
 
 @ActivityScope
@@ -31,4 +35,9 @@ public class ModifyPasswordModel extends BaseModel implements ModifyPasswordCont
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<RegisterResponse> modifyPassword(ModifyUserInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .modifyPasswordInfo(request);
+    }
 }

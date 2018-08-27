@@ -55,6 +55,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayMealOrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AuthenticationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyDiaryRequest;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -175,4 +176,6 @@ public interface MainService {
     @POST("gateway")
     Observable<OrderDetailsResponse> getOrderDetails(@Body OrderDetailsRequest request);
 
+    @POST("gateway")
+    Observable<BaseResponse> auth(@Body AuthenticationRequest request);
 }

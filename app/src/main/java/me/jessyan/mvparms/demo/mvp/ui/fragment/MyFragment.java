@@ -154,6 +154,10 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     }
 
+    @Subscriber(tag = EventBusTags.LOGIN_STATUS_CHANGE_EVENT)
+    private void updateLoginStatus() {
+        mPresenter.getUserInfo();
+    }
 
     @Override
     public void showLoading() {

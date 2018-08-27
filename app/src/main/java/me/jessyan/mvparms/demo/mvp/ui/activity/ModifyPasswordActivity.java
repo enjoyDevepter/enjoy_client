@@ -1,5 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
@@ -89,7 +91,21 @@ public class ModifyPasswordActivity extends BaseActivity<ModifyPasswordPresenter
                 killMyself();
                 break;
             case R.id.submit:
+                provideCache().put("old", oldET.getText().toString());
+                provideCache().put("new", newET.getText().toString());
+                provideCache().put("confirm", confirmET.getText().toString());
+                mPresenter.modifyPassword();
                 break;
         }
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 }

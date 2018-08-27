@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.cchao.MoneyView;
+import com.guoqi.actionsheet.ActionSheet;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -42,9 +43,10 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> implements ReleaseDiaryContract.View, View.OnClickListener {
+public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> implements ReleaseDiaryContract.View, View.OnClickListener, ActionSheet.OnActionSheetSelected {
     private static final int GALLERY_OPEN_REQUEST_CODE = 1;
     private static final int CROP_IMAGE_REQUEST_CODE = 2;
+    private static final int CAMERA_OPEN_REQUEST_CODE = 3;
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
@@ -83,7 +85,7 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
     RxPermissions mRxPermissions;
     @Inject
     List<String> images;
-
+    private String mCameraFilePath = "";
     private String mCropImgFilePath = "";
 
     @Override
@@ -160,7 +162,7 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
             case R.id.choice:
                 break;
             case R.id.add:
-                openAlbum();
+                ActionSheet.showSheet(this, this, null);
                 break;
             case R.id.submit:
                 provideCache().put("title", titleET.getText().toString());
@@ -176,6 +178,25 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
         super.onDestroy();
 
     }
+
+
+    @Override
+    public void onClick(int whichButton) {
+        switch (whichButton) {
+            case ActionSheet.CHOOSE_PICTURE:
+                //相册
+                openAlbum();
+                break;
+            case ActionSheet.TAKE_PICTURE:
+                //拍照
+                openCamera();
+                break;
+            case ActionSheet.CANCEL:
+                //取消
+                break;
+        }
+    }
+
 
     private void openAlbum() {
         //请求外部存储权限用于适配android6.0的权限管理机制
@@ -198,6 +219,27 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
 
         ImageUploadUtils.startGallery(this, GALLERY_OPEN_REQUEST_CODE);
 
+    }
+
+    private void openCamera() {
+        //请求外部存储权限用于适配android6.0的权限管理机制
+        PermissionUtil.externalStorage(new PermissionUtil.RequestPermission() {
+            @Override
+            public void onRequestPermissionSuccess() {
+                //request permission success, do something.
+            }
+
+            @Override
+            public void onRequestPermissionFailure(List<String> permissions) {
+                showMessage("Request permissions failure");
+            }
+
+            @Override
+            public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+                showMessage("Need to go to the settings");
+            }
+        }, mRxPermissions, mErrorHandler);
+        ImageUploadUtils.startCamera(this, CAMERA_OPEN_REQUEST_CODE, generateCameraFilePath());
     }
 
     @Override
@@ -227,6 +269,21 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
                     images.add(mCropImgFilePath);
                     mAdapter.notifyDataSetChanged();
                     break;
+                case CAMERA_OPEN_REQUEST_CODE:
+                    if (data == null || data.getExtras() == null) {
+                        BitmapFactory.Options mOptions = getBitampOptions(mCameraFilePath);
+                        generateCropImgFilePath();
+                        ImageUploadUtils.startCropImage(
+                                this,
+                                mCameraFilePath,
+                                mCropImgFilePath,
+                                mOptions.outWidth,
+                                mOptions.outHeight,
+                                imageWdith,
+                                imageHeight,
+                                CROP_IMAGE_REQUEST_CODE);
+                    }
+                    break;
             }
         }
     }
@@ -238,6 +295,16 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
         return mOptions;
     }
 
+    private String generateCameraFilePath() {
+        String mCameraFileDirPath = Environment.getExternalStorageDirectory() + File.separator + "camera";
+        File mCameraFileDir = new File(mCameraFileDirPath);
+        if (!mCameraFileDir.exists()) {
+            mCameraFileDir.mkdirs();
+        }
+        mCameraFilePath = mCameraFileDirPath + File.separator + System.currentTimeMillis() + ".jgp";
+        return mCameraFilePath;
+    }
+
     private String generateCropImgFilePath() {
         String mCameraFileDirPath = Environment.getExternalStorageDirectory() + File.separator + "camera";
         File mCameraFileDir = new File(mCameraFileDirPath);
@@ -247,6 +314,7 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
         mCropImgFilePath = mCameraFileDirPath + File.separator + System.currentTimeMillis() + ".jgp";
         return mCropImgFilePath;
     }
+
 
     @Override
     public Cache getCache() {

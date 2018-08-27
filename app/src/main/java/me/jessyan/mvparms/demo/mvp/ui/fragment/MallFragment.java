@@ -21,6 +21,8 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,7 @@ import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMallComponent;
 import me.jessyan.mvparms.demo.di.module.MallModule;
 import me.jessyan.mvparms.demo.mvp.contract.MallContract;
@@ -155,6 +158,11 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         secondAdapter.setOnItemClickListener(this);
         tabLayout.addOnTabSelectedListener(this);
         mPresenter.getCategory();
+    }
+
+    @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
+    public void updateIndex() {
+
     }
 
     /**

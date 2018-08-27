@@ -16,6 +16,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerSettingComponent;
 import me.jessyan.mvparms.demo.di.module.SettingModule;
 import me.jessyan.mvparms.demo.mvp.contract.SettingContract;
 import me.jessyan.mvparms.demo.mvp.presenter.SettingPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -43,6 +44,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
     View versionV;
     @BindView(R.id.submit)
     View submitV;
+    CustomDialog dialog = null;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -127,11 +129,42 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
             case R.id.contact:
                 break;
             case R.id.clean:
+                showDailog("确认清除应用缓存吗?");
                 break;
             case R.id.version:
                 break;
             case R.id.submit:
+                ArmsUtils.killAll();
                 break;
         }
+    }
+
+
+    private void showDailog(String text) {
+        dialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        ((TextView) view.findViewById(R.id.content)).setText(text);
+                        view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.dialog_remove_good_for_cart)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
+                .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
+                .show();
     }
 }
