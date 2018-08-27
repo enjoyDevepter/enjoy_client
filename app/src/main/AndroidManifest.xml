@@ -241,6 +241,9 @@
         <activity
             android:name=".mvp.ui.activity.WebActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.InviteMainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
