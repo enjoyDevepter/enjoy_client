@@ -10,7 +10,11 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.InviteMainContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetMyMemberListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetMyMemberListResponse;
 
 
 @ActivityScope
@@ -30,5 +34,12 @@ public class InviteMainModel extends BaseModel implements InviteMainContract.Mod
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
+    }
+
+
+    @Override
+    public Observable<GetMyMemberListResponse> getMyMemberList(GetMyMemberListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getMyMemberList(request);
     }
 }
