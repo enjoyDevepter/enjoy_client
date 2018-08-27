@@ -12,4 +12,6 @@
     <color name="order_item_red_color">#FFED3833</color>
     <color name="order_confirm_type_seleted">#FFFFFFFF</color>
     <color name="order_confirm_type_unseleted">#FFD33232</color>
+    <color name="user_qiandao_btn_back_normal">#66A4FD</color>
+    <color name="user_qiandao_btn_back_enable">#ffd0d0d0</color>
 </resources>

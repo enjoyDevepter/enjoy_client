@@ -28,8 +28,10 @@ import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.ScorePointBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -76,6 +78,33 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void nextPage() {
         requestOrderList(nextPageIndex, false);
+        getQiandaoInfo();
+    }
+
+    public void getQiandaoInfo(){
+        QiandaoInfoRequest request = new QiandaoInfoRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+        request.setToken(token);
+
+        mModel.getQiandaoInfo(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new Consumer<QiandaoInfoResponse>() {
+                    @Override
+                    public void accept(QiandaoInfoResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            mRootView.updateQiandaoInfo("1".equals(response.getIsSign()),response.getPoint(),response.getUrl());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
     }
 
     public void qiandao() {
@@ -99,9 +128,10 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                     public void accept(QiandaoResponse response) throws Exception {
                         if (response.isSuccess()) {
                             ArmsUtils.makeText(ArmsUtils.getContext(), "签到成功");
-                            initUser();
+                            getQiandaoInfo();
                             requestOrderList();
                         } else {
+                            getQiandaoInfo();
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }

@@ -37,12 +37,11 @@ import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
+/**用户积分*/
 public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> implements UserIntegralContract.View {
 
     @BindView(R.id.score)
     TextView score;
-    @BindView(R.id.qiandao_btn)
-    View qiandao_btn;
 
     @BindView(R.id.back)
     View back;
@@ -64,6 +63,9 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean isEnd;
+
+    @BindView(R.id.how_to_icon)
+    View how_to_icon;
 
     private void initPaginate() {
         if (mPaginate == null) {
@@ -134,6 +136,7 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
                 mPresenter.qiandao();
             }
         });
+
     }
 
     @Override
@@ -204,5 +207,17 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
     public void updateUserAccount(MemberAccount account) {
         score.setText(account.getPoint() + "");
+    }
+
+    public void updateQiandaoInfo(boolean isSignin,long point,String url){
+        how_to_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+
+            }
+        });
+        qianming.setEnabled(!isSignin);
+        score.setText(point+"");
     }
 }

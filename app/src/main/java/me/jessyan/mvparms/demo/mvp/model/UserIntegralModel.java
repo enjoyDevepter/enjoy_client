@@ -16,8 +16,10 @@ import me.jessyan.mvparms.demo.mvp.model.api.service.ScoreService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 
@@ -57,5 +59,11 @@ public class UserIntegralModel extends BaseModel implements UserIntegralContract
     public Observable<UserInfoResponse> getUserInfo(UserInfoRequest request) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
                 .getUserInfo(request);
+    }
+
+    @Override
+    public Observable<QiandaoInfoResponse> getQiandaoInfo(QiandaoInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getQiandaoInfo(request);
     }
 }

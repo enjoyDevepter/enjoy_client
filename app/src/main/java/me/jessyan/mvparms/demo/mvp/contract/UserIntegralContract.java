@@ -8,8 +8,10 @@ import com.jess.arms.mvp.IView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.UserScorePageResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 
@@ -26,6 +28,7 @@ public interface UserIntegralContract {
         Activity getActivity();
 
         void showError(boolean hasDate);
+        void updateQiandaoInfo(boolean isSignin,long point,String url);
 
     }
 
@@ -36,5 +39,6 @@ public interface UserIntegralContract {
         Observable<QiandaoResponse> qiandao(QiandaoRequest request);
 
         Observable<UserInfoResponse> getUserInfo(UserInfoRequest request);
+        Observable<QiandaoInfoResponse> getQiandaoInfo(QiandaoInfoRequest request);
     }
 }

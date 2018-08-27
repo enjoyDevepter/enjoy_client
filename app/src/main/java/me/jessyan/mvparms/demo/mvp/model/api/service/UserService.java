@@ -37,6 +37,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashCoinRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFollowRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
@@ -48,6 +49,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashCoinRespons
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyCouponListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFollowListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 import retrofit2.Retrofit;
@@ -110,6 +112,10 @@ public interface UserService {
     @POST("gateway")
         // 签到
     Observable<QiandaoResponse> qiandao(@Body QiandaoRequest request);
+
+    @POST("gateway")
+    // 签到详情
+    Observable<QiandaoInfoResponse> getQiandaoInfo(@Body QiandaoInfoRequest request);
 
     @POST("gateway")
     // 获取现金币详情
