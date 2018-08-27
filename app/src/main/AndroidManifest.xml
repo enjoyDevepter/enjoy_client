@@ -235,6 +235,9 @@
         <activity
             android:name=".mvp.ui.activity.ConsumeCoinInputActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.FeedBackActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
