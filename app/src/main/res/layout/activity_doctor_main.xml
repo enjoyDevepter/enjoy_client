@@ -90,7 +90,7 @@
                 android:layout_below="@id/rating_layout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="14dp"
-                android:background="@mipmap/hit_good_no" />
+                android:background="@mipmap/doctor_main_follow_doctor" />
 
             <TextView
                 android:id="@+id/addr_title"

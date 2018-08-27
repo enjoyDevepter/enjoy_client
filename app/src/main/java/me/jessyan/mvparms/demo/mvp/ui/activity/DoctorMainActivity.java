@@ -297,7 +297,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     @Override
     public void updateLikeImage(boolean isLike) {
         this.isLike = isLike;
-        hit_good.setBackground(getResources().getDrawable(isLike ? R.mipmap.hit_good_yes : R.mipmap.hit_good_no));
+        hit_good.setBackground(getResources().getDrawable(isLike ? R.mipmap.doctor_main_followed_doctor : R.mipmap.doctor_main_follow_doctor));
     }
 
     @Override
