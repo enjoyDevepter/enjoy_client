@@ -31,8 +31,8 @@
                 android:layout_alignTop="@id/blue_back"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="46dp"
-                android:background="@mipmap/place_holder_user"
                 app:radius="17dp"
+                android:background="@color/white"
                 app:shape_type="round" />
 
             <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
