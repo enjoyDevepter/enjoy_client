@@ -234,7 +234,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         doctor_name.setText(doctorBean.getName());
         comment_count.setText(""+doctorBean.getComment());
         rating.setStar(doctorBean.getStar());
-        updateLikeImage(LIKE.equals(doctorBean.getIsPraise()));
+        updateLikeImage(LIKE.equals(doctorBean.getIsFollow()));
         HospitalBean hospitalBean = doctorBean.getHospitalBean();
         if(hospitalBean != null){
             hosp_info.setText(hospitalBean.getName());
