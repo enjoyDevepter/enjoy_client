@@ -33,6 +33,7 @@ import me.jessyan.mvparms.demo.mvp.presenter.MyPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CashCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ConsumeCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CouponActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.InviteMainActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyDiaryActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyFarvirateActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyFollowActivity;
@@ -203,6 +204,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 ArmsUtils.startActivity(intent2);
                 break;
             case R.id.friend:
+                ArmsUtils.startActivity(InviteMainActivity.class);
                 break;
             case R.id.diary:
                 ArmsUtils.startActivity(MyDiaryActivity.class);

@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerInviteMainComponent;
 import me.jessyan.mvparms.demo.di.module.InviteMainModule;
 import me.jessyan.mvparms.demo.mvp.contract.InviteMainContract;
@@ -21,6 +24,11 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implements InviteMainContract.View {
+
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.back)
+    View back;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -39,7 +47,13 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                killMyself();
+            }
+        });
+        title.setText("邀请好友");
     }
 
     @Override
