@@ -213,8 +213,10 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
         how_to_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-
+                Intent intent = new Intent(UserIntegralActivity.this,WebActivity.class);
+                intent.putExtra(WebActivity.KEY_FOR_WEB_URL,url);
+                intent.putExtra(WebActivity.KEY_FOR_WEB_TITLE,"如何获取积分");
+                ArmsUtils.startActivity(intent);
             }
         });
         qianming.setEnabled(!isSignin);

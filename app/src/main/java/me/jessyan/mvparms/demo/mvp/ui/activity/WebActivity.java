@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerWebComponent;
 import me.jessyan.mvparms.demo.di.module.WebModule;
 import me.jessyan.mvparms.demo.mvp.contract.WebContract;
@@ -21,6 +25,16 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class WebActivity extends BaseActivity<WebPresenter> implements WebContract.View {
+
+    @BindView(R.id.webview)
+    WebView webView;
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.back)
+    View back;
+
+    public static final String KEY_FOR_WEB_TITLE = "KEY_FOR_WEB_TITLE";
+    public static final String KEY_FOR_WEB_URL = "KEY_FOR_WEB_URL";
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -39,7 +53,15 @@ public class WebActivity extends BaseActivity<WebPresenter> implements WebContra
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                killMyself();
+            }
+        });
+        Intent intent = getIntent();
+        title.setText(intent.getStringExtra(KEY_FOR_WEB_TITLE));
+        webView.loadUrl(intent.getStringExtra(KEY_FOR_WEB_URL));
     }
 
     @Override

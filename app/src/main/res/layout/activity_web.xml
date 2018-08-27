@@ -5,4 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/title"/>
+    <View style="@style/divider_3"/>
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></WebView>
 </LinearLayout>
