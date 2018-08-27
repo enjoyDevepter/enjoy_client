@@ -27,7 +27,7 @@
             android:layout_alignTop="@id/blue_back"
             android:layout_centerInParent="true"
             android:layout_marginTop="46dp"
-            android:background="@mipmap/place_holder_user"
+            android:background="@color/white"
             app:radius="17dp"
             app:shape_type="round" />
 
