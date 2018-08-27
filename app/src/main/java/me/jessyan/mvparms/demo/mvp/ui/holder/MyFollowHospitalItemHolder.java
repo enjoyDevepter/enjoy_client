@@ -83,9 +83,7 @@ public class MyFollowHospitalItemHolder extends BaseHolder<Hospital> {
     public void setData(Hospital hospital, int position) {
         Observable.just(hospital.getName())
                 .subscribe(s -> nameTV.setText(s));
-        Observable.just(hospital.getIsFollow())
-                .subscribe(s -> fllowV.setSelected("1".equals(s) ? true : false));
-
+        fllowV.setSelected(true);
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()

@@ -41,6 +41,7 @@ public class BaseResponse implements Serializable {
     private int retCode;
     private String retDesc;
     private ImageUrl result;
+    private String content;
 
     public String getSequence() {
         return sequence;
@@ -128,6 +129,32 @@ public class BaseResponse implements Serializable {
 
     public void setResult(ImageUrl result) {
         this.result = result;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "BaseResponse{" +
+                "sequence='" + sequence + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", cmd=" + cmd +
+                ", channel='" + channel + '\'' +
+                ", childChannel='" + childChannel + '\'' +
+                ", version='" + version + '\'' +
+                ", clientVersion='" + clientVersion + '\'' +
+                ", deviceNumber='" + deviceNumber + '\'' +
+                ", retCode=" + retCode +
+                ", retDesc='" + retDesc + '\'' +
+                ", result=" + result +
+                ", content='" + content + '\'' +
+                '}';
     }
 
     /**

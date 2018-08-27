@@ -8,6 +8,8 @@ import com.jess.arms.mvp.IView;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 
 
@@ -25,10 +27,15 @@ public interface MyDiaryContract {
         Cache getCache();
 
         void showError(boolean hasDate);
+
+        void showApply(String content);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<DiaryListResponse> getMyDiaryList(DiaryListRequest request);
+
+        Observable<BaseResponse> apply(DiaryRequest request);
+
     }
 }

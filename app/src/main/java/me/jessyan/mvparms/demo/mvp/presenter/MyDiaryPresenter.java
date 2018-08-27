@@ -21,6 +21,8 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MyDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -105,6 +107,31 @@ public class MyDiaryPresenter extends BasePresenter<MyDiaryContract.Model, MyDia
                 }
             }
         });
+    }
+
+    public void apply(boolean apply) {
+
+        DiaryRequest request = new DiaryRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(apply ? 825 : 824);
+        mModel.apply(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            if (apply) {
+                                mRootView.showApply(response.getContent());
+                            } else {
+                                mRootView.showMessage(response.getRetDesc());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
     }
 
     @Override

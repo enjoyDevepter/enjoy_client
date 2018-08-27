@@ -85,11 +85,7 @@ public class MyFollowDocterItemHolder extends BaseHolder<DoctorBean> {
     public void setData(DoctorBean doctorBean, int position) {
         Observable.just(doctorBean.getName())
                 .subscribe(s -> nameTV.setText(s));
-        Observable.just(doctorBean.getIsFollow())
-                .subscribe(s -> fllowV.setSelected("1".equals(s) ? true : false));
-//        Observable.just(doctorBean.get())
-//                .subscribe(s -> publishDateTV.setText(s));
-
+        fllowV.setSelected(true);
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()

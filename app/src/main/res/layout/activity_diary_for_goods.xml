@@ -75,6 +75,7 @@
                             android:id="@+id/left"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:background="@mipmap/place_holder_img"
                             android:scaleType="fitXY" />
 
                         <TextView
@@ -101,6 +102,7 @@
                             android:id="@+id/right"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:background="@mipmap/place_holder_img"
                             android:scaleType="fitXY" />
 
                         <TextView

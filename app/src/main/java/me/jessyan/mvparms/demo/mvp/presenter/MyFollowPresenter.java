@@ -167,20 +167,22 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                 });
     }
 
-    public void follow(boolean follow, int position) {
+    public void unfollow() {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         FollowRequest request = new FollowRequest();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
         final int status = (int) mRootView.getCache().get("status");
         switch (status) {
             case 0:
-                request.setCmd(follow ? 210 : 211);
+                request.setCmd(211);
                 request.setMemberId((String) mRootView.getCache().get("memberId"));
                 break;
             case 1:
-                request.setCmd(follow ? 665 : 666);
+                request.setCmd(666);
                 request.setDoctorId((String) mRootView.getCache().get("doctorId"));
                 break;
             case 2:
-                request.setCmd(follow ? 604 : 605);
+                request.setCmd(605);
                 request.setHospitalId((String) mRootView.getCache().get("hospitalId"));
                 break;
         }
@@ -200,20 +202,7 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                     @Override
                     public void accept(BaseResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            switch (status) {
-                                case 0:
-                                    memberAdapter.getInfos().get(position).setIsFollow(follow ? "1" : "0");
-                                    memberAdapter.notifyItemChanged(position);
-                                    break;
-                                case 1:
-                                    doctorAdapter.getInfos().get(position).setIsFollow(follow ? "1" : "0");
-                                    doctorAdapter.notifyItemChanged(position);
-                                    break;
-                                case 2:
-                                    hospitalAdapter.getInfos().get(position).setIsFollow(follow ? "1" : "0");
-                                    hospitalAdapter.notifyItemChanged(position);
-                                    break;
-                            }
+                            getMyFollow(true);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

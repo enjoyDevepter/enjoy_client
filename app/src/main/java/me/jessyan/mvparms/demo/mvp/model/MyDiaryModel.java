@@ -13,6 +13,8 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.MyDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 
 
@@ -39,5 +41,11 @@ public class MyDiaryModel extends BaseModel implements MyDiaryContract.Model {
     public Observable<DiaryListResponse> getMyDiaryList(DiaryListRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getDiaryList(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> apply(DiaryRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .apply(request);
     }
 }

@@ -280,13 +280,69 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
     @Override
     public void onChildItemClick(View v, MyOrderAdapter.ViewName viewname, int position) {
         Order order = mAdapter.getInfos().get(position);
+        provideCache().put("orderId", order.getOrderId());
         switch (viewname) {
             case LEFT:
-                Intent payIntent = new Intent(this, PayActivity.class);
-                payIntent.putExtra("orderId", order.getOrderId());
-                payIntent.putExtra("payMoney", order.getPayMoney());
-                payIntent.putExtra("orderTime", order.getOrderTime());
-                ArmsUtils.startActivity(payIntent);
+                switch ((int) provideCache().get("type")) {
+                    case 0:
+                        if ("1".equals(order.getOrderStatus())) {
+                            // 取消订单
+                        } else if ("4".equals(order.getOrderStatus())) {
+                            // 查看物流
+                        }
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        if ("1".equals(order.getOrderStatus())) {
+                            // 取消订单
+                            mPresenter.cancelOrder();
+                        }
+                        break;
+                }
+                break;
+            case RIGHT:
+                switch ((int) provideCache().get("type")) {
+                    case 0:
+                        if ("1".equals(order.getOrderStatus())) {
+                            // 去支付
+
+                        } else if ("3".equals(order.getOrderStatus())) {
+                            // 提醒发货
+
+                        } else if ("4".equals(order.getOrderStatus())) {
+                            // 确认收货
+
+                        } else if ("5".equals(order.getOrderStatus())) {
+                            // 写日记
+                        }
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        if ("1".equals(order.getOrderStatus())) {
+                            // 去支付
+
+                        } else if ("2".equals(order.getOrderStatus())) {
+                            // 付尾款
+
+                        } else if ("31".equals(order.getOrderStatus())) {
+                            // 预约
+
+                        } else if ("5".equals(order.getOrderStatus())) {
+                            // 写日记
+                            Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
+                            intent.putExtra("imageURl", order.getSetMealGoodsList().get(0).getImage());
+                            intent.putExtra("name", order.getSetMealGoodsList().get(0).getName());
+                            intent.putExtra("price", order.getSetMealGoodsList().get(0).getSalePrice());
+                            intent.putExtra("goodsId", order.getSetMealGoodsList().get(0).getSetMealId());
+                            intent.putExtra("merchId", order.getSetMealGoodsList().get(0).getSetMealId());
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
+
+                        }
+                        break;
+                }
                 break;
             case ITEM:
                 Intent detailIntent = new Intent(this, OrderDeatilsActivity.class);

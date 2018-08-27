@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
@@ -237,7 +238,7 @@ public class MyFollowActivity extends BaseActivity<MyFollowPresenter> implements
         switch (viewname) {
             case FLLOW:
                 provideCache().put("memberId", member.getMemberId());
-                mPresenter.follow("1".equals(member.getIsFollow()) ? false : true, position);
+                mPresenter.unfollow();
                 break;
             case ITEM:
                 break;
@@ -250,7 +251,7 @@ public class MyFollowActivity extends BaseActivity<MyFollowPresenter> implements
         switch (viewname) {
             case FLLOW:
                 provideCache().put("hospitalId", hospital.getHospitalId());
-                mPresenter.follow("1".equals(hospital.getIsFollow()) ? false : true, position);
+                mPresenter.unfollow();
                 break;
             case ITEM:
                 break;
@@ -263,10 +264,16 @@ public class MyFollowActivity extends BaseActivity<MyFollowPresenter> implements
         switch (viewname) {
             case FLLOW:
                 provideCache().put("doctorId", doctor.getDoctorId());
-                mPresenter.follow("1".equals(doctor.getIsFollow()) ? false : true, position);
+                mPresenter.unfollow();
                 break;
             case ITEM:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
     }
 }

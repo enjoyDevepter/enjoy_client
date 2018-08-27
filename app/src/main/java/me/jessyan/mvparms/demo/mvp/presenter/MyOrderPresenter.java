@@ -20,7 +20,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MyOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyOrderAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -73,6 +75,40 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                 getHOrder(pullToRefresh);
                 break;
         }
+    }
+
+    public void cancelOrder() {
+        OrderOperationRequest request = new OrderOperationRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setOrderId((String) mRootView.getCache().get("orderId"));
+        int type = 0;
+        if (null != mRootView.getCache().get("type")) {
+            type = (int) mRootView.getCache().get("type");
+        }
+        switch (type) {
+            case 0:
+                return;
+            case 1:
+                return;
+            case 2:
+                request.setCmd(553);
+                break;
+        }
+        mModel.cancelOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            getOrder(true);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+
     }
 
     /**

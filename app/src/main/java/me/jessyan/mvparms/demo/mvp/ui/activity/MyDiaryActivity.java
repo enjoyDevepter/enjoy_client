@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
@@ -25,6 +26,7 @@ import me.jessyan.mvparms.demo.di.module.MyDiaryModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyDiaryContract;
 import me.jessyan.mvparms.demo.mvp.presenter.MyDiaryPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -49,6 +51,7 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     DiaryListAdapter mAdapter;
+    CustomDialog dialog = null;
 
     private Paginate mPaginate;
     private boolean isLoadingMore;
@@ -165,6 +168,11 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
         swipeRefreshLayout.setVisibility(nodata ? View.GONE : View.VISIBLE);
     }
 
+    @Override
+    public void showApply(String content) {
+        showDailog(content);
+    }
+
 
     @Override
     public void showMessage(@NonNull String message) {
@@ -191,11 +199,36 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
                 killMyself();
                 break;
             case R.id.apply:
+                mPresenter.apply(true);
                 break;
             case R.id.release:
                 break;
         }
     }
+
+    private void showDailog(String text) {
+        dialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        ((TextView) view.findViewById(R.id.content)).setText(text);
+                        view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mPresenter.apply(false);
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.diary_for_apply_benefit)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setWidth(ArmsUtils.getDimens(this, R.dimen.diray_apply_width))
+                .setHeight(ArmsUtils.getDimens(this, R.dimen.diray_apply_height))
+                .show();
+    }
+
 
     @Override
     protected void onDestroy() {

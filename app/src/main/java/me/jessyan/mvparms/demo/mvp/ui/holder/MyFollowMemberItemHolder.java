@@ -85,8 +85,7 @@ public class MyFollowMemberItemHolder extends BaseHolder<Member> {
     public void setData(Member member, int position) {
         Observable.just(member.getNickName())
                 .subscribe(s -> nickNameTV.setText(s));
-        Observable.just(member.getIsFollow())
-                .subscribe(s -> fllowV.setSelected("1".equals(s) ? true : false));
+        fllowV.setSelected(true);
         Observable.just(member.getFollowDate())
                 .subscribe(s -> publishDateTV.setText(s));
 
