@@ -4,11 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerFeedBackComponent;
 import me.jessyan.mvparms.demo.di.module.FeedBackModule;
 import me.jessyan.mvparms.demo.mvp.contract.FeedBackContract;
@@ -21,6 +27,16 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class FeedBackActivity extends BaseActivity<FeedBackPresenter> implements FeedBackContract.View {
+
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.back)
+    View back;
+
+    @BindView(R.id.et_name)
+    EditText et_name;
+    @BindView(R.id.text_count)
+    TextView text_count;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -39,7 +55,29 @@ public class FeedBackActivity extends BaseActivity<FeedBackPresenter> implements
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                killMyself();
+            }
+        });
+        title.setText("意见反馈");
+        et_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                text_count.setText(""+s.length());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override

@@ -122,6 +122,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                 ArmsUtils.startActivity(AuthenticationActivity.class);
                 break;
             case R.id.fallback:
+                ArmsUtils.startActivity(FeedBackActivity.class);
                 break;
             case R.id.contact:
                 break;
