@@ -2,31 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include layout="@layout/title"/>
     <FrameLayout
         android:id="@+id/look_rule"
-        android:background="@mipmap/invite_main_back"
         android:layout_width="match_parent"
-        android:layout_height="212dp">
+        android:layout_height="212dp"
+        android:background="@mipmap/invite_main_back">
 
         <TextView
+            android:layout_width="94dp"
+            android:layout_height="25dp"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="19dp"
+            android:background="@mipmap/invite_main_rule_back"
+            android:gravity="center_vertical|right"
+            android:paddingRight="7dp"
             android:text="查看活动规则>"
             android:textColor="#ff333333"
-            android:textSize="11sp"
-            android:layout_marginTop="19dp"
-            android:layout_gravity="top|right"
-            android:paddingRight="7dp"
-            android:gravity="center_vertical|right"
-            android:background="@mipmap/invite_main_rule_back"
-            android:layout_width="94dp"
-            android:layout_height="25dp" />
+            android:textSize="11sp" />
     </FrameLayout>
     <TextView
-        android:id="@+id/commit"
+        android:id="@+id/invite"
         android:layout_width="match_parent"
         android:layout_height="39dp"
         android:layout_marginLeft="45dp"
@@ -38,16 +38,16 @@
         android:textColor="#ffffffff"
         android:textSize="13sp" />
     <LinearLayout
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <View
-            android:background="@mipmap/invite_title_left"
             android:layout_width="85dp"
-            android:layout_height="12dp"/>
+            android:layout_height="12dp"
+            android:background="@mipmap/invite_title_left" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,16 +60,16 @@
             />
 
         <View
-            android:background="@mipmap/invite_title_right"
             android:layout_width="85dp"
-            android:layout_height="12dp"/>
+            android:layout_height="12dp"
+            android:background="@mipmap/invite_title_right" />
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_weight="1"
         android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/white">
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -118,10 +118,10 @@
         android:id="@+id/all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="查看全部>"
-        android:layout_marginTop="18dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="32dp"
+        android:layout_marginTop="18dp"
+        android:text="查看全部>"
         android:textColor="#ff666666"
         android:textSize="11sp"
         />
