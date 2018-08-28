@@ -15,7 +15,7 @@ public interface CashCoinContract {
     interface View extends IView {
         void setEnd(boolean isEnd);
         void endLoadMore();
-        void startLoadMore();
+        void startLoadMore();void showError(boolean hasDate);
         Activity getActivity();
     }
 

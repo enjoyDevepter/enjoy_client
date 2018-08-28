@@ -31,6 +31,8 @@ import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.CashCoinPresenter;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -62,6 +64,15 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean isEnd;
+
+    @BindView(R.id.no_date)
+    View onDateV;
+
+    @Override
+    public void showError(boolean hasDate) {
+        onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
+        swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+    }
 
     private void initPaginate() {
         if (mPaginate == null) {
