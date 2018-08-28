@@ -100,6 +100,7 @@ public class InviteMainPresenter extends BasePresenter<InviteMainContract.Model,
                     @Override
                     public void accept(GetMyMemberListResponse response) throws Exception {
                         if (response.isSuccess()) {
+                            mRootView.updateUrl(response.getUrl());
                             if(clear){
                                 orderBeanList.clear();
                             }

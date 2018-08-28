@@ -8,6 +8,7 @@
 
     <include layout="@layout/title"/>
     <FrameLayout
+        android:id="@+id/look_rule"
         android:background="@mipmap/invite_main_back"
         android:layout_width="match_parent"
         android:layout_height="212dp">

@@ -52,6 +52,9 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
     @BindView(R.id.contentList)
     RecyclerView contentList;
 
+    @BindView(R.id.look_rule)
+    View look_rule;
+
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     private Paginate mPaginate;
@@ -105,6 +108,18 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
     @Override
     public int initView(@Nullable Bundle savedInstanceState) {
         return R.layout.activity_invite_main; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+    }
+
+    public void updateUrl(String url){
+        look_rule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(InviteMainActivity.this,WebActivity.class);
+                intent.putExtra(WebActivity.KEY_FOR_WEB_TITLE,"规则");
+                intent.putExtra(WebActivity.KEY_FOR_WEB_URL,url);
+                ArmsUtils.startActivity(intent);
+            }
+        });
     }
 
     @Override
