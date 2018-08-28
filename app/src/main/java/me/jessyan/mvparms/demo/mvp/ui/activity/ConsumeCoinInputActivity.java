@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -13,6 +17,8 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import org.simple.eventbus.Subscriber;
+
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.app.EventBusTags;
@@ -39,6 +45,10 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
 
     @BindView(R.id.consume_count)
     TextView consume_count;  // 消费币
+    @BindView(R.id.et_name)
+    EditText et_name;
+    @BindView(R.id.money)
+    TextView money;
 
     private MemberAccount account;
 
@@ -114,6 +124,29 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
             @Override
             public void onClick(View v) {
                 selectType(wx_type);
+            }
+        });
+        et_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String s1 = s + "";
+                if(TextUtils.isEmpty(s1)){
+                    money.setText("0");
+                }else{
+                    long i = 0;
+                    i = Long.parseLong(s1);
+                    money.setText(""+i);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
