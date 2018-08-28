@@ -42,6 +42,32 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
 
     private MemberAccount account;
 
+    @BindView(R.id.pay_for_zfb)
+    View pay_for_zfb;
+    @BindView(R.id.pay_for_wx)
+    View pay_for_wx;
+
+    @BindView(R.id.zfb)
+    View zfb; private static final int zfb_type = 0;
+    @BindView(R.id.wx)
+    View wx; private static final int wx_type = 1;
+    private int currType = 0;
+
+    private void selectType(int type){
+        zfb.setSelected(false);
+        wx.setSelected(false);
+
+        switch (type){
+            case zfb_type:
+                zfb.setSelected(true);
+                break;
+            case wx_type:
+                wx.setSelected(true);
+                break;
+        }
+        currType = type;
+    }
+
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
     public void updateUserAccount(MemberAccount account){
         if(account == null){
@@ -75,6 +101,19 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
             @Override
             public void onClick(View v) {
                 killMyself();
+            }
+        });
+        selectType(zfb_type);
+        pay_for_zfb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectType(zfb_type);
+            }
+        });
+        pay_for_wx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectType(wx_type);
             }
         });
     }
