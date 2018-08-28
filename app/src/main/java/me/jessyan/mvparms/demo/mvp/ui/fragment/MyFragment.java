@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.CashCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ConsumeCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CouponActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.InviteMainActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyDiaryActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyFarvirateActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyFollowActivity;
@@ -41,6 +43,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.MyMealActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.RecommenderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SettingActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.UserInfoActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.UserIntegralActivity;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
@@ -135,6 +138,18 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         recommenderV.setOnClickListener(this);
         consume.setOnClickListener(this);
         cash.setOnClickListener(this);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
+                Object o = cache.get(KEY_KEEP + "token");
+                if(o == null){
+                    ArmsUtils.startActivity(LoginActivity.class);
+                }else{
+                    ArmsUtils.startActivity(UserInfoActivity.class);
+                }
+            }
+        });
     }
 
     /**
@@ -254,6 +269,17 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         moneyTV.setText(String.format("%.2f", account.getBonus() * 1.0 / 100));
         memberMoneyTV.setText(String.format("%.2f", account.getTotal() * 1.0 / 100));
         bonusTV.setText(account.getPoint() + "");
+    }
+
+
+    @Subscriber(tag = EventBusTags.USER_LOGOUT)
+    public void clear(){
+        image.setImageResource(R.mipmap.place_holder_user);
+        nickNameTV.setText("");
+        level_icon.setBackground(null);
+        moneyTV.setText("");
+        memberMoneyTV.setText("");
+        bonusTV.setText("");
     }
 
 

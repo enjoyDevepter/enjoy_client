@@ -37,6 +37,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerUserInfoComponent;
 import me.jessyan.mvparms.demo.di.module.UserInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.UserInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.MyModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.Area;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Member;
 import me.jessyan.mvparms.demo.mvp.presenter.UserInfoPresenter;
@@ -146,7 +147,10 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
         nameTV.setText(member.getNickName());
         maleTV.setText("0".equals(member.getSex()) ? "保密" : "1".equals(member.getSex()) ? "男" : "女");
         ageTV.setText(member.getAge() + "");
-        areaTV.setText(member.getCity().getName());
+        Area city = member.getCity();
+        if(city != null){
+            areaTV.setText(city.getName());
+        }
         constellationTV.setText(member.getConstellationDesc());
 
         StringBuilder sb = new StringBuilder();
