@@ -30,6 +30,8 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.ChooseBankAdapter;
 
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -98,6 +100,16 @@ public class ChooseBankActivity extends BaseActivity<ChooseBankPresenter> implem
     public int initView(@Nullable Bundle savedInstanceState) {
         return R.layout.activity_choose_bank; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
+
+    @BindView(R.id.no_date)
+    View onDateV;
+
+    @Override
+    public void showError(boolean hasDate) {
+        onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
+        swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+    }
+
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
