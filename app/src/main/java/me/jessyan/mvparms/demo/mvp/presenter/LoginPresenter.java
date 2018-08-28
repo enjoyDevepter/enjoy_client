@@ -9,6 +9,7 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.PermissionUtil;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
@@ -106,6 +107,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
         mModel.loginByUserName(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new Consumer<RegisterResponse>() {
                     @Override
                     public void accept(RegisterResponse response) throws Exception {

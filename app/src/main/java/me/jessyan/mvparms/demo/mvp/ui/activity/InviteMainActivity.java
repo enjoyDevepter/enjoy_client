@@ -27,6 +27,8 @@ import me.jessyan.mvparms.demo.mvp.presenter.InviteMainPresenter;
 import me.jessyan.mvparms.demo.R;
 
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -40,6 +42,9 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
     @BindView(R.id.all)
     View all;
 
+    @BindView(R.id.no_date)
+    View onDateV;
+
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
@@ -52,6 +57,13 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean isEnd;
+
+    @Override
+    public void showError(boolean hasDate) {
+        onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
+        swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+        all.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+    }
 
     private void initPaginate() {
         if (mPaginate == null) {

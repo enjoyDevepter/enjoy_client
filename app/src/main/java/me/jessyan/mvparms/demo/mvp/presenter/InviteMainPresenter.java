@@ -104,6 +104,7 @@ public class InviteMainPresenter extends BasePresenter<InviteMainContract.Model,
                                 orderBeanList.clear();
                             }
                             nextPageIndex = response.getNextPageIndex();
+                            mRootView.showError(response.getMemberList().size() > 0);
                             mRootView.setEnd(nextPageIndex == -1);
                             orderBeanList.addAll(response.getMemberList());
                             mAdapter.notifyDataSetChanged();
