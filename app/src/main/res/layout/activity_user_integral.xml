@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -100,13 +99,13 @@
 
         <Button
             android:id="@+id/qianming"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
             android:layout_below="@id/score"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="28dp"
             android:layout_marginTop="25dp"
             android:background="@drawable/user_qiandao_btn_back"
-            android:layout_width="120dp"
-            android:layout_height="30dp"
             android:gravity="center"
             android:text="立即签到"
             android:textColor="#ffffffff"
@@ -175,13 +174,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <View
                 android:layout_width="94dp"
                 android:layout_height="60dp"
-                android:layout_marginTop="150dp"
+                android:layout_marginTop="80dp"
                 android:background="@mipmap/nodata" />
 
             <TextView

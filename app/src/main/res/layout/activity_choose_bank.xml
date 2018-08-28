@@ -2,18 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#F5F5F5"
     android:layout_height="match_parent"
+    android:background="#F5F5F5"
     android:orientation="vertical">
 
-    <include layout="@layout/title"/>
-    <View style="@style/divider_3"/>
+    <include layout="@layout/title" />
+
+    <View style="@style/divider_3" />
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_weight="1"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
+        android:layout_weight="1"
         android:background="@color/white">
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -36,13 +37,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <View
                 android:layout_width="94dp"
                 android:layout_height="60dp"
-                android:layout_marginTop="150dp"
+                android:layout_marginTop="80dp"
                 android:background="@mipmap/nodata" />
 
             <TextView
@@ -60,15 +60,14 @@
 
     <TextView
         android:id="@+id/add_card_btn"
-        android:text="添加新卡"
-        android:textColor="#ffffffff"
-        android:textSize="13sp"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/cash_convert_btn_back"
         android:layout_width="330dp"
         android:layout_height="44dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="10dp"
-        />
+        android:layout_marginTop="10dp"
+        android:background="@drawable/cash_convert_btn_back"
+        android:gravity="center"
+        android:text="添加新卡"
+        android:textColor="#ffffffff"
+        android:textSize="13sp" />
 </LinearLayout>
