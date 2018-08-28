@@ -12,9 +12,12 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 
 
 @ActivityScope
@@ -46,5 +49,11 @@ public class TaoCanDetailsModel extends BaseModel implements TaoCanDetailsContra
     public Observable<BaseResponse> collectGoods(MealDetailsRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .collectGoods(request);
+    }
+
+    @Override
+    public Observable<ShareResponse> share(FollowRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .share(request);
     }
 }

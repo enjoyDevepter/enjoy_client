@@ -8,11 +8,18 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -24,6 +31,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerTaoCanDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.TaoCanDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
 import me.jessyan.mvparms.demo.mvp.presenter.TaoCanDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -37,6 +45,8 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     View backV;
     @BindView(R.id.buy)
     View buyV;
+    @BindView(R.id.share)
+    View shareV;
     @BindView(R.id.goods_iamges)
     Banner imagesB;
     @BindView(R.id.image_count)
@@ -68,6 +78,44 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
 
     MealDetailsResponse response;
 
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Toast.makeText(TaoCanDetailsActivity.this, "成功了", Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(TaoCanDetailsActivity.this, "失败" + t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(TaoCanDetailsActivity.this, "取消了", Toast.LENGTH_LONG).show();
+        }
+    };
+
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerTaoCanDetailsComponent //如找不到该类,请编译一下项目
@@ -88,6 +136,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         backV.setOnClickListener(this);
         buyV.setOnClickListener(this);
         collectV.setOnClickListener(this);
+        shareV.setOnClickListener(this);
         imagesB.setImageLoader(new GlideImageLoader());
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
         tabLayout.addTab(tabLayout.newTab().setText("套餐详情"));
@@ -153,6 +202,24 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void showWX(Share share) {
+        UMWeb web = new UMWeb(share.getUrl());
+        web.setTitle(share.getTitle());//标题
+        web.setDescription(share.getIntro());
+        web.setThumb(new UMImage(this, share.getImage()));
+        new ShareAction(this)
+                .withMedia(web)
+                .setCallback(shareListener)
+                .open();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
@@ -165,6 +232,9 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
                 mPresenter.collectGoods(!collectV.isSelected());
                 break;
             case R.id.tel:
+                break;
+            case R.id.share:
+                mPresenter.share();
                 break;
         }
     }

@@ -103,7 +103,7 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
                         .url(appointment.getGoods().getImage())
                         .imageView(imageIV)
                         .build());
-        noTV.setText(appointment.getProjectId());
+        noTV.setText(appointment.getCode());
         if ("1".equals(appointment.getStatus())) {
             rightTV.setVisibility(View.VISIBLE);
             rightTV.setText("预约");

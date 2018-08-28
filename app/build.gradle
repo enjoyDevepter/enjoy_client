@@ -19,21 +19,37 @@ android {
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
     }
 
+    signingConfigs {
+        release {
+            storeFile file('ehanmy.keystore')
+            storePassword "ehanmy.cn"
+            keyAlias "ehanmy"
+            keyPassword "ehanmy.cn"
+        }
+    }
+
     buildTypes {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "true"
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             buildConfigField "boolean", "USE_CANARY", "false"
+            signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets { // 从ANT迁移的工程，可以使用 sourceSets 来配置工程结构.
+        main {
+            jniLibs.srcDirs = ['libs'] // 配置此处才会打包jni 的.so 文件
         }
     }
 
@@ -43,6 +59,9 @@ android {
         abortOnError false
     }
 }
+
+
+
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

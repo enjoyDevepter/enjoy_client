@@ -12,6 +12,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MealOrderConfirmActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -137,6 +140,34 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
         intent.putExtra("salePrice", mealDetailsResponse.getSetMealGoods().getSalePrice());
         ArmsUtils.startActivity(intent);
 
+    }
+
+    public void share() {
+        FollowRequest request = new FollowRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+
+        if (ArmsUtils.isEmpty(token)) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+        request.setToken(token);
+        request.setCmd(909);
+        mModel.share(request)
+                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new Consumer<ShareResponse>() {
+                    @Override
+                    public void accept(ShareResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            mRootView.showWX(response.getShare());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
     }
 
 }

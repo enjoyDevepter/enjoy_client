@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/title"/>
+    <include layout="@layout/title" />
+
     <FrameLayout
-        android:background="@mipmap/invite_main_back"
         android:layout_width="match_parent"
-        android:layout_height="212dp">
+        android:layout_height="212dp"
+        android:background="@mipmap/invite_main_back">
 
         <TextView
+            android:layout_width="94dp"
+            android:layout_height="25dp"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="19dp"
+            android:background="@mipmap/invite_main_rule_back"
+            android:gravity="center_vertical|right"
+            android:paddingRight="7dp"
             android:text="查看活动规则>"
             android:textColor="#ff333333"
-            android:textSize="11sp"
-            android:layout_marginTop="19dp"
-            android:layout_gravity="top|right"
-            android:paddingRight="7dp"
-            android:gravity="center_vertical|right"
-            android:background="@mipmap/invite_main_rule_back"
-            android:layout_width="94dp"
-            android:layout_height="25dp" />
+            android:textSize="11sp" />
     </FrameLayout>
+
     <TextView
-        android:id="@+id/commit"
+        android:id="@+id/invite"
         android:layout_width="match_parent"
         android:layout_height="39dp"
         android:layout_marginLeft="45dp"
@@ -35,17 +36,18 @@
         android:text="立即邀请"
         android:textColor="#ffffffff"
         android:textSize="13sp" />
+
     <LinearLayout
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <View
-            android:background="@mipmap/invite_title_left"
             android:layout_width="85dp"
-            android:layout_height="12dp"/>
+            android:layout_height="12dp"
+            android:background="@mipmap/invite_title_left" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,29 +56,26 @@
             android:layout_marginRight="8dp"
             android:text="我邀请的好友"
             android:textColor="#ffff5656"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
         <View
-            android:background="@mipmap/invite_title_right"
             android:layout_width="85dp"
-            android:layout_height="12dp"/>
+            android:layout_height="12dp"
+            android:background="@mipmap/invite_title_right" />
 
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp"
         android:id="@+id/swipeRefreshLayout"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/contentList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="9dp"
-            />
+            android:layout_margin="9dp" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -84,11 +83,10 @@
         android:id="@+id/all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="查看全部>"
-        android:layout_marginTop="18dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="32dp"
+        android:layout_marginTop="18dp"
+        android:text="查看全部>"
         android:textColor="#ff666666"
-        android:textSize="11sp"
-        />
+        android:textSize="11sp" />
 </LinearLayout>
