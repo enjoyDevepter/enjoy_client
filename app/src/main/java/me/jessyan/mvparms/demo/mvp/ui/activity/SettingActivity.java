@@ -8,16 +8,23 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerSettingComponent;
 import me.jessyan.mvparms.demo.di.module.SettingModule;
 import me.jessyan.mvparms.demo.mvp.contract.SettingContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.SettingPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -134,11 +141,14 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
             case R.id.version:
                 break;
             case R.id.submit:
-                ArmsUtils.killAll();
+                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+                cache.put(KEY_KEEP + "token", null);
+                cache.put(KEY_KEEP + "signkey", null);
+                EventBus.getDefault().post(EventBusTags.USER_LOGOUT);
+                killMyself();
                 break;
         }
     }
-
 
     private void showDailog(String text) {
         dialog = CustomDialog.create(getSupportFragmentManager())
