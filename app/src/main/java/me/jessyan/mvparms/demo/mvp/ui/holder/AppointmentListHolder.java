@@ -44,10 +44,12 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
 public class AppointmentListHolder extends BaseHolder<Appointment> {
     @BindView(R.id.no)
     TextView noTV;
-    @BindView(R.id.make)
-    TextView makeV;
-    @BindView(R.id.cancel)
-    View cancelV;
+    @BindView(R.id.left)
+    TextView leftTV;
+    @BindView(R.id.right)
+    TextView rightTV;
+    @BindView(R.id.status)
+    TextView statusTV;
     @BindView(R.id.image)
     ImageView imageIV;
     @BindView(R.id.name)
@@ -69,8 +71,8 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
     public AppointmentListHolder(View itemView, AppointmentListAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
         this.onChildItemClickLinstener = onChildItemClickLinstener;
-        makeV.setOnClickListener(this);
-        cancelV.setOnClickListener(this);
+        leftTV.setOnClickListener(this);
+        rightTV.setOnClickListener(this);
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
@@ -80,11 +82,11 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
     public void onClick(View view) {
         if (null != onChildItemClickLinstener) {
             switch (view.getId()) {
-                case R.id.make:
-                    onChildItemClickLinstener.onChildItemClick(view, AppointmentListAdapter.ViewName.MAKE, getAdapterPosition());
+                case R.id.left:
+                    onChildItemClickLinstener.onChildItemClick(view, AppointmentListAdapter.ViewName.LEFT, getAdapterPosition());
                     return;
-                case R.id.cancel:
-                    onChildItemClickLinstener.onChildItemClick(view, AppointmentListAdapter.ViewName.CANCEL, getAdapterPosition());
+                case R.id.right:
+                    onChildItemClickLinstener.onChildItemClick(view, AppointmentListAdapter.ViewName.RIGHT, getAdapterPosition());
                     return;
             }
         }
@@ -103,15 +105,25 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
                         .build());
         noTV.setText(appointment.getProjectId());
         if ("1".equals(appointment.getStatus())) {
-            makeV.setText("预约");
-            timeV.setVisibility(View.INVISIBLE);
-            cancelV.setVisibility(View.INVISIBLE);
+            rightTV.setVisibility(View.VISIBLE);
+            rightTV.setText("预约");
+            timeV.setVisibility(View.GONE);
+            leftTV.setVisibility(View.GONE);
+            statusTV.setVisibility(View.GONE);
         } else if ("2".equals(appointment.getStatus())) {
-            cancelV.setVisibility(View.VISIBLE);
-            makeV.setVisibility(View.VISIBLE);
-            makeV.setText("改约");
+            leftTV.setVisibility(View.VISIBLE);
+            leftTV.setText("取消");
+            rightTV.setVisibility(View.VISIBLE);
+            rightTV.setText("改约");
             timeV.setVisibility(View.VISIBLE);
+            statusTV.setVisibility(View.GONE);
             timeTV.setText(appointment.getReservationDate() + " " + appointment.getReservationTime());
+        } else { // 3.4.5
+            statusTV.setVisibility(View.VISIBLE);
+            statusTV.setText(appointment.getStatusDesc());
+            leftTV.setVisibility(View.GONE);
+            rightTV.setVisibility(View.GONE);
+            timeV.setVisibility(View.GONE);
         }
         nameTV.setText(appointment.getGoods().getName());
         priceTV.setText(String.valueOf(appointment.getGoods().getSalePrice()));
@@ -132,12 +144,13 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
                 .build());
         this.noTV = null;
         this.timeTV = null;
-        this.makeV = null;
+        this.leftTV = null;
+        this.rightTV = null;
+        this.statusTV = null;
         this.imageIV = null;
         this.nameTV = null;
         this.priceTV = null;
         this.countTV = null;
-        this.cancelV = null;
         this.timeV = null;
     }
 }

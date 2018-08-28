@@ -86,8 +86,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             public Fragment getItem(int position) {
                 return mFragmentList.get(position);
             }
+
         });
         viewPager.addOnPageChangeListener(this);
+        viewPager.setOffscreenPageLimit(1);
         bottomBarLayout.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
             @Override
             public void onItemSelected(BottomBarItem bottomBarItem, int previousPosition, int currentPosition) {

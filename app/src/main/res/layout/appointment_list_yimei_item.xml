@@ -34,7 +34,7 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/cancel"
+            android:id="@+id/left"
             android:layout_width="52dp"
             android:layout_height="20dp"
             android:layout_marginRight="8dp"
@@ -45,13 +45,22 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/make"
+            android:id="@+id/right"
             android:layout_width="52dp"
             android:layout_height="20dp"
             android:background="@drawable/order_btn_bg"
             android:gravity="center"
             android:text="预约"
             android:textColor="@color/white"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="预约"
+            android:textColor="#FF333333"
             android:textSize="13sp" />
 
     </LinearLayout>

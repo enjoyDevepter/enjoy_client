@@ -154,7 +154,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
             @Override
             public void accept(BaseResponse response) throws Exception {
                 if (response.isSuccess()) {
-                    getAppointment(false);
+                    getAppointment(true);
                 } else {
                     mRootView.showMessage(response.getRetDesc());
                 }

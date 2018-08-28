@@ -193,6 +193,11 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                 });
     }
 
+
+    public void getKGoodsList(final boolean pullToRefresh) {
+        mRootView.showError(false);
+    }
+
     public void getHGoodsList(final boolean pullToRefresh) {
         GoodsListRequest request = new GoodsListRequest();
         request.setCmd(440);

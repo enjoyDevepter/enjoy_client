@@ -64,7 +64,7 @@ public class AppointmentListAdapter extends DefaultAdapter<Appointment> {
     }
 
     public enum ViewName {
-        MAKE, ITEM, CANCEL
+        LEFT, ITEM, RIGHT
     }
 
     public interface OnChildItemClickLinstener {

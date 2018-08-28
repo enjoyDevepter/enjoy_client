@@ -127,7 +127,7 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
             @Override
             public void accept(BaseResponse response) throws Exception {
                 if (response.isSuccess()) {
-                    EventBus.getDefault().post(EventBusTags.CHANGE_APPOINTMENT_TIME);
+                    EventBus.getDefault().post(mRootView.getActivity().getIntent().getIntExtra("index", 0), EventBusTags.CHANGE_APPOINTMENT_TIME);
                     mRootView.killMyself();
                 } else {
                     mRootView.showMessage(response.getRetDesc());

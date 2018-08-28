@@ -110,8 +110,8 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
 
 
     @Subscriber(tag = EventBusTags.CHANGE_APPOINTMENT_TIME)
-    private void updateTime() {
-        mPresenter.getAppointment(false);
+    private void updateTime(int position) {
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -254,27 +254,31 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
     public void onChildItemClick(View v, AppointmentListAdapter.ViewName viewname, int position) {
         Appointment appointment = mAdapter.getInfos().get(position);
         switch (viewname) {
-            case MAKE:
+            case LEFT:
+                if (appointment.getStatus().equals("2")) {
+                    // 取消预约
+                    provideCache().put("reservationId", appointment.getReservationId());
+                    mPresenter.cancelAppointment();
+                }
+                break;
+            case RIGHT:
                 if (appointment.getStatus().equals("1")) {
                     // 预约
                     Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
                     addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
                     addappointmentsIntent.putExtra("type", "add_appointment_time");
+                    addappointmentsIntent.putExtra("index", position);
                     ArmsUtils.startActivity(addappointmentsIntent);
                 } else if (appointment.getStatus().equals("2")) {
                     // 改约
                     Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
                     addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
                     addappointmentsIntent.putExtra("type", "modify_appointment_time");
+                    addappointmentsIntent.putExtra("index", position);
                     ArmsUtils.startActivity(addappointmentsIntent);
                 }
                 break;
             case ITEM:
-                break;
-            case CANCEL:
-                // 取消预约
-                provideCache().put("reservationId", appointment.getReservationId());
-                mPresenter.cancelAppointment();
                 break;
         }
     }

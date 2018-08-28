@@ -310,6 +310,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                         mPresenter.getGoodsList(true);
                         break;
                     case 1:
+                        mPresenter.getKGoodsList(true);
                         break;
                     case 2:
                         mPresenter.getHGoodsList(true);
@@ -333,6 +334,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                         mPresenter.getGoodsList(true);
                         break;
                     case 1:
+                        mPresenter.getKGoodsList(true);
                         break;
                     case 2:
                         mPresenter.getHGoodsList(true);
@@ -427,6 +429,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                             mPresenter.getGoodsList(true);
                             break;
                         case 1:
+                            mPresenter.getKGoodsList(true);
                             break;
                         case 2:
                             mPresenter.getHGoodsList(true);
@@ -450,7 +453,17 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getId());
                 showFilter(false);
-                mPresenter.getGoodsList(true);
+                switch ((int) provideCache().get("type")) {
+                    case 0:
+                        mPresenter.getGoodsList(true);
+                        break;
+                    case 1:
+                        mPresenter.getKGoodsList(true);
+                        break;
+                    case 2:
+                        mPresenter.getHGoodsList(true);
+                        break;
+                }
                 break;
         }
     }
@@ -479,6 +492,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 mPresenter.getGoodsList(true);
                 break;
             case 1:
+                mPresenter.getKGoodsList(true);
                 break;
             case 2:
                 mRecyclerView.setAdapter(mHAdapter);
@@ -515,6 +529,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 mPresenter.getGoodsList(true);
                 break;
             case 1:
+                mPresenter.getKGoodsList(true);
                 break;
             case 2:
                 mPresenter.getHGoodsList(true);
