@@ -99,10 +99,12 @@ public class InviteMainPresenter extends BasePresenter<InviteMainContract.Model,
                     @Override
                     public void accept(GetMyMemberListResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            if (clear) {
+                            mRootView.updateUrl(response.getUrl());
+                            if(clear){
                                 orderBeanList.clear();
                             }
                             nextPageIndex = response.getNextPageIndex();
+                            mRootView.showError(response.getMemberList().size() > 0);
                             mRootView.setEnd(nextPageIndex == -1);
                             orderBeanList.addAll(response.getMemberList());
                             mAdapter.notifyDataSetChanged();

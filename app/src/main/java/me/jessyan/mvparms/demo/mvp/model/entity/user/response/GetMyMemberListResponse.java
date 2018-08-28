@@ -7,12 +7,14 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MyMemberBean;
 
 public class GetMyMemberListResponse extends BaseResponse {
     private int nextPageIndex;
+    private String url;
     private List<MyMemberBean> memberList;
 
     @Override
     public String toString() {
         return "GetMyMemberListResponse{" +
                 "nextPageIndex=" + nextPageIndex +
+                ", url='" + url + '\'' +
                 ", memberList=" + memberList +
                 '}';
     }
@@ -23,6 +25,14 @@ public class GetMyMemberListResponse extends BaseResponse {
 
     public void setNextPageIndex(int nextPageIndex) {
         this.nextPageIndex = nextPageIndex;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public List<MyMemberBean> getMemberList() {

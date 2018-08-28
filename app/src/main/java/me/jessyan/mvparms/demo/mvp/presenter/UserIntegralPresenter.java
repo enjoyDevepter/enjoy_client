@@ -71,14 +71,18 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
         this.mApplication = null;
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void onCreate(){
+        requestOrderList();
+        getQiandaoInfo();
+    }
+
     public void requestOrderList() {
         requestOrderList(1, true);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void nextPage() {
         requestOrderList(nextPageIndex, false);
-        getQiandaoInfo();
     }
 
     public void getQiandaoInfo(){

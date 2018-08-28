@@ -99,11 +99,6 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void getBankList(){
         Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-//        Object o = cache.get(KEY_KEEP+ ChooseBankModel.KEY_FOR_BANK_LIST);
-//        if(o != null){
-//            requestOrderList();
-//            return;
-//        }
 
         BankListRequest request = new BankListRequest();
         mModel.getBankList(request)
@@ -122,7 +117,6 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
                         if (response.isSuccess()) {
                             List<BankBean> bankList = response.getBankList();
                             cache.put(KEY_KEEP+ ChooseBankModel.KEY_FOR_BANK_LIST,bankList);
-                            System.out.println("1 bankList = "+bankList.size());
                             requestOrderList();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
@@ -131,7 +125,6 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
                 });
     }
 
-//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void requestOrderList(){
         requestOrderList(1,true);
     }
@@ -174,6 +167,7 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
                                 orderBeanList.clear();
                             }
                             nextPageIndex = response.getNextPageIndex();
+                            mRootView.showError(response.getBankCardList().size() > 0);
                             mRootView.setEnd(nextPageIndex == -1);
                             orderBeanList.addAll(response.getBankCardList());
                             mAdapter.notifyDataSetChanged();

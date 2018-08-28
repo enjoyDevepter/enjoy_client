@@ -104,7 +104,9 @@ public class CashCoinPresenter extends BasePresenter<CashCoinContract.Model, Cas
                             }
                             nextPageIndex = response.getNextPageIndex();
                             mRootView.setEnd(nextPageIndex == -1);
-                            orderBeanList.addAll(response.getCashList());
+                            List<CashBean> cashList = response.getCashList();
+                            mRootView.showError(response.getCashList().size() > 0);
+                            orderBeanList.addAll(cashList);
                             mAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
                         } else {

@@ -66,6 +66,8 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
 
     @BindView(R.id.how_to_icon)
     View how_to_icon;
+    @BindView(R.id.how_to_icon_title)
+    TextView how_to_icon_title;
 
     private void initPaginate() {
         if (mPaginate == null) {
@@ -136,7 +138,6 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
                 mPresenter.qiandao();
             }
         });
-
     }
 
     @Override
@@ -210,15 +211,17 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
     }
 
     public void updateQiandaoInfo(boolean isSignin,long point,String url){
-        how_to_icon.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener howGetIntegral = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserIntegralActivity.this,WebActivity.class);
-                intent.putExtra(WebActivity.KEY_FOR_WEB_URL,url);
-                intent.putExtra(WebActivity.KEY_FOR_WEB_TITLE,"如何获取积分");
+                Intent intent = new Intent(UserIntegralActivity.this, WebActivity.class);
+                intent.putExtra(WebActivity.KEY_FOR_WEB_URL, url);
+                intent.putExtra(WebActivity.KEY_FOR_WEB_TITLE, "如何获取积分");
                 ArmsUtils.startActivity(intent);
             }
-        });
+        };
+        how_to_icon.setOnClickListener(howGetIntegral);
+        how_to_icon_title.setOnClickListener(howGetIntegral);
         qianming.setEnabled(!isSignin);
         score.setText(point+"");
     }

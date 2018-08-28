@@ -87,7 +87,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         this.mApplication = null;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void init(){
         initHospital();
         nextDoctorPage();
