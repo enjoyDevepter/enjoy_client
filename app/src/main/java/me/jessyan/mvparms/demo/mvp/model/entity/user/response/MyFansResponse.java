@@ -2,12 +2,12 @@ package me.jessyan.mvparms.demo.mvp.model.entity.user.response;
 
 import java.util.List;
 
+import me.jessyan.mvparms.demo.mvp.model.entity.Member;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.FansMember;
 
 public class MyFansResponse extends BaseResponse {
     private int nextPageIndex;
-    private List<FansMember> memberList;
+    private List<Member> memberList;
 
     @Override
     public String toString() {
@@ -25,11 +25,11 @@ public class MyFansResponse extends BaseResponse {
         this.nextPageIndex = nextPageIndex;
     }
 
-    public List<FansMember> getMemberList() {
+    public List<Member> getMemberList() {
         return memberList;
     }
 
-    public void setMemberList(List<FansMember> memberList) {
+    public void setMemberList(List<Member> memberList) {
         this.memberList = memberList;
     }
 }

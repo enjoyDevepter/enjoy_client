@@ -18,14 +18,21 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.FansMember;
+import me.jessyan.mvparms.demo.mvp.model.entity.Member;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFansRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFansResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowDoctorAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowMemberAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
 import me.jessyan.mvparms.demo.mvp.contract.FansContract;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -42,9 +49,9 @@ public class FansPresenter extends BasePresenter<FansContract.Model, FansContrac
     AppManager mAppManager;
 
     @Inject
-    RecyclerView.Adapter mAdapter;
+    MyFollowMemberAdapter mAdapter;
     @Inject
-    List<FansMember> orderBeanList;
+    List<Member> orderBeanList;
 
 
     @Inject
@@ -115,6 +122,37 @@ public class FansPresenter extends BasePresenter<FansContract.Model, FansContrac
                         }
                     }
                 });
+    }
+
+    public void follow(boolean follow,String memberId) {
+        if (checkLoginStatus()) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+        FollowMemberRequest request = new FollowMemberRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(follow ? 201 : 211);
+        request.setMemberId(memberId);
+        mModel.follow(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            requestOrderList();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    private boolean checkLoginStatus() {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) (cache.get(KEY_KEEP + "token"));
+        return ArmsUtils.isEmpty(token);
     }
 
 }

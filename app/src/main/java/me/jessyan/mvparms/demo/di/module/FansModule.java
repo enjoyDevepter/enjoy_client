@@ -13,8 +13,9 @@ import dagger.Provides;
 
 import me.jessyan.mvparms.demo.mvp.contract.FansContract;
 import me.jessyan.mvparms.demo.mvp.model.FansModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.FansMember;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFansAdapter;
+import me.jessyan.mvparms.demo.mvp.model.entity.Member;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowDoctorAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowMemberAdapter;
 
 
 @Module
@@ -44,14 +45,14 @@ public class FansModule {
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideStoreAdapter(List<FansMember> list) {
-        return new MyFansAdapter(list);
+    MyFollowMemberAdapter provideStoreAdapter(List<Member> list) {
+        return new MyFollowMemberAdapter(list);
     }
 
 
     @ActivityScope
     @Provides
-    List<FansMember> provideOrderBeanList() {
+    List<Member> provideOrderBeanList() {
         return new ArrayList<>();
     }
 

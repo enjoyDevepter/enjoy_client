@@ -12,7 +12,11 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.FansContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFansRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFansResponse;
 
@@ -40,6 +44,13 @@ public class FansModel extends BaseModel implements FansContract.Model {
     public Observable<MyFansResponse> getMyFans(MyFansRequest request) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
 	                .getMyFans(request);
+    }
+
+
+    @Override
+    public Observable<BaseResponse> follow(FollowMemberRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .follow(request);
     }
 
 }

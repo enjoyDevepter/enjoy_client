@@ -6,6 +6,9 @@ import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFansRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFansResponse;
 
@@ -23,5 +26,6 @@ public interface FansContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<MyFansResponse> getMyFans(MyFansRequest request);
+        Observable<BaseResponse> follow(FollowMemberRequest request);
     }
 }

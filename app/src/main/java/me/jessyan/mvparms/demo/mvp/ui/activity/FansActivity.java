@@ -22,9 +22,12 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerFansComponent;
 import me.jessyan.mvparms.demo.di.module.FansModule;
 import me.jessyan.mvparms.demo.mvp.contract.FansContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Member;
 import me.jessyan.mvparms.demo.mvp.presenter.FansPresenter;
 
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowDoctorAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowMemberAdapter;
 
 
 import static android.view.View.INVISIBLE;
@@ -32,7 +35,7 @@ import static android.view.View.VISIBLE;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class FansActivity extends BaseActivity<FansPresenter> implements FansContract.View {
+public class FansActivity extends BaseActivity<FansPresenter> implements MyFollowMemberAdapter.OnChildItemClickLinstener,FansContract.View {
 
     @BindView(R.id.back)
     View back;
@@ -42,7 +45,7 @@ public class FansActivity extends BaseActivity<FansPresenter> implements FansCon
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    MyFollowMemberAdapter mAdapter;
     @BindView(R.id.contentList)
     RecyclerView contentList;
 
@@ -53,6 +56,21 @@ public class FansActivity extends BaseActivity<FansPresenter> implements FansCon
     private boolean isEnd;
     @BindView(R.id.no_date)
     View onDateV;
+    @Override
+    public void onChildItemClick(View v, MyFollowMemberAdapter.ViewName viewname, int position) {
+        Member member = mAdapter.getInfos().get(position);
+        String isFollow = member.getIsFollow();
+        boolean isFollowed = "1".equals(isFollow);
+        switch (viewname) {
+            case FLLOW:
+                mPresenter.follow(!isFollowed,member.getMemberId());
+                break;
+            case ITEM:
+                break;
+        }
+    }
+
+
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -80,7 +98,7 @@ public class FansActivity extends BaseActivity<FansPresenter> implements FansCon
         });
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);
-
+        mAdapter.setOnChildItemClickLinstener(this);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
