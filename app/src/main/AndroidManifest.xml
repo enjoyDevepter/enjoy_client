@@ -261,6 +261,9 @@
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
+            android:name=".mvp.ui.activity.FansActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".mvp.ui.activity.ChoiceProjectForDiaryActivity"
             android:screenOrientation="portrait" />
 
