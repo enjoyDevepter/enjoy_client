@@ -101,6 +101,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     @BindView(R.id.fans)
     View fans;
+    @BindView(R.id.follow_view)
+    View follow_view;
 
 
     @Inject
@@ -138,6 +140,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         mealV.setOnClickListener(this);
         couponV.setOnClickListener(this);
         storeV.setOnClickListener(this);
+        follow_view.setOnClickListener(this);
         settingV.setOnClickListener(this);
         msgV.setOnClickListener(this);
         bouns_parent.setOnClickListener(this);
@@ -245,6 +248,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 ArmsUtils.startActivity(MyFarvirateActivity.class);
                 break;
             case R.id.follow:
+            case R.id.follow_view:
                 ArmsUtils.startActivity(MyFollowActivity.class);
                 break;
             case R.id.meal:

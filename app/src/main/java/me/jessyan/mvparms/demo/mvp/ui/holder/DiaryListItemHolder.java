@@ -112,7 +112,7 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
 
     @Override
     public void setData(Diary diary, int position) {
-        Observable.just(diary.getMember().getNickName())
+        Observable.just(diary.getMember().getNickName() != null ? diary.getMember().getNickName() : "")
                 .subscribe(s -> nickNameTV.setText(s));
         Observable.just(diary.getMember().getIsFollow())
                 .subscribe(s -> fllowV.setSelected("1".equals(s) ? true : false));
