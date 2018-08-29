@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    
+    <ImageView
+        android:id="@+id/image"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="13dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_alignTop="@+id/image"
+        android:layout_toRightOf="@id/image"
+        android:layout_marginLeft="7dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="雪怡gril"
+        android:textColor="#ff676767"
+        android:textSize="12sp"
+        />
+
+    <View
+        android:layout_alignLeft="@id/name"
+        android:layout_marginTop="3dp"
+        android:id="@+id/good"
+        android:layout_toRightOf="@id/image"
+        android:background="@mipmap/doctor_main_follow_doctor"
+        android:layout_below="@id/name"
+        android:layout_width="44dp"
+        android:layout_height="15dp"/>
+    <TextView
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/name"
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2018-07-12"
+        android:textColor="#ffb3b3b3"
+        android:textSize="10sp"
+        />
+
+</RelativeLayout>
