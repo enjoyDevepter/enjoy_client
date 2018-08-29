@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:money="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="112dp"
+    android:background="@color/white"
+    android:padding="15dp">
+
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="82dp"
+        android:layout_height="82dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY" />
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/image"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/image"
+        android:lines="2"
+        android:textColor="#FF000000"
+        android:textSize="13sp" />
+
+    <com.github.cchao.MoneyView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/image"
+        android:layout_alignLeft="@id/name"
+        android:layout_marginBottom="3dp"
+        money:cent_size="14sp"
+        money:money_color="#FFFF0000"
+        money:money_text="0.00"
+        money:point_padding_left="1dp"
+        money:point_padding_right="5dp"
+        money:prefix_padding="2dp"
+        money:prefix_size="12sp"
+        money:yuan_size="17sp" />
+</RelativeLayout>

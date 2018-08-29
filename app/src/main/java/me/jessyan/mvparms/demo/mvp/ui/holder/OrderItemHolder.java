@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -55,6 +56,11 @@ public class OrderItemHolder extends BaseHolder<Order> {
     TextView statusTV;
     @BindView(R.id.left)
     TextView leftTV;
+    @BindView(R.id.single_layout)
+    View singleV;
+    @BindView(R.id.single_price)
+    MoneyView singlePrice;
+
     @BindView(R.id.right)
     TextView rightTV;
     @BindView(R.id.more_layout)
@@ -62,29 +68,25 @@ public class OrderItemHolder extends BaseHolder<Order> {
     @BindView(R.id.images)
     LinearLayout imageLL;
     @BindView(R.id.more_price)
-    TextView morePriceTV;
+    MoneyView morePriceTV;
     @BindView(R.id.more_count)
     TextView moreCountTV;
-    @BindView(R.id.single_layout)
-    View singleV;
     @BindView(R.id.image)
     ImageView imageIV;
     @BindView(R.id.name)
     TextView nameTV;
-    @BindView(R.id.price_single)
-    TextView priceTV;
     @BindView(R.id.count)
     TextView countTV;
     @BindView(R.id.payPrice_layout)
     View payPriceV;
     @BindView(R.id.payPrice)
-    TextView payPriceTV;
+    MoneyView payPriceTV;
     @BindView(R.id.single_price_info)
     TextView single_price_infoTV;
-    @BindView(R.id.single_price_tag)
-    TextView single_price_tagTV;
     @BindColor(R.color.order_item_color)
     int textColor;
+    @BindColor(R.color.red)
+    int redColor;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -123,9 +125,12 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 .subscribe(s -> timeTV.setText("时间：" + sdf.format(s)));
         RecyclerView.LayoutParams itemLayoutParams = (RecyclerView.LayoutParams) itemView.getLayoutParams();
 
-        if ("6".equals(order.getOrderType())) { // 医美套餐
-            countTV.setVisibility(View.INVISIBLE);
-            payPriceV.setVisibility(View.INVISIBLE);
+        if ("3".equals(order.getOrderType()) || "6".equals(order.getOrderType())) { // 医美套餐
+            countTV.setVisibility(View.GONE);
+            payPriceV.setVisibility(View.GONE);
+            single_price_infoTV.setVisibility(View.VISIBLE);
+            singlePrice.getPaint().setColor(redColor);
+            singleV.setVisibility(View.VISIBLE);
 
             if (order.getOrderStatus().equals("1")) {
                 statusTV.setText("待付款");
@@ -133,7 +138,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 leftTV.setText("取消订单");
                 rightTV.setVisibility(View.VISIBLE);
                 rightTV.setText("去支付");
-            } else if (order.getOrderStatus().equals("3")) {
+            } else if (order.getOrderStatus().equals("31")) {
                 statusTV.setText("待预约");
                 leftTV.setVisibility(View.GONE);
                 rightTV.setVisibility(View.VISIBLE);
@@ -148,10 +153,11 @@ public class OrderItemHolder extends BaseHolder<Order> {
         } else if ("7".equals(order.getOrderType())) { // 医美定金预售
             countTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.VISIBLE);
-            priceTV.setTextColor(textColor);
-            single_price_tagTV.setTextColor(textColor);
-            single_price_infoTV.setTextColor(textColor);
-            payPriceTV.setText(String.valueOf(order.getGoodsList().get(0).getSalePrice()));
+            single_price_infoTV.setVisibility(View.VISIBLE);
+            singlePrice.getPaint().setColor(textColor);
+            singlePrice.requestLayout();
+            singleV.setVisibility(View.VISIBLE);
+            payPriceTV.setMoneyText(ArmsUtils.formatLong(order.getPayMoney()));
 
             if (order.getOrderStatus().equals("1")) {
                 statusTV.setText("待付款");
@@ -164,7 +170,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 rightTV.setVisibility(View.VISIBLE);
                 rightTV.setText("付尾款");
                 leftTV.setVisibility(View.GONE);
-            } else if (order.getOrderStatus().equals("3")) {
+            } else if (order.getOrderStatus().equals("31")) {
                 statusTV.setText("待预约");
                 leftTV.setVisibility(View.GONE);
                 rightTV.setVisibility(View.VISIBLE);
@@ -177,7 +183,10 @@ public class OrderItemHolder extends BaseHolder<Order> {
             }
 
         } else {
+            countTV.setVisibility(View.VISIBLE);
             single_price_infoTV.setVisibility(View.GONE);
+            payPriceV.setVisibility(View.GONE);
+            singleV.setVisibility(View.VISIBLE);
 
             if (order.getOrderStatus().equals("1")) {
                 statusTV.setText("待付款");
@@ -204,7 +213,6 @@ public class OrderItemHolder extends BaseHolder<Order> {
             }
         }
 
-
         if (order.getGoodsList().size() > 1) {
             itemLayoutParams.height = ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_item_height);
             singleV.setVisibility(View.GONE);
@@ -225,7 +233,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
                                 .build());
                 imageLL.addView(imageView, layoutParams);
             }
-            morePriceTV.setText(ArmsUtils.formatLong(order.getTotalPrice()));
+            morePriceTV.setMoneyText(ArmsUtils.formatLong(order.getTotalPrice()));
             moreCountTV.setText("共" + order.getNums() + "件商品，应付款：");
         } else {
             moreV.setVisibility(View.GONE);
@@ -253,7 +261,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
                             .build());
 
             nameTV.setText(name);
-            priceTV.setText(String.valueOf(salePrice));
+            singlePrice.setMoneyText(String.valueOf(salePrice));
             countTV.setText("数量：x" + String.valueOf(order.getNums()));
 
         }
@@ -283,11 +291,10 @@ public class OrderItemHolder extends BaseHolder<Order> {
         this.singleV = null;
         this.imageIV = null;
         this.nameTV = null;
-        this.priceTV = null;
         this.countTV = null;
         this.payPriceV = null;
         this.payPriceTV = null;
         this.single_price_infoTV = null;
-        this.single_price_tagTV = null;
+        this.singlePrice = null;
     }
 }

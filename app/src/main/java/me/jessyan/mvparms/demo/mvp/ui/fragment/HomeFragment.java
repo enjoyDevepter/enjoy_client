@@ -344,11 +344,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mPresenter.updateHomeInfo();
     }
 
-    @Subscriber(tag = EventBusTags.LOGIN_STATUS_CHANGE_EVENT)
-    private void refreshHomeInfo() {
-        mPresenter.updateHomeInfo();
-    }
-
     @Override
     public void showLoading() {
         swipeRefreshLayout.setRefreshing(true);

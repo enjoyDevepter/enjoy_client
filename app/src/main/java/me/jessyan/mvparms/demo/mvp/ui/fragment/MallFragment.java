@@ -162,7 +162,6 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
     @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
     public void updateIndex() {
-
     }
 
     /**

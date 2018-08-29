@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -59,7 +60,7 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
     @BindView(R.id.count)
     TextView countTV;
     @BindView(R.id.price)
-    TextView priceTV;
+    MoneyView priceTV;
     @BindView(R.id.time_layout)
     View timeV;
 
@@ -115,9 +116,14 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
             leftTV.setText("取消");
             rightTV.setVisibility(View.VISIBLE);
             rightTV.setText("改约");
-            timeV.setVisibility(View.VISIBLE);
             statusTV.setVisibility(View.GONE);
-            timeTV.setText(appointment.getReservationDate() + " " + appointment.getReservationTime());
+
+            if (ArmsUtils.isEmpty(appointment.getReservationDate()) || ArmsUtils.isEmpty(appointment.getReservationTime())) {
+                timeV.setVisibility(View.INVISIBLE);
+            } else {
+                timeV.setVisibility(View.VISIBLE);
+            }
+            timeTV.setText(appointment.getReservationDate() + appointment.getReservationTime());
         } else { // 3.4.5
             statusTV.setVisibility(View.VISIBLE);
             statusTV.setText(appointment.getStatusDesc());
@@ -126,7 +132,7 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
             timeV.setVisibility(View.GONE);
         }
         nameTV.setText(appointment.getGoods().getName());
-        priceTV.setText(String.valueOf(appointment.getGoods().getSalePrice()));
+        priceTV.setMoneyText(String.valueOf(appointment.getGoods().getSalePrice()));
         countTV.setText(String.valueOf(appointment.getSurplusNum()));
 
     }

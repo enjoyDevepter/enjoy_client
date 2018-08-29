@@ -12,7 +12,9 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.OrderDeatilsContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderDetailsResponse;
 
 
@@ -39,5 +41,11 @@ public class OrderDeatilsModel extends BaseModel implements OrderDeatilsContract
     public Observable<OrderDetailsResponse> getOrderDetails(OrderDetailsRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getOrderDetails(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> cancelOrder(OrderOperationRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .cancelOrder(request);
     }
 }

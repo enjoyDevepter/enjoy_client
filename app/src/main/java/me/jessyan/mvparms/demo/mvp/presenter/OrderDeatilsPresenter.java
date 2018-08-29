@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 
@@ -21,7 +22,9 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.OrderDeatilsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderGoods;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderDetailsResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -100,6 +103,84 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
                             }
                             mRootView.updateUI(response);
                             mAdapter.notifyDataSetChanged();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+
+    public void cancelOrder() {
+        OrderOperationRequest request = new OrderOperationRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setOrderId((String) mRootView.getCache().get("orderId"));
+        int type = 0;
+        if (null != mRootView.getCache().get("type")) {
+            type = (int) mRootView.getCache().get("type");
+        }
+        request.setCmd(553);
+        mModel.cancelOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+//                            getOrder(true);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+
+    }
+
+    public void reminding() {
+        OrderOperationRequest request = new OrderOperationRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setOrderId((String) mRootView.getCache().get("orderId"));
+        int type = 0;
+        if (null != mRootView.getCache().get("type")) {
+            type = (int) mRootView.getCache().get("type");
+        }
+        request.setCmd(555);
+        mModel.cancelOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+//                            getOrder(true);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+
+    public void confirmReceipt() {
+        OrderOperationRequest request = new OrderOperationRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setOrderId((String) mRootView.getCache().get("orderId"));
+        int type = 0;
+        if (null != mRootView.getCache().get("type")) {
+            type = (int) mRootView.getCache().get("type");
+        }
+        request.setCmd(556);
+        mModel.cancelOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+//                            getOrder(true);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

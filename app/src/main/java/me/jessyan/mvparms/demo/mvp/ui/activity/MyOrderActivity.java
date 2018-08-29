@@ -287,6 +287,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                     case 0:
                         if ("1".equals(order.getOrderStatus())) {
                             // 取消订单
+                            mPresenter.cancelOrder();
                         } else if ("4".equals(order.getOrderStatus())) {
                             // 查看物流
                         }
@@ -309,12 +310,20 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
 
                         } else if ("3".equals(order.getOrderStatus())) {
                             // 提醒发货
-
+                            mPresenter.reminding();
                         } else if ("4".equals(order.getOrderStatus())) {
                             // 确认收货
-
+                            mPresenter.confirmReceipt();
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记
+                            Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
+                            intent.putExtra("imageURl", order.getGoodsList().get(0).getImage());
+                            intent.putExtra("name", order.getGoodsList().get(0).getName());
+                            intent.putExtra("price", order.getGoodsList().get(0).getSalePrice());
+                            intent.putExtra("goodsId", order.getGoodsList().get(0).getGoodsId());
+                            intent.putExtra("merchId", order.getGoodsList().get(0).getMerchId());
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
                         }
                         break;
                     case 1:
@@ -328,7 +337,10 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
 
                         } else if ("31".equals(order.getOrderStatus())) {
                             // 预约
-
+                            Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
+                            makeIntent.putExtra("orderId", order.getOrderId());
+                            makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
+                            ArmsUtils.startActivity(makeIntent);
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记
                             Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
@@ -339,7 +351,6 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                             intent.putExtra("merchId", order.getSetMealGoodsList().get(0).getSetMealId());
                             intent.putExtra("orderId", order.getOrderId());
                             ArmsUtils.startActivity(intent);
-
                         }
                         break;
                 }

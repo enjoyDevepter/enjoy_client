@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
@@ -78,7 +79,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     @BindView(R.id.remark)
     TextView remarkTV;
     @BindView(R.id.price)
-    TextView priceTV;
+    MoneyView priceTV;
     @BindView(R.id.money)
     TextView moneyTV;
     @BindView(R.id.deductionMoney)
@@ -88,7 +89,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     @BindView(R.id.freight)
     TextView freightTV;
     @BindView(R.id.payMoney)
-    TextView payMoneyTV;
+    MoneyView payMoneyTV;
     @BindView(R.id.right)
     TextView rightTV;
     @BindView(R.id.left)
@@ -167,13 +168,85 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
 
     @Override
     public void onClick(View v) {
+        OrderDetails order = response.getOrder();
+        int orderType = getIntent().getIntExtra("type", 0);
+        provideCache().put("orderId", order.getOrderId());
         switch (v.getId()) {
             case R.id.back:
                 killMyself();
                 break;
             case R.id.left:
+                switch (orderType) {
+                    case 0:
+                        if ("1".equals(order.getOrderStatus())) {
+                            // 取消订单
+                            mPresenter.cancelOrder();
+                        } else if ("4".equals(order.getOrderStatus())) {
+                            // 查看物流
+                        }
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        if ("1".equals(order.getOrderStatus())) {
+                            // 取消订单
+                            mPresenter.cancelOrder();
+                        }
+                        break;
+                }
                 break;
             case R.id.right:
+                switch (orderType) {
+                    case 0:
+                        if ("1".equals(order.getOrderStatus())) {
+                            // 去支付
+
+                        } else if ("3".equals(order.getOrderStatus())) {
+                            // 提醒发货
+                            mPresenter.reminding();
+                        } else if ("4".equals(order.getOrderStatus())) {
+                            // 确认收货
+                            mPresenter.confirmReceipt();
+                        } else if ("5".equals(order.getOrderStatus())) {
+                            // 写日记
+                            Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
+                            intent.putExtra("imageURl", order.getGoodsList().get(0).getImage());
+                            intent.putExtra("name", order.getGoodsList().get(0).getName());
+                            intent.putExtra("price", order.getGoodsList().get(0).getSalePrice());
+                            intent.putExtra("goodsId", order.getGoodsList().get(0).getGoodsId());
+                            intent.putExtra("merchId", order.getGoodsList().get(0).getMerchId());
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
+                        }
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        if ("1".equals(order.getOrderStatus())) {
+                            // 去支付
+
+                        } else if ("2".equals(order.getOrderStatus())) {
+                            // 付尾款
+
+                        } else if ("31".equals(order.getOrderStatus())) {
+                            // 预约
+                            Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
+                            makeIntent.putExtra("orderId", order.getOrderId());
+                            makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
+                            ArmsUtils.startActivity(makeIntent);
+                        } else if ("5".equals(order.getOrderStatus())) {
+                            // 写日记
+                            Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
+                            intent.putExtra("imageURl", order.getSetMealGoodsList().get(0).getImage());
+                            intent.putExtra("name", order.getSetMealGoodsList().get(0).getName());
+                            intent.putExtra("price", order.getSetMealGoodsList().get(0).getSalePrice());
+                            intent.putExtra("goodsId", order.getSetMealGoodsList().get(0).getSetMealId());
+                            intent.putExtra("merchId", order.getSetMealGoodsList().get(0).getSetMealId());
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
+                        }
+                        break;
+                }
                 break;
         }
     }
@@ -227,7 +300,6 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             case 1:
                 break;
             case 2:
-
                 if (status.equals("1")) {
                     leftTV.setVisibility(View.VISIBLE);
                     leftTV.setText("取消订单");
@@ -237,7 +309,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                     rightTV.setVisibility(View.VISIBLE);
                     rightTV.setText("付尾款");
                     leftTV.setVisibility(View.GONE);
-                } else if (status.equals("3")) {
+                } else if (status.equals("31")) {
                     leftTV.setVisibility(View.GONE);
                     rightTV.setVisibility(View.VISIBLE);
                     rightTV.setText("预约");
@@ -260,7 +332,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                     orderPayV.setVisibility(View.GONE);
                     hOrderPayV.setVisibility(View.GONE);
                     mealOrderV.setVisibility(View.VISIBLE);
-                    mealPriceTV.setText(String.valueOf(response.getOrder().getPayMoney()));
+                    mealPriceTV.setText(ArmsUtils.formatLong(response.getOrder().getPayMoney()));
                     mealMoneyTV.setText(ArmsUtils.formatLong(orderDetails.getMoney()));
                 }
                 break;
@@ -279,13 +351,13 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
         addressTV.setText(address.getAddress());
 
         remarkTV.setText(orderDetails.getRemark());
-        priceTV.setText(ArmsUtils.formatLong(orderDetails.getPrice()));
+        priceTV.setMoneyText(ArmsUtils.formatLong(orderDetails.getPrice()));
         moneyTV.setText(ArmsUtils.formatLong(orderDetails.getMoney()));
         horderMoneyV.setText(ArmsUtils.formatLong(orderDetails.getMoney()));
         deductionMoneyTV.setText(ArmsUtils.formatLong(orderDetails.getDeductionMoney()));
         couponTV.setText(ArmsUtils.formatLong(orderDetails.getCoupon()));
         horderCouponV.setText(ArmsUtils.formatLong(orderDetails.getCoupon()));
         freightTV.setText(ArmsUtils.formatLong(orderDetails.getFreight()));
-        payMoneyTV.setText(ArmsUtils.formatLong(orderDetails.getPayMoney()));
+        payMoneyTV.setMoneyText(ArmsUtils.formatLong(orderDetails.getPayMoney()));
     }
 }

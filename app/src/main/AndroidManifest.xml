@@ -248,7 +248,6 @@
             android:name=".mvp.ui.activity.InviteListActivity"
             android:screenOrientation="portrait" />
 
-
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5b84ca1ef43e481641000018" />
@@ -261,6 +260,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".mvp.ui.activity.ChoiceProjectForDiaryActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

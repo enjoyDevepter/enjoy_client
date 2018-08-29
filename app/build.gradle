@@ -17,6 +17,7 @@ android {
         versionCode rootProject.ext.android["versionCode"]
         versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -72,6 +73,7 @@ dependencies {
     implementation rootProject.ext.dependencies['countdownview']
     implementation rootProject.ext.dependencies['moneyview']
     implementation rootProject.ext.dependencies['actionsheet']
+    implementation rootProject.ext.dependencies['multidex']
 
     //support
     implementation(rootProject.ext.dependencies["cardview-v7"]) {

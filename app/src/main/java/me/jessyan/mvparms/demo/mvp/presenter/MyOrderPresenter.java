@@ -86,15 +86,59 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
         if (null != mRootView.getCache().get("type")) {
             type = (int) mRootView.getCache().get("type");
         }
-        switch (type) {
-            case 0:
-                return;
-            case 1:
-                return;
-            case 2:
-                request.setCmd(553);
-                break;
+        request.setCmd(553);
+        mModel.cancelOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            getOrder(true);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+
+    }
+
+    public void reminding() {
+        OrderOperationRequest request = new OrderOperationRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setOrderId((String) mRootView.getCache().get("orderId"));
+        int type = 0;
+        if (null != mRootView.getCache().get("type")) {
+            type = (int) mRootView.getCache().get("type");
         }
+        request.setCmd(555);
+        mModel.cancelOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<BaseResponse>() {
+                    @Override
+                    public void accept(BaseResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            getOrder(true);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+
+    public void confirmReceipt() {
+        OrderOperationRequest request = new OrderOperationRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setOrderId((String) mRootView.getCache().get("orderId"));
+        int type = 0;
+        if (null != mRootView.getCache().get("type")) {
+            type = (int) mRootView.getCache().get("type");
+        }
+        request.setCmd(556);
         mModel.cancelOrder(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -209,7 +253,7 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                 status = "2";
                 break;
             case 3:
-                status = "3";
+                status = "31";
                 break;
             case 4:
                 status = "5";

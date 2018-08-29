@@ -50,6 +50,7 @@ public class Goods implements Parcelable {
     private String advanceDepositId;
     private double deposit;
     private double tailMoney;
+    private String orderId;
 
 
     public Goods() {
@@ -85,6 +86,7 @@ public class Goods implements Parcelable {
         advanceDepositId = in.readString();
         deposit = in.readDouble();
         tailMoney = in.readDouble();
+        orderId = in.readString();
     }
 
     public int getAttention() {
@@ -312,6 +314,14 @@ public class Goods implements Parcelable {
         this.advanceDepositId = advanceDepositId;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
     public double getDeposit() {
         return deposit;
     }
@@ -361,6 +371,7 @@ public class Goods implements Parcelable {
                 ", advanceDepositId='" + advanceDepositId + '\'' +
                 ", deposit=" + deposit +
                 ", tailMoney=" + tailMoney +
+                ", orderId='" + orderId + '\'' +
                 '}';
     }
 
@@ -400,6 +411,7 @@ public class Goods implements Parcelable {
         dest.writeString(advanceDepositId);
         dest.writeDouble(deposit);
         dest.writeDouble(tailMoney);
+        dest.writeString(orderId);
     }
 }
 

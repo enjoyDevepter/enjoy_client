@@ -160,6 +160,7 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
                 killMyself();
                 break;
             case R.id.choice:
+
                 break;
             case R.id.add:
                 ActionSheet.showSheet(this, this, null);
