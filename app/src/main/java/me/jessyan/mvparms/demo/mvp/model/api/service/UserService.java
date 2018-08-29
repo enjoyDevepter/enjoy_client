@@ -39,6 +39,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageR
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetMyMemberListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFansRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
@@ -53,6 +54,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashCoinRespons
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetMyMemberListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyCouponListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFansResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFollowListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
@@ -168,5 +170,7 @@ public interface UserService {
         // 邀请好友
     Observable<ShareResponse> share(@Body FollowRequest request);
 
-
+    @POST("gateway")
+        // 获取粉丝
+    Observable<MyFansResponse> getMyFans(@Body MyFansRequest request);
 }

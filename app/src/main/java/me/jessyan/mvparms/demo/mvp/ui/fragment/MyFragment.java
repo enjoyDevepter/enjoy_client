@@ -34,6 +34,7 @@ import me.jessyan.mvparms.demo.mvp.presenter.MyPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CashCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ConsumeCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CouponActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.FansActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.InviteMainActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyDiaryActivity;
@@ -98,6 +99,9 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     @BindView(R.id.level_icon)
     ImageView level_icon;
 
+    @BindView(R.id.fans)
+    View fans;
+
 
     @Inject
     ImageLoader mImageLoader;
@@ -150,6 +154,13 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 }else{
                     ArmsUtils.startActivity(UserInfoActivity.class);
                 }
+            }
+        });
+
+        fans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArmsUtils.startActivity(FansActivity.class);
             }
         });
     }
