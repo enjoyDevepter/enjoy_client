@@ -64,6 +64,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     TextView memberMoneyTV;
     @BindView(R.id.bonus)
     TextView bonusTV;
+    @BindView(R.id.bouns_parent)
+    View bouns_parent;
     @BindView(R.id.goods_order)
     View gOrderV;
     @BindView(R.id.hgoods_order)
@@ -134,7 +136,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         storeV.setOnClickListener(this);
         settingV.setOnClickListener(this);
         msgV.setOnClickListener(this);
-        bonusTV.setOnClickListener(this);
+        bouns_parent.setOnClickListener(this);
         recommenderV.setOnClickListener(this);
         consume.setOnClickListener(this);
         cash.setOnClickListener(this);
@@ -249,7 +251,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 recommenderIntent.putExtra("recommender", member.getRecomMember().getUserName());
                 ArmsUtils.startActivity(recommenderIntent);
                 break;
-            case R.id.bonus:
+            case R.id.bouns_parent:
                 Intent bonusIntent = new Intent(getContext(), UserIntegralActivity.class);
                 ArmsUtils.startActivity(bonusIntent);
                 break;
