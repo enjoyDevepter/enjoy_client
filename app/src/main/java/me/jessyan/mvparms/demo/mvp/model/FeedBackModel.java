@@ -10,7 +10,14 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.FeedBackContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.LoginAndRegisterService;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ForgetRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FeedbackRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.FeedbackResponse;
 
 
 @ActivityScope
@@ -30,5 +37,11 @@ public class FeedBackModel extends BaseModel implements FeedBackContract.Model {
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
+    }
+
+    @Override
+    public Observable<FeedbackResponse> feedback(FeedbackRequest forgetRequest) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .feedback(forgetRequest);
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -37,6 +38,9 @@ public class FeedBackActivity extends BaseActivity<FeedBackPresenter> implements
     EditText et_name;
     @BindView(R.id.text_count)
     TextView text_count;
+
+    @BindView(R.id.commit)
+    View commit;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -78,6 +82,18 @@ public class FeedBackActivity extends BaseActivity<FeedBackPresenter> implements
 
             }
         });
+
+        commit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = et_name.getText() + "";
+                if(TextUtils.isEmpty(s)){
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入内容后提交");
+                    return;
+                }
+                mPresenter.feedback(s);
+            }
+        });
     }
 
     @Override
@@ -105,5 +121,10 @@ public class FeedBackActivity extends BaseActivity<FeedBackPresenter> implements
     @Override
     public void killMyself() {
         finish();
+    }
+
+    public void showOk(){
+        ArmsUtils.makeText(this,"提交成功");
+        et_name.setText("");
     }
 }
