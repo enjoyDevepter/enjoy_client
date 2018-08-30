@@ -97,34 +97,6 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void getBankList(){
-        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-
-        BankListRequest request = new BankListRequest();
-        mModel.getBankList(request)
-                .subscribeOn(Schedulers.io())
-                .doOnSubscribe(disposable -> {
-                    mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                    mRootView.hideLoading();
-                })
-                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<BankListResponse>() {
-                    @Override
-                    public void accept(BankListResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                            List<BankBean> bankList = response.getBankList();
-                            cache.put(KEY_KEEP+ ChooseBankModel.KEY_FOR_BANK_LIST,bankList);
-                            requestOrderList();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
-                    }
-                });
-    }
-
     public void requestOrderList(){
         requestOrderList(1,true);
     }

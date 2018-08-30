@@ -1,7 +1,11 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
+import android.widget.Adapter;
 
+import com.bigkoo.pickerview.adapter.WheelAdapter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.cache.Cache;
@@ -10,12 +14,18 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.mvp.model.ChooseBankModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankCardBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AddBankCardRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
@@ -48,6 +58,33 @@ public class AddBankCardPresenter extends BasePresenter<AddBankCardContract.Mode
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void getBankList(){
+        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+
+        BankListRequest request = new BankListRequest();
+        mModel.getBankList(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new Consumer<BankListResponse>() {
+                    @Override
+                    public void accept(BankListResponse response) throws Exception {
+                        if (response.isSuccess()) {
+                            mRootView.updateBankList(response.getBankList());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
     }
 
     public void addBankCard(String bankName,String cardNo,String name,String id){

@@ -192,26 +192,13 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
             return;
         }
         add_card.setVisibility(View.GONE);
-        List<BankBean> bankBeanList = (List<BankBean>) cache.get(KEY_KEEP+ ChooseBankModel.KEY_FOR_BANK_LIST);
-
-        String bankName = bankCardBean.getBankName();
-        BankBean bankBean = null;
-        for(BankBean bb : bankBeanList){
-            if (bb.getName().equals(bankName)) {
-                bankBean = bb;
-                break;
-            }
-        }
-
-        if(bankBean != null){
-            mImageLoader.loadImage(this,
-                    ImageConfigImpl
-                            .builder()
-                            .url(bankBean.getImage())
-                            .imageView(bank_card_icon)
-                            .build());
-            bank_title.setText(bankBean.getName());
-        }
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .url(bankCardBean.getImage())
+                        .imageView(bank_card_icon)
+                        .build());
+        bank_title.setText(bankCardBean.getBankName());
         String cardNo = bankCardBean.getCardNo();
         car_num.setText(cardNo.substring(cardNo.length() - 4));
         show_bank_card.setVisibility(View.VISIBLE);

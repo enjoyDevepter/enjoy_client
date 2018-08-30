@@ -30,8 +30,6 @@ public class ChooseBankModel extends BaseModel implements ChooseBankContract.Mod
     @Inject
     Application mApplication;
 
-    public static final String KEY_FOR_BANK_LIST = "KEY_FOR_BANK_LIST";
-
     @Inject
     public ChooseBankModel(IRepositoryManager repositoryManager) {
         super(repositoryManager);
@@ -51,11 +49,7 @@ public class ChooseBankModel extends BaseModel implements ChooseBankContract.Mod
     }
 
 
-    @Override
-    public Observable<BankListResponse> getBankList(BankListRequest request) {
-        return mRepositoryManager.obtainRetrofitService(UserService.class)
-                .getBackList(request);
-    }
+
 
     @Override
     public Observable<DelBankCardResponse> delBankCard(DelBankCardRequest request) {

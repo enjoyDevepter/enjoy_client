@@ -53,22 +53,10 @@ public class ChooseBankHolder extends BaseHolder<BankCardBean> {
 
     @Override
     public void setData(BankCardBean data, int position) {
-        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        bankBeanList = (List<BankBean>) cache.get(KEY_KEEP+ ChooseBankModel.KEY_FOR_BANK_LIST);
-        System.out.println("2 bankList = "+bankBeanList.size());
-        String bankName = data.getBankName();
-        BankBean bankBean = null;
-        for(BankBean bb : bankBeanList){
-            if (bb.getName().equals(bankName)) {
-                bankBean = bb;
-                break;
-            }
-        }
-
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .url(bankBean.getImage())
+                        .url(data.getImage())
                         .imageView(image)
                         .build());
 

@@ -32,6 +32,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankBean;
 import me.jessyan.mvparms.demo.mvp.presenter.AddBankCardPresenter;
 
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.ChooseBankNameAdapter;
 
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
@@ -115,7 +116,6 @@ public class AddBankCardActivity extends BaseActivity<AddBankCardPresenter> impl
         });
 
         Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        bankBeanList = (List<BankBean>) cache.get(KEY_KEEP+ ChooseBankModel.KEY_FOR_BANK_LIST);
         bank_list.setCyclic(false);
         bank_list.setCurrentItem(0);
         bank_list.setDividerColor(Color.parseColor("#E7E7E7"));
@@ -125,33 +125,10 @@ public class AddBankCardActivity extends BaseActivity<AddBankCardPresenter> impl
         bank_list.setTextSize(13);
         bank_list.setGravity(Gravity.CENTER);
         bank_list.setLineSpacingMultiplier(ArmsUtils.dip2px(ArmsUtils.getContext(),31));
-        WheelAdapter adapter = new WheelAdapter() {
-            @Override
-            public int getItemsCount() {
-                return bankBeanList.size();
-            }
 
-            @Override
-            public String getItem(int i) {
-                return bankBeanList.get(i).getName();
-            }
 
-            @Override
-            public int indexOf(Object o) {
-                return bankBeanList.indexOf(o);
-            }
-        };
-        bank_list.setAdapter(adapter);
-        cacheBankBean = bankBeanList.get(0);
-        bank_list.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(int i) {
-                if(i < 0){
-                    return;
-                }
-                cacheBankBean = bankBeanList.get(i);
-            }
-        });
+
+
 
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,9 +156,23 @@ public class AddBankCardActivity extends BaseActivity<AddBankCardPresenter> impl
 
     }
 
+    public void updateBankList(List<BankBean> bankBeans){
+        ChooseBankNameAdapter adapter = new ChooseBankNameAdapter(bankBeans);
+        bank_list.setAdapter(adapter);
+        cacheBankBean = bankBeans.get(0);
+        bank_list.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int i) {
+                if(i < 0){
+                    return;
+                }
+                cacheBankBean = bankBeans.get(i);
+            }
+        });
+    }
+
     private BankBean cacheBankBean;
 
-    private List<BankBean> bankBeanList;
     private BankBean currentBankBean;
 
     @Override

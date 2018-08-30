@@ -111,6 +111,7 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
         mModel.getCategory(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new Consumer<CategoryResponse>() {
                     @Override
                     public void accept(CategoryResponse response) throws Exception {

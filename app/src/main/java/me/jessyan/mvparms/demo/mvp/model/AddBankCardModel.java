@@ -16,7 +16,9 @@ import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AddBankCardRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
 
 
 @ActivityScope
@@ -42,6 +44,12 @@ public class AddBankCardModel extends BaseModel implements AddBankCardContract.M
     public Observable<AddBankCardResponse> addBankCard(AddBankCardRequest request) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
                 .addBankCard(request);
+    }
+
+    @Override
+    public Observable<BankListResponse> getBankList(BankListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getBackList(request);
     }
 
 }

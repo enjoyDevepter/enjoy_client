@@ -1,12 +1,18 @@
 package me.jessyan.mvparms.demo.di.module;
 
+import com.bigkoo.pickerview.adapter.WheelAdapter;
 import com.jess.arms.di.scope.ActivityScope;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
 
 import me.jessyan.mvparms.demo.mvp.contract.AddBankCardContract;
 import me.jessyan.mvparms.demo.mvp.model.AddBankCardModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankBean;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.ChooseBankNameAdapter;
 
 
 @Module
