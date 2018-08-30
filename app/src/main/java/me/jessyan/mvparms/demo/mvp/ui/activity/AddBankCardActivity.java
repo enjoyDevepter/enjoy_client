@@ -110,7 +110,7 @@ public class AddBankCardActivity extends BaseActivity<AddBankCardPresenter> impl
                     return;
                 }
 
-                mPresenter.addBankCard(currentBankBean.getName(),cardNo,title);
+                mPresenter.addBankCard(currentBankBean.getName(),cardNo,title,currentBankBean.getBankId());
             }
         });
 

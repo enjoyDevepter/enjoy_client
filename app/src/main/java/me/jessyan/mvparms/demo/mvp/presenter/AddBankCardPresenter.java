@@ -50,10 +50,12 @@ public class AddBankCardPresenter extends BasePresenter<AddBankCardContract.Mode
         this.mApplication = null;
     }
 
-    public void addBankCard(String bankName,String cardNo,String name){
+    public void addBankCard(String bankName,String cardNo,String name,String id){
         AddBankCardRequest request = new AddBankCardRequest();
         BankCardBean bankCardBean = new BankCardBean();
         bankCardBean.setBankName(bankName);
+        bankCardBean.setBankId(id);
+        bankCardBean.setIsDefaultIn("0");
         bankCardBean.setCardNo(cardNo);
         bankCardBean.setName(name);
         request.setBankCard(bankCardBean);

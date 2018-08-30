@@ -5,18 +5,22 @@ import java.io.Serializable;
 public class BankCardBean implements Serializable {
     private String bankName;
     private String cardNo;
+    private String bankId;
     private String id;
     private String isDefaultIn;
     private String name;
+    private String image;
 
     @Override
     public String toString() {
         return "BankCardBean{" +
                 "bankName='" + bankName + '\'' +
                 ", cardNo='" + cardNo + '\'' +
+                ", bankId='" + bankId + '\'' +
                 ", id='" + id + '\'' +
                 ", isDefaultIn='" + isDefaultIn + '\'' +
                 ", name='" + name + '\'' +
+                ", image='" + image + '\'' +
                 '}';
     }
 
@@ -34,6 +38,14 @@ public class BankCardBean implements Serializable {
 
     public void setCardNo(String cardNo) {
         this.cardNo = cardNo;
+    }
+
+    public String getBankId() {
+        return bankId;
+    }
+
+    public void setBankId(String bankId) {
+        this.bankId = bankId;
     }
 
     public String getId() {
@@ -58,5 +70,13 @@ public class BankCardBean implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
