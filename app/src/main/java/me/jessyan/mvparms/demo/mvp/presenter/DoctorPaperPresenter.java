@@ -6,25 +6,26 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.mvp.contract.DoctorPaperContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorIdentificationBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorPaperRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorPaperResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorPaperActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import me.jessyan.mvparms.demo.mvp.contract.DoctorPaperContract;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 
 @ActivityScope
@@ -68,19 +69,19 @@ public class DoctorPaperPresenter extends BasePresenter<DoctorPaperContract.Mode
         mModel.getDoctorPaper(doctorPaperRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DoctorPaperResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<DoctorPaperResponse>(mErrorHandler) {
                     @Override
-                    public void accept(DoctorPaperResponse baseResponse) throws Exception {
-                        if (baseResponse.isSuccess()) {
+                    public void onNext(DoctorPaperResponse response) {
+                        if (response.isSuccess()) {
                             GoodsList.clear();
-                            GoodsList.addAll(baseResponse.getIdentificationList());
+                            GoodsList.addAll(response.getIdentificationList());
                             mAdapter.notifyDataSetChanged();
                         } else {
-                            mRootView.showMessage(baseResponse.getRetDesc());
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
     }
-
-
 }

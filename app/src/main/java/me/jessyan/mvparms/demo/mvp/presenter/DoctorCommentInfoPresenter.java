@@ -5,19 +5,21 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.mvp.contract.DoctorCommentInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentReplyBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.GetDoctorCommentReplyPageRequest;
@@ -29,10 +31,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LikeDoctorCommen
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.ReplyDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.UnLikeDoctorCommentResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import me.jessyan.mvparms.demo.mvp.contract.DoctorCommentInfoContract;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static me.jessyan.mvparms.demo.mvp.ui.activity.DoctorCommentInfoActivity.KEY_FOR_DOCTOR_COMMENT_BEAN;
@@ -53,6 +53,7 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
     RecyclerView.Adapter mAdapter;
     @Inject
     List<DoctorCommentReplyBean> orderBeanList;
+    private int nextPageIndex = 1;
 
     @Inject
     public DoctorCommentInfoPresenter(DoctorCommentInfoContract.Model model, DoctorCommentInfoContract.View rootView) {
@@ -68,22 +69,20 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
         this.mApplication = null;
     }
 
-    public void initDoctorInfo(){
+    public void initDoctorInfo() {
         nextPage();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    public void requestOrderList(){
-        requestOrderList(1,true);
+    public void requestOrderList() {
+        requestOrderList(1, true);
     }
 
-    public void nextPage(){
-        requestOrderList(nextPageIndex,false);
+    public void nextPage() {
+        requestOrderList(nextPageIndex, false);
     }
 
-    private int nextPageIndex = 1;
-
-    private void requestOrderList(int pageIndex,final boolean clear) {
+    private void requestOrderList(int pageIndex, final boolean clear) {
         GetDoctorCommentReplyPageRequest getDoctorCommentReplyPageRequest = new GetDoctorCommentReplyPageRequest();
         DoctorCommentBean doctorCommentBean = (DoctorCommentBean) mRootView.getActivity().getIntent().getSerializableExtra(KEY_FOR_DOCTOR_COMMENT_BEAN);
         getDoctorCommentReplyPageRequest.setPageSize(10);
@@ -95,7 +94,7 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
                 .doOnSubscribe(disposable -> {
                     if (clear) {
                         //                        mRootView.showLoading();//显示下拉刷新的进度条
-                    }else
+                    } else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -105,12 +104,13 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<GetDoctorCommentReplyPageResponse>() {
+                .subscribe(new ErrorHandleSubscriber<GetDoctorCommentReplyPageResponse>(mErrorHandler) {
                     @Override
-                    public void accept(GetDoctorCommentReplyPageResponse response) throws Exception {
+                    public void onNext(GetDoctorCommentReplyPageResponse response) {
                         if (response.isSuccess()) {
-                            if(clear){
+                            if (clear) {
                                 orderBeanList.clear();
                             }
                             nextPageIndex = response.getNextPageIndex();
@@ -126,7 +126,7 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
     }
 
 
-    public void unlikeDoctorComment(String doctorId,String commentId){
+    public void unlikeDoctorComment(String doctorId, String commentId) {
         UnLikeDoctorCommentRequest unLikeDoctorCommentRequest = new UnLikeDoctorCommentRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
@@ -138,19 +138,21 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
         mModel.unLikeDoctorComment(unLikeDoctorCommentRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<UnLikeDoctorCommentResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<UnLikeDoctorCommentResponse>(mErrorHandler) {
                     @Override
-                    public void accept(UnLikeDoctorCommentResponse baseResponse) throws Exception {
-                        if (baseResponse.isSuccess()) {
+                    public void onNext(UnLikeDoctorCommentResponse response) {
+                        if (response.isSuccess()) {
                             mRootView.updateGoodView(false);
-                        }else{
-                            mRootView.showMessage(baseResponse.getRetDesc());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
     }
 
-    public void likeDoctorComment(String doctorId,String commentId){
+    public void likeDoctorComment(String doctorId, String commentId) {
         LikeDoctorCommentRequest likeDoctorCommentRequest = new LikeDoctorCommentRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
@@ -162,19 +164,21 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
         mModel.likeDoctorComment(likeDoctorCommentRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<LikeDoctorCommentResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<LikeDoctorCommentResponse>(mErrorHandler) {
                     @Override
-                    public void accept(LikeDoctorCommentResponse baseResponse) throws Exception {
-                        if (baseResponse.isSuccess()) {
+                    public void onNext(LikeDoctorCommentResponse response) {
+                        if (response.isSuccess()) {
                             mRootView.updateGoodView(true);
-                        }else{
-                            mRootView.showMessage(baseResponse.getRetDesc());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
     }
 
-    public void replyDoctorComment(String content){
+    public void replyDoctorComment(String content) {
 
         DoctorCommentBean doctorCommentBean = (DoctorCommentBean) mRootView.getActivity().getIntent().getSerializableExtra(KEY_FOR_DOCTOR_COMMENT_BEAN);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
@@ -188,14 +192,16 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
         mModel.replyDoctorComment(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ReplyDoctorCommentResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<ReplyDoctorCommentResponse>(mErrorHandler) {
                     @Override
-                    public void accept(ReplyDoctorCommentResponse baseResponse) throws Exception {
-                        if (baseResponse.isSuccess()) {
-                            ArmsUtils.makeText(ArmsUtils.getContext(),"评论成功");
+                    public void onNext(ReplyDoctorCommentResponse response) {
+                        if (response.isSuccess()) {
+                            ArmsUtils.makeText(ArmsUtils.getContext(), "评论成功");
                             mRootView.clear();
-                        }else{
-                            mRootView.showMessage(baseResponse.getRetDesc());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

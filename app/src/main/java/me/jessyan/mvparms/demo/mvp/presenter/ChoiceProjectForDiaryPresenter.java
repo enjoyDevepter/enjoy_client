@@ -18,13 +18,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceProjectForDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.diary.ProjectRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
@@ -83,9 +83,9 @@ public class ChoiceProjectForDiaryPresenter extends BasePresenter<ChoiceProjectF
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
-                .subscribe(new Consumer<GoodsListResponse>() {
+                .subscribe(new ErrorHandleSubscriber<GoodsListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(GoodsListResponse response) throws Exception {
+                    public void onNext(GoodsListResponse response) {
                         if (response.isSuccess()) {
                             if (pullToRefresh) {
                                 mGoods.clear();

@@ -5,28 +5,30 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.text.TextUtils;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalEnvBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity;
@@ -34,10 +36,8 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalEnvImageAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -58,20 +58,20 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
     HGoodsListAdapter hospitalGoodsListAdapter;
     @Inject
     List<HGoods> hospitalList;
-    private int goodsNextPageIndex = 1;
-
     // 第三个页面
     @Inject
     DoctorListAdapter doctorListAdapter;
     @Inject
     List<DoctorBean> doctorBeans;
-    private int doctorNextPageIndex = 1;
-
     // 第四个页面
     @Inject
     HospitalEnvImageAdapter hospitalEnvImageAdapter;
     @Inject
     List<String> imageList;
+    private int goodsNextPageIndex = 1;
+    private int doctorNextPageIndex = 1;
+    private int preEndIndex;
+    private int lastPageIndex;
 
     @Inject
     public HospitalInfoPresenter(HospitalInfoContract.Model model, HospitalInfoContract.View rootView) {
@@ -88,39 +88,41 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void init(){
+    public void init() {
         initHospital();
         nextDoctorPage();
         getHGoodsList(true);
     }
 
-    private void initHospital(){
+    private void initHospital() {
         String hospitalId = mRootView.getActivity().getIntent().getStringExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
-        if(TextUtils.isEmpty(token)){
+        if (TextUtils.isEmpty(token)) {
             // 未登录用户
             HospitalInfoRequest hospitalInfoRequest = new HospitalInfoRequest();
             hospitalInfoRequest.setHospitalId(hospitalId);
             mModel.requestHospital(hospitalInfoRequest)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<HospitalInfoResponse>() {
+                    .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                    .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                    .subscribe(new ErrorHandleSubscriber<HospitalInfoResponse>(mErrorHandler) {
                         @Override
-                        public void accept(HospitalInfoResponse baseResponse) throws Exception {
-                            if (baseResponse.isSuccess()) {
-                                mRootView.updateHosptialInfo(baseResponse.getHospital());
+                        public void onNext(HospitalInfoResponse response) {
+                            if (response.isSuccess()) {
+                                mRootView.updateHosptialInfo(response.getHospital());
                                 imageList.clear();
-                                for(HospitalEnvBean env : baseResponse.getHospitalEnvList()){
+                                for (HospitalEnvBean env : response.getHospitalEnvList()) {
                                     imageList.add(env.getImage());
                                 }
                                 hospitalEnvImageAdapter.notifyDataSetChanged();
-                            }else{
-                                mRootView.showMessage(baseResponse.getRetDesc());
+                            } else {
+                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     });
-        }else{
+        } else {
             // 已登录用户
             LoginUserHospitalInfoRequest loginUserHospitalInfoRequest = new LoginUserHospitalInfoRequest();
             loginUserHospitalInfoRequest.setHospitalId(hospitalId);
@@ -129,33 +131,35 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
             mModel.requestHospitalByUser(loginUserHospitalInfoRequest)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<LoginUserHospitalInfoResponse>() {
+                    .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                    .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                    .subscribe(new ErrorHandleSubscriber<LoginUserHospitalInfoResponse>(mErrorHandler) {
                         @Override
-                        public void accept(LoginUserHospitalInfoResponse baseResponse) throws Exception {
-                            if (baseResponse.isSuccess()) {
-                                mRootView.updateHosptialInfo(baseResponse.getHospital());
+                        public void onNext(LoginUserHospitalInfoResponse response) {
+                            if (response.isSuccess()) {
+                                mRootView.updateHosptialInfo(response.getHospital());
                                 imageList.clear();
-                                for(HospitalEnvBean env : baseResponse.getHospitalEnvList()){
+                                for (HospitalEnvBean env : response.getHospitalEnvList()) {
                                     imageList.add(env.getImage());
                                 }
                                 hospitalEnvImageAdapter.notifyDataSetChanged();
-                            }else{
-                                mRootView.showMessage(baseResponse.getRetDesc());
+                            } else {
+                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     });
         }
     }
 
-    public void requestDoctor(){
-        requestDoctor(1,true);
+    public void requestDoctor() {
+        requestDoctor(1, true);
     }
 
-    public void nextDoctorPage(){
-        requestDoctor(doctorNextPageIndex,false);
+    public void nextDoctorPage() {
+        requestDoctor(doctorNextPageIndex, false);
     }
 
-    private void requestDoctor(int pageIndex,final boolean clear) {
+    private void requestDoctor(int pageIndex, final boolean clear) {
         DoctorListRequest request = new DoctorListRequest();
         request.setPageIndex(pageIndex);
         request.setPageSize(10);
@@ -166,7 +170,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     if (clear) {
-                    }else
+                    } else
                         mRootView.startLoadDoctorMore();//显示上拉加载更多的进度条
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -177,11 +181,13 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                         mRootView.endLoadDoctorMore();//隐藏上拉加载更多的进度条
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<DoctorListResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<DoctorListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(DoctorListResponse response) throws Exception {
+                    public void onNext(DoctorListResponse response) {
                         if (response.isSuccess()) {
-                            if(clear){
+                            if (clear) {
                                 doctorBeans.clear();
                             }
                             doctorNextPageIndex = response.getNextPageIndex();
@@ -210,8 +216,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
-                    if (pullToRefresh){
-
+                    if (pullToRefresh) {
                     }
 //                        mRootView.showLoading();//显示下拉刷新的进度条
                     else
@@ -222,33 +227,33 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                         mRootView.hideGoodsLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadGoodsMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<HGoodsListResponse>() {
-            @Override
-            public void accept(HGoodsListResponse response) throws Exception {
-                if (response.isSuccess()) {
-                    if (pullToRefresh) {
-                        hospitalList.clear();
-                    }
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HGoodsListResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(HGoodsListResponse response) {
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                hospitalList.clear();
+                            }
 //                    mRootView.showError(response.getGoodsList().size() > 0);
-                    if (response.getGoodsList().size() <= 0) {
-                        return;
+                            if (response.getGoodsList().size() <= 0) {
+                                return;
+                            }
+                            mRootView.endGoods(response.getNextPageIndex() == -1);
+                            hospitalList.addAll(response.getGoodsList());
+                            preEndIndex = hospitalList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = hospitalList.size() / 10;
+                            if (pullToRefresh) {
+                                hospitalGoodsListAdapter.notifyDataSetChanged();
+                            } else {
+                                hospitalGoodsListAdapter.notifyItemRangeInserted(preEndIndex, hospitalList.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
                     }
-                    mRootView.endGoods(response.getNextPageIndex() == -1);
-                    hospitalList.addAll(response.getGoodsList());
-                    preEndIndex = hospitalList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = hospitalList.size() / 10;
-                    if (pullToRefresh) {
-                        hospitalGoodsListAdapter.notifyDataSetChanged();
-                    } else {
-                        hospitalGoodsListAdapter.notifyItemRangeInserted(preEndIndex, hospitalList.size());
-                    }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
+                });
     }
-
-    private int preEndIndex;
-    private int lastPageIndex;
 }

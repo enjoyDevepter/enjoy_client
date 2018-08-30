@@ -10,6 +10,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
@@ -31,6 +32,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryTypeListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -67,7 +70,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         this.mApplication = null;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     void onCreate() {
         getDiaryNaviType();
     }
@@ -78,9 +81,11 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         mModel.getDiaryNaviType(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DiaryNaviListResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<DiaryNaviListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(DiaryNaviListResponse response) throws Exception {
+                    public void onNext(DiaryNaviListResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateTab(response.getNavList());
                             mRootView.getCache().put("type", "recom");
@@ -139,28 +144,31 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<DiaryListResponse>() {
-            @Override
-            public void accept(DiaryListResponse response) throws Exception {
-                if (response.isSuccess()) {
-                    if (pullToRefresh) {
-                        diaryList.clear();
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<DiaryListResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(DiaryListResponse response) {
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                diaryList.clear();
+                            }
+                            mRootView.showError(response.getDiaryList().size() <= 0);
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            diaryList.addAll(response.getDiaryList());
+                            preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = diaryList.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
                     }
-                    mRootView.showError(response.getDiaryList().size() <= 0);
-                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    diaryList.addAll(response.getDiaryList());
-                    preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = diaryList.size() / 10;
-                    if (pullToRefresh) {
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
-                    }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
+                });
     }
 
 
@@ -194,9 +202,11 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         mModel.diaryVote(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
-                    public void accept(BaseResponse response) throws Exception {
+                    public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             diaryList.get(position).setIsPraise(vote ? "1" : "0");
                             int num = diaryList.get(position).getPraise();
@@ -207,7 +217,6 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                         }
                     }
                 });
-
     }
 
     public void follow(boolean follow, int position) {
@@ -223,9 +232,11 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         mModel.follow(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
-                    public void accept(BaseResponse response) throws Exception {
+                    public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             diaryList.get(position).getMember().setIsFollow(follow ? "1" : "0");
                             mAdapter.notifyItemChanged(position);

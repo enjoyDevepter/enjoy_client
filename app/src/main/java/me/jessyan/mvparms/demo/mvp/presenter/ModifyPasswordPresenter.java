@@ -8,16 +8,18 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ModifyPasswordContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoRequest;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -71,9 +73,11 @@ public class ModifyPasswordPresenter extends BasePresenter<ModifyPasswordContrac
         mModel.modifyPassword(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<RegisterResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<RegisterResponse>(mErrorHandler) {
                     @Override
-                    public void accept(RegisterResponse response) throws Exception {
+                    public void onNext(RegisterResponse response) {
                         if (response.isSuccess()) {
                             cacheUserInfo(response.getToken(), response.getSignkey());
                             mRootView.showMessage(response.getRetDesc());

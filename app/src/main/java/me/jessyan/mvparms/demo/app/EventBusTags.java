@@ -67,7 +67,14 @@ public interface EventBusTags {
      */
     String USER_BASE_INFO_CHANGE = "user_base_info_change";
 
-    /**退出登录*/
+    /**
+     * 退出登录
+     */
     String USER_LOGOUT = "user_logout";
+
+    /**
+     * 发表日记，切换项目
+     */
+    String CHANGE_DIRAY_PROJECT = "change_diray_project";
 
 }

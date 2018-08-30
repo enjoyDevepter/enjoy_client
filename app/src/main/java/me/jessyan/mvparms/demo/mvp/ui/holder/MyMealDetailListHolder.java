@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -60,7 +61,11 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
     @BindView(R.id.count)
     TextView countTV;
     @BindView(R.id.price)
-    TextView priceTV;
+    MoneyView priceTV;
+    @BindView(R.id.project)
+    TextView projectTV;
+    @BindView(R.id.date)
+    TextView dateTV;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -107,8 +112,15 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
         timeTV.setText(sdf.format(appointment.getCreateDate()));
         statusTV.setText(appointment.getStatusDesc());
         nameTV.setText(mealGoods.getName());
-        priceTV.setText(String.valueOf(mealGoods.getSalePrice()));
+        priceTV.setMoneyText(String.valueOf(mealGoods.getSalePrice()));
         countTV.setText(String.valueOf(mealGoods.getNums()));
+        projectTV.setText("项目号：" + appointment.getProjectId());
+        if (!ArmsUtils.isEmpty(appointment.getReservationDate())) {
+            dateTV.setVisibility(View.VISIBLE);
+            dateTV.setText("预约时间：" + appointment.getReservationDate() + " " + appointment.getReservationTime());
+        } else {
+            dateTV.setVisibility(View.INVISIBLE);
+        }
 
         if (appointment.getStatus().equals("1")) {
             statusTV.setText("可预约");
@@ -157,5 +169,7 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
         this.nameTV = null;
         this.priceTV = null;
         this.countTV = null;
+        this.projectTV = null;
+        this.dateTV = null;
     }
 }

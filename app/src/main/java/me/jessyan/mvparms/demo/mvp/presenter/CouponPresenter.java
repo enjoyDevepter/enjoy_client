@@ -10,13 +10,13 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.CouponContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Coupon;
@@ -24,6 +24,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyCouponListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CouponListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -93,27 +95,31 @@ public class CouponPresenter extends BasePresenter<CouponContract.Model, CouponC
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<MyCouponListResponse>() {
-            @Override
-            public void accept(MyCouponListResponse response) throws Exception {
-                if (response.isSuccess()) {
-                    if (pullToRefresh) {
-                        couponList.clear();
+                })
+
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<MyCouponListResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(MyCouponListResponse response) {
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                couponList.clear();
+                            }
+                            mRootView.showError(response.getCouponList().size() > 0);
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            couponList.addAll(response.getCouponList());
+                            preEndIndex = couponList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = couponList.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, couponList.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
                     }
-                    mRootView.showError(response.getCouponList().size() > 0);
-                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    couponList.addAll(response.getCouponList());
-                    preEndIndex = couponList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = couponList.size() / 10;
-                    if (pullToRefresh) {
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter.notifyItemRangeInserted(preEndIndex, couponList.size());
-                    }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
+                });
     }
 }

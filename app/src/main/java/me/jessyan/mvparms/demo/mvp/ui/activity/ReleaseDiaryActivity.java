@@ -24,6 +24,8 @@ import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.PermissionUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import org.simple.eventbus.Subscriber;
+
 import java.io.File;
 import java.util.List;
 
@@ -32,10 +34,12 @@ import javax.inject.Inject;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.app.utils.ImageUploadUtils;
 import me.jessyan.mvparms.demo.di.component.DaggerReleaseDiaryComponent;
 import me.jessyan.mvparms.demo.di.module.ReleaseDiaryModule;
 import me.jessyan.mvparms.demo.mvp.contract.ReleaseDiaryContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.presenter.ReleaseDiaryPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -113,17 +117,6 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
         ArmsUtils.configRecyclerView(imagesRV, mLayoutManager);
         imagesRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.plus_width), 0));
         imagesRV.setAdapter(mAdapter);
-
-        mImageLoader.loadImage(this,
-                ImageConfigImpl
-                        .builder()
-                        .placeholder(R.mipmap.place_holder_img)
-                        .url(getIntent().getStringExtra("imageURl"))
-                        .imageView(imageIV)
-                        .build());
-
-        nameTV.setText(getIntent().getStringExtra("name"));
-        priceMV.setMoneyText(String.valueOf(getIntent().getDoubleExtra("price", 0)));
     }
 
     @Override
@@ -160,7 +153,7 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
                 killMyself();
                 break;
             case R.id.choice:
-
+                ArmsUtils.startActivity(ChoiceProjectForDiaryActivity.class);
                 break;
             case R.id.add:
                 ActionSheet.showSheet(this, this, null);
@@ -316,7 +309,6 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
         return mCropImgFilePath;
     }
 
-
     @Override
     public Cache getCache() {
         return provideCache();
@@ -325,5 +317,21 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
     @Override
     public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    @Subscriber(tag = EventBusTags.CHANGE_DIRAY_PROJECT)
+    public void updateProject(Goods goods) {
+        provideCache().put("goodsId", goods.getGoodsId());
+        provideCache().put("merchId", goods.getMerchId());
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .placeholder(R.mipmap.place_holder_img)
+                        .url(goods.getImage())
+                        .imageView(imageIV)
+                        .build());
+        nameTV.setText(goods.getName());
+        priceMV.setMoneyText(String.valueOf(goods.getSalePrice()));
     }
 }

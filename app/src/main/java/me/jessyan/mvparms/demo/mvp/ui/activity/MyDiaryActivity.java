@@ -27,6 +27,7 @@ import me.jessyan.mvparms.demo.mvp.contract.MyDiaryContract;
 import me.jessyan.mvparms.demo.mvp.presenter.MyDiaryPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
+import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -80,6 +81,7 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
         swipeRefreshLayout.setOnRefreshListener(this);
         tabLayout.addTab(tabLayout.newTab().setText("我的日记"));
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         mRecyclerView.setAdapter(mAdapter);
         initPaginate();
     }

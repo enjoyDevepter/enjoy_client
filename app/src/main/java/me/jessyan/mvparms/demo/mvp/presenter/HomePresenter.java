@@ -12,7 +12,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.HomeContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
@@ -26,6 +25,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -49,13 +49,13 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
         super(model, rootView);
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         this.mErrorHandler = null;
         this.mAppManager = null;
     }
-
 
     public void updateHomeInfo() {
 
@@ -85,9 +85,9 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                             mRootView.showLoading();//显示下拉刷新的进度条
                         }).doFinally(() -> {
                     mRootView.hideLoading();//隐藏下拉刷新的进度条
-                }).subscribe(new Consumer<HomeResponse>() {
+                }).subscribe(new ErrorHandleSubscriber<HomeResponse>(mErrorHandler) {
                     @Override
-                    public void accept(HomeResponse response) throws Exception {
+                    public void onNext(HomeResponse response) {
                         if (response.isSuccess()) {
                             mRootView.refreshUI(response.getFirstNavList(), response.getCarouselList(), response.getModuleList(), response.getSecondNavList());
                             getRecommenDiaryList();
@@ -109,7 +109,6 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
             }
         }, mRootView.getRxPermissions(), mErrorHandler);
     }
-
 
     public void getRecommenDiaryList() {
 
@@ -134,9 +133,9 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                 })
                 .doFinally(() -> {
                     mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<DiaryListResponse>() {
+                }).subscribe(new ErrorHandleSubscriber<DiaryListResponse>(mErrorHandler) {
             @Override
-            public void accept(DiaryListResponse response) throws Exception {
+            public void onNext(DiaryListResponse response) {
                 if (response.isSuccess()) {
                     if (lastPageIndex == 1) {
                         diaryList.clear();
@@ -155,6 +154,10 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                     mRootView.showMessage(response.getRetDesc());
                 }
             }
+
+            @Override
+            public void onError(Throwable t) {
+            }
         });
     }
 
@@ -171,9 +174,9 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
         mModel.diaryVote(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseResponse>() {
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
-                    public void accept(BaseResponse response) throws Exception {
+                    public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             diaryList.get(position).setIsPraise(vote ? "1" : "0");
                             int num = diaryList.get(position).getPraise();
@@ -184,7 +187,6 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                         }
                     }
                 });
-
     }
 
     public void follow(boolean follow, int position) {
@@ -200,9 +202,9 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
         mModel.follow(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseResponse>() {
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
-                    public void accept(BaseResponse response) throws Exception {
+                    public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             diaryList.get(position).getMember().setIsFollow(follow ? "1" : "0");
                             mAdapter.notifyItemChanged(position);

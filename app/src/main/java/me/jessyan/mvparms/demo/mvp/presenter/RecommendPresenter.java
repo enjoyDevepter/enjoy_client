@@ -10,6 +10,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.RecommendContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
@@ -28,6 +28,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 
 @ActivityScope
@@ -67,9 +69,11 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
         mModel.getCategory(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<CategoryResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<CategoryResponse>(mErrorHandler) {
                     @Override
-                    public void accept(CategoryResponse response) throws Exception {
+                    public void onNext(CategoryResponse response) {
                         if (response.isSuccess()) {
                             sortCategory(response.getGoodsCategoryList());
                         } else {
@@ -113,28 +117,31 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<GoodsListResponse>() {
-            @Override
-            public void accept(GoodsListResponse response) throws Exception {
-                if (response.isSuccess()) {
-                    if (pullToRefresh) {
-                        mGoods.clear();
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<GoodsListResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(GoodsListResponse response) {
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                mGoods.clear();
+                            }
+                            mRootView.showError(response.getGoodsList().size() > 0);
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            mGoods.addAll(response.getGoodsList());
+                            preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = mGoods.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
                     }
-                    mRootView.showError(response.getGoodsList().size() > 0);
-                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    mGoods.addAll(response.getGoodsList());
-                    preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = mGoods.size() / 10;
-                    if (pullToRefresh) {
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
-                    }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
+                });
     }
 
 

@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -8,6 +10,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,13 +19,16 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ReleaseDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.DiaryBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.diary.ProjectRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ReleaseDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -46,6 +52,37 @@ public class ReleaseDiaryPresenter extends BasePresenter<ReleaseDiaryContract.Mo
     public ReleaseDiaryPresenter(ReleaseDiaryContract.Model model, ReleaseDiaryContract.View rootView) {
         super(model, rootView);
     }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    public void getFirstProject() {
+        getProject();
+    }
+
+    public void getProject() {
+        ProjectRequest request = new ProjectRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+        request.setToken(token);
+        request.setOrderId(mRootView.getActivity().getIntent().getStringExtra("orderId"));
+
+        mModel.getProjects(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<GoodsListResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(GoodsListResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.updateProject(response.getGoodsList().get(0));
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
 
     public void relsaseDiary() {
         String title = (String) mRootView.getCache().get("title");
@@ -72,16 +109,18 @@ public class ReleaseDiaryPresenter extends BasePresenter<ReleaseDiaryContract.Mo
         diary.setTitle(title);
         diary.setContent(content);
         diary.setImageList(images);
-        diary.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
-        diary.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        diary.setGoodsId((String) mRootView.getCache().get("goodsId"));
+        diary.setMerchId((String) mRootView.getCache().get("merchId"));
         diary.setOrderId(mRootView.getActivity().getIntent().getStringExtra("orderId"));
         request.setDiary(diary);
         mModel.releaseDiary(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
-                    public void accept(BaseResponse response) throws Exception {
+                    public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showMessage("发表成功");
                         } else {
@@ -89,8 +128,6 @@ public class ReleaseDiaryPresenter extends BasePresenter<ReleaseDiaryContract.Mo
                         }
                     }
                 });
-
-
     }
 
     public void uploadImage() {
@@ -101,9 +138,11 @@ public class ReleaseDiaryPresenter extends BasePresenter<ReleaseDiaryContract.Mo
         mModel.uploadImage(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
-                    public void accept(BaseResponse response) throws Exception {
+                    public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             images.add(response.getResult().getUrl());
                         } else {

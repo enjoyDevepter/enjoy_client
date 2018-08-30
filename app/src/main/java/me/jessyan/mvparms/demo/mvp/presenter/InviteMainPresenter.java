@@ -18,7 +18,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.InviteMainContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MyMemberBean;
@@ -27,6 +26,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetMyMemberListRequ
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetMyMemberListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -86,7 +87,7 @@ public class InviteMainPresenter extends BasePresenter<InviteMainContract.Model,
                         //                        mRootView.showLoading();//显示下拉刷新的进度条
                     } else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (clear)
@@ -95,12 +96,14 @@ public class InviteMainPresenter extends BasePresenter<InviteMainContract.Model,
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<GetMyMemberListResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<GetMyMemberListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(GetMyMemberListResponse response) throws Exception {
+                    public void onNext(GetMyMemberListResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateUrl(response.getUrl());
-                            if(clear){
+                            if (clear) {
                                 orderBeanList.clear();
                             }
                             nextPageIndex = response.getNextPageIndex();
@@ -124,12 +127,12 @@ public class InviteMainPresenter extends BasePresenter<InviteMainContract.Model,
         request.setCmd(908);
         mModel.share(request)
                 .subscribeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<ShareResponse>() {
+                .subscribe(new ErrorHandleSubscriber<ShareResponse>(mErrorHandler) {
                     @Override
-                    public void accept(ShareResponse response) throws Exception {
+                    public void onNext(ShareResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showWX(response.getShare());
                         } else {

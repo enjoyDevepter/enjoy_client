@@ -17,7 +17,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MyFollowContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
@@ -31,6 +30,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowDoctorAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowHospitalAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowMemberAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
@@ -108,10 +108,11 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<MyFollowListResponse>() {
+                .subscribe(new ErrorHandleSubscriber<MyFollowListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(MyFollowListResponse response) throws Exception {
+                    public void onNext(MyFollowListResponse response) {
                         if (response.isSuccess()) {
                             switch (status) {
                                 case 0:
@@ -197,10 +198,11 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                 .doFinally(() -> {
                     mRootView.hideLoading();//隐藏下拉刷新的进度条
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<BaseResponse>() {
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
-                    public void accept(BaseResponse response) throws Exception {
+                    public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             getMyFollow(true);
                         } else {

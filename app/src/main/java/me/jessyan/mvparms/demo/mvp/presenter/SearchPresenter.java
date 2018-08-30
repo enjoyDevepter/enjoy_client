@@ -8,6 +8,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 import com.zhy.view.flowlayout.TagAdapter;
 
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.SearchContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
@@ -26,6 +26,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HotResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.SearchTypeAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 
 @ActivityScope
@@ -70,9 +72,11 @@ public class SearchPresenter extends BasePresenter<SearchContract.Model, SearchC
         mModel.getHot(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<HotResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HotResponse>(mErrorHandler) {
                     @Override
-                    public void accept(HotResponse response) throws Exception {
+                    public void onNext(HotResponse response) {
                         if (response.isSuccess()) {
                             hotList.clear();
                             for (HotResponse.Key key : response.getGoodsSearchKeywordList()) {
@@ -104,9 +108,11 @@ public class SearchPresenter extends BasePresenter<SearchContract.Model, SearchC
         mModel.getCategory(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<CategoryResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<CategoryResponse>(mErrorHandler) {
                     @Override
-                    public void accept(CategoryResponse response) throws Exception {
+                    public void onNext(CategoryResponse response) {
                         if (response.isSuccess()) {
                             categoryList.addAll(sortCategory(response.getGoodsCategoryList()));
                             typeAdapter.notifyDataSetChanged();

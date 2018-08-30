@@ -7,205 +7,197 @@
 
     <include layout="@layout/title" />
 
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
+                    android:id="@+id/headImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="@mipmap/place_holder_user" />
+
+                <TextView
+                    android:id="@+id/nickName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_toRightOf="@id/headImage"
+                    android:textColor="#FF676767"
+                    android:textSize="12sp" />
+
+                <View
+                    android:id="@+id/follow"
+                    android:layout_width="44dp"
+                    android:layout_height="16dp"
+                    android:layout_alignLeft="@id/nickName"
+                    android:layout_below="@id/nickName"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/follow_bg" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:layout_height="120dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1">
 
-                    <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
-                        android:id="@+id/headImage"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:background="@mipmap/place_holder_user" />
+                    <ImageView
+                        android:id="@+id/left"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@mipmap/place_holder_img"
+                        android:scaleType="fitXY" />
 
                     <TextView
-                        android:id="@+id/nickName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_toRightOf="@id/headImage"
-                        android:textColor="#FF676767"
-                        android:textSize="12sp" />
-
-                    <View
-                        android:id="@+id/follow"
-                        android:layout_width="44dp"
+                        android:id="@+id/left_count"
+                        android:layout_width="30dp"
                         android:layout_height="16dp"
-                        android:layout_alignLeft="@id/nickName"
-                        android:layout_below="@id/nickName"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/follow_bg" />
+                        android:layout_gravity="right|bottom"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/diary_img_count_bg"
+                        android:gravity="center"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="13sp" />
 
-                </RelativeLayout>
+                </FrameLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
 
-                    <FrameLayout
-                        android:layout_width="0dp"
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/right"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1">
+                        android:background="@mipmap/place_holder_img"
+                        android:scaleType="fitXY" />
 
-                        <ImageView
-                            android:id="@+id/left"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@mipmap/place_holder_img"
-                            android:scaleType="fitXY" />
+                    <TextView
+                        android:id="@+id/right_count"
+                        android:layout_width="30dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="right|bottom"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/diary_img_count_bg"
+                        android:gravity="center"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="13sp" />
 
-                        <TextView
-                            android:id="@+id/left_count"
-                            android:layout_width="30dp"
-                            android:layout_height="16dp"
-                            android:layout_gravity="right|bottom"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginRight="8dp"
-                            android:background="@drawable/diary_img_count_bg"
-                            android:gravity="center"
-                            android:textColor="#FFFFFFFF"
-                            android:textSize="13sp" />
-
-                    </FrameLayout>
-
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:id="@+id/right"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@mipmap/place_holder_img"
-                            android:scaleType="fitXY" />
-
-                        <TextView
-                            android:id="@+id/right_count"
-                            android:layout_width="30dp"
-                            android:layout_height="16dp"
-                            android:layout_gravity="right|bottom"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginRight="8dp"
-                            android:background="@drawable/diary_img_count_bg"
-                            android:gravity="center"
-                            android:textColor="#FFFFFFFF"
-                            android:textSize="13sp" />
-
-                    </FrameLayout>
-                </LinearLayout>
-
+                </FrameLayout>
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/goods_info"
-                android:layout_width="match_parent"
-                android:layout_height="102dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingTop="10dp">
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/goods_info"
+            android:layout_width="match_parent"
+            android:layout_height="102dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/white"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp">
 
 
-                <ImageView
-                    android:id="@+id/goods_image"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:scaleType="fitXY" />
+            <ImageView
+                android:id="@+id/goods_image"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY" />
 
+
+            <TextView
+                android:id="@+id/goods_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/image"
+                android:layout_marginLeft="12dp"
+                android:layout_toRightOf="@id/goods_image"
+                android:lines="2"
+                android:textColor="#FF000000"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:id="@+id/price_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/goods_name"
+                android:layout_below="@id/goods_name"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/goods_name"
+                    android:id="@+id/price_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/image"
-                    android:layout_marginLeft="12dp"
-                    android:layout_toRightOf="@id/goods_image"
-                    android:lines="2"
-                    android:textColor="#FF000000"
-                    android:textSize="13sp" />
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="3dp"
+                    android:text="￥"
+                    android:textColor="#FFFF0000"
+                    android:textSize="12sp" />
 
-                <LinearLayout
-                    android:id="@+id/price_layout"
+                <TextView
+                    android:id="@+id/goods_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/goods_name"
-                    android:layout_below="@id/goods_name"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    android:layout_gravity="bottom"
+                    android:layout_toRightOf="@id/price_tag"
+                    android:textColor="#FFFF0000"
+                    android:textSize="17sp" />
+            </LinearLayout>
+        </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/price_tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginRight="3dp"
-                        android:text="￥"
-                        android:textColor="#FFFF0000"
-                        android:textSize="12sp" />
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/title_bg"
+            app:tabIndicatorColor="#FF50C8F5"
+            app:tabIndicatorHeight="2dp"
+            app:tabMode="scrollable"
+            app:tabPaddingEnd="15dp"
+            app:tabPaddingStart="15dp"
+            app:tabSelectedTextColor="#FF50C8F5"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"
+            app:tabTextColor="#FF666666" />
 
-                    <TextView
-                        android:id="@+id/goods_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_toRightOf="@id/price_tag"
-                        android:textColor="#FFFF0000"
-                        android:textSize="17sp" />
-                </LinearLayout>
-            </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/diaryRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/title_bg"
-                app:tabIndicatorColor="#FF50C8F5"
-                app:tabIndicatorHeight="2dp"
-                app:tabMode="scrollable"
-                app:tabPaddingEnd="15dp"
-                app:tabPaddingStart="15dp"
-                app:tabSelectedTextColor="#FF50C8F5"
-                app:tabTextAppearance="@style/TabLayoutTextStyle"
-                app:tabTextColor="#FF666666" />
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/diaryRV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-
-
+    </LinearLayout>
 </LinearLayout>

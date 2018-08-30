@@ -119,21 +119,24 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
         Observable.just(diary.getPraise())
                 .subscribe(s -> praiseTV.setText(String.valueOf(s)));
 
-        mImageLoader.loadImage(itemView.getContext(),
-                ImageConfigImpl
-                        .builder()
-                        .placeholder(R.mipmap.place_holder_img)
-                        .url(diary.getImageList().get(0))
-                        .imageView(leftIV)
-                        .build());
-
-        mImageLoader.loadImage(itemView.getContext(),
-                ImageConfigImpl
-                        .builder()
-                        .placeholder(R.mipmap.place_holder_img)
-                        .url(diary.getImageList().get(1))
-                        .imageView(rightIV)
-                        .build());
+        if (diary.getImageList() != null && diary.getImageList().size() > 0) {
+            mImageLoader.loadImage(itemView.getContext(),
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.mipmap.place_holder_img)
+                            .url(diary.getImageList().get(0))
+                            .imageView(leftIV)
+                            .build());
+        }
+        if (diary.getImageList() != null && diary.getImageList().size() > 1) {
+            mImageLoader.loadImage(itemView.getContext(),
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.mipmap.place_holder_img)
+                            .url(diary.getImageList().get(1))
+                            .imageView(rightIV)
+                            .build());
+        }
 
     }
 

@@ -10,13 +10,13 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.AppointmentContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
@@ -26,6 +26,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -110,28 +112,31 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<AppointmentResponse>() {
-            @Override
-            public void accept(AppointmentResponse response) throws Exception {
-                if (response.isSuccess()) {
-                    mRootView.showError(response.getOrderProjectDetailList().size() > 0);
-                    if (pullToRefresh) {
-                        appointments.clear();
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<AppointmentResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(AppointmentResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showError(response.getOrderProjectDetailList().size() > 0);
+                            if (pullToRefresh) {
+                                appointments.clear();
+                            }
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            appointments.addAll(response.getOrderProjectDetailList());
+                            preEndIndex = appointments.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = appointments.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, appointments.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
                     }
-                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    appointments.addAll(response.getOrderProjectDetailList());
-                    preEndIndex = appointments.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = appointments.size() / 10;
-                    if (pullToRefresh) {
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter.notifyItemRangeInserted(preEndIndex, appointments.size());
-                    }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
+                });
     }
 
     /**
@@ -146,13 +151,16 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
         mModel.cancelAppointment(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
                 }).doFinally(() -> {
             mRootView.hideLoading();//隐藏下拉刷新的进度条
-        }).subscribe(new Consumer<BaseResponse>() {
+
+        }).subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
             @Override
-            public void accept(BaseResponse response) throws Exception {
+            public void onNext(BaseResponse response) {
                 if (response.isSuccess()) {
                     getAppointment(true);
                 } else {

@@ -2,21 +2,22 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorIntorRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorIntorResponse;
-import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorIntorContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorIntorRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorIntorResponse;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 
 @ActivityScope
@@ -44,20 +45,22 @@ public class DoctorIntorPresenter extends BasePresenter<DoctorIntorContract.Mode
         this.mApplication = null;
     }
 
-    public void getDoctorInfo(String doctorId){
+    public void getDoctorInfo(String doctorId) {
         DoctorIntorRequest request = new DoctorIntorRequest();
         request.setDoctorId(doctorId);
 
         mModel.getDoctorIntor(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DoctorIntorResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<DoctorIntorResponse>(mErrorHandler) {
                     @Override
-                    public void accept(DoctorIntorResponse baseResponse) throws Exception {
-                        if (baseResponse.isSuccess()) {
-                            mRootView.update(baseResponse.getDoctor());
-                        }else{
-                            mRootView.showMessage(baseResponse.getRetDesc());
+                    public void onNext(DoctorIntorResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.update(response.getDoctor());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

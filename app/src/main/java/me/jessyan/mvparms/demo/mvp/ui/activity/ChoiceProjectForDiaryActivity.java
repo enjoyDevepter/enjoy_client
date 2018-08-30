@@ -16,13 +16,17 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.EventBus;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerChoiceProjectForDiaryComponent;
 import me.jessyan.mvparms.demo.di.module.ChoiceProjectForDiaryModule;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceProjectForDiaryContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.presenter.ChoiceProjectForDiaryPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
@@ -172,6 +176,7 @@ public class ChoiceProjectForDiaryActivity extends BaseActivity<ChoiceProjectFor
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
+        EventBus.getDefault().post((Goods) data, EventBusTags.CHANGE_DIRAY_PROJECT);
         killMyself();
     }
 

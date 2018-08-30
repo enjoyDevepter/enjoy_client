@@ -20,7 +20,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.UserIntegralContract;
@@ -35,6 +34,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoInfoRespons
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -72,7 +73,7 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void onCreate(){
+    public void onCreate() {
         requestOrderList();
         getQiandaoInfo();
     }
@@ -85,7 +86,7 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
         requestOrderList(nextPageIndex, false);
     }
 
-    public void getQiandaoInfo(){
+    public void getQiandaoInfo() {
         QiandaoInfoRequest request = new QiandaoInfoRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
@@ -98,12 +99,13 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<QiandaoInfoResponse>() {
+                .subscribe(new ErrorHandleSubscriber<QiandaoInfoResponse>(mErrorHandler) {
                     @Override
-                    public void accept(QiandaoInfoResponse response) throws Exception {
+                    public void onNext(QiandaoInfoResponse response) {
                         if (response.isSuccess()) {
-                            mRootView.updateQiandaoInfo("1".equals(response.getIsSign()),response.getPoint(),response.getUrl());
+                            mRootView.updateQiandaoInfo("1".equals(response.getIsSign()), response.getPoint(), response.getUrl());
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -126,10 +128,11 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<QiandaoResponse>() {
+                .subscribe(new ErrorHandleSubscriber<QiandaoResponse>(mErrorHandler) {
                     @Override
-                    public void accept(QiandaoResponse response) throws Exception {
+                    public void onNext(QiandaoResponse response) {
                         if (response.isSuccess()) {
                             ArmsUtils.makeText(ArmsUtils.getContext(), "签到成功");
                             getQiandaoInfo();
@@ -167,10 +170,11 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<UserScorePageResponse>() {
+                .subscribe(new ErrorHandleSubscriber<UserScorePageResponse>(mErrorHandler) {
                     @Override
-                    public void accept(UserScorePageResponse response) throws Exception {
+                    public void onNext(UserScorePageResponse response) {
                         if (response.isSuccess()) {
                             if (clear) {
                                 orderBeanList.clear();
@@ -203,10 +207,11 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                 .doFinally(() -> {
                     mRootView.hideLoading();//隐藏下拉刷新的进度条
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<UserInfoResponse>() {
+                .subscribe(new ErrorHandleSubscriber<UserInfoResponse>(mErrorHandler) {
                     @Override
-                    public void accept(UserInfoResponse response) throws Exception {
+                    public void onNext(UserInfoResponse response) {
                         if (response.isSuccess()) {
                             cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_INFO, response.getMember());
                             cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT, response.getMemberAccount());

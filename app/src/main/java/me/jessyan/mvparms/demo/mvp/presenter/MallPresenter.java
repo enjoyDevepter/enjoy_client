@@ -18,7 +18,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MallContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
@@ -34,6 +33,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
@@ -112,9 +112,11 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<CategoryResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<CategoryResponse>(mErrorHandler) {
                     @Override
-                    public void accept(CategoryResponse response) throws Exception {
+                    public void onNext(CategoryResponse response) {
                         if (response.isSuccess()) {
                             mRootView.refreshNaviTitle(sortCategory(response.getGoodsCategoryList()));
                         } else {
@@ -170,9 +172,11 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
-                .subscribe(new Consumer<GoodsListResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<GoodsListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(GoodsListResponse response) throws Exception {
+                    public void onNext(GoodsListResponse response) {
                         if (response.isSuccess()) {
                             if (pullToRefresh) {
                                 mGoods.clear();
@@ -232,10 +236,11 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<HGoodsListResponse>() {
+                .subscribe(new ErrorHandleSubscriber<HGoodsListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(HGoodsListResponse response) throws Exception {
+                    public void onNext(HGoodsListResponse response) {
                         if (response.isSuccess()) {
                             if (pullToRefresh) {
                                 mHGoods.clear();

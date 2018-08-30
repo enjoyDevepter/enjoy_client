@@ -522,17 +522,17 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
     @Override
     public void onRefresh() {
-        int type = (int) provideCache().get("type");
-        switch (type) {
-            case 0:
-                mPresenter.getGoodsList(true);
-                break;
-            case 1:
-                mPresenter.getKGoodsList(true);
-                break;
-            case 2:
-                mPresenter.getHGoodsList(true);
-                break;
-        }
+//        int type = (int) provideCache().get("type");
+//        switch (type) {
+//            case 0:
+//                mPresenter.getGoodsList(true);
+//                break;
+//            case 1:
+//                mPresenter.getKGoodsList(true);
+//                break;
+//            case 2:
+//                mPresenter.getHGoodsList(true);
+//                break;
+//        }
     }
 }

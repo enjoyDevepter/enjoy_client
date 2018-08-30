@@ -79,7 +79,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     @BindView(R.id.remark)
     TextView remarkTV;
     @BindView(R.id.price)
-    MoneyView priceTV;
+    TextView priceTV;
     @BindView(R.id.money)
     TextView moneyTV;
     @BindView(R.id.deductionMoney)
@@ -210,11 +210,6 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记
                             Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
-                            intent.putExtra("imageURl", order.getGoodsList().get(0).getImage());
-                            intent.putExtra("name", order.getGoodsList().get(0).getName());
-                            intent.putExtra("price", order.getGoodsList().get(0).getSalePrice());
-                            intent.putExtra("goodsId", order.getGoodsList().get(0).getGoodsId());
-                            intent.putExtra("merchId", order.getGoodsList().get(0).getMerchId());
                             intent.putExtra("orderId", order.getOrderId());
                             ArmsUtils.startActivity(intent);
                         }
@@ -237,11 +232,6 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记
                             Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
-                            intent.putExtra("imageURl", order.getSetMealGoodsList().get(0).getImage());
-                            intent.putExtra("name", order.getSetMealGoodsList().get(0).getName());
-                            intent.putExtra("price", order.getSetMealGoodsList().get(0).getSalePrice());
-                            intent.putExtra("goodsId", order.getSetMealGoodsList().get(0).getSetMealId());
-                            intent.putExtra("merchId", order.getSetMealGoodsList().get(0).getSetMealId());
                             intent.putExtra("orderId", order.getOrderId());
                             ArmsUtils.startActivity(intent);
                         }
@@ -351,7 +341,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
         addressTV.setText(address.getAddress());
 
         remarkTV.setText(orderDetails.getRemark());
-        priceTV.setMoneyText(ArmsUtils.formatLong(orderDetails.getPrice()));
+        priceTV.setText(ArmsUtils.formatLong(orderDetails.getPrice()));
         moneyTV.setText(ArmsUtils.formatLong(orderDetails.getMoney()));
         horderMoneyV.setText(ArmsUtils.formatLong(orderDetails.getMoney()));
         deductionMoneyTV.setText(ArmsUtils.formatLong(orderDetails.getDeductionMoney()));

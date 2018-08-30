@@ -229,21 +229,24 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                         .imageView(goodsImageIV)
                         .build());
 
-        mImageLoader.loadImage(this,
-                ImageConfigImpl
-                        .builder()
-                        .placeholder(R.mipmap.place_holder_img)
-                        .url(response.getDiary().getImageList().get(0))
-                        .imageView(leftIV)
-                        .build());
-
-        mImageLoader.loadImage(this,
-                ImageConfigImpl
-                        .builder()
-                        .placeholder(R.mipmap.place_holder_img)
-                        .url(response.getDiary().getImageList().size() > 1 ? response.getDiary().getImageList().get(1) : response.getDiary().getImageList().get(0))
-                        .imageView(rightIV)
-                        .build());
+        if (response.getDiary().getImageList() != null && response.getDiary().getImageList().size() > 0) {
+            mImageLoader.loadImage(this,
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.mipmap.place_holder_img)
+                            .url(response.getDiary().getImageList().get(0))
+                            .imageView(leftIV)
+                            .build());
+        }
+        if (response.getDiary().getImageList() != null && response.getDiary().getImageList().size() > 1) {
+            mImageLoader.loadImage(this,
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.mipmap.place_holder_img)
+                            .url(response.getDiary().getImageList().get(1))
+                            .imageView(rightIV)
+                            .build());
+        }
     }
 
     @Override

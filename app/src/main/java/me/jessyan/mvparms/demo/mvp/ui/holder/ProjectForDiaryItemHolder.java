@@ -64,7 +64,7 @@ public class ProjectForDiaryItemHolder extends BaseHolder<Goods> {
     public void setData(Goods goods, int position) {
         Observable.just(goods.getName())
                 .subscribe(s -> nameTV.setText(s));
-        Observable.just(goods.getSales())
+        Observable.just(goods.getSalePrice())
                 .subscribe(s -> priceTV.setMoneyText(String.valueOf(s)));
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定

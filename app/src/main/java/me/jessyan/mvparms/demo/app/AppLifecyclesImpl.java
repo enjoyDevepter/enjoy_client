@@ -18,6 +18,7 @@ package me.jessyan.mvparms.demo.app;
 import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.multidex.MultiDex;
 
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.integration.cache.IntelligentCache;
@@ -44,7 +45,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
 
     @Override
     public void attachBaseContext(@NonNull Context base) {
-//          MultiDex.install(base);  //这里比 onCreate 先执行,常用于 MultiDex 初始化,插件化框架的初始化
+        MultiDex.install(base);  //这里比 onCreate 先执行,常用于 MultiDex 初始化,插件化框架的初始化
     }
 
     @Override
@@ -72,6 +73,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
         }
         UMConfigure.init(application, UMConfigure.DEVICE_TYPE_PHONE, "");
         PlatformConfig.setWeixin("wxb3206f9ac6441de4", "57240413f17564b90084b7635aba924a");
+
         //LeakCanary 内存泄露检查
         //使用 IntelligentCache.KEY_KEEP 作为 key 的前缀, 可以使储存的数据永久存储在内存中
         //否则存储在 LRU 算法的存储空间中, 前提是 extras 使用的是 IntelligentCache (框架默认使用)

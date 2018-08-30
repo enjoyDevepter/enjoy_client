@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:money="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="210dp"
     android:background="@color/white"
@@ -99,8 +100,30 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_toRightOf="@id/image"
-            android:lines="2"
+            android:lines="1"
             android:textColor="#FF000000"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/project"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/name"
+            android:layout_below="@id/name"
+            android:layout_marginTop="8dp"
+            android:lines="1"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/project"
+            android:layout_below="@id/project"
+            android:layout_marginTop="8dp"
+            android:lines="1"
+            android:textColor="#FF666666"
             android:textSize="13sp" />
 
 
@@ -113,23 +136,22 @@
             android:layout_marginBottom="10dp"
             android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/price_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="1dp"
-                android:text="￥"
-                android:textColor="#FFFF0000"
-                android:textSize="12sp" />
 
-            <TextView
+            <com.github.cchao.MoneyView
                 android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:textColor="#FFFF0000"
-                android:textSize="17sp" />
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="15dp"
+                money:cent_size="14sp"
+                money:money_color="#FFFF0000"
+                money:money_text="0.00"
+                money:point_padding_left="1dp"
+                money:point_padding_right="5dp"
+                money:prefix_padding="2dp"
+                money:prefix_size="12sp"
+                money:yuan_size="17sp" />
+
 
             <TextView
                 android:layout_width="0dp"

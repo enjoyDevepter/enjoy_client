@@ -50,6 +50,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/project"
                     android:layout_marginTop="12dp"
+                    android:background="@mipmap/place_holder_img"
                     android:scaleType="fitXY" />
 
 

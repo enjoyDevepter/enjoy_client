@@ -16,7 +16,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginByPhoneRequest;
@@ -25,6 +24,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -82,9 +83,11 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
         mModel.loginByPhone(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<RegisterResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<RegisterResponse>(mErrorHandler) {
                     @Override
-                    public void accept(RegisterResponse response) throws Exception {
+                    public void onNext(RegisterResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
                             cacheUserInfo(response.getToken(), response.getSignkey());
@@ -95,7 +98,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                         }
                     }
                 });
-
     }
 
     public void loginByUser(String username, String password) {
@@ -107,10 +109,11 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
         mModel.loginByUserName(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<RegisterResponse>() {
+                .subscribe(new ErrorHandleSubscriber<RegisterResponse>(mErrorHandler) {
                     @Override
-                    public void accept(RegisterResponse response) throws Exception {
+                    public void onNext(RegisterResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
                             cacheUserInfo(response.getToken(), response.getSignkey());
@@ -120,7 +123,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                         }
                     }
                 });
-
     }
 
     public void getVerifyForUser(String mobile) {
@@ -131,12 +133,14 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
         mModel.getVerifyForUser(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
-                    public void accept(BaseResponse baseResponse) throws Exception {
-                        if (!baseResponse.isSuccess()) {
+                    public void onNext(BaseResponse response) {
+                        if (!response.isSuccess()) {
                             mRootView.showVerity();
-                            mRootView.showMessage(baseResponse.getRetDesc());
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

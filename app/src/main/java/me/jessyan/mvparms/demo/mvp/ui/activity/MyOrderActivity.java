@@ -317,11 +317,6 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记
                             Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
-                            intent.putExtra("imageURl", order.getGoodsList().get(0).getImage());
-                            intent.putExtra("name", order.getGoodsList().get(0).getName());
-                            intent.putExtra("price", order.getGoodsList().get(0).getSalePrice());
-                            intent.putExtra("goodsId", order.getGoodsList().get(0).getGoodsId());
-                            intent.putExtra("merchId", order.getGoodsList().get(0).getMerchId());
                             intent.putExtra("orderId", order.getOrderId());
                             ArmsUtils.startActivity(intent);
                         }
@@ -344,11 +339,6 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记
                             Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
-                            intent.putExtra("imageURl", order.getSetMealGoodsList().get(0).getImage());
-                            intent.putExtra("name", order.getSetMealGoodsList().get(0).getName());
-                            intent.putExtra("price", order.getSetMealGoodsList().get(0).getSalePrice());
-                            intent.putExtra("goodsId", order.getSetMealGoodsList().get(0).getSetMealId());
-                            intent.putExtra("merchId", order.getSetMealGoodsList().get(0).getSetMealId());
                             intent.putExtra("orderId", order.getOrderId());
                             ArmsUtils.startActivity(intent);
                         }

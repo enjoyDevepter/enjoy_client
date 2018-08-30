@@ -18,13 +18,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BalanceBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -92,10 +93,11 @@ public class ConsumeCoinPresenter extends BasePresenter<ConsumeCoinContract.Mode
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<GetConsumeInfoPageResponse>() {
+                .subscribe(new ErrorHandleSubscriber<GetConsumeInfoPageResponse>(mErrorHandler) {
                     @Override
-                    public void accept(GetConsumeInfoPageResponse response) throws Exception {
+                    public void onNext(GetConsumeInfoPageResponse response) {
                         if (response.isSuccess()) {
                             if (clear) {
                                 orderBeanList.clear();

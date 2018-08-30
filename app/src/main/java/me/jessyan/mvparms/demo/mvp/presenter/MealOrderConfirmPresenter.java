@@ -12,6 +12,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import org.simple.eventbus.EventBus;
 
@@ -21,7 +22,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.MealOrderConfirmContract;
@@ -34,6 +34,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.PayMealOrderResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -83,9 +85,11 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
         mModel.getMealOrderConfirmInfo(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<MealOrderConfirmResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<MealOrderConfirmResponse>(mErrorHandler) {
                     @Override
-                    public void accept(MealOrderConfirmResponse response) throws Exception {
+                    public void onNext(MealOrderConfirmResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
                             orderConfirmInfoResponse = response;
@@ -95,7 +99,6 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                         }
                     }
                 });
-
     }
 
 
@@ -126,9 +129,11 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
         mModel.placeMealOrder(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<PayMealOrderResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<PayMealOrderResponse>(mErrorHandler) {
                     @Override
-                    public void accept(PayMealOrderResponse response) throws Exception {
+                    public void onNext(PayMealOrderResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
                             if ("0".equals(response.getPayStatus())) {

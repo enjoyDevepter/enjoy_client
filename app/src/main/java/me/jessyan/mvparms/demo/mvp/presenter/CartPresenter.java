@@ -11,6 +11,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.CartContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.CartBean;
@@ -29,6 +29,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.EidtCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CartListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -93,28 +95,31 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<CartListResponse>() {
-            @Override
-            public void accept(CartListResponse response) throws Exception {
-                if (response.isSuccess()) {
-                    if (pullToRefresh) {
-                        cartItems.clear();
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<CartListResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(CartListResponse response) {
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                cartItems.clear();
+                            }
+                            mRootView.setLoadedAllItems(true);
+                            mRootView.updateUI(response.getCart());
+                            cartItems.addAll(response.getCart().getCartItems());
+                            preEndIndex = cartItems.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = cartItems.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, cartItems.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
                     }
-                    mRootView.setLoadedAllItems(true);
-                    mRootView.updateUI(response.getCart());
-                    cartItems.addAll(response.getCart().getCartItems());
-                    preEndIndex = cartItems.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = cartItems.size() / 10;
-                    if (pullToRefresh) {
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter.notifyItemRangeInserted(preEndIndex, cartItems.size());
-                    }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
+                });
     }
 
 
@@ -135,10 +140,12 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
         request.setStatus((String) mRootView.getCache().get("status"));
         mModel.editCartList(request)
                 .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<CartListResponse>() {
+                .subscribe(new ErrorHandleSubscriber<CartListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(CartListResponse response) throws Exception {
+                    public void onNext(CartListResponse response) {
                         if (response.isSuccess()) {
                             cartItems.clear();
                             cartItems.addAll(response.getCart().getCartItems());
@@ -163,10 +170,12 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
         request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
         mModel.getGoodsOfCart(request)
                 .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<CartListResponse>() {
+                .subscribe(new ErrorHandleSubscriber<CartListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(CartListResponse response) throws Exception {
+                    public void onNext(CartListResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
                             cartItems.clear();
@@ -207,10 +216,12 @@ public class CartPresenter extends BasePresenter<CartContract.Model, CartContrac
         mRootView.showLoading();
         mModel.deleteCartList(request)
                 .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<CartListResponse>() {
+                .subscribe(new ErrorHandleSubscriber<CartListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(CartListResponse response) throws Exception {
+                    public void onNext(CartListResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
                             cartItems.clear();

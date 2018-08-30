@@ -6,34 +6,34 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorAllCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorAllCommentResponse;
+import me.jessyan.mvparms.demo.mvp.contract.DoctorAllCommentContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorAllCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LikeDoctorCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.LoginUserDoctorAllCommentRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LoginUserDoctorAllCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.UnLikeDoctorCommentRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorAllCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LikeDoctorCommentResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LoginUserDoctorAllCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.UnLikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorAllCommentActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import me.jessyan.mvparms.demo.mvp.contract.DoctorAllCommentContract;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -52,7 +52,7 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
     RecyclerView.Adapter mAdapter;
     @Inject
     List<DoctorCommentBean> orderBeanList;
-
+    private int nextPageIndex = 1;
 
     @Inject
     public DoctorAllCommentPresenter(DoctorAllCommentContract.Model model, DoctorAllCommentContract.View rootView) {
@@ -76,8 +76,6 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
     public void nextPage() {
         requestOrderList(nextPageIndex, false);
     }
-
-    private int nextPageIndex = 1;
 
     private void requestOrderList(int pageIndex, final boolean clear) {
         String doctorId = mRootView.getActivity().getIntent().getStringExtra(DoctorAllCommentActivity.KEY_FOR_DOCTOR_ID);
@@ -104,10 +102,11 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
                         else
                             mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                     })
+                    .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                     .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                    .subscribe(new Consumer<DoctorAllCommentResponse>() {
+                    .subscribe(new ErrorHandleSubscriber<DoctorAllCommentResponse>(mErrorHandler) {
                         @Override
-                        public void accept(DoctorAllCommentResponse response) throws Exception {
+                        public void onNext(DoctorAllCommentResponse response) {
                             if (response.isSuccess()) {
                                 if (clear) {
                                     orderBeanList.clear();
@@ -145,9 +144,11 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
                             mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                     })
                     .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                    .subscribe(new Consumer<LoginUserDoctorAllCommentResponse>() {
+                    .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                    .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                    .subscribe(new ErrorHandleSubscriber<LoginUserDoctorAllCommentResponse>(mErrorHandler) {
                         @Override
-                        public void accept(LoginUserDoctorAllCommentResponse response) throws Exception {
+                        public void onNext(LoginUserDoctorAllCommentResponse response) {
                             if (response.isSuccess()) {
                                 if (clear) {
                                     orderBeanList.clear();
@@ -167,7 +168,7 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
     }
 
 
-    public void unlikeDoctorComment(String doctorId,String commentId){
+    public void unlikeDoctorComment(String doctorId, String commentId) {
         UnLikeDoctorCommentRequest unLikeDoctorCommentRequest = new UnLikeDoctorCommentRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
@@ -179,17 +180,19 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
         mModel.unLikeDoctorComment(unLikeDoctorCommentRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<UnLikeDoctorCommentResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<UnLikeDoctorCommentResponse>(mErrorHandler) {
                     @Override
-                    public void accept(UnLikeDoctorCommentResponse baseResponse) throws Exception {
-                        if (baseResponse.isSuccess()) {
-                        }else{
+                    public void onNext(UnLikeDoctorCommentResponse response) {
+                        if (response.isSuccess()) {
+                        } else {
                         }
                     }
                 });
     }
 
-    public void likeDoctorComment(String doctorId,String commentId){
+    public void likeDoctorComment(String doctorId, String commentId) {
         LikeDoctorCommentRequest likeDoctorCommentRequest = new LikeDoctorCommentRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
@@ -201,11 +204,13 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
         mModel.likeDoctorComment(likeDoctorCommentRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<LikeDoctorCommentResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<LikeDoctorCommentResponse>(mErrorHandler) {
                     @Override
-                    public void accept(LikeDoctorCommentResponse baseResponse) throws Exception {
-                        if (baseResponse.isSuccess()) {
-                        }else{
+                    public void onNext(LikeDoctorCommentResponse response) {
+                        if (response.isSuccess()) {
+                        } else {
                         }
                     }
                 });

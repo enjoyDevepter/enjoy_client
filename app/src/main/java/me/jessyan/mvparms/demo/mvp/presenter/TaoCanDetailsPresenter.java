@@ -19,7 +19,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
@@ -31,6 +30,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MealOrderConfirmActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -84,9 +85,11 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
         mModel.getMealDetail(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<MealDetailsResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<MealDetailsResponse>(mErrorHandler) {
                     @Override
-                    public void accept(MealDetailsResponse response) throws Exception {
+                    public void onNext(MealDetailsResponse response) {
                         if (response.isSuccess()) {
                             goodsList.clear();
                             goodsList.addAll(response.getSetMealGoods().getGoodsList());
@@ -115,9 +118,11 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
         mModel.collectGoods(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<BaseResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
-                    public void accept(BaseResponse response) throws Exception {
+                    public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateCollect(collect);
                         } else {
@@ -125,7 +130,6 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
                         }
                     }
                 });
-
     }
 
     public void buy() {
@@ -157,10 +161,11 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<ShareResponse>() {
+                .subscribe(new ErrorHandleSubscriber<ShareResponse>(mErrorHandler) {
                     @Override
-                    public void accept(ShareResponse response) throws Exception {
+                    public void onNext(ShareResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showWX(response.getShare());
                         } else {

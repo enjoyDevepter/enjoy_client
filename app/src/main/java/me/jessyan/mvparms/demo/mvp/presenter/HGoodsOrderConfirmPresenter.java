@@ -12,6 +12,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
@@ -33,6 +33,8 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -84,9 +86,11 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
         mModel.getOrderConfirmInfo(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<HGoodsOrderConfirmInfoResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HGoodsOrderConfirmInfoResponse>(mErrorHandler) {
                     @Override
-                    public void accept(HGoodsOrderConfirmInfoResponse response) throws Exception {
+                    public void onNext(HGoodsOrderConfirmInfoResponse response) {
                         if (response.isSuccess()) {
                             hGoodsOrderConfirmInfoResponse = response;
                             mRootView.updateUI(response);
@@ -144,9 +148,11 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
         mModel.placeHGoodsOrder(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<HGoodsPayOrderResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HGoodsPayOrderResponse>(mErrorHandler) {
                     @Override
-                    public void accept(HGoodsPayOrderResponse response) throws Exception {
+                    public void onNext(HGoodsPayOrderResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
                             if ("0".equals(response.getPayStatus())) {

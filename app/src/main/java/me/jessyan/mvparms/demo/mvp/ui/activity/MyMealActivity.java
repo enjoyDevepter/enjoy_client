@@ -235,11 +235,6 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
                 } else if ("5".equals(appointment.getOrderStatus())) {
                     // 写日记
                     Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
-                    intent.putExtra("imageURl", appointment.getSetMealGoodsList().get(0).getImage());
-                    intent.putExtra("name", appointment.getSetMealGoodsList().get(0).getName());
-                    intent.putExtra("price", appointment.getSetMealGoodsList().get(0).getSalePrice());
-                    intent.putExtra("goodsId", appointment.getSetMealGoodsList().get(0).getSetMealId());
-                    intent.putExtra("merchId", appointment.getSetMealGoodsList().get(0).getSetMealId());
                     intent.putExtra("orderId", appointment.getOrderId());
                     ArmsUtils.startActivity(intent);
                 }

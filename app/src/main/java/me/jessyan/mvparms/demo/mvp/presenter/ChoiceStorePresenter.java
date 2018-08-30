@@ -9,6 +9,7 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceStoreContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
@@ -27,6 +27,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE;
 
@@ -90,9 +92,11 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
         mModel.getStores(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<StoresListResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<StoresListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(StoresListResponse response) throws Exception {
+                    public void onNext(StoresListResponse response) {
                         if (response.isSuccess() && response.getStoreList() != null) {
                             commonStoreDateTypeList.clear();
                             commonStoreDateTypeList.addAll(response.getStoreList());
@@ -119,9 +123,11 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
         mModel.getHospitals(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<HospitalListResponse>() {
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HospitalListResponse>(mErrorHandler) {
                     @Override
-                    public void accept(HospitalListResponse response) throws Exception {
+                    public void onNext(HospitalListResponse response) {
                         if (response.isSuccess() && response.getHospitalList() != null) {
                             commonStoreDateTypeList.clear();
                             commonStoreDateTypeList.addAll(response.getHospitalList());

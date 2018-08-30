@@ -11,9 +11,12 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.ReleaseDiaryContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.DiaryService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.diary.ProjectRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ReleaseDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import okhttp3.MultipartBody;
 
 
@@ -46,5 +49,11 @@ public class ReleaseDiaryModel extends BaseModel implements ReleaseDiaryContract
     public Observable<BaseResponse> releaseDiary(ReleaseDiaryRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .releaseDiary(request);
+    }
+
+    @Override
+    public Observable<GoodsListResponse> getProjects(ProjectRequest request) {
+        return mRepositoryManager.obtainRetrofitService(DiaryService.class)
+                .getProjects(request);
     }
 }

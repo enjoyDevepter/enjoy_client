@@ -7,10 +7,42 @@
     <include layout="@layout/title" />
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/project"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/project"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <LinearLayout
+        android:id="@+id/no_date"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="92dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="94dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="100dp"
+            android:background="@mipmap/nodata" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="暂无数据"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+    </LinearLayout>
 
 </LinearLayout>
