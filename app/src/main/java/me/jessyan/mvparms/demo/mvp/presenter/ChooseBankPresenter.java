@@ -20,9 +20,12 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ChooseBankContract;
+import me.jessyan.mvparms.demo.mvp.model.ChooseBankModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankCardBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.DelBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.DelBankCardResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -94,42 +97,6 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void getBankList() {
-//        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-////        Object o = cache.get(KEY_KEEP+ ChooseBankModel.KEY_FOR_BANK_LIST);
-////        if(o != null){
-////            requestOrderList();
-////            return;
-////        }
-//
-//        BankListRequest request = new BankListRequest();
-//        mModel.getBankList(request)
-//                .subscribeOn(Schedulers.io())
-//                .doOnSubscribe(disposable -> {
-//                    mRootView.showLoading();//显示下拉刷新的进度条
-//                }).subscribeOn(AndroidSchedulers.mainThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .doFinally(() -> {
-//                    mRootView.hideLoading();
-//                })
-//                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
-//                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-//                .subscribe(new ErrorHandleSubscriber<BankListResponse>(mErrorHandler) {
-//                    @Override
-//                    public void onNext(BankListResponse response) {
-//                        if (response.isSuccess()) {
-//                            List<BankBean> bankList = response.getBankList();
-//                            cache.put(KEY_KEEP + ChooseBankModel.KEY_FOR_BANK_LIST, bankList);
-//                            System.out.println("1 bankList = " + bankList.size());
-//                            requestOrderList();
-//                        } else {
-//                            mRootView.showMessage(response.getRetDesc());
-//                        }
-//                    }
-//                });
-    }
-
-    //    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void requestOrderList() {
         requestOrderList(1, true);
     }
@@ -172,6 +139,7 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
                             }
                             nextPageIndex = response.getNextPageIndex();
                             mRootView.setEnd(nextPageIndex == -1);
+                            mRootView.showError(response.getBankCardList().size() > 0);
                             orderBeanList.addAll(response.getBankCardList());
                             mAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
