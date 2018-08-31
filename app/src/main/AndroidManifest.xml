@@ -266,7 +266,9 @@
         <activity
             android:name=".mvp.ui.activity.ChoiceProjectForDiaryActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".mvp.ui.activity.CashPasswordActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

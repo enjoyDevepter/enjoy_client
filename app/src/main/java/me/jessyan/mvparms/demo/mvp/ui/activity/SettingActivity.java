@@ -52,6 +52,8 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
     @BindView(R.id.submit)
     View submitV;
     CustomDialog dialog = null;
+    @BindView(R.id.get_cash_password)
+    View get_cash_password;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -81,6 +83,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
         cleanV.setOnClickListener(this);
         versionV.setOnClickListener(this);
         submitV.setOnClickListener(this);
+        get_cash_password.setOnClickListener(this);
     }
 
 
@@ -146,6 +149,9 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                 cache.put(KEY_KEEP + "signkey", null);
                 EventBus.getDefault().post(EventBusTags.USER_LOGOUT);
                 killMyself();
+                break;
+            case R.id.get_cash_password:
+                ArmsUtils.startActivity(CashPasswordActivity.class);
                 break;
         }
     }

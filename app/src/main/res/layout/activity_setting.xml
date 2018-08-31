@@ -110,6 +110,30 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/get_cash_password"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:text="提现密码"
+                android:textColor="#FF000000"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="5dp"
+                android:layout_height="9dp"
+                android:layout_marginRight="15dp"
+                android:background="@mipmap/more_right" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/fallback"
             android:layout_width="match_parent"
             android:layout_height="45dp"
