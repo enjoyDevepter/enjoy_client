@@ -156,12 +156,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         ArmsUtils.configRecyclerView(secondFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         secondFilterRV.setAdapter(secondAdapter);
         secondAdapter.setOnItemClickListener(this);
-        tabLayout.addOnTabSelectedListener(this);
         mPresenter.getCategory();
-    }
-
-    @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
-    public void updateIndex() {
     }
 
     /**
@@ -373,18 +368,62 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         }
     }
 
+
+    @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
+    public void updateIndex(int index) {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
+        int type = (int) cache.get("defaultIndex");
+        provideCache().put("type", type);
+        tabLayout.getTabAt(type).select();
+        switch (type) {
+            case 0:
+                mRecyclerView.setAdapter(mAdapter);
+                break;
+            case 1:
+                mRecyclerView.setAdapter(mAdapter);
+                break;
+            case 2:
+                mRecyclerView.setAdapter(mHAdapter);
+                break;
+        }
+        initPaginate();
+    }
+
+
     @Override
     public void refreshNaviTitle(List<Category> categories) {
+        List<Category> navi = new ArrayList<>();
         for (Category category : categories) {
             if ("0".equals(category.getParentId())) {
-                tabLayout.addTab(tabLayout.newTab().setTag(category.getBusType()).setText(category.getName()));
+                navi.add(category);
             }
         }
+        TabLayout.Tab tab1 = tabLayout.newTab().setText(navi.get(0).getName());
+        TabLayout.Tab tab2 = tabLayout.newTab().setText(navi.get(1).getName());
+        TabLayout.Tab tab3 = tabLayout.newTab().setText(navi.get(2).getName());
+        tabLayout.addTab(tab1);
+        tabLayout.addTab(tab2);
+        tabLayout.addTab(tab3);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
         if (cache.get("defaultIndex") != null) {
-            tabLayout.getTabAt((int) cache.get("defaultIndex")).select();
+            int defaultIndex = (int) cache.get("defaultIndex");
             cache.put("defaultIndex", null);
+            provideCache().put("type", defaultIndex);
+            switch (defaultIndex) {
+                case 0:
+                    tab1.select();
+                    break;
+                case 1:
+                    tab2.select();
+                    break;
+                case 2:
+                    tab3.select();
+                    break;
+            }
+        } else {
+            tab1.select();
         }
+        tabLayout.addOnTabSelectedListener(this);
     }
 
     @Override
@@ -491,6 +530,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 mPresenter.getGoodsList(true);
                 break;
             case 1:
+                mRecyclerView.setAdapter(mAdapter);
                 mPresenter.getKGoodsList(true);
                 break;
             case 2:
@@ -522,17 +562,17 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
     @Override
     public void onRefresh() {
-//        int type = (int) provideCache().get("type");
-//        switch (type) {
-//            case 0:
-//                mPresenter.getGoodsList(true);
-//                break;
-//            case 1:
-//                mPresenter.getKGoodsList(true);
-//                break;
-//            case 2:
-//                mPresenter.getHGoodsList(true);
-//                break;
-//        }
+        int type = (int) provideCache().get("type");
+        switch (type) {
+            case 0:
+                mPresenter.getGoodsList(true);
+                break;
+            case 1:
+                mPresenter.getKGoodsList(true);
+                break;
+            case 2:
+                mPresenter.getHGoodsList(true);
+                break;
+        }
     }
 }

@@ -140,16 +140,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mPresenter.updateHomeInfo();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (null != tabLayout.getTabAt(0)) {
-            tabLayout.getTabAt(0).select();
-        }
-        if (null != tabLayoutTwo.getTabAt(0)) {
-            tabLayoutTwo.getTabAt(0).select();
-        }
-    }
 
     /**
      * 开始加载更多
@@ -229,9 +219,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     ArmsUtils.startActivity(TaoCanActivity.class);
                 } else if ("medicalcosmetology".equals(tag)) {
                     cache.put("defaultIndex", 2);
-                    EventBus.getDefault().post(EventBusTags.CHANGE_MAIN_INDEX);
+                    EventBus.getDefault().post(tab.getPosition(), EventBusTags.CHANGE_MAIN_INDEX);
                 } else if ("shop".equals(tag)) {
-                    EventBus.getDefault().post(EventBusTags.CHANGE_MAIN_INDEX);
+                    cache.put("defaultIndex", 0);
+                    EventBus.getDefault().post(tab.getPosition(), EventBusTags.CHANGE_MAIN_INDEX);
                 }
             }
 
@@ -365,6 +356,19 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void launchActivity(@NonNull Intent intent) {
         checkNotNull(intent);
         ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (null != tabLayout && null != tabLayout.getTabAt(0)) {
+                tabLayout.getTabAt(0).select();
+            }
+            if (null != tabLayoutTwo && null != tabLayoutTwo.getTabAt(0)) {
+                tabLayoutTwo.getTabAt(0).select();
+            }
+        }
     }
 
     @Override

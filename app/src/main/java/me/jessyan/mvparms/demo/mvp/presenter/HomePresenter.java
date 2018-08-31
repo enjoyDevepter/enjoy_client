@@ -64,38 +64,6 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
         PermissionUtil.readPhoneState(new PermissionUtil.RequestPermission() {
             @Override
             public void onRequestPermissionSuccess() {
-                //request permission success, do something.
-                HomeRequest request = new HomeRequest();
-                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-                String token = String.valueOf(cache.get(KEY_KEEP + "token"));
-                if (ArmsUtils.isEmpty(token)) {
-                    request.setCmd(301);
-                } else {
-                    request.setCmd(302);
-                }
-                request.setCity(String.valueOf(cache.get("city")));
-                request.setCounty(String.valueOf(cache.get("county")));
-                request.setProvince(String.valueOf(cache.get("province")));
-                request.setToken(token);
-
-                mModel.getHomeInfo(request)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe(disposable -> {
-                            mRootView.showLoading();//显示下拉刷新的进度条
-                        }).doFinally(() -> {
-                    mRootView.hideLoading();//隐藏下拉刷新的进度条
-                }).subscribe(new ErrorHandleSubscriber<HomeResponse>(mErrorHandler) {
-                    @Override
-                    public void onNext(HomeResponse response) {
-                        if (response.isSuccess()) {
-                            mRootView.refreshUI(response.getFirstNavList(), response.getCarouselList(), response.getModuleList(), response.getSecondNavList());
-                            getRecommenDiaryList();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
-                    }
-                });
             }
 
             @Override
@@ -108,6 +76,39 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                 mRootView.showMessage("Need to go to the settings");
             }
         }, mRootView.getRxPermissions(), mErrorHandler);
+
+        //request permission success, do something.
+        HomeRequest request = new HomeRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = String.valueOf(cache.get(KEY_KEEP + "token"));
+        if (ArmsUtils.isEmpty(token)) {
+            request.setCmd(301);
+        } else {
+            request.setCmd(302);
+        }
+        request.setCity(String.valueOf(cache.get("city")));
+        request.setCounty(String.valueOf(cache.get("county")));
+        request.setProvince(String.valueOf(cache.get("province")));
+        request.setToken(token);
+
+        mModel.getHomeInfo(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).doFinally(() -> {
+            mRootView.hideLoading();//隐藏下拉刷新的进度条
+        }).subscribe(new ErrorHandleSubscriber<HomeResponse>(mErrorHandler) {
+            @Override
+            public void onNext(HomeResponse response) {
+                if (response.isSuccess()) {
+                    mRootView.refreshUI(response.getFirstNavList(), response.getCarouselList(), response.getModuleList(), response.getSecondNavList());
+                    getRecommenDiaryList();
+                } else {
+                    mRootView.showMessage(response.getRetDesc());
+                }
+            }
+        });
     }
 
     public void getRecommenDiaryList() {

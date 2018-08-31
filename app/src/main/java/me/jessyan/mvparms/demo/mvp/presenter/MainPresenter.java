@@ -1,11 +1,20 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.Context;
+import android.location.LocationListener;
+import android.location.LocationManager;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.PermissionUtil;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,6 +37,36 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     @Inject
     public MainPresenter(MainContract.Model model, MainContract.View rootView) {
         super(model, rootView);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    void onCreate() {
+        requestLocation();//打开 App 时自动加载列表
+    }
+
+
+    private void requestLocation() {
+        PermissionUtil.locaiton(new PermissionUtil.RequestPermission() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onRequestPermissionSuccess() {
+                LocationManager locationManager = (LocationManager) mRootView.getActivity().getSystemService(Context.LOCATION_SERVICE);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000l, 0, (LocationListener) mRootView.getActivity());
+                //request permission success, do something.
+            }
+
+            @Override
+            public void onRequestPermissionFailure(List<String> permissions) {
+                mRootView.showMessage("Request permissions failure");
+            }
+
+            @Override
+            public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+                mRootView.showMessage("Need to go to the settings");
+            }
+        }, mRootView.getRxPermissions(), mErrorHandler);
+
+
     }
 
     @Override

@@ -27,7 +27,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="92dp"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <View
             android:layout_width="94dp"

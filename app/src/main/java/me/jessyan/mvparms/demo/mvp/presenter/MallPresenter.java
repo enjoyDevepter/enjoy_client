@@ -99,13 +99,6 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                 mRootView.showMessage("Need to go to the settings");
             }
         }, mRxPermissions, mErrorHandler);
-
-
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        if (cache.get("category") != null) {
-            mRootView.refreshNaviTitle((List<Category>) cache.get("category"));
-            return;
-        }
         SimpleRequest request = new SimpleRequest();
         request.setCmd(401);
         mModel.getCategory(request)
@@ -300,8 +293,6 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                 }
             }
         }
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        cache.put("category", categories);
         this.categories.clear();
         this.categories.addAll(categories.get(0).getCatagories());
         return categories;

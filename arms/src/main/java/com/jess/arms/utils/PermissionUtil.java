@@ -131,6 +131,10 @@ public class PermissionUtil {
         requestPermission(requestPermission, rxPermissions, errorHandler, Manifest.permission.READ_PHONE_STATE);
     }
 
+    public static void locaiton(RequestPermission requestPermission, RxPermissions rxPermissions, RxErrorHandler errorHandler) {
+        requestPermission(requestPermission, rxPermissions, errorHandler, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
+    }
+
     /**
      * 请求app运行初始化
      */

@@ -1,6 +1,9 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,11 +17,14 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
@@ -37,12 +43,14 @@ import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, ViewPager.OnPageChangeListener {
+public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, ViewPager.OnPageChangeListener, LocationListener {
 
     @BindView(R.id.bbl)
     BottomBarLayout bottomBarLayout;
     @BindView(R.id.viewpager)
     ViewPager viewPager;
+    @Inject
+    RxPermissions mRxPermissions;
 
     private List<Fragment> mFragmentList = new ArrayList<>();
 
@@ -120,7 +128,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
 
     @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
-    public void updateIndex() {
+    public void updateIndex(int index) {
         viewPager.setCurrentItem(1);
     }
 
@@ -163,5 +171,37 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        System.out.println("location.getLatitude() " + location.getLatitude()
+                + "location.getAltitude()" + location.getLongitude()
+        );
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public RxPermissions getRxPermissions() {
+        return mRxPermissions;
     }
 }
