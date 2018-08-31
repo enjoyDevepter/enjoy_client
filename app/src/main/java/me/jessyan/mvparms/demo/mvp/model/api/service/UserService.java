@@ -44,6 +44,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFansRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.SetCashPasswordRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
@@ -60,6 +61,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFansResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFollowListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.SetCashPasswordResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 import retrofit2.Retrofit;
@@ -179,4 +181,8 @@ public interface UserService {
     @POST("gateway")
         // 提交反馈
     Observable<FeedbackResponse> feedback(@Body FeedbackRequest request);
+
+    @POST("gateway")
+        // 提现密码修改
+    Observable<SetCashPasswordResponse> setCashPassword(@Body SetCashPasswordRequest request);
 }
