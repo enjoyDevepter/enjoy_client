@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
+            android:drawablePadding="6dp"
             android:drawableRight="@mipmap/arrow_down"
             android:gravity="center"
             android:text="北京"
