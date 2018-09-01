@@ -255,16 +255,21 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             RecyclerView moduleRV = moduleV.findViewById(R.id.moduleRV);
             ((TextView) moduleV.findViewById(R.id.module_name)).setText(module.getName());
             if ("平台介绍".equals(module.getName())) {
-                moduleV.findViewById(R.id.module_info).setVisibility(View.GONE);
+                moduleV.findViewById(R.id.title).setVisibility(View.GONE);
             }
             if ("新人专区".equals(module.getName())) {
+                moduleV.findViewById(R.id.icon).setBackgroundResource(R.mipmap.main_new_peiple_icon);
                 try {
                     if (!ArmsUtils.isEmpty(module.getExtendParam())) {
                         ((TextView) moduleV.findViewById(R.id.moduleinfo)).setText("距离活动结束还有" + new JSONObject(module.getExtendParam()).optString("remainingDays") + "天");
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+            if("限时秒杀".equals(module.getName())){
+                moduleV.findViewById(R.id.icon).setBackgroundResource(R.mipmap.main_miaosha_icon);
             }
             moduleV.findViewById(R.id.module_info).setTag(module.getRedirectType());
             moduleV.findViewById(R.id.module_info).setOnClickListener(this);
