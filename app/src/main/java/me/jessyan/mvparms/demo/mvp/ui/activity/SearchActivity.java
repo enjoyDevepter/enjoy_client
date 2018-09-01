@@ -89,7 +89,8 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         ((HistoryAdapter) historyAdapter).setOnItemClickListener(this);
         cleanV.setOnClickListener(this);
         contentET.setOnEditorActionListener(this);
-        mPresenter.getHot("110000", "110000", "110000");
+        provideCache().put("type", 0);
+        mPresenter.getHot();
         mPresenter.getCategory();
     }
 
@@ -151,7 +152,10 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
-        mPresenter.goSearch("", (String) data);
+        Intent result = new Intent(this, SearchResultActivity.class);
+        result.putExtra("type", (int) provideCache().get("type"));
+        result.putExtra("keywords", contentET.getText().toString());
+        ArmsUtils.startActivity(result);
     }
 
     private void showType() {
@@ -167,6 +171,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
             @Override
             public void onItemClick(View view, int viewType, Object data, int position) {
                 searchTypeV.setText(((Category) data).getName());
+                provideCache().put("type", position);
                 if (popupWindow != null) {
                     popupWindow.dismiss();
                     popupWindow = null;
@@ -183,6 +188,10 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         switch (actionId) {
             case EditorInfo.IME_ACTION_SEARCH:
+                Intent result = new Intent(this, SearchResultActivity.class);
+                result.putExtra("type", (int) provideCache().get("type"));
+                result.putExtra("keywords", contentET.getText().toString());
+                ArmsUtils.startActivity(result);
                 return true;
         }
         return false;

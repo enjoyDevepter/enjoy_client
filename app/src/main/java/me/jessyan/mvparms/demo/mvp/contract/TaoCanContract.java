@@ -19,6 +19,8 @@ public interface TaoCanContract {
 
         void endLoadMore();
 
+        void showError(boolean hasData);
+
         void setLoadedAllItems(boolean has);
     }
 

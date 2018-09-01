@@ -103,6 +103,7 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
                             if (pullToRefresh) {
                                 mGoods.clear();
                             }
+                            mRootView.showError(response.getSetMealGoodsList().size() > 0);
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             mGoods.addAll(response.getSetMealGoodsList());
                             preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置

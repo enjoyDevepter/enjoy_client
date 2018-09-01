@@ -42,6 +42,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.presenter.MallPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterThirdAdapter;
@@ -157,6 +158,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         secondFilterRV.setAdapter(secondAdapter);
         secondAdapter.setOnItemClickListener(this);
         mPresenter.getCategory();
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     /**
@@ -278,6 +280,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 mPresenter.goCart();
                 break;
             case R.id.message:
+                ArmsUtils.startActivity(MessageActivity.class);
                 break;
             case R.id.search:
                 ArmsUtils.startActivity(SearchActivity.class);
@@ -378,7 +381,6 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         tabLayout.getTabAt(type).select();
         switch (type) {
             case 0:
-//                mPresenter.getGoodsList(true);
                 mRecyclerView.setAdapter(mAdapter);
                 break;
             case 1:
@@ -424,6 +426,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
             }
         } else {
             tab1.select();
+            mPresenter.getGoodsList(true);
         }
         tabLayout.addOnTabSelectedListener(this);
     }

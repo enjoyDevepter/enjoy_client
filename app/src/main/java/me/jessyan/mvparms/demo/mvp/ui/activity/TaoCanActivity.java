@@ -28,6 +28,8 @@ import me.jessyan.mvparms.demo.mvp.presenter.TaoCanPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.TaoCanListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.TaoCanListAdapter.ViewName;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -42,6 +44,8 @@ public class TaoCanActivity extends BaseActivity<TaoCanPresenter> implements Tao
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.content)
     RecyclerView mRecyclerView;
+    @BindView((R.id.no_date))
+    View noDataV;
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
@@ -93,6 +97,12 @@ public class TaoCanActivity extends BaseActivity<TaoCanPresenter> implements Tao
     @Override
     public void endLoadMore() {
         isLoadingMore = false;
+    }
+
+    @Override
+    public void showError(boolean hasData) {
+        noDataV.setVisibility(hasData ? INVISIBLE : VISIBLE);
+        swipeRefreshLayout.setVisibility(hasData ? VISIBLE : INVISIBLE);
     }
 
     @Override

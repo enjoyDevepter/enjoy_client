@@ -64,11 +64,12 @@ public class SearchPresenter extends BasePresenter<SearchContract.Model, SearchC
     }
 
 
-    public void getHot(String province, String city, String county) {
+    public void getHot() {
         HotRequest request = new HotRequest();
-        request.setCity(city);
-        request.setCounty(county);
-        request.setProvince(province);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setCity(String.valueOf(cache.get("city")));
+        request.setCounty(String.valueOf(cache.get("county")));
+        request.setProvince(String.valueOf(cache.get("province")));
         mModel.getHot(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -88,20 +89,12 @@ public class SearchPresenter extends BasePresenter<SearchContract.Model, SearchC
                 });
     }
 
-    public void goSearch(String type, String keywords) {
+    public void goSearch(String keywords) {
 
     }
 
 
     public void getCategory() {
-
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        if (cache.get("category") != null) {
-            categoryList.clear();
-            categoryList.addAll((List<Category>) cache.get("category"));
-            typeAdapter.notifyDataSetChanged();
-            return;
-        }
 
         SimpleRequest request = new SimpleRequest();
         request.setCmd(401);
@@ -149,8 +142,6 @@ public class SearchPresenter extends BasePresenter<SearchContract.Model, SearchC
                 }
             }
         }
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        cache.put("category", categories);
         return categories;
     }
 }

@@ -52,11 +52,12 @@ import me.jessyan.mvparms.demo.mvp.model.entity.GoodSummary;
 import me.jessyan.mvparms.demo.mvp.model.entity.Module;
 import me.jessyan.mvparms.demo.mvp.model.entity.NaviInfo;
 import me.jessyan.mvparms.demo.mvp.presenter.HomePresenter;
-import me.jessyan.mvparms.demo.mvp.ui.activity.AddressListActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CityActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DiaryForGoodsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.NewlywedsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PlatformActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.RecommendActivity;
@@ -70,6 +71,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.HomeGoodsAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -378,14 +380,18 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void killMyself() {
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.message:
-                ArmsUtils.startActivity(AddressListActivity.class);
+                Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getActivity()).extras();
+                if (ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
+                    ArmsUtils.startActivity(LoginActivity.class);
+                    return;
+                }
+                ArmsUtils.startActivity(MessageActivity.class);
                 break;
             case R.id.city:
                 ArmsUtils.startActivity(CityActivity.class);

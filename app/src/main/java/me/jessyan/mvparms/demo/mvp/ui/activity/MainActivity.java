@@ -10,8 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
-import com.chaychan.library.BottomBarItem;
 import com.chaychan.library.BottomBarLayout;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -43,8 +43,18 @@ import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, ViewPager.OnPageChangeListener, LocationListener {
+public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, ViewPager.OnPageChangeListener, LocationListener, View.OnClickListener {
 
+    @BindView(R.id.ll_home)
+    View homeV;
+    @BindView(R.id.ll_mall)
+    View mallV;
+    @BindView(R.id.ll_found)
+    View foundV;
+    @BindView(R.id.ll_appointment)
+    View appointmentV;
+    @BindView(R.id.ll_my)
+    View myV;
     @BindView(R.id.bbl)
     BottomBarLayout bottomBarLayout;
     @BindView(R.id.viewpager)
@@ -53,7 +63,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     RxPermissions mRxPermissions;
 
     private List<Fragment> mFragmentList = new ArrayList<>();
-
+    private boolean hasChange;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -97,26 +107,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
         });
         viewPager.addOnPageChangeListener(this);
-        viewPager.setOffscreenPageLimit(1);
-        bottomBarLayout.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(BottomBarItem bottomBarItem, int previousPosition, int currentPosition) {
-                if (previousPosition == currentPosition) {
-                    return;
-                }
-                if (currentPosition == 3 || currentPosition == 4) {
-                    Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
-                    if (ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
-                        ArmsUtils.startActivity(LoginActivity.class);
-                        return;
-                    }
-                }
-            }
-        });
         bottomBarLayout.setViewPager(viewPager);
+        homeV.setOnClickListener(this);
+        mallV.setOnClickListener(this);
+        foundV.setOnClickListener(this);
+        appointmentV.setOnClickListener(this);
+        myV.setOnClickListener(this);
         viewPager.setCurrentItem(0);
     }
-
 
     private void initFragment() {
         mFragmentList.add(HomeFragment.newInstance());
@@ -125,7 +123,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         mFragmentList.add(AppointmentFragment.newInstance());
         mFragmentList.add(MyFragment.newInstance());
     }
-
 
     @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
     public void updateIndex(int index) {
@@ -161,7 +158,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
+        if (position == 2 && positionOffset > 0 && ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
+            viewPager.setCurrentItem(2);
+        }
     }
 
     @Override
@@ -170,14 +170,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        System.out.println("location.getLatitude() " + location.getLatitude()
-                + "location.getAltitude()" + location.getLongitude()
-        );
     }
 
     @Override
@@ -203,5 +199,36 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public RxPermissions getRxPermissions() {
         return mRxPermissions;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_home:
+                viewPager.setCurrentItem(0);
+                break;
+            case R.id.ll_mall:
+                viewPager.setCurrentItem(1);
+                break;
+            case R.id.ll_found:
+                viewPager.setCurrentItem(2);
+                break;
+            case R.id.ll_appointment:
+                Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
+                if (ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
+                    ArmsUtils.startActivity(LoginActivity.class);
+                    return;
+                }
+                viewPager.setCurrentItem(3);
+                break;
+            case R.id.ll_my:
+                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
+                if (ArmsUtils.isEmpty((String) cache.get(KEY_KEEP + "token"))) {
+                    ArmsUtils.startActivity(LoginActivity.class);
+                    return;
+                }
+                viewPager.setCurrentItem(4);
+                break;
+        }
     }
 }
