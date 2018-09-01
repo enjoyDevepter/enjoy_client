@@ -7,6 +7,7 @@
     <dimen name="image_upload_height">120dp</dimen>
     <dimen name="code_height">29dp</dimen>
     <dimen name="search_type_height">13dp</dimen>
+    <dimen name="search_item_offsetY">2dp</dimen>
     <dimen name="home_module_margin_left">13dp</dimen>
     <dimen name="home_diary_item_height">236dp</dimen>
     <dimen name="home_module_style_margin_left">4dp</dimen>
@@ -25,6 +26,7 @@
     <dimen name="order_single_item_height">212dp</dimen>
     <dimen name="order_item_height">244dp</dimen>
     <dimen name="plus_width">10dp</dimen>
+    <dimen name="search_type_width">80dp</dimen>
 
 
 </resources>

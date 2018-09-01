@@ -44,7 +44,7 @@ public class TaoCanActivity extends BaseActivity<TaoCanPresenter> implements Tao
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.content)
     RecyclerView mRecyclerView;
-    @BindView((R.id.no_date))
+    @BindView((R.id.noData))
     View noDataV;
     @Inject
     RecyclerView.LayoutManager mLayoutManager;

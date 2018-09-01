@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -83,6 +84,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
     public void initData(Bundle savedInstanceState) {
         ArmsUtils.configRecyclerView(historyRV, mLayoutManager);
         tagFlowLayout.setAdapter(adapter);
+        tagFlowLayout.setOnTagClickListener(this);
         historyRV.setAdapter(historyAdapter);
         searchTypeV.setOnClickListener(this);
         backV.setOnClickListener(this);
@@ -123,7 +125,11 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
 
     @Override
     public boolean onTagClick(View view, int position, FlowLayout parent) {
-        return false;
+        Intent result = new Intent(this, SearchResultActivity.class);
+        result.putExtra("type", (int) provideCache().get("type"));
+        result.putExtra("keywords", (String) adapter.getItem(position));
+        ArmsUtils.startActivity(result);
+        return true;
     }
 
     @Override
@@ -154,7 +160,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
     public void onItemClick(View view, int viewType, Object data, int position) {
         Intent result = new Intent(this, SearchResultActivity.class);
         result.putExtra("type", (int) provideCache().get("type"));
-        result.putExtra("keywords", contentET.getText().toString());
+        result.putExtra("keywords", (String) data);
         ArmsUtils.startActivity(result);
     }
 
@@ -167,6 +173,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         RecyclerView recyclerView = new RecyclerView(this);
         ArmsUtils.configRecyclerView(recyclerView, new LinearLayoutManager(this));
         recyclerView.setAdapter(typeAdapter);
+        recyclerView.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
         typeAdapter.setOnItemClickListener(new DefaultAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int viewType, Object data, int position) {
@@ -178,10 +185,10 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
                 }
             }
         });
-        popupWindow = new PopupWindow(recyclerView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        popupWindow = new PopupWindow(recyclerView, ArmsUtils.getDimens(this, R.dimen.search_type_width), LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(true);
-        popupWindow.showAsDropDown(searchTypeV, 0, 0);
+        popupWindow.showAsDropDown(searchTypeV, 0, ArmsUtils.getDimens(this, R.dimen.search_item_offsetY));
     }
 
     @Override

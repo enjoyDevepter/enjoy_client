@@ -131,9 +131,9 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
         typeV.setOnClickListener(this);
         saleV.setOnClickListener(this);
         priceV.setOnClickListener(this);
+        maskV.setOnClickListener(this);
         mAdapter.setOnItemClickListener(this);
         mHAdapter.setOnItemClickListener(this);
-        maskV.setOnClickListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         ArmsUtils.configRecyclerView(secondFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -241,6 +241,7 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
 
     @Override
     public void killMyself() {
+        finish();
     }
 
     @Override
