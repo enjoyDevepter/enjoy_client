@@ -3,7 +3,6 @@ package me.jessyan.mvparms.demo.mvp.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +36,13 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.CouponActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.FansActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.InviteMainActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyDiaryActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyFarvirateActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyFollowActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyMealActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MyStoreActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.RecommenderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SettingActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.UserInfoActivity;
@@ -222,6 +223,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 ArmsUtils.startActivity(SettingActivity.class);
                 break;
             case R.id.msg:
+                ArmsUtils.startActivity(MessageActivity.class);
                 break;
             case R.id.goods_order:
                 Intent intent0 = new Intent(getContext(), MyOrderActivity.class);
@@ -258,6 +260,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 ArmsUtils.startActivity(CouponActivity.class);
                 break;
             case R.id.store:
+                ArmsUtils.startActivity(MyStoreActivity.class);
                 break;
             case R.id.recommender:
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();

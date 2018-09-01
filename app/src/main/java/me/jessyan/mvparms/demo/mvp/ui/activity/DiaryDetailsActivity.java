@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
@@ -85,8 +86,11 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     View isPraiseTV;
     @BindView(R.id.praise)
     TextView praiseTV;
+    @BindView(R.id.tab)
+    TabLayout tab;
     @BindView(R.id.commentRV)
     RecyclerView commentRV;
+
 
     @BindView(R.id.content)
     EditText commentET;
@@ -129,8 +133,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         commentET.setOnEditorActionListener(this);
         ArmsUtils.configRecyclerView(commentRV, mLayoutManager);
         commentRV.setAdapter(mAdapter);
+        tab.addTab(tab.newTab().setText("全部评论"));
     }
-
 
     @Override
     public void showLoading() {
@@ -268,10 +272,16 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         switch (actionId) {
             case EditorInfo.IME_ACTION_SEND:
-                System.out.println("");
-                break;
+                String comment = commentET.getText().toString();
+                if (ArmsUtils.isEmpty(comment)) {
+                    showMessage("请输入评论内容");
+                    return true;
+                }
+                provideCache().put("diaryId", response.getDiary().getDiaryId());
+                provideCache().put("content", comment);
+                mPresenter.comment();
+                return true;
         }
-
         return false;
     }
 

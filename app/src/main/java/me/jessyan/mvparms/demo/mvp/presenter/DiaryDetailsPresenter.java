@@ -21,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.DiaryComment;
+import me.jessyan.mvparms.demo.mvp.model.entity.diary.DiaryCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryCommentListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
@@ -64,7 +65,7 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
 
     private void getDiaryDetails() {
         DiaryDetailsRequest request = new DiaryDetailsRequest();
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) (cache.get(KEY_KEEP + "token"));
         if (ArmsUtils.isEmpty(token)) {
             request.setCmd(807);
@@ -135,6 +136,36 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateVoteStatus(vote);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 评论
+     */
+    public void comment() {
+        if (checkLoginStatus()) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+        DiaryCommentRequest request = new DiaryCommentRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setDiaryId((String) mRootView.getCache().get("diaryId"));
+        request.setContent((String) mRootView.getCache().get("content"));
+        mModel.comment(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            getDiaryComment();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

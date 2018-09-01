@@ -7,6 +7,7 @@ import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.diary.DiaryCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryCommentListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
@@ -41,6 +42,8 @@ public interface DiaryDetailsContract {
         Observable<BaseResponse> diaryVote(DiaryVoteRequest request);
 
         Observable<BaseResponse> follow(FollowMemberRequest request);
+
+        Observable<BaseResponse> comment(DiaryCommentRequest request);
 
     }
 }

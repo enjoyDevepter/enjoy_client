@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.diary.DiaryCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryCommentListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
@@ -62,5 +63,11 @@ public class DiaryDetailsModel extends BaseModel implements DiaryDetailsContract
     public Observable<BaseResponse> follow(FollowMemberRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .follow(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> comment(DiaryCommentRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .comment(request);
     }
 }

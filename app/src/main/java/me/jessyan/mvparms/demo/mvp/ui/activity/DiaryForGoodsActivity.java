@@ -292,8 +292,6 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                         .build());
         goodsNameTV.setText(response.getGoods().getName());
         goodsPriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
-
-
     }
 
 

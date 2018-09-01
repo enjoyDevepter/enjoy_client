@@ -1,6 +1,7 @@
 package me.jessyan.mvparms.demo.mvp.model.api.service;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.diary.DiaryCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
@@ -158,6 +159,9 @@ public interface MainService {
 
     @POST("gateway")
     Observable<BaseResponse> follow(@Body FollowMemberRequest request);
+
+    @POST("gateway")
+    Observable<BaseResponse> comment(@Body DiaryCommentRequest request);
 
     @POST("gateway")
     Observable<DiaryResponse> getDiary(@Body DiaryRequest request);

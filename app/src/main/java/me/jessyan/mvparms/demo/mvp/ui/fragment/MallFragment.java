@@ -194,6 +194,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                             mPresenter.getGoodsList(false);
                             break;
                         case 1:
+                            mPresenter.getKGoodsList(false);
                             break;
                         case 2:
                             mPresenter.getHGoodsList(false);
@@ -377,6 +378,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         tabLayout.getTabAt(type).select();
         switch (type) {
             case 0:
+//                mPresenter.getGoodsList(true);
                 mRecyclerView.setAdapter(mAdapter);
                 break;
             case 1:
