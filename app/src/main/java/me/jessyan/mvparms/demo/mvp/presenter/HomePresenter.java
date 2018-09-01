@@ -6,6 +6,7 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.PermissionUtil;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
@@ -98,7 +99,8 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                     mRootView.showLoading();//显示下拉刷新的进度条
                 }).doFinally(() -> {
             mRootView.hideLoading();//隐藏下拉刷新的进度条
-        }).subscribe(new ErrorHandleSubscriber<HomeResponse>(mErrorHandler) {
+        }).compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HomeResponse>(mErrorHandler) {
             @Override
             public void onNext(HomeResponse response) {
                 if (response.isSuccess()) {

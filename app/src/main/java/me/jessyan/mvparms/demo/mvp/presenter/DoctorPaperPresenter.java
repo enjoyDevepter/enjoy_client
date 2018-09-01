@@ -77,6 +77,7 @@ public class DoctorPaperPresenter extends BasePresenter<DoctorPaperContract.Mode
                         if (response.isSuccess()) {
                             GoodsList.clear();
                             GoodsList.addAll(response.getIdentificationList());
+                            mRootView.setEmpty(response.getIdentificationList().size() == 0);
                             mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());

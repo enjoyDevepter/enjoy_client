@@ -44,6 +44,9 @@ public class DoctorHonorActivity extends BaseActivity<DoctorHonorPresenter> impl
     @BindView(R.id.back)
     View back;
 
+    @BindView(R.id.no_date)
+    View no_date;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerDoctorHonorComponent //如找不到该类,请编译一下项目
@@ -101,5 +104,10 @@ public class DoctorHonorActivity extends BaseActivity<DoctorHonorPresenter> impl
 
     public Activity getActivity(){
         return this;
+    }
+
+    public void setEmpty(boolean isEmpty){
+        list.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        no_date.setVisibility(!isEmpty ? View.GONE : View.VISIBLE);
     }
 }

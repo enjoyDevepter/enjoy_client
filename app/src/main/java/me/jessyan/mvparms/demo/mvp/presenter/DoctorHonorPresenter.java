@@ -79,6 +79,7 @@ public class DoctorHonorPresenter extends BasePresenter<DoctorHonorContract.Mode
                         if (response.isSuccess()) {
                             GoodsList.clear();
                             GoodsList.addAll(response.getHonorList());
+                            mRootView.setEmpty(response.getHonorList().size() == 0);
                             mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());

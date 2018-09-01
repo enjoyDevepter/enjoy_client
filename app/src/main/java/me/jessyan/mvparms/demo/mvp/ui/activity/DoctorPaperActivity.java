@@ -44,6 +44,9 @@ public class DoctorPaperActivity extends BaseActivity<DoctorPaperPresenter> impl
     @BindView(R.id.back)
     View back;
 
+    @BindView(R.id.no_date)
+    View no_date;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerDoctorPaperComponent //如找不到该类,请编译一下项目
@@ -102,5 +105,10 @@ public class DoctorPaperActivity extends BaseActivity<DoctorPaperPresenter> impl
 
     public Activity getActivity(){
         return this;
+    }
+
+    public void setEmpty(boolean isEmpty){
+        list.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        no_date.setVisibility(!isEmpty ? View.GONE : View.VISIBLE);
     }
 }
