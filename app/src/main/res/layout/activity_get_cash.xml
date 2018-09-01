@@ -238,6 +238,7 @@
 
     <RelativeLayout
         android:id="@+id/convert_ok"
+        android:clickable="true"
         android:visibility="gone"
         android:background="#55000000"
         android:layout_width="match_parent"
@@ -246,7 +247,7 @@
             android:background="@color/white"
             android:layout_centerInParent="true"
             android:layout_width="219dp"
-            android:layout_height="117dp">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/tishi"
                 android:layout_centerHorizontal="true"
@@ -254,21 +255,12 @@
                 android:layout_alignParentTop="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="提示"
+                android:text="请输入支付密码"
                 android:textColor="#ff000000"
                 android:textSize="13sp"
                 />
 
-            <TextView
-                android:layout_below="@id/tishi"
-                android:layout_marginTop="40dp"
-                android:layout_width="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_height="wrap_content"
-                android:text="消费币转换成功！"
-                android:textColor="#ff333333"
-                android:textSize="13sp"
-                />
+
             <View
                 android:layout_marginTop="13dp"
                 android:layout_marginLeft="13dp"
@@ -278,9 +270,73 @@
                 android:layout_height="9dp"/>
 
             <View
+                android:id="@+id/divider"
                 android:layout_marginTop="12dp"
                 android:layout_below="@id/tishi"
                 style="@style/divider_1"/>
+
+            <TextView
+                android:id="@+id/tixian"
+                android:layout_below="@id/divider"
+                android:layout_marginTop="14dp"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:text="提现"
+                android:textColor="#ff333333"
+                android:textSize="13sp"
+                />
+
+            <LinearLayout
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/tixian"
+                android:layout_marginTop="13dp"
+                android:id="@+id/money_parent"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¥"
+                    android:textColor="#ff333333"
+                    android:textSize="19sp"
+                    />
+                <TextView
+                    android:id="@+id/money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2222.22"
+                    android:textColor="#ff333333"
+                    android:textSize="19sp"
+                    />
+
+            </LinearLayout>
+
+            <EditText
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp"
+                android:background="@drawable/get_cash_password_et_back"
+                android:layout_below="@+id/money_parent"
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/commit"
+                android:layout_width="110dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_below="@id/et_password"
+                android:background="@drawable/get_cash_password_commit_back"
+                android:text="确认"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="13sp"
+            />
         </RelativeLayout>
     </RelativeLayout>
 </FrameLayout>

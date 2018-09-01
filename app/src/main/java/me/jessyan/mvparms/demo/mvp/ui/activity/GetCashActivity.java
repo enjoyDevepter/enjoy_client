@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -73,6 +74,17 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
 
     @BindView(R.id.choose)
     View choose;
+    @BindView(R.id.close)
+    View close;
+    @BindView(R.id.convert_ok)
+    View convert_ok;
+    @BindView(R.id.money)
+    TextView money_show;
+
+    @BindView(R.id.commit)
+    View commit;
+    @BindView(R.id.et_password)
+    EditText et_password;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -91,7 +103,13 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                convert_ok.setVisibility(View.GONE);
+                et_password.setText("");
+            }
+        });
         title.setText("提现");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,10 +157,38 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
                     return;
                 }
 
-//                mPresenter.convertCash(money * 100);
+                if(bankCardBean == null){
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"请选择要提现的银行卡");
+                    return;
+                }
+
+                GetCashActivity.this.money = money * 100;
+                money_show.setText(String.format("%.2f",money * 1.0));
+                convert_ok.setVisibility(View.VISIBLE);
+                et_money.clearFocus();
+                convert_ok.requestFocus();
+                hideImm();
+            }
+        });
+
+        commit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(et_password.getText() == null || TextUtils.isEmpty(et_password.getText())){
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入提现密码");
+                    return;
+                }
+                if(bankCardBean == null){
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"请选择要提现的银行卡");
+                    convert_ok.setVisibility(View.GONE);
+                    return;
+                }
+                mPresenter.getCash(et_password.getText().toString(),money,bankCardBean.getId());
             }
         });
     }
+
+    private long money = 0;
 
     @Override
     public void showLoading() {
@@ -202,5 +248,10 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
         String cardNo = bankCardBean.getCardNo();
         car_num.setText(cardNo.substring(cardNo.length() - 4));
         show_bank_card.setVisibility(View.VISIBLE);
+    }
+
+    public void showOk(){
+        convert_ok.setVisibility(View.GONE);
+        ArmsUtils.makeText(this,"提现成功");
     }
 }
