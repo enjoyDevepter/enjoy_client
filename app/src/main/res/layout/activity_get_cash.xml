@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/title" />
+        <include layout="@layout/title"/>
 
         <View style="@style/divider_3" />
 
@@ -129,7 +129,7 @@
             android:background="@color/white">
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/title_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -142,7 +142,7 @@
                 android:id="@+id/edit_parent"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
-                android:layout_below="@id/title"
+                android:layout_below="@id/title_title"
                 android:layout_marginTop="14dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -259,7 +259,6 @@
                 android:textColor="#ff000000"
                 android:textSize="13sp"
                 />
-
 
             <View
                 android:layout_marginTop="13dp"

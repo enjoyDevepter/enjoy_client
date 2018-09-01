@@ -17,7 +17,9 @@ import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 
 
 @ActivityScope
@@ -43,5 +45,11 @@ public class GetCashModel extends BaseModel implements GetCashContract.Model {
     public Observable<GetCashResponse> getCash(GetCashRequest request) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
                 .getCash(request);
+    }
+
+    @Override
+    public Observable<UserInfoResponse> getUserInfo(UserInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getUserInfo(request);
     }
 }

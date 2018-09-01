@@ -86,6 +86,7 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
     @BindView(R.id.et_password)
     EditText et_password;
 
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerGetCashComponent //如找不到该类,请编译一下项目
@@ -111,6 +112,7 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
             }
         });
         title.setText("提现");
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -10,7 +10,11 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.GetCashListContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashListResponse;
 
 
 @ActivityScope
@@ -31,4 +35,11 @@ public class GetCashListModel extends BaseModel implements GetCashListContract.M
         this.mGson = null;
         this.mApplication = null;
     }
+
+    @Override
+    public Observable<GetCashListResponse> getCashList(GetCashListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getCashList(request);
+    }
+
 }

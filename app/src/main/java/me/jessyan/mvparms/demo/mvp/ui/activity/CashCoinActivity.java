@@ -68,6 +68,10 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     @BindView(R.id.no_date)
     View onDateV;
 
+
+    @BindView(R.id.go_to_list)
+    TextView go_to_list;
+
     @Override
     public void showError(boolean hasDate) {
         onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
@@ -123,6 +127,12 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
             @Override
             public void onClick(View v) {
                 ArmsUtils.startActivity(CashConvertActivity.class);
+            }
+        });
+        go_to_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArmsUtils.startActivity(GetCashListActivity.class);
             }
         });
         back.setOnClickListener(new View.OnClickListener() {

@@ -59,7 +59,7 @@ public class CashCoinPresenter extends BasePresenter<CashCoinContract.Model, Cas
         this.mApplication = null;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void requestOrderList() {
         requestOrderList(1, true);
     }

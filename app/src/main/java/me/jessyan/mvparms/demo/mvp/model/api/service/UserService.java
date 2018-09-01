@@ -36,6 +36,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FeedbackRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashCoinRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetMyMemberListRequest;
@@ -55,6 +56,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.DelBankCardRespons
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.FeedbackResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashCoinResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetMyMemberListResponse;
@@ -192,4 +194,8 @@ public interface UserService {
         // 提现
     Observable<GetCashResponse> getCash(@Body GetCashRequest request);
 
+
+    @POST("gateway")
+        // 提现列表
+    Observable<GetCashListResponse> getCashList(@Body GetCashListRequest request);
 }
