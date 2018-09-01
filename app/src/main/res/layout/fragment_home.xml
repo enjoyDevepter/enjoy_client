@@ -100,10 +100,13 @@
                         app:tabIndicatorHeight="2dp"
                         app:tabMode="scrollable"
                         app:tabPaddingEnd="0dp"
+                        android:paddingLeft="15dp"
                         app:tabPaddingStart="0dp"
                         app:tabSelectedTextColor="#FF333333"
                         app:tabTextAppearance="@style/TabLayoutTextStyle"
                         app:tabTextColor="#FF333333" />
+
+                    <View style="@style/divider_1"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
