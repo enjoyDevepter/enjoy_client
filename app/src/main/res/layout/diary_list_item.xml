@@ -45,7 +45,8 @@
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="2018-07-12" />
+            android:textColor="#FFB3B3B3"
+            android:textSize="10sp" />
     </LinearLayout>
 
 
@@ -78,8 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:lines="2"
-        android:text="打完水光针这么多天了，很针的注射和皮..." />
+        android:lines="2" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -105,7 +105,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="1000"
                 android:textColor="#FFB3B3B3"
                 android:textSize="11sp" />
 
@@ -133,7 +132,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="1000"
                 android:textColor="#FFB3B3B3"
                 android:textSize="11sp" />
 
@@ -159,7 +157,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="1000"
                 android:textColor="#FFB3B3B3"
                 android:textSize="11sp" />
 

@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -51,7 +52,7 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
     @BindView(R.id.name)
     TextView nameTV;
     @BindView(R.id.price)
-    TextView priceTV;
+    MoneyView priceTV;
     @BindView(R.id.sale)
     TextView saleTV;
     @BindView(R.id.salePrice)
@@ -75,7 +76,7 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
         Observable.just(goods.getSales())
                 .subscribe(s -> saleTV.setText(String.valueOf(s)));
         Observable.just(goods.getSecKillPrice())
-                .subscribe(s -> priceTV.setText(String.valueOf(s)));
+                .subscribe(s -> priceTV.setMoneyText(String.valueOf(s)));
         salePriceTV.setText("￥" + String.valueOf(goods.getSalePrice()));
         salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定

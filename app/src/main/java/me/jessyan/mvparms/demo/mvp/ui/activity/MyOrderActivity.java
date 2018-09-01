@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -115,6 +117,10 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                 tab3.select();
                 break;
         }
+        LinearLayout linearLayout = (LinearLayout) typeTabLayout.getChildAt(0);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        linearLayout.setDividerDrawable(ContextCompat.getDrawable(this,
+                R.drawable.tablayout_divider_vertical));
         statusTabLayout.addOnTabSelectedListener(this);
         initPaginate();
     }

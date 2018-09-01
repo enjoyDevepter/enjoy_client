@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -50,11 +51,11 @@ public class MealGoodsListItemHolder extends BaseHolder<MealGoods> {
     @BindView(R.id.name)
     TextView nameTV;
     @BindView(R.id.salesPrice)
-    TextView salesPriceTV;
+    MoneyView salesPriceTV;
     @BindView(R.id.sale)
     TextView saleTV;
     @BindView(R.id.totalPrice)
-    TextView totalPriceTV;
+    MoneyView totalPriceTV;
     @BindView(R.id.buy)
     View buyV;
     TaoCanListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
@@ -77,8 +78,8 @@ public class MealGoodsListItemHolder extends BaseHolder<MealGoods> {
         Observable.just(goods.getSales())
                 .subscribe(s -> saleTV.setText(String.valueOf(s)));
         Observable.just(goods.getSalePrice())
-                .subscribe(s -> salesPriceTV.setText(String.valueOf(s)));
-        totalPriceTV.setText(String.valueOf(goods.getTotalPrice()));
+                .subscribe(s -> salesPriceTV.setMoneyText(String.valueOf(s)));
+        totalPriceTV.setMoneyText(String.valueOf(goods.getTotalPrice()));
         totalPriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定

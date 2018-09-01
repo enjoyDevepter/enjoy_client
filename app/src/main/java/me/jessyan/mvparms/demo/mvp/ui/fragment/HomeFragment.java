@@ -75,7 +75,7 @@ import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, DiaryListAdapter.OnChildItemClickLinstener, DefaultAdapter.OnRecyclerViewItemClickListener, OnBannerListener {
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, DiaryListAdapter.OnChildItemClickLinstener, DefaultAdapter.OnRecyclerViewItemClickListener, OnBannerListener, TabLayout.OnTabSelectedListener {
 
     @BindView(R.id.message)
     View messageV;
@@ -208,36 +208,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
         // 一级导航
         tabLayout.removeAllTabs();
+        tabLayout.addOnTabSelectedListener(this);
         for (NaviInfo naviInfo : firstNavList) {
             tabLayout.addTab(tabLayout.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
         }
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
-                String tag = (String) tab.getTag();
-                if ("".equals(tab.getTag())) {
-                } else if ("combo".equals(tag)) {
-                    ArmsUtils.startActivity(TaoCanActivity.class);
-                } else if ("medicalcosmetology".equals(tag)) {
-                    cache.put("defaultIndex", 2);
-                    EventBus.getDefault().post(tab.getPosition(), EventBusTags.CHANGE_MAIN_INDEX);
-                } else if ("shop".equals(tag)) {
-                    cache.put("defaultIndex", 0);
-                    EventBus.getDefault().post(tab.getPosition(), EventBusTags.CHANGE_MAIN_INDEX);
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        tabLayout.addOnTabSelectedListener(this);
 
         // 广告
         List<String> urls = new ArrayList<>();
@@ -270,7 +245,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     e.printStackTrace();
                 }
             }
-            if("限时秒杀".equals(module.getName())){
+            if ("限时秒杀".equals(module.getName())) {
                 moduleV.findViewById(R.id.icon).setBackgroundResource(R.mipmap.main_miaosha_icon);
             }
             moduleV.findViewById(R.id.module_info).setTag(module.getRedirectType());
@@ -377,6 +352,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             }
         }
     }
+
 
     @Override
     public void killMyself() {
@@ -506,6 +482,32 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void OnBannerClick(int position) {
+
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
+        String tag = (String) tab.getTag();
+        if ("".equals(tab.getTag())) {
+        } else if ("combo".equals(tag)) {
+            ArmsUtils.startActivity(TaoCanActivity.class);
+        } else if ("medicalcosmetology".equals(tag)) {
+            cache.put("defaultIndex", 2);
+            EventBus.getDefault().post(tab.getPosition(), EventBusTags.CHANGE_MAIN_INDEX);
+        } else if ("shop".equals(tag)) {
+            cache.put("defaultIndex", 0);
+            EventBus.getDefault().post(tab.getPosition(), EventBusTags.CHANGE_MAIN_INDEX);
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
 
     }
 }
