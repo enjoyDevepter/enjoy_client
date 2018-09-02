@@ -54,7 +54,7 @@ public class MessagePresenter extends BasePresenter<MessageContract.Model, Messa
     }
 
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     void onCreate() {
         getMessage(true);
     }
@@ -105,18 +105,21 @@ public class MessagePresenter extends BasePresenter<MessageContract.Model, Messa
                     @Override
                     public void onNext(MessageResponse response) {
                         if (response.isSuccess()) {
-                            mRootView.showConent(response.getMessageList().size() > 0);
+                            List<Message> messageList = response.getMessageList();
+                            mRootView.showConent(messageList != null && messageList.size() > 0);
                             if (pullToRefresh) {
-                                messageList.clear();
+                                MessagePresenter.this.messageList.clear();
                             }
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                            messageList.addAll(response.getMessageList());
-                            preEndIndex = messageList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = messageList.size() / 10;
+                            if(messageList != null){
+                                MessagePresenter.this.messageList.addAll(messageList);
+                            }
+                            preEndIndex = MessagePresenter.this.messageList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = MessagePresenter.this.messageList.size() / 10;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
-                                mAdapter.notifyItemRangeInserted(preEndIndex, messageList.size());
+                                mAdapter.notifyItemRangeInserted(preEndIndex, MessagePresenter.this.messageList.size());
                             }
                         } else {
                             mRootView.showMessage(response.getRetDesc());

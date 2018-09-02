@@ -105,6 +105,9 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     @BindView(R.id.follow_view)
     View follow_view;
 
+    @BindView(R.id.chenghao)
+    TextView chenghao;
+
 
     @Inject
     ImageLoader mImageLoader;
@@ -338,5 +341,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         if (null == member.getRecomMember()) {
             recommenderV.setVisibility(View.INVISIBLE);
         }
+
+        chenghao.setText(member.getRank().getPointLevelName());
     }
 }
