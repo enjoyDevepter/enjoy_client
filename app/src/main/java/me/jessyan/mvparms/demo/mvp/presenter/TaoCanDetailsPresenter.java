@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
@@ -12,6 +13,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.PermissionUtil;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
@@ -34,6 +36,7 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+import static com.jess.arms.utils.ArmsUtils.startActivity;
 
 
 @ActivityScope
@@ -106,7 +109,7 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
     public void collectGoods(boolean collect) {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         if (cache.get(KEY_KEEP + "token") == null) {
-            ArmsUtils.startActivity(LoginActivity.class);
+            startActivity(LoginActivity.class);
             return;
         }
 
@@ -135,14 +138,14 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
     public void buy() {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         if (cache.get(KEY_KEEP + "token") == null) {
-            ArmsUtils.startActivity(LoginActivity.class);
+            startActivity(LoginActivity.class);
             return;
         }
         Intent intent = new Intent(mRootView.getActivity(), MealOrderConfirmActivity.class);
         intent.putExtra("totalPrice", mealDetailsResponse.getSetMealGoods().getTotalPrice());
         intent.putExtra("setMealId", mealDetailsResponse.getSetMealGoods().getSetMealId());
         intent.putExtra("salePrice", mealDetailsResponse.getSetMealGoods().getSalePrice());
-        ArmsUtils.startActivity(intent);
+        startActivity(intent);
 
     }
 
@@ -152,7 +155,7 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
         String token = (String) cache.get(KEY_KEEP + "token");
 
         if (ArmsUtils.isEmpty(token)) {
-            ArmsUtils.startActivity(LoginActivity.class);
+            startActivity(LoginActivity.class);
             return;
         }
         request.setToken(token);
@@ -175,4 +178,28 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
                 });
     }
 
+    public void tel(String phoneNum) {
+        //请求外部存储权限用于适配android6.0的权限管理机制
+        PermissionUtil.callPhone(new PermissionUtil.RequestPermission() {
+            @Override
+            public void onRequestPermissionSuccess() {
+                //request permission success, do something.
+            }
+
+            @Override
+            public void onRequestPermissionFailure(List<String> permissions) {
+                mRootView.showMessage("Request permissions failure");
+            }
+
+            @Override
+            public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+                mRootView.showMessage("Need to go to the settings");
+            }
+        }, mRootView.getRxPermissions(), mErrorHandler);
+
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        startActivity(intent);
+    }
 }

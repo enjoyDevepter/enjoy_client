@@ -227,7 +227,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                             // 预约
                             Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
                             makeIntent.putExtra("orderId", order.getOrderId());
-                            makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
+                            makeIntent.putExtra("mealName", order.getSetMealGoodsList().get(0).getName());
                             ArmsUtils.startActivity(makeIntent);
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记

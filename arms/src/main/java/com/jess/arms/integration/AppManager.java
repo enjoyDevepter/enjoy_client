@@ -168,7 +168,7 @@ public final class AppManager {
 //                .radius(20)
 //                .show();
 
-        Toast toast = Toast.makeText(getCurrentActivity(), message, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(mApplication, message, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         View view = toast.getView();
         view.setLayoutParams(new LinearLayout.LayoutParams(ArmsUtils.getDimens(view.getContext(), R.dimen.toast_width), ArmsUtils.getDimens(view.getContext(), R.dimen.toast_height)));

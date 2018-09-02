@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -79,13 +81,13 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     @BindView(R.id.image_count)
     TextView imageCountTV;
     @BindView(R.id.tailMoney_buttom)
-    TextView tailMoneyButtomTV;
+    MoneyView tailMoneyButtomTV;
     @BindView(R.id.deposit_buttom)
-    TextView depositButtomTV;
+    MoneyView depositButtomTV;
     @BindView(R.id.deposit)
-    TextView depositTV;
+    MoneyView depositTV;
     @BindView(R.id.tailMoney)
-    TextView tailMoneyTV;
+    MoneyView tailMoneyTV;
     @BindView(R.id.isFavorite)
     View isFavoriteV;
     @BindView(R.id.saleCount)
@@ -113,7 +115,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     @BindView(R.id.spec_name)
     TextView spceNameTV;
     @BindView(R.id.spec_price)
-    TextView spcePriceTV;
+    MoneyView spcePriceTV;
     @BindView(R.id.spec_goods_id)
     TextView spceIDTV;
     @BindView(R.id.goods_spec)
@@ -142,12 +144,12 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     TextView priceTagTV;
 
     @BindView(R.id.price)
-    TextView vipPriceTV;
+    MoneyView vipPriceTV;
     @BindView(R.id.salePrice_top)
     TextView salePriceTopTV;
 
     @BindView(R.id.time_limit_vip_price)
-    TextView timeLimitVipPriceV;
+    MoneyView timeLimitVipPriceV;
     @BindView(R.id.time_limit_tailMoney)
     TextView timeLimitTailMoney;
 
@@ -411,7 +413,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         initViewPage();
         detailWV.loadData(response.getGoods().getMobileDetail(), "text/html", "UTF-8");
 
-        tailMoneyButtomTV.setText(String.valueOf(goods.getTailMoney()));
+        tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getTailMoney()));
         if (null != goods.getGoodsSpecValue()) {
             goodsSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
             provideCache().put("specValueId", goods.getGoodsSpecValue().getSpecValueId());
@@ -443,32 +445,35 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             } else {
                 countdownView.start(count);
             }
-            timeLimitVipPriceV.setText(String.valueOf(goods.getSecKillPrice()));
+            timeLimitVipPriceV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
             timeLimitTailMoney.setText(String.valueOf("￥" + goods.getSalePrice()));
-            tailMoneyButtomTV.setText(String.valueOf(goods.getSalePrice()));
-            depositButtomTV.setText(String.valueOf(goods.getSecKillPrice()));
-            spcePriceTV.setText(String.valueOf(goods.getSecKillPrice()));
+            timeLimitTailMoney.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getSalePrice()));
+            tailMoneyButtomTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            depositButtomTV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
+            spcePriceTV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
         } else if ("newpeople".equals(where)) {
-            spcePriceTV.setText(String.valueOf(goods.getVipPrice()));
-            vipPriceTV.setText(String.valueOf(goods.getVipPrice()));
+            spcePriceTV.setMoneyText(String.valueOf(goods.getVipPrice()));
+            vipPriceTV.setMoneyText(String.valueOf(goods.getVipPrice()));
             salePriceTopTV.setText(String.valueOf("￥" + goods.getSalePrice()));
             salePriceTopTV.getPaint().setFlags(STRIKE_THRU_TEXT_FLAG);
-            tailMoneyButtomTV.setText(String.valueOf(goods.getSalePrice()));
-            depositButtomTV.setText(String.valueOf(goods.getVipPrice()));
+            tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getSalePrice()));
+            tailMoneyButtomTV.getPaint().setFlags(STRIKE_THRU_TEXT_FLAG);
+            depositButtomTV.setMoneyText(String.valueOf(goods.getVipPrice()));
         } else {
-            spcePriceTV.setText(String.valueOf(goods.getSalePrice()));
+            spcePriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
             if (goods.getDeposit() == 0 && goods.getTailMoney() == 0 && ArmsUtils.isEmpty(goods.getAdvanceDepositId())) {
                 depositTagTV.setText("总金额:");
                 priceTagTV.setText("项目总金额");
-                depositButtomTV.setText(String.valueOf(goods.getSalePrice()));
+                depositButtomTV.setMoneyText(String.valueOf(goods.getSalePrice()));
                 depositButtomLayoutV.setVisibility(View.GONE);
                 tailMoneyLeftTagTV.setVisibility(View.INVISIBLE);
-                depositTV.setText(String.valueOf(goods.getSalePrice()));
-                tailMoneyTV.setText("");
+                tailMoneyTV.setVisibility(View.INVISIBLE);
+                depositTV.setMoneyText(String.valueOf(goods.getSalePrice()));
             } else {
-                depositButtomTV.setText(String.valueOf(goods.getDeposit()));
-                tailMoneyTV.setText(String.valueOf(goods.getTailMoney()));
-                depositTV.setText(String.valueOf(goods.getDeposit()));
+                depositButtomTV.setMoneyText(String.valueOf(goods.getDeposit()));
+                tailMoneyTV.setMoneyText(String.valueOf(goods.getTailMoney()));
+                depositTV.setMoneyText(String.valueOf(goods.getDeposit()));
             }
         }
     }
@@ -545,7 +550,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             specLayoutV.setVisibility(View.VISIBLE);
             specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_butom_in));
             spceIDTV.setText(response.getGoods().getAdvanceDepositId());
-            spcePriceTV.setText(String.valueOf(response.getGoods().getMarketPrice()));
+            spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getMarketPrice()));
             spceNameTV.setText(response.getGoods().getName());
 
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定

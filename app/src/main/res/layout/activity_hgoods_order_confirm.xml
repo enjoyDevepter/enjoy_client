@@ -61,7 +61,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="3dp"
-                        android:text="预付款："
+                        android:text="预付款:"
                         android:textColor="#FFABABAB"
                         android:textSize="12sp" />
 
@@ -69,21 +69,15 @@
                         android:id="@+id/deposit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        money:money_text="0.00" />
-
-                    <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="￥"-->
-                    <!--android:textColor="#FFFF0000"-->
-                    <!--android:textSize="13sp" />-->
-
-                    <!--<TextView-->
-                    <!--android:id="@+id/deposit"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textColor="#FFFF0000"-->
-                    <!--android:textSize="17sp" />-->
+                        android:layout_marginRight="15dp"
+                        money:cent_size="14sp"
+                        money:money_color="#FFFF0000"
+                        money:money_text="0.00"
+                        money:point_padding_left="1dp"
+                        money:point_padding_right="5dp"
+                        money:prefix_padding="2dp"
+                        money:prefix_size="12sp"
+                        money:yuan_size="17sp" />
 
                     <TextView
                         android:id="@+id/nums"
@@ -111,16 +105,26 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:layout_marginRight="3dp"
-                        android:text="总金额：￥"
+                        android:text="总金额:"
                         android:textColor="#FFABABAB"
                         android:textSize="12sp" />
 
-                    <TextView
+                    <com.github.cchao.MoneyView
                         android:id="@+id/tailMoney"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_gravity="bottom"
-                        android:layout_toRightOf="@id/price_tag" />
+                        money:cent_size="12sp"
+                        money:money_color="#FF666666"
+                        money:money_text="0.00"
+                        money:point_padding_left="1dp"
+                        money:point_padding_right="5dp"
+                        money:prefix_color="#FF666666"
+                        money:prefix_padding="2dp"
+                        money:prefix_size="12sp"
+                        money:yuan_size="12sp" />
+
                 </LinearLayout>
 
             </RelativeLayout>

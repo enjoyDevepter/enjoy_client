@@ -48,7 +48,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
     @BindView(R.id.nums)
     TextView numsTV;
     @BindView(R.id.tailMoney)
-    TextView tailMoneyTV;
+    MoneyView tailMoneyTV;
     @BindView(R.id.goods_spec)
     TextView goodsSpecTV;
     @BindView(R.id.hospital_info)
@@ -211,7 +211,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         Goods goods = response.getGoodsList().get(0);
         goodsNameTV.setText(goods.getName());
         numsTV.setText("x" + String.valueOf(goods.getNums()));
-        tailMoneyTV.setText(String.valueOf(goods.getTailMoney()));
+        tailMoneyTV.setMoneyText(String.valueOf(goods.getTailMoney()));
         goodsSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
 
         balanceTV.setText(ArmsUtils.formatLong(response.getBalance()));

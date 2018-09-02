@@ -110,7 +110,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     @BindView(R.id.spec_name)
     TextView spceNameTV;
     @BindView(R.id.spec_price)
-    TextView spcePriceTV;
+    MoneyView spcePriceTV;
     @BindView(R.id.spec_goods_id)
     TextView spceIDTV;
     @BindView(R.id.collect)
@@ -445,7 +445,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             salePriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
             salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             secKillPriceTV.setMoneyText(String.valueOf(response.getGoods().getSecKillPrice()));
-            spcePriceTV.setText(String.valueOf(response.getGoods().getSecKillPrice()));
+            spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getSecKillPrice()));
         } else if ("newpeople".equals(where)) {
             salePriceTopTV.setText("￥" + String.valueOf(response.getGoods().getSalePrice()));
             salePriceTopTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -453,10 +453,10 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             priceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
             secKillPriceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
-            spcePriceTV.setText(String.valueOf(response.getGoods().getVipPrice()));
+            spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
         } else {
             priceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
-            spcePriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
+            spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
         }
 
     }
@@ -528,7 +528,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             specLayoutV.setVisibility(View.VISIBLE);
             specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_butom_in));
             Goods goods = ((Goods) provideCache().get("goods"));
-            spceIDTV.setText(goods.getGoodsId());
+            spceIDTV.setText(goods.getMerchId());
             spceNameTV.setText(goods.getName());
             adapter.setSelectedList(0);
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定

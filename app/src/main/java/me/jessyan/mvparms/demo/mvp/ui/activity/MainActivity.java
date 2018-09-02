@@ -63,7 +63,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     RxPermissions mRxPermissions;
 
     private List<Fragment> mFragmentList = new ArrayList<>();
-    private boolean hasChange;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {

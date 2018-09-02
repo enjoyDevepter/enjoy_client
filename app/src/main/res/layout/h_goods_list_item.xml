@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:money="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="138dp"
     android:background="@drawable/list_item_bg"
@@ -26,7 +27,6 @@
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@id/image"
         android:lines="2"
-        android:text=" 湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
         android:textColor="#FF000000"
         android:textSize="13sp" />
 
@@ -38,7 +38,6 @@
         android:layout_alignLeft="@id/name"
         android:layout_below="@id/name"
         android:layout_marginTop="8dp"
-        android:text="刘聪 北京太和医疗美容医院"
         android:textColor="#666666"
         android:textSize="12sp" />
 
@@ -50,60 +49,86 @@
         android:layout_alignLeft="@id/doctor"
         android:layout_below="@id/doctor"
         android:layout_marginTop="8dp"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:text="预付款："
+            android:layout_gravity="bottom"
+            android:layout_marginRight="2dp"
+            android:text="预付款:"
             android:textColor="#666666"
             android:textSize="13sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="￥"
-            android:textColor="#FFFF0000"
-            android:textSize="12sp" />
-
-        <TextView
+        <com.github.cchao.MoneyView
             android:id="@+id/deposit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FFFF0000"
-            android:textSize="17sp" />
+            android:layout_marginRight="15dp"
+            money:cent_size="14sp"
+            money:money_color="#FFFF0000"
+            money:money_text="0.00"
+            money:point_padding_left="1dp"
+            money:point_padding_right="5dp"
+            money:prefix_padding="2dp"
+            money:prefix_size="12sp"
+            money:yuan_size="17sp" />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/image"
-        android:layout_alignLeft="@id/doctor"
+        android:layout_alignLeft="@id/price_layout"
         android:layout_marginTop="5dp"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="总金额："
+            android:layout_marginRight="2dp"
+            android:text="总金额:"
             android:textColor="#666666"
             android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/pricet_tag"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="￥"
-            android:textColor="#FFFF0000"
-            android:textSize="12sp" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tailMoney"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#666666"
-            android:textSize="13sp" />
+            <com.github.cchao.MoneyView
+                android:id="@+id/tailMoney_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                money:cent_size="14sp"
+                money:money_color="#FFFF0000"
+                money:money_text="0.00"
+                money:point_padding_left="1dp"
+                money:point_padding_right="5dp"
+                money:prefix_padding="2dp"
+                money:prefix_size="12sp"
+                money:yuan_size="17sp" />
+
+            <com.github.cchao.MoneyView
+                android:id="@+id/tailMoney_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="bottom"
+                money:cent_size="14sp"
+                money:money_color="#FF666666"
+                money:money_text="0.00"
+                money:point_padding_left="1dp"
+                money:point_padding_right="5dp"
+                money:prefix_color="#FF666666"
+                money:prefix_padding="2dp"
+                money:prefix_size="14sp"
+                money:yuan_size="14sp" />
+        </FrameLayout>
+
 
         <TextView
             android:layout_width="0dp"

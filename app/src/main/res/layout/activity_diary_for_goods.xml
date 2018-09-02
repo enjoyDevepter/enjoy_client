@@ -149,34 +149,23 @@
                 android:textColor="#FF000000"
                 android:textSize="13sp" />
 
-            <LinearLayout
-                android:id="@+id/price_layout"
+            <com.github.cchao.MoneyView
+                android:id="@+id/goods_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/goods_name"
                 android:layout_below="@id/goods_name"
+                android:layout_centerVertical="true"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                app:cent_size="14sp"
+                app:money_color="#FFFF0000"
+                app:money_text="0.00"
+                app:point_padding_left="1dp"
+                app:point_padding_right="5dp"
+                app:prefix_padding="2dp"
+                app:prefix_size="12sp"
+                app:yuan_size="17sp" />
 
-                <TextView
-                    android:id="@+id/price_tag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginRight="3dp"
-                    android:text="￥"
-                    android:textColor="#FFFF0000"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/goods_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_toRightOf="@id/price_tag"
-                    android:textColor="#FFFF0000"
-                    android:textSize="17sp" />
-            </LinearLayout>
         </RelativeLayout>
 
         <android.support.design.widget.TabLayout

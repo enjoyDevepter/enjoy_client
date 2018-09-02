@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:money="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -56,24 +55,23 @@
                         android:id="@+id/price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/name"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="15dp"
+                        app:cent_size="17sp"
+                        app:money_color="#FFFF0000"
                         app:money_text="0.00"
-                        money:cent_size="17sp"
-                        money:money_color="#FFFF0000"
-                        money:point_padding_left="1dp"
-                        money:point_padding_right="5dp"
-                        money:prefix_padding="2dp"
-                        money:prefix_size="12sp"
-                        money:yuan_size="20sp" />
+                        app:point_padding_left="1dp"
+                        app:point_padding_right="5dp"
+                        app:prefix_padding="2dp"
+                        app:prefix_size="12sp"
+                        app:yuan_size="20sp" />
 
                     <TextView
                         android:id="@+id/newly"
                         android:layout_width="70dp"
                         android:layout_height="25dp"
                         android:layout_marginLeft="10dp"
-                        android:background="@drawable/order_btn_15_bg"
+                        android:background="@drawable/newly_btn_bg"
                         android:gravity="center"
                         android:text="新人专享"
                         android:textColor="#FFFFFFFF" />
@@ -358,21 +356,20 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:text="￥"
-                    android:textColor="#FFFF0000"
-                    android:textSize="12sp" />
-
-                <TextView
+                <com.github.cchao.MoneyView
                     android:id="@+id/spec_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:textColor="#FFFF0000"
-                    android:textSize="20sp" />
+                    android:layout_centerVertical="true"
+                    app:cent_size="17sp"
+                    app:money_color="#FFFF0000"
+                    app:money_text="0.00"
+                    app:point_padding_left="1dp"
+                    app:point_padding_right="5dp"
+                    app:prefix_padding="2dp"
+                    app:prefix_size="12sp"
+                    app:yuan_size="20sp" />
+
             </LinearLayout>
 
 
@@ -600,16 +597,16 @@
                             android:id="@+id/salePrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:money_color="#FF666666"
+                            android:layout_centerVertical="true"
+                            app:cent_size="12sp"
+                            app:money_color="#FF333333"
                             app:money_text="0.00"
-                            money:cent_size="12sp"
-                            money:money_color="#FF666666"
-                            money:point_padding_left="1dp"
-                            money:point_padding_right="5dp"
-                            money:prefix_padding="2dp"
-                            money:prefix_size="12sp"
-                            money:yuan_size="12sp" />
-
+                            app:point_padding_left="1dp"
+                            app:point_padding_right="5dp"
+                            app:prefix_color="#FF333333"
+                            app:prefix_padding="2dp"
+                            app:prefix_size="12sp"
+                            app:yuan_size="12sp" />
 
                     </LinearLayout>
 
@@ -632,16 +629,15 @@
                             android:id="@+id/secKillPrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/name"
                             android:layout_centerVertical="true"
+                            app:cent_size="14sp"
+                            app:money_color="#FFFF0000"
                             app:money_text="0.00"
-                            money:cent_size="14sp"
-                            money:money_color="#FFFF0000"
-                            money:point_padding_left="1dp"
-                            money:point_padding_right="5dp"
-                            money:prefix_padding="2dp"
-                            money:prefix_size="12sp"
-                            money:yuan_size="17sp" />
+                            app:point_padding_left="1dp"
+                            app:point_padding_right="5dp"
+                            app:prefix_padding="2dp"
+                            app:prefix_size="12sp"
+                            app:yuan_size="17sp" />
                     </LinearLayout>
 
                 </LinearLayout>

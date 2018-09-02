@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealDetailsRequest;
@@ -24,6 +25,9 @@ public interface TaoCanDetailsContract {
         void updateUI(MealDetailsResponse response);
 
         void showWX(Share share);
+
+        //申请权限
+        RxPermissions getRxPermissions();
     }
 
 

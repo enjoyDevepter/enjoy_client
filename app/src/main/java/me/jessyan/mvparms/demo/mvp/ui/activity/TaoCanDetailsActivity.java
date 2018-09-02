@@ -16,6 +16,7 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -77,6 +78,8 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     RecyclerView.Adapter mAdapter;
     @Inject
     RecyclerView.LayoutManager layoutManager;
+    @Inject
+    RxPermissions mRxPermissions;
 
     MealDetailsResponse response;
 
@@ -223,6 +226,11 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     }
 
     @Override
+    public RxPermissions getRxPermissions() {
+        return mRxPermissions;
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
@@ -235,6 +243,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
                 mPresenter.collectGoods(!collectV.isSelected());
                 break;
             case R.id.tel:
+                mPresenter.tel(response.getTellphone());
                 // 打电话
                 break;
             case R.id.share:

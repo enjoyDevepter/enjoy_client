@@ -120,6 +120,7 @@
                 android:background="@android:color/transparent"
                 android:hint="请输入密码"
                 android:imeOptions="actionDone"
+                android:inputType="textPassword"
                 android:singleLine="true"
                 android:textSize="13sp" />
 
@@ -148,6 +149,8 @@
                 android:background="@android:color/transparent"
                 android:hint="请输入验证码"
                 android:imeOptions="actionDone"
+                android:inputType="number"
+                android:maxLength="4"
                 android:singleLine="true"
                 android:textSize="13sp" />
 

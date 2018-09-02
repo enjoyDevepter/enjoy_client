@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -48,7 +49,7 @@ public class OrderConfirmGoodsListItemHolder extends BaseHolder<Goods> {
     @BindView(R.id.name)
     TextView nameTV;
     @BindView(R.id.price)
-    TextView priceTV;
+    MoneyView priceTV;
     @BindView(R.id.count)
     TextView countTV;
     @BindView(R.id.minus)
@@ -92,11 +93,11 @@ public class OrderConfirmGoodsListItemHolder extends BaseHolder<Goods> {
             operationV.setVisibility(View.INVISIBLE);
         }
         if (data.getSecKillPrice() != 0) {
-            priceTV.setText(String.valueOf(data.getSecKillPrice()));
+            priceTV.setMoneyText(String.valueOf(data.getSecKillPrice()));
         } else if (data.getVipPrice() != 0) {
-            priceTV.setText(String.valueOf(data.getVipPrice()));
+            priceTV.setMoneyText(String.valueOf(data.getVipPrice()));
         } else {
-            priceTV.setText(String.valueOf(data.getSalePrice()));
+            priceTV.setMoneyText(String.valueOf(data.getSalePrice()));
         }
         Observable.just(data.getName())
                 .subscribe(s -> nameTV.setText(String.valueOf(s)));

@@ -8,6 +8,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 
 public class MealDetailsResponse extends BaseResponse {
 
+    private String tellphone;
     private MealGoods setMealGoods;
 
     public MealGoods getSetMealGoods() {
@@ -18,10 +19,19 @@ public class MealDetailsResponse extends BaseResponse {
         this.setMealGoods = setMealGoods;
     }
 
+    public String getTellphone() {
+        return tellphone;
+    }
+
+    public void setTellphone(String tellphone) {
+        this.tellphone = tellphone;
+    }
+
     @Override
     public String toString() {
         return "MealDetailsResponse{" +
-                "setMealGoods=" + setMealGoods +
+                "tellphone='" + tellphone + '\'' +
+                ", setMealGoods=" + setMealGoods +
                 '}';
     }
 }

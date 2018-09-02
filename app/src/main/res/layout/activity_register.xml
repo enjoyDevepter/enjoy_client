@@ -61,6 +61,7 @@
                 android:background="@android:color/transparent"
                 android:hint="请输入手机号"
                 android:inputType="number"
+                android:maxLength="11"
                 android:textSize="13sp" />
 
         </LinearLayout>
@@ -105,6 +106,7 @@
                 android:background="@android:color/transparent"
                 android:hint="请输入验证码"
                 android:inputType="number"
+                android:maxLength="4"
                 android:textSize="13sp" />
 
             <TextView
@@ -187,21 +189,20 @@
             android:orientation="horizontal">
 
             <TextView
-                android:padding="3dp"
-                android:textSize="13sp"
-                android:textColor="#FF9A9A9A"
-                android:layout_marginLeft="26dp"
-                android:background="@drawable/register_choice_bg"
                 android:id="@+id/choice"
                 android:layout_width="wrap_content"
-                android:text="请选择"
-                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/project_title"
+                android:layout_marginLeft="26dp"
                 android:layout_toRightOf="@id/project_title"
+                android:background="@drawable/register_choice_bg"
                 android:drawablePadding="4dp"
                 android:drawableRight="@mipmap/drop_down_icon"
-                />
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="请选择"
+                android:textColor="#FF9A9A9A"
+                android:textSize="13sp" />
 
             <EditText
                 android:id="@+id/content"

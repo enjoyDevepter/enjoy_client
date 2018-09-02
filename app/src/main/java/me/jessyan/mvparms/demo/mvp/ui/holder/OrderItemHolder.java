@@ -58,8 +58,10 @@ public class OrderItemHolder extends BaseHolder<Order> {
     TextView leftTV;
     @BindView(R.id.single_layout)
     View singleV;
-    @BindView(R.id.single_price)
-    MoneyView singlePrice;
+    @BindView(R.id.single_price_one)
+    MoneyView singleOnePrice;
+    @BindView(R.id.single_price_two)
+    MoneyView singleTwoPrice;
 
     @BindView(R.id.right)
     TextView rightTV;
@@ -129,7 +131,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
             countTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.GONE);
             single_price_infoTV.setVisibility(View.VISIBLE);
-            singlePrice.getPaint().setColor(redColor);
+            singleOnePrice.setVisibility(View.VISIBLE);
+            singleTwoPrice.setVisibility(View.INVISIBLE);
             singleV.setVisibility(View.VISIBLE);
 
             if (order.getOrderStatus().equals("1")) {
@@ -154,8 +157,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
             countTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.VISIBLE);
             single_price_infoTV.setVisibility(View.VISIBLE);
-            singlePrice.getPaint().setColor(textColor);
-            singlePrice.requestLayout();
+            singleOnePrice.setVisibility(View.INVISIBLE);
+            singleTwoPrice.setVisibility(View.VISIBLE);
             singleV.setVisibility(View.VISIBLE);
             payPriceTV.setMoneyText(ArmsUtils.formatLong(order.getPayMoney()));
 
@@ -261,7 +264,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
                             .build());
 
             nameTV.setText(name);
-            singlePrice.setMoneyText(String.valueOf(salePrice));
+            singleOnePrice.setMoneyText(String.valueOf(salePrice));
+            singleTwoPrice.setMoneyText(String.valueOf(salePrice));
             countTV.setText("数量：x" + String.valueOf(order.getNums()));
 
         }
@@ -295,6 +299,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
         this.payPriceV = null;
         this.payPriceTV = null;
         this.single_price_infoTV = null;
-        this.singlePrice = null;
+        this.singleOnePrice = null;
+        this.singleTwoPrice = null;
     }
 }

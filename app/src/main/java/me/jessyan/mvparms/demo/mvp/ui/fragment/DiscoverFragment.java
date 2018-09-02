@@ -254,14 +254,12 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
                 provideCache().put("memberId", diary.getMember().getMemberId());
                 mPresenter.follow("1".equals(diary.getMember().getIsFollow()) ? false : true, position);
                 break;
-            case LEFT_IMAGE:
-                break;
-            case RIGHT_IMAGE:
-                break;
             case VOTE:
                 provideCache().put("diaryId", diary.getDiaryId());
                 mPresenter.vote("1".equals(diary.getIsPraise()) ? false : true, position);
                 break;
+            case LEFT_IMAGE:
+            case RIGHT_IMAGE:
             case ITEM:
                 Intent intent = new Intent(getActivity().getApplication(), DiaryForGoodsActivity.class);
                 intent.putExtra("diaryId", diary.getDiaryId());

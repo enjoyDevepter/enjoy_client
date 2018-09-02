@@ -194,19 +194,41 @@
                         android:textColor="#FF666666"
                         android:textSize="13sp" />
 
-                    <com.github.cchao.MoneyView
-                        android:id="@+id/single_price"
+                    <FrameLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        money:cent_size="14sp"
-                        money:money_color="#FFFF0000"
-                        money:money_text="0.00"
-                        money:point_padding_left="1dp"
-                        money:point_padding_right="5dp"
-                        money:prefix_padding="2dp"
-                        money:prefix_size="12sp"
-                        money:yuan_size="17sp" />
+                        android:layout_height="wrap_content">
+
+                        <com.github.cchao.MoneyView
+                            android:id="@+id/single_price_one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            money:cent_size="14sp"
+                            money:money_color="#FFFF0000"
+                            money:money_text="0.00"
+                            money:point_padding_left="1dp"
+                            money:point_padding_right="5dp"
+                            money:prefix_padding="2dp"
+                            money:prefix_size="12sp"
+                            money:yuan_size="17sp" />
+
+                        <com.github.cchao.MoneyView
+                            android:id="@+id/single_price_two"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="bottom"
+                            money:cent_size="15sp"
+                            money:money_color="#FF666666"
+                            money:money_text="0.00"
+                            money:point_padding_left="1dp"
+                            money:point_padding_right="5dp"
+                            money:prefix_color="#FF666666"
+                            money:prefix_padding="2dp"
+                            money:prefix_size="15sp"
+                            money:yuan_size="15sp" />
+                    </FrameLayout>
+
 
                 </LinearLayout>
 

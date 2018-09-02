@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -62,7 +63,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
     @BindView(R.id.goods_name)
     TextView goodsNameTV;
     @BindView(R.id.goods_price)
-    TextView goodsPriceTV;
+    MoneyView goodsPriceTV;
     @BindView(R.id.tab)
     TabLayout tabLayout;
     @BindView(R.id.diaryRV)
@@ -291,7 +292,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                         .imageView(goodsImageIV)
                         .build());
         goodsNameTV.setText(response.getGoods().getName());
-        goodsPriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
+        goodsPriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
     }
 
 

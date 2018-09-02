@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -63,7 +64,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     @BindView(R.id.goods_name)
     TextView goodsNameTV;
     @BindView(R.id.goods_price)
-    TextView goodsPriceTV;
+    MoneyView goodsPriceTV;
 
 
     @BindView(R.id.diary_publishDate)
@@ -209,7 +210,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         followV.setSelected("1".equals(response.getMember().getIsFollow()) ? true : false);
         publishDateTV.setText(response.getDiary().getPublishDate());
         goodsNameTV.setText(response.getGoods().getName());
-        goodsPriceTV.setText(String.valueOf(response.getGoods().getSalePrice()));
+        goodsPriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
         diaryPublishDateTV.setText(response.getDiary().getPublishDate());
         int position = getIntent().getIntExtra("position", 0);
         indexTV.setText("第" + NumberToChn.NumberToChn(position + 1) + "篇日记");

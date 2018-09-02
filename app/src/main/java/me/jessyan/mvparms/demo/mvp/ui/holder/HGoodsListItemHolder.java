@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -27,7 +28,6 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
-import butterknife.BindColor;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
@@ -51,17 +51,13 @@ public class HGoodsListItemHolder extends BaseHolder<HGoods> {
     @BindView(R.id.doctor)
     TextView doctorT;
     @BindView(R.id.deposit)
-    TextView depositTV;
-    @BindView(R.id.tailMoney)
-    TextView tailMoneyTV;
+    MoneyView depositTV;
+    @BindView(R.id.tailMoney_one)
+    MoneyView tailMoneyOneMV;
+    @BindView(R.id.tailMoney_two)
+    MoneyView tailMoneyTwoMV;
     @BindView(R.id.sale)
     TextView saleTV;
-    @BindView(R.id.pricet_tag)
-    TextView priceTagTV;
-    @BindColor(R.color.red)
-    int redColor;
-    @BindColor(R.color.order_item_color)
-    int norColor;
     @BindView(R.id.price_layout)
     View depositV;
     private AppComponent mAppComponent;
@@ -84,20 +80,18 @@ public class HGoodsListItemHolder extends BaseHolder<HGoods> {
                 .subscribe(s -> saleTV.setText(String.valueOf(s)));
         if (goods.getDeposit() == 0 && goods.getTailMoney() == 0 && ArmsUtils.isEmpty(goods.getAdvanceDepositId())) {
             depositV.setVisibility(View.INVISIBLE);
-            priceTagTV.setTextColor(redColor);
-//            tailMoneyTV.setTextSize(ArmsUtils.getDimens(tailMoneyTV.getContext(), R.dimen.price_red_text_size));
-            tailMoneyTV.setTextColor(redColor);
+            tailMoneyTwoMV.setVisibility(View.INVISIBLE);
+            tailMoneyOneMV.setVisibility(View.VISIBLE);
             Observable.just(goods.getSalePrice())
-                    .subscribe(s -> tailMoneyTV.setText(String.valueOf(s)));
+                    .subscribe(s -> tailMoneyOneMV.setMoneyText(String.valueOf(s)));
         } else {
             depositV.setVisibility(View.VISIBLE);
-//            tailMoneyTV.setTextSize(ArmsUtils.getDimens(tailMoneyTV.getContext(), R.dimen.price_nor_text_size));
-            tailMoneyTV.setTextColor(norColor);
-            priceTagTV.setTextColor(norColor);
+            tailMoneyTwoMV.setVisibility(View.VISIBLE);
+            tailMoneyOneMV.setVisibility(View.INVISIBLE);
             Observable.just(goods.getDeposit())
-                    .subscribe(s -> depositTV.setText(String.valueOf(s)));
+                    .subscribe(s -> depositTV.setMoneyText(String.valueOf(s)));
             Observable.just(goods.getTailMoney())
-                    .subscribe(s -> tailMoneyTV.setText(String.valueOf(s)));
+                    .subscribe(s -> tailMoneyTwoMV.setMoneyText(String.valueOf(s)));
         }
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
@@ -125,10 +119,10 @@ public class HGoodsListItemHolder extends BaseHolder<HGoods> {
         this.imageIV = null;
         this.nameTV = null;
         this.depositTV = null;
-        this.tailMoneyTV = null;
         this.saleTV = null;
         this.doctorT = null;
-        this.priceTagTV = null;
+        this.tailMoneyTwoMV = null;
+        this.tailMoneyOneMV = null;
         this.depositV = null;
         this.mAppComponent = null;
         this.mImageLoader = null;

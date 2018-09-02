@@ -1,12 +1,15 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -46,32 +49,36 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
 
 
     private void requestLocation() {
-        PermissionUtil.locaiton(new PermissionUtil.RequestPermission() {
-            @SuppressLint("MissingPermission")
-            @Override
-            public void onRequestPermissionSuccess() {
-                LocationManager locationManager = (LocationManager) mRootView.getActivity().getSystemService(Context.LOCATION_SERVICE);
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000l, 0, (LocationListener) mRootView.getActivity());
-                //request permission success, do something.
-            }
+        LocationManager locationManager = (LocationManager) mRootView.getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(mRootView.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mRootView.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            PermissionUtil.locaiton(new PermissionUtil.RequestPermission() {
+                @SuppressLint("MissingPermission")
+                @Override
+                public void onRequestPermissionSuccess() {
+                    //request permission success, do something.
+                }
 
-            @Override
-            public void onRequestPermissionFailure(List<String> permissions) {
-                mRootView.showMessage("Request permissions failure");
-            }
+                @Override
+                public void onRequestPermissionFailure(List<String> permissions) {
+                    mRootView.showMessage("Request permissions failure");
+                }
 
-            @Override
-            public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
-                mRootView.showMessage("Need to go to the settings");
-            }
-        }, mRootView.getRxPermissions(), mErrorHandler);
-
-
+                @Override
+                public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+                    mRootView.showMessage("Need to go to the settings");
+                }
+            }, mRootView.getRxPermissions(), mErrorHandler);
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000l, 0, (LocationListener) mRootView.getActivity());
     }
+
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LocationManager locationManager = (LocationManager) mRootView.getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.removeUpdates((LocationListener) mRootView.getActivity());
         this.mErrorHandler = null;
         this.mAppManager = null;
         this.mImageLoader = null;
