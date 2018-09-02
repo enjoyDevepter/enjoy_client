@@ -303,7 +303,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/search_input_bg"
                     android:paddingLeft="6dp"
-                    android:paddingRight="6dp" />
+                    android:paddingRight="6dp"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

@@ -124,6 +124,11 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
         ArmsUtils.snackbarText(message);

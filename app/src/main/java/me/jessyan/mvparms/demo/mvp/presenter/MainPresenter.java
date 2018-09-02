@@ -76,13 +76,13 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         LocationManager locationManager = (LocationManager) mRootView.getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.removeUpdates((LocationListener) mRootView.getActivity());
         this.mErrorHandler = null;
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+        super.onDestroy();
     }
 
 }

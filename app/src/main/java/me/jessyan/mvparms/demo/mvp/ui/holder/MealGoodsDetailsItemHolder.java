@@ -62,7 +62,7 @@ public class MealGoodsDetailsItemHolder extends BaseHolder<MealGoods.Goods> {
 
     @Override
     public void setData(MealGoods.Goods data, int position) {
-        Observable.just(data.getTitle())
+        Observable.just(data.getName())
                 .subscribe(s -> nameTV.setText(String.valueOf(s)));
         Observable.just(data.getMarketPrice())
                 .subscribe(s -> totalPriceTV.setText("￥" + String.valueOf(s)));
