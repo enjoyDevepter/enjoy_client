@@ -58,7 +58,11 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.PayMealOrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AuthenticationRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyDiaryRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.LocationResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.Multipart;
@@ -137,7 +141,7 @@ public interface MainService {
 
     @Multipart
     @POST("file/imageUpload")
-    Observable<BaseResponse> uploadImage(@Part MultipartBody.Part imgs);
+    Observable<BaseResponse> uploadImage(@Part("type") String description, @Part MultipartBody.Part file);
 
     @POST("gateway")
     Observable<BaseResponse> releaseDiary(@Body ReleaseDiaryRequest request);
@@ -189,5 +193,11 @@ public interface MainService {
 
     @POST("gateway")
     Observable<BaseResponse> cancelOrder(@Body OrderOperationRequest request);
+
+    @POST("gateway")
+    Observable<UpdateResponse> checkUpdate(@Body UpdateRequest request);
+
+    @POST("gateway")
+    Observable<LocationResponse> getAreaForLoaction(@Body LocationRequest request);
 
 }

@@ -13,8 +13,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.ReleaseDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import okhttp3.MultipartBody;
-import retrofit2.http.Body;
-import retrofit2.http.Part;
 
 
 public interface ReleaseDiaryContract {
@@ -30,9 +28,9 @@ public interface ReleaseDiaryContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
 
-        Observable<BaseResponse> uploadImage(@Part MultipartBody.Part imgs);
+        Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs);
 
-        Observable<BaseResponse> releaseDiary(@Body ReleaseDiaryRequest request);
+        Observable<BaseResponse> releaseDiary(ReleaseDiaryRequest request);
 
         Observable<GoodsListResponse> getProjects(ProjectRequest request);
 

@@ -16,13 +16,22 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.PermissionUtil;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.LocationResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 
 @ActivityScope
@@ -45,8 +54,48 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
         requestLocation();//打开 App 时自动加载列表
+        checkUpdate();
     }
 
+    private void checkUpdate() {
+        UpdateRequest request = new UpdateRequest();
+        request.setType("android");
+        mModel.checkUpdate(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<UpdateResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(UpdateResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showUpdateInfo(response);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    public void getAreaForLoaction() {
+        LocationRequest request = new LocationRequest();
+        request.setLon((String) mRootView.getCache().get("lon"));
+        request.setLat((String) mRootView.getCache().get("lat"));
+        mModel.getAreaForLoaction(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<LocationResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(LocationResponse response) {
+                        if (response.isSuccess()) {
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
 
     private void requestLocation() {
         LocationManager locationManager = (LocationManager) mRootView.getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -84,5 +133,4 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
         this.mApplication = null;
         super.onDestroy();
     }
-
 }

@@ -92,7 +92,8 @@ public class AuthenticationPresenter extends BasePresenter<AuthenticationContrac
         File file = new File((String) mRootView.getCache().get("imagePath"));
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/otcet-stream"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-        mModel.uploadImage(body)
+
+        mModel.uploadImage("3", body)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁

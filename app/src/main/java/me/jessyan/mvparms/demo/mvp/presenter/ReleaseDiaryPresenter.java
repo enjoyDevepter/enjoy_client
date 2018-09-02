@@ -133,9 +133,11 @@ public class ReleaseDiaryPresenter extends BasePresenter<ReleaseDiaryContract.Mo
     public void uploadImage() {
 
         File file = new File((String) mRootView.getCache().get("imagePath"));
+
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/otcet-stream"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-        mModel.uploadImage(body)
+
+        mModel.uploadImage("2", body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔

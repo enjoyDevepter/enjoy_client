@@ -2,9 +2,16 @@ package me.jessyan.mvparms.demo.mvp.contract;
 
 import android.app.Activity;
 
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+
+import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.LocationResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 
 
 public interface MainContract {
@@ -12,12 +19,18 @@ public interface MainContract {
     interface View extends IView {
         Activity getActivity();
 
+        Cache getCache();
+
         //申请权限
         RxPermissions getRxPermissions();
+
+        void showUpdateInfo(UpdateResponse showUpdateInfo);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
+        Observable<UpdateResponse> checkUpdate(UpdateRequest request);
 
+        Observable<LocationResponse> getAreaForLoaction(LocationRequest request);
     }
 }

@@ -12,7 +12,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoRequest;
 import okhttp3.MultipartBody;
-import retrofit2.http.Part;
 
 
 public interface UserInfoContract {
@@ -27,9 +26,9 @@ public interface UserInfoContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
 
-        Observable<BaseResponse> uploadImage(@Part MultipartBody.Part imgs);
+        Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs);
 
-        Observable<BaseResponse> modifyUserInfo(@Part ModifyUserInfoRequest request);
+        Observable<BaseResponse> modifyUserInfo(ModifyUserInfoRequest request);
 
         Observable<AllAddressResponse> getAllAddressList(SimpleRequest request);
     }

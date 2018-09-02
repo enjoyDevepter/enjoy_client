@@ -1,16 +1,30 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.TextView;
 
 import com.chaychan.library.BottomBarLayout;
 import com.jess.arms.base.BaseActivity;
@@ -21,6 +35,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.simple.eventbus.Subscriber;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,12 +47,14 @@ import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMainComponent;
 import me.jessyan.mvparms.demo.di.module.MainModule;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.MainPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.fragment.AppointmentFragment;
 import me.jessyan.mvparms.demo.mvp.ui.fragment.DiscoverFragment;
 import me.jessyan.mvparms.demo.mvp.ui.fragment.HomeFragment;
 import me.jessyan.mvparms.demo.mvp.ui.fragment.MallFragment;
 import me.jessyan.mvparms.demo.mvp.ui.fragment.MyFragment;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -62,7 +79,35 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Inject
     RxPermissions mRxPermissions;
 
+    CustomDialog dialog = null;
+
+    DownloadManager downloadManager;
+    DownLoadBroadCastReceiver downLoadBroadCastReceiver;
+    private long downloadId;
+
     private List<Fragment> mFragmentList = new ArrayList<>();
+
+    /**
+     * 获取当前应用版本号
+     *
+     * @param context
+     * @return
+     */
+    public static int getCurrentVersionCode(Context context) {
+
+        PackageManager packageManager = context.getPackageManager();
+
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+
+    }
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -113,6 +158,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         appointmentV.setOnClickListener(this);
         myV.setOnClickListener(this);
         viewPager.setCurrentItem(0);
+
+        downloadManager = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
     }
 
     private void initFragment() {
@@ -173,7 +220,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void onLocationChanged(Location location) {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.removeUpdates(this);
+        provideCache().put("lon", String.valueOf(location.getLongitude()));
+        provideCache().put("lat", String.valueOf(location.getLatitude()));
+        mPresenter.getAreaForLoaction();
     }
+
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -196,8 +249,20 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     }
 
     @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
     public RxPermissions getRxPermissions() {
         return mRxPermissions;
+    }
+
+    @Override
+    public void showUpdateInfo(UpdateResponse updateResponse) {
+        if (updateResponse.isNeedUpgrade()) {
+            showDailog(updateResponse);
+        }
     }
 
     @Override
@@ -230,4 +295,184 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 break;
         }
     }
+
+    private void showDailog(UpdateResponse updateResponse) {
+        dialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        ((TextView) view.findViewById(R.id.content)).setText(updateResponse.getDescription());
+                        view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                downLoadBroadCastReceiver = new DownLoadBroadCastReceiver();
+                                IntentFilter intentFilter = new IntentFilter();
+                                intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+                                getActivity().registerReceiver(downLoadBroadCastReceiver, intentFilter);
+                                downloadAPk(updateResponse.getUrl());
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.dialog_update)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
+                .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
+                .show();
+    }
+
+    private void downloadAPk(String url) {
+        SharedPreferences sp = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
+        downloadId = sp.getLong("downloadId", -1);
+        if (downloadId != -1l) {
+
+            int status = getDownloadStatus(downloadId);
+
+            if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                Uri uri = getDownloadUri(downloadId);
+                if (uri != null) {
+                    //对比下载的apk版本和本地应用版本
+                    if (compare(getApkInfo(uri.getPath()))) {
+                        installApk();
+                    } else {
+                        downloadManager.remove(downloadId);
+                        startDownload(url);
+                    }
+                }
+            } else if (status == DownloadManager.STATUS_FAILED) {
+                startDownload(url);
+            }
+        } else {
+            startDownload(url);
+        }
+    }
+
+    private void startDownload(final String url) {
+        //创建下载任务
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        //移动网络情况下是否允许漫游
+        request.setAllowedOverRoaming(false);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setTitle("");
+        request.setVisibleInDownloadsUi(true);
+        //设置下载的路径
+        //创建目录
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir();
+
+        //设置文件存放路径
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "app.apk");
+
+        //将下载请求加入下载队列，加入下载队列后会给该任务返回一个long型的id，通过该id可以取消任务，重启任务、获取下载的文件等等
+        downloadId = downloadManager.enqueue(request);
+
+        SharedPreferences sp = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
+        //获取到edit对象
+        SharedPreferences.Editor edit = sp.edit();
+        //通过editor对象写入数据
+        edit.putLong("downloadId", downloadId);
+        //提交数据存入到xml文件中
+        edit.commit();
+    }
+
+    /**
+     * 获取保存的apk文件的地址
+     *
+     * @param downloadApkId
+     * @return
+     */
+    private Uri getDownloadUri(long downloadApkId) {
+        return downloadManager.getUriForDownloadedFile(downloadApkId);
+    }
+
+    private int getDownloadStatus(long downloadApkId) {
+
+        DownloadManager.Query query = new DownloadManager.Query();
+        query.setFilterById(downloadApkId);
+        Cursor c = downloadManager.query(query);
+        if (c != null) {
+            try {
+                if (c.moveToFirst()) {
+                    return c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+
+                c.close();
+            }
+        }
+        return -1;
+    }
+
+    private void installApk() {
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(), "app.apk");
+        Intent install = new Intent(Intent.ACTION_VIEW);
+        if (Build.VERSION.SDK_INT >= 24) {//判读版本是否在7.0以上
+            Uri apkUri = FileProvider.getUriForFile(getActivity(), "cn.ehanmy.fileprovider", file);//在AndroidManifest中的android:authorities值
+            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            install.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//添加这一句表示对目标应用临时授权该Uri所代表的文件
+            install.setDataAndType(apkUri, "application/vnd.android.package-archive");
+        } else {
+            install.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        getActivity().startActivity(install);
+    }
+
+    /**
+     * 获取下载的apk版本信息
+     *
+     * @param path
+     * @return
+     */
+    private PackageInfo getApkInfo(String path) {
+        PackageManager pm = getActivity().getPackageManager();
+        PackageInfo info = pm.getPackageArchiveInfo(path, PackageManager.GET_ACTIVITIES);
+        if (info != null) {
+
+            return info;
+        }
+        return null;
+    }
+
+    /**
+     * 如果当前版本号小于apk的版本号则返回true
+     *
+     * @param apkInfo
+     * @return
+     */
+    private boolean compare(PackageInfo apkInfo) {
+        if (apkInfo == null) {
+            return false;
+        }
+        int versionCode = getCurrentVersionCode(this);
+
+        if (apkInfo.versionCode > versionCode) {
+            return true;
+        }
+        return false;
+    }
+
+    private class DownLoadBroadCastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+            if (downloadId == id) {
+                //下载完成
+                getActivity().unregisterReceiver(downLoadBroadCastReceiver);
+                //跳到安装界面
+                installApk();
+            }
+        }
+    }
+
 }

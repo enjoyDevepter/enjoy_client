@@ -37,9 +37,9 @@ public class AuthenticationModel extends BaseModel implements AuthenticationCont
     }
 
     @Override
-    public Observable<BaseResponse> uploadImage(MultipartBody.Part imgs) {
+    public Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
-                .uploadImage(imgs);
+                .uploadImage(type, imgs);
     }
 
     @Override
