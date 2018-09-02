@@ -183,7 +183,7 @@ public class FansActivity extends BaseActivity<FansPresenter> implements MyFollo
     @Override
     public void showError(boolean hasDate) {
         onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
-        swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+        contentList.setVisibility(hasDate ? VISIBLE : INVISIBLE);
     }
 
     @Override

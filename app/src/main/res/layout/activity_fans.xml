@@ -5,18 +5,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/title"/>
-    <View style="@style/divider_1"/>
+    <include layout="@layout/title" />
 
-    <FrameLayout
+    <View style="@style/divider_1" />
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="match_parent">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/contentList"
@@ -26,33 +29,35 @@
                 android:scrollbars="none"
                 tools:listitem="@layout/recycle_list" />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
 
-        <LinearLayout
-            android:id="@+id/no_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:visibility="gone">
+            <LinearLayout
+                android:id="@+id/no_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <View
-                android:layout_width="94dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="150dp"
-                android:background="@mipmap/nodata" />
+                <View
+                    android:layout_width="94dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="150dp"
+                    android:background="@mipmap/nodata" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="暂无数据"
-                android:textColor="#FF666666"
-                android:textSize="13sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="暂无数据"
+                    android:textColor="#FF666666"
+                    android:textSize="13sp" />
 
-        </LinearLayout>
+            </LinearLayout>
 
 
-    </FrameLayout>
+        </FrameLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </LinearLayout>
