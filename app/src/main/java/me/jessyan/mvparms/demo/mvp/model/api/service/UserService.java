@@ -40,6 +40,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetMyMemberListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetRechargeListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MessageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest;
@@ -47,6 +48,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFansRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.RechargeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.SetCashPasswordRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
@@ -61,12 +63,14 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashListRespons
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetMyMemberListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetRechargeListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MessageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyCouponListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFansResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFollowListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.RechargeResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.SetCashPasswordResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
@@ -205,4 +209,14 @@ public interface UserService {
     @POST("gateway")
         // 提现列表
     Observable<GetCashListResponse> getCashList(@Body GetCashListRequest request);
+
+
+    @POST("gateway")
+        // 充值
+    Observable<RechargeResponse> recharge(@Body RechargeRequest request);
+
+
+    @POST("gateway")
+        // 获取充值记录
+    Observable<GetRechargeListResponse> getRechargeList(@Body GetRechargeListRequest request);
 }

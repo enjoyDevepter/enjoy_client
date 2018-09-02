@@ -55,8 +55,7 @@
                 android:layout_marginLeft="16dp"
                 android:text="充值金额"
                 android:textColor="#ff666666"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
 
             <EditText
                 android:id="@+id/et_name"
@@ -75,23 +74,22 @@
                 android:layout_height="wrap_content"
                 android:text="元 = "
                 android:textColor="#ff666666"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="100"
                 android:textColor="#ff666666"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" 消费币"
                 android:textColor="#ff666666"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -192,6 +190,7 @@
         </LinearLayout>
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -225,39 +224,33 @@
         <View style="@style/divider_1" />
     </LinearLayout>
 
-    <FrameLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/white">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/contentList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/contentList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="9dp"
-                android:scrollbars="none"
-                tools:listitem="@layout/recycle_list" />
-
-        </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent"
+            android:layout_margin="9dp"
+            android:scrollbars="none"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/no_date"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <View
                 android:layout_width="94dp"
                 android:layout_height="60dp"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="0dp"
                 android:background="@mipmap/nodata" />
 
             <TextView
@@ -270,8 +263,7 @@
 
         </LinearLayout>
 
-
-    </FrameLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
     <TextView

@@ -10,7 +10,13 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinInputContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetRechargeListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetRechargeListResponse;
 
 
 @ActivityScope
@@ -31,4 +37,12 @@ public class ConsumeCoinInputModel extends BaseModel implements ConsumeCoinInput
         this.mGson = null;
         this.mApplication = null;
     }
+
+
+    @Override
+    public Observable<GetRechargeListResponse> getRechargeList(GetRechargeListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getRechargeList(request);
+    }
+
 }

@@ -41,5 +41,4 @@ public class ConsumeCoinModel extends BaseModel implements ConsumeCoinContract.M
         return mRepositoryManager.obtainRetrofitService(UserService.class)
 	                .getConsumeInfoPage(request);
     }
-
 }
