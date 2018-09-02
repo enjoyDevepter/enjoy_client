@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -52,9 +54,9 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     @BindView(R.id.image_count)
     TextView imageCount;
     @BindView(R.id.salesPrice)
-    TextView salesPriceTV;
+    MoneyView salesPriceTV;
     @BindView(R.id.totalPrice)
-    TextView totalPriceTV;
+    MoneyView totalPriceTV;
     @BindView(R.id.collect)
     View collectV;
     @BindView(R.id.sales)
@@ -66,9 +68,9 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     @BindView(R.id.tab)
     TabLayout tabLayout;
     @BindView(R.id.deposit)
-    TextView depositTV;
+    MoneyView depositTV;
     @BindView(R.id.tailMoney)
-    TextView tailMoneyTV;
+    MoneyView tailMoneyTV;
     @BindView(R.id.tel)
     View telV;
     @Inject
@@ -188,12 +190,13 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         imagesB.isAutoPlay(false);
         imageCount.setText("1/" + response.getSetMealGoods().getImages().size());
         titleTV.setText(String.valueOf(response.getSetMealGoods().getName()));
-        salesPriceTV.setText(String.valueOf(response.getSetMealGoods().getSalePrice()));
-        totalPriceTV.setText("￥" + String.valueOf(response.getSetMealGoods().getTotalPrice()));
+        salesPriceTV.setMoneyText(String.valueOf(response.getSetMealGoods().getSalePrice()));
+        totalPriceTV.setMoneyText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
+        totalPriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         salesTV.setText(String.valueOf(response.getSetMealGoods().getSales()));
         collectV.setSelected("1".equals(response.getSetMealGoods().getFavorite()) ? true : false);
-        depositTV.setText(String.valueOf(response.getSetMealGoods().getSalePrice()));
-        tailMoneyTV.setText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
+        depositTV.setMoneyText(String.valueOf(response.getSetMealGoods().getSalePrice()));
+        tailMoneyTV.setMoneyText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
     }
 
     @Override
@@ -232,6 +235,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
                 mPresenter.collectGoods(!collectV.isSelected());
                 break;
             case R.id.tel:
+                // 打电话
                 break;
             case R.id.share:
                 mPresenter.share();

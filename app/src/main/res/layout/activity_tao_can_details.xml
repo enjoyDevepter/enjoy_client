@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:money="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -52,38 +52,44 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/price_tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="2dp"
-                        android:layout_marginTop="2dp"
-                        android:text="￥"
-                        android:textColor="#FFFF0000"
-                        android:textSize="12sp" />
 
-                    <TextView
+                    <com.github.cchao.MoneyView
                         android:id="@+id/salesPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="228.00"
-                        android:textColor="#FFFF0000"
-                        android:textSize="20sp" />
+                        android:layout_alignLeft="@+id/name"
+                        android:layout_marginLeft="15dp"
+                        money:cent_size="17sp"
+                        money:money_color="#FFFF0000"
+                        money:money_text="0.00"
+                        money:point_padding_left="1dp"
+                        money:point_padding_right="5dp"
+                        money:prefix_padding="2dp"
+                        money:prefix_size="12sp"
+                        money:yuan_size="20sp" />
 
-                    <TextView
+                    <com.github.cchao.MoneyView
                         android:id="@+id/totalPrice"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginBottom="2dp"
+                        android:layout_alignLeft="@+id/name"
+                        android:layout_gravity="left|bottom"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:text="￥228.00"
-                        android:textColor="#FFABABAB"
-                        android:textSize="12sp" />
+                        money:cent_size="12sp"
+                        money:money_color="#FFABABAB"
+                        money:money_text="0.00"
+                        money:point_padding_left="1dp"
+                        money:point_padding_right="5dp"
+                        money:prefix_color="#FFABABAB"
+                        money:prefix_padding="2dp"
+                        money:prefix_size="12sp"
+                        money:yuan_size="12sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
 
                     <View
                         android:id="@+id/collect"
@@ -133,15 +139,15 @@
                 android:background="#FFFFFFFF"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="#FF50C8F5"
-                app:tabIndicatorHeight="2dp"
-                app:tabMode="scrollable"
-                app:tabPaddingEnd="0dp"
-                app:tabPaddingStart="0dp"
-                app:tabSelectedTextColor="#FF5FBFE3"
-                app:tabTextAppearance="@style/TabLayoutTextStyle"
-                app:tabTextColor="#FF666666" />
+                money:tabGravity="fill"
+                money:tabIndicatorColor="#FF50C8F5"
+                money:tabIndicatorHeight="2dp"
+                money:tabMode="scrollable"
+                money:tabPaddingEnd="0dp"
+                money:tabPaddingStart="0dp"
+                money:tabSelectedTextColor="#FF5FBFE3"
+                money:tabTextAppearance="@style/TabLayoutTextStyle"
+                money:tabTextColor="#FF666666" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/detail"
@@ -229,18 +235,25 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="套餐原价：¥ "
+                        android:text="套餐原价"
                         android:textColor="#666666"
                         android:textSize="12sp" />
 
-                    <TextView
+                    <com.github.cchao.MoneyView
                         android:id="@+id/tailMoney"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="4dp"
-                        android:layout_weight="1"
-                        android:textColor="#666666"
-                        android:textSize="12sp" />
+                        android:layout_marginLeft="4sp"
+                        money:cent_size="12sp"
+                        money:money_color="#FF333333"
+                        money:money_text="0.00"
+                        money:point_padding_left="1dp"
+                        money:point_padding_right="5dp"
+                        money:prefix_color="#FF333333"
+                        money:prefix_padding="2dp"
+                        money:prefix_size="12sp"
+                        money:yuan_size="12sp" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -252,26 +265,24 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
                         android:text="套餐金额"
                         android:textColor="#666666"
                         android:textSize="13sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginRight="1dp"
-                        android:text="￥"
-                        android:textColor="#FFFF0000"
-                        android:textSize="12sp" />
 
-                    <TextView
+                    <com.github.cchao.MoneyView
                         android:id="@+id/deposit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#FFFF0000"
-                        android:textSize="17sp" />
+                        android:layout_marginLeft="4dp"
+                        money:cent_size="14sp"
+                        money:money_color="#FFFF0000"
+                        money:money_text="0.00"
+                        money:point_padding_left="1dp"
+                        money:point_padding_right="5dp"
+                        money:prefix_padding="2dp"
+                        money:prefix_size="12sp"
+                        money:yuan_size="17sp" />
                 </LinearLayout>
 
             </LinearLayout>
