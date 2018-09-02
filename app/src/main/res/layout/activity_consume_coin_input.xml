@@ -231,6 +231,10 @@
         android:layout_weight="1"
         android:background="@color/white">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/contentList"
             android:layout_width="match_parent"
@@ -262,6 +266,8 @@
                 android:textSize="13sp" />
 
         </LinearLayout>
+
+        </FrameLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
