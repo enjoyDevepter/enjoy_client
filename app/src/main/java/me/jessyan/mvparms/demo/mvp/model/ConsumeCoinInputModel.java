@@ -15,8 +15,10 @@ import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinInputContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetRechargeListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.RechargeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetRechargeListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.RechargeResponse;
 
 
 @ActivityScope
@@ -45,4 +47,10 @@ public class ConsumeCoinInputModel extends BaseModel implements ConsumeCoinInput
                 .getRechargeList(request);
     }
 
+
+    @Override
+    public Observable<RechargeResponse> recharge(RechargeRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .recharge(request);
+    }
 }

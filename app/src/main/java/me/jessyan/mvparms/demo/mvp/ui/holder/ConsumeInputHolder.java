@@ -37,7 +37,7 @@ public class ConsumeInputHolder extends BaseHolder<ChargeBean> {
     @Override
     public void setData(ChargeBean data, int position) {
         time.setText(data.getCreateDate());
-        type.setText(data.getOrderTypeDesc());
+        type.setText(data.getStatusDesc());
         fuhao.setText("+");
         score_num.setText(String.format("%.2f",data.getMoney() * 1.0 / 100));
     }

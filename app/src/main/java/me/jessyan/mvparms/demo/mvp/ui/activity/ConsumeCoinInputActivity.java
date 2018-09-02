@@ -74,6 +74,9 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     @BindView(R.id.no_date)
     View onDateV;
 
+    @BindView(R.id.commit)
+    View commit;
+
     private MemberAccount account;
 
     @BindView(R.id.pay_for_zfb)
@@ -81,21 +84,31 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     @BindView(R.id.pay_for_wx)
     View pay_for_wx;
 
-    @BindView(R.id.zfb)
-    View zfb; private static final int zfb_type = 0;
-    @BindView(R.id.wx)
-    View wx; private static final int wx_type = 1;
-    private int currType = 0;
+    enum PayType{
+        WX("WEIXIN_APP"),  // 微信
+        ZFB("ALIPAY_APP");  // 支付宝
 
-    private void selectType(int type){
+        private String payType;
+        PayType(String payType){
+            this.payType = payType;
+        }
+    }
+
+    @BindView(R.id.zfb)
+    View zfb;
+    @BindView(R.id.wx)
+    View wx;
+    private PayType currType = PayType.WX;
+
+    private void selectType(PayType type){
         zfb.setSelected(false);
         wx.setSelected(false);
 
         switch (type){
-            case zfb_type:
+            case ZFB:
                 zfb.setSelected(true);
                 break;
-            case wx_type:
+            case WX:
                 wx.setSelected(true);
                 break;
         }
@@ -164,17 +177,17 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
                 killMyself();
             }
         });
-        selectType(zfb_type);
+        selectType(PayType.ZFB);
         pay_for_zfb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectType(zfb_type);
+                selectType(PayType.ZFB);
             }
         });
         pay_for_wx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectType(wx_type);
+                selectType(PayType.WX);
             }
         });
         et_name.addTextChangedListener(new TextWatcher() {
@@ -188,10 +201,12 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
                 String s1 = s + "";
                 if(TextUtils.isEmpty(s1)){
                     money.setText("0");
+                    money_num = 0;
                 }else{
                     long i = 0;
                     i = Long.parseLong(s1);
                     money.setText(""+i);
+                    money_num = i * 100;
                 }
             }
 
@@ -211,7 +226,19 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
         });
         initPaginate();
 
+        commit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currType == null){
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"请选择支付方式");
+                    return;
+                }
+                mPresenter.recharge(money_num,currType.payType);
+            }
+        });
     }
+
+    private long money_num = 0;
 
     @Override
     public void showLoading() {
