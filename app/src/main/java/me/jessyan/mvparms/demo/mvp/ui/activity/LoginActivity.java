@@ -31,7 +31,6 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View, View.OnClickListener {
-
     @BindView(R.id.forget)
     View forgetV;
     @BindView(R.id.register)

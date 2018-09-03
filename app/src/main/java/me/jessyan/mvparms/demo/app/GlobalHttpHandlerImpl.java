@@ -16,18 +16,13 @@
 package me.jessyan.mvparms.demo.app;
 
 import android.content.Context;
-import android.text.TextUtils;
 
-import com.google.gson.reflect.TypeToken;
 import com.jess.arms.http.GlobalHttpHandler;
-import com.jess.arms.http.log.RequestInterceptor;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.List;
 
-import me.jessyan.mvparms.demo.mvp.model.entity.User;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -35,7 +30,6 @@ import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import timber.log.Timber;
 
 /**
  * ================================================
@@ -64,18 +58,6 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
      */
     @Override
     public Response onHttpResultResponse(String httpResult, Interceptor.Chain chain, Response response) {
-        if (!TextUtils.isEmpty(httpResult) && RequestInterceptor.isJson(response.body().contentType())) {
-            try {
-                List<User> list = ArmsUtils.obtainAppComponentFromContext(context).gson().fromJson(httpResult, new TypeToken<List<User>>() {
-                }.getType());
-                User user = list.get(0);
-                Timber.w("Result ------> " + user.getLogin() + "    ||   Avatar_url------> " + user.getAvatarUrl());
-            } catch (Exception e) {
-                e.printStackTrace();
-                return response;
-            }
-        }
-
         /* 这里如果发现 token 过期, 可以先请求最新的 token, 然后在拿新的 token 放入 Request 里去重新请求
         注意在这个回调之前已经调用过 proceed(), 所以这里必须自己去建立网络请求, 如使用 Okhttp 使用新的 Request 去请求
         create a newlyweds request and modify it accordingly using the newlyweds token

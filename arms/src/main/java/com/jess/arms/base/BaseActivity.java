@@ -25,13 +25,13 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.jess.arms.base.delegate.IActivity;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.CacheType;
 import com.jess.arms.integration.lifecycle.ActivityLifecycleable;
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.utils.ArmsUtils;
-import com.jess.arms.utils.StatusBarUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import javax.inject.Inject;
@@ -97,13 +97,20 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
         } catch (Exception e) {
             e.printStackTrace();
         }
-        StatusBarUtil.setStatusBarMode(this, true, android.R.color.white);
+
+        ImmersionBar.with(this)
+                .fitsSystemWindows(true)
+                .statusBarDarkFont(true)
+                .barColor(android.R.color.white)  //同时自定义状态栏和导航栏颜色，不写默认状态栏为透明色，导航栏为黑色
+                .statusBarColor(android.R.color.white)
+                .init(); //初始化，默认透明状态栏和黑色导航栏
 
         initData(savedInstanceState);
     }
 
     @Override
     protected void onDestroy() {
+        ImmersionBar.with(this).destroy(); //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
         super.onDestroy();
         if (mUnbinder != null && mUnbinder != Unbinder.EMPTY)
             mUnbinder.unbind();

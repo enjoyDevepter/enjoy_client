@@ -58,6 +58,31 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     }
 
     private void checkUpdate() {
+        if (ActivityCompat.checkSelfPermission(mRootView.getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            //请求外部存储权限用于适配android6.0的权限管理机制
+            PermissionUtil.readPhoneState(new PermissionUtil.RequestPermission() {
+                @Override
+                public void onRequestPermissionSuccess() {
+                    //request permission success, do something.
+                    checkUpdateForApp();
+                }
+
+                @Override
+                public void onRequestPermissionFailure(List<String> permissions) {
+                    mRootView.showMessage("Request permissions failure");
+                }
+
+                @Override
+                public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+                    mRootView.showMessage("Need to go to the settings");
+                }
+            }, mRootView.getRxPermissions(), mErrorHandler);
+        } else {
+            checkUpdateForApp();
+        }
+    }
+
+    private void checkUpdateForApp() {
         UpdateRequest request = new UpdateRequest();
         request.setType("android");
         mModel.checkUpdate(request)

@@ -1,0 +1,2 @@
+-keep class com.jess.arms.** { *; }
+-keep class me.jessyan.mvparms.demo.app.** {*;}

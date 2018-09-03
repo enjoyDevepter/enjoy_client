@@ -59,6 +59,9 @@ ext {
             "countdownview"            : "com.github.iwgang:countdownview:2.1.6",
             "moneyview"                : "com.github.cchao:moneyview:1.0.1",
             "actionsheet"              : "com.guoqi.widget:actionsheet:1.0",
+            "barlibrary"               : "com.gyf.barlibrary:barlibrary:2.3.0",
+
+
 
             //rx1
             "rxandroid"                : "io.reactivex:rxandroid:1.2.1",

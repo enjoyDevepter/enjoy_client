@@ -101,6 +101,7 @@ dependencies {
     annotationProcessor(rootProject.ext.dependencies["glide-compiler"]) {
         exclude module: 'jsr305'
     }
+    implementation rootProject.ext.dependencies['barlibrary']
 
     //tools
     compileOnly rootProject.ext.dependencies["javax.annotation"]

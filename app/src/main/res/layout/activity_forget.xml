@@ -27,7 +27,7 @@
             android:layout_width="89dp"
             android:layout_height="89dp"
             android:layout_gravity="center"
-            android:background="@mipmap/login_logo"
+            android:background="@mipmap/logo"
             app:layout_auto_baseheight="width" />
 
     </FrameLayout>
