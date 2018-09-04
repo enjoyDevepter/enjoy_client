@@ -5,6 +5,10 @@ import me.jessyan.mvparms.demo.mvp.model.entity.diary.DiaryCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.pay.request.PayInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.pay.request.PayRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.pay.response.PayInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.pay.response.PayResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CartListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
@@ -200,4 +204,9 @@ public interface MainService {
     @POST("gateway")
     Observable<LocationResponse> getAreaForLoaction(@Body LocationRequest request);
 
+    @POST("gateway")
+    Observable<PayInfoResponse> getOrderPayInfo(@Body PayInfoRequest request);
+
+    @POST("gateway")
+    Observable<PayResponse> pay(@Body PayRequest request);
 }

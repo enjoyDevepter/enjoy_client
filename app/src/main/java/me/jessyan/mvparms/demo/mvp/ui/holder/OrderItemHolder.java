@@ -189,6 +189,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
             countTV.setVisibility(View.VISIBLE);
             single_price_infoTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.GONE);
+            singleOnePrice.setVisibility(View.VISIBLE);
+            singleTwoPrice.setVisibility(View.INVISIBLE);
             singleV.setVisibility(View.VISIBLE);
 
             if (order.getOrderStatus().equals("1")) {

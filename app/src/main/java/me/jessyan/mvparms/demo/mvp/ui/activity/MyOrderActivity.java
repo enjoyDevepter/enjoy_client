@@ -313,7 +313,9 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                     case 0:
                         if ("1".equals(order.getOrderStatus())) {
                             // 去支付
-
+                            Intent intent = new Intent(this, PayActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
                         } else if ("3".equals(order.getOrderStatus())) {
                             // 提醒发货
                             mPresenter.reminding();
@@ -332,10 +334,14 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                     case 2:
                         if ("1".equals(order.getOrderStatus())) {
                             // 去支付
-
+                            Intent intent = new Intent(this, PayActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
                         } else if ("2".equals(order.getOrderStatus())) {
                             // 付尾款
-
+                            Intent intent = new Intent(this, PayActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
                         } else if ("31".equals(order.getOrderStatus())) {
                             // 预约
                             Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);

@@ -13,6 +13,9 @@ public class PayMealOrderResponse extends BaseResponse {
     private String orderId;
     private long orderTime;
     private long payMoney;
+    private String orderType;
+    private String payType;
+    private String payTypeDesc;
     private String payStatus;
     private MealGoods setMealGoods;
     private List<PayEntry> payEntryList;
@@ -65,10 +68,37 @@ public class PayMealOrderResponse extends BaseResponse {
         this.setMealGoods = setMealGoods;
     }
 
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
+    public String getPayTypeDesc() {
+        return payTypeDesc;
+    }
+
+    public void setPayTypeDesc(String payTypeDesc) {
+        this.payTypeDesc = payTypeDesc;
+    }
+
     @Override
     public String toString() {
         return "PayMealOrderResponse{" +
-                "orderId='" + orderId + '\'' +
+                ", orderType='" + orderType + '\'' +
+                ", payType='" + payType + '\'' +
+                ", payTypeDesc='" + payTypeDesc + '\'' +
+                ", orderId='" + orderId + '\'' +
                 ", orderTime=" + orderTime +
                 ", payMoney=" + payMoney +
                 ", payStatus='" + payStatus + '\'' +

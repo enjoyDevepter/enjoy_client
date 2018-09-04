@@ -460,6 +460,20 @@ public final class AppManager {
         }
     }
 
+    /**
+     * 关闭指定Activity之前所以有Activity
+     *
+     * @param excludeActivityClasses
+     */
+    public void killAllBeforeClass(Class excludeActivityClasses) {
+        synchronized (AppManager.class) {
+            for (int i = getActivityList().size() - 1; ; i--) {
+                if (excludeActivityClasses.getName().equals(getActivityList().get(i).getClass().getName()))
+                    return;
+                getActivityList().get(i).finish();
+            }
+        }
+    }
 
     /**
      * 退出应用程序
@@ -476,6 +490,14 @@ public final class AppManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Activity getmCurrentActivity() {
+        return mCurrentActivity;
+    }
+
+    public void setmCurrentActivity(Activity mCurrentActivity) {
+        this.mCurrentActivity = mCurrentActivity;
     }
 
     public interface HandleListener {

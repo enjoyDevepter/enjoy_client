@@ -5,42 +5,65 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
+import java.util.Map;
+
+import javax.inject.Inject;
+
 import butterknife.BindView;
+import cn.ehanmy.pay.PayManager;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerPayComponent;
 import me.jessyan.mvparms.demo.di.module.PayModule;
 import me.jessyan.mvparms.demo.mvp.contract.PayContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.pay.response.PayInfoResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.PayPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class PayActivity extends BaseActivity<PayPresenter> implements PayContract.View, View.OnClickListener {
+public class PayActivity extends BaseActivity<PayPresenter> implements PayContract.View, View.OnClickListener, PayManager.PayListener {
 
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
     TextView titleTV;
-    @BindView(R.id.pay_for_zfb)
-    View zfbPay;
     @BindView(R.id.order_id)
     TextView orderIdTV;
     @BindView(R.id.price)
     TextView priceTV;
-    @BindView(R.id.zfb)
-    View zfbV;
-    @BindView(R.id.pay_for_wx)
-    View wxPay;
-    @BindView(R.id.wx)
-    View wxV;
+    @BindView(R.id.pay_one)
+    View payOneV;
+    @BindView(R.id.pay_one_img)
+    ImageView payOneIV;
+    @BindView(R.id.pay_one_text)
+    TextView payOneTV;
+    @BindView(R.id.pay_one_status)
+    View payOneStatus;
+    @BindView(R.id.pay_two)
+    View payTwoV;
+    @BindView(R.id.pay_two_img)
+    ImageView payTwoIV;
+    @BindView(R.id.pay_two_text)
+    TextView payTwoTV;
+    @BindView(R.id.pay_two_status)
+    View payTwoStatus;
     @BindView(R.id.confirm)
     View confirmV;
+
+    @Inject
+    ImageLoader mImageLoader;
+
+    PayInfoResponse response;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -62,11 +85,9 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         titleTV.setText("立即支付");
         backV.setOnClickListener(this);
         confirmV.setOnClickListener(this);
-        zfbPay.setOnClickListener(this);
-        wxPay.setOnClickListener(this);
-        zfbV.setSelected(true);
+        payOneV.setOnClickListener(this);
+        payTwoV.setOnClickListener(this);
         orderIdTV.setText(getIntent().getStringExtra("orderId"));
-        priceTV.setText(ArmsUtils.formatLong(getIntent().getLongExtra("payMoney", 0)));
     }
 
 
@@ -104,29 +125,26 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
             case R.id.back:
                 killMyself();
                 break;
-            case R.id.pay_for_zfb:
-                if (!zfbV.isSelected()) {
-                    changeToWX(false);
+            case R.id.pay_one:
+                if (!payOneStatus.isSelected()) {
+                    changeToPayOne(true);
                 }
                 break;
-            case R.id.pay_for_wx:
-                if (!wxV.isSelected()) {
-                    changeToWX(true);
+            case R.id.pay_two:
+                if (!payTwoStatus.isSelected()) {
+                    changeToPayOne(false);
                 }
                 break;
             case R.id.confirm:
-                if (zfbV.isSelected()) {
-
-                } else {
-
-                }
+                mPresenter.pay();
                 break;
         }
     }
 
-    private void changeToWX(boolean wxPay) {
-        wxV.setSelected(wxPay);
-        zfbV.setSelected(!wxPay);
+    private void changeToPayOne(boolean toOne) {
+        provideCache().put("payId", toOne ? response.getPayEntryList().get(0).getPayId() : response.getPayEntryList().get(1).getPayId());
+        payOneStatus.setSelected(toOne);
+        payTwoStatus.setSelected(!toOne);
     }
 
     @Override
@@ -135,7 +153,57 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     }
 
     @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    public void updateUI(PayInfoResponse response) {
+        this.response = response;
+        priceTV.setText(ArmsUtils.formatLong(response.getPayMoney()));
+
+        payOneTV.setText(response.getPayEntryList().get(0).getName());
+
+        provideCache().put("payMoney", response.getPayMoney());
+
+        provideCache().put("payId", response.getPayEntryList().get(0).getPayId());
+
+        payOneStatus.setSelected(true);
+        //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .placeholder(R.mipmap.place_holder_img)
+                        .url(response.getPayEntryList().get(0).getImage())
+                        .imageView(payOneIV)
+                        .build());
+
+        payTwoTV.setText(response.getPayEntryList().get(1).getName());
+
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .placeholder(R.mipmap.place_holder_img)
+                        .url(response.getPayEntryList().get(1).getImage())
+                        .imageView(payTwoIV)
+                        .build());
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onPaySuccess(Map<String, String> rawResult) {
+    }
+
+    @Override
+    public void onPayError(int error_code, String message) {
+    }
+
+    @Override
+    public void onPayCancel() {
     }
 }

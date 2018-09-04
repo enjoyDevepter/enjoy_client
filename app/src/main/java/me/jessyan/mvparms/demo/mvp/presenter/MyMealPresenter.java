@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MyMealContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentAndMealRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -152,6 +153,30 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             getMyMealAppointment(false);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+
+    public void cancelOrder() {
+        OrderOperationRequest request = new OrderOperationRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setOrderId((String) mRootView.getCache().get("orderId"));
+        request.setCmd(553);
+        mModel.cancelOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            getMyMealAppointment(true);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

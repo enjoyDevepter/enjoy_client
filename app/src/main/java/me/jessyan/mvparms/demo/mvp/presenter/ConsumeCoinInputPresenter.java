@@ -5,29 +5,28 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import cn.ehanmy.pay.PayManager;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinInputContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.ChargeBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetRechargeListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.RechargeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetRechargeListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.RechargeResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinInputContract;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
@@ -48,6 +47,12 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
     RecyclerView.Adapter mAdapter;
     @Inject
     List<ChargeBean> orderBeanList;
+    private int nextPageIndex = 1;
+
+    @Inject
+    public ConsumeCoinInputPresenter(ConsumeCoinInputContract.Model model, ConsumeCoinInputContract.View rootView) {
+        super(model, rootView);
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void requestOrderList(){
@@ -57,8 +62,6 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
     public void nextPage(){
         requestOrderList(nextPageIndex,false);
     }
-
-    private int nextPageIndex = 1;
 
     private void requestOrderList(int pageIndex,final boolean clear) {
         GetRechargeListRequest request = new GetRechargeListRequest();
@@ -105,12 +108,6 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                 });
     }
 
-
-    @Inject
-    public ConsumeCoinInputPresenter(ConsumeCoinInputContract.Model model, ConsumeCoinInputContract.View rootView) {
-        super(model, rootView);
-    }
-
     public void recharge(long money,String payType) {// 单位分
         RechargeRequest request = new RechargeRequest();
         request.setAmount(money);
@@ -134,6 +131,7 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                     @Override
                     public void onNext(RechargeResponse response) {
                         if (response.isSuccess()) {
+                            PayManager.getInstace(mRootView.getActivity()).toPay("ALIPAY_APP".equals(payType) ? PayManager.PayMode.ALIPAY : PayManager.PayMode.WXPAY, response.getParams(), (PayManager.PayListener) mRootView.getActivity());
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

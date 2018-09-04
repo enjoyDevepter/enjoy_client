@@ -382,6 +382,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         edit.commit();
     }
 
+
+    @Override
+    protected void onDestroy() {
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.removeUpdates(this);
+        super.onDestroy();
+    }
+
     /**
      * 获取保存的apk文件的地址
      *

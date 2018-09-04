@@ -56,10 +56,9 @@
         android:layout_height="40dp"
         android:background="@color/white"
         app:tabIndicatorColor="#FF50C8F5"
-        app:tabIndicatorHeight="0dp"
+        app:tabIndicatorHeight="1dp"
         app:tabMode="scrollable"
-        app:tabPaddingEnd="0dp"
-        app:tabPaddingStart="0dp"
+        app:tabPaddingEnd="15dp"
         app:tabSelectedTextColor="#FF50C8F5"
         app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabTextColor="#FF666666" />

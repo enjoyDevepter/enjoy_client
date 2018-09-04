@@ -4,7 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
-import android.os.Parcelable;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -16,9 +15,6 @@ import com.jess.arms.utils.RxLifecycleUtils;
 
 import org.simple.eventbus.EventBus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,11 +22,11 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.MealOrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
-import me.jessyan.mvparms.demo.mvp.model.entity.PayEntry;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealOrderConfrimRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayMealOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealOrderConfirmResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayMealOrderResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MainActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -136,13 +132,10 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                     public void onNext(PayMealOrderResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
+                            mAppManager.killAllBeforeClass(MainActivity.class);
                             if ("0".equals(response.getPayStatus())) {
                                 Intent intent = new Intent(mRootView.getActivity(), PayActivity.class);
-                                intent.putExtra("comefrom", "meal");
                                 intent.putExtra("orderId", response.getOrderId());
-                                intent.putExtra("payMoney", response.getPayMoney());
-                                intent.putExtra("orderTime", response.getOrderTime());
-                                intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
                                 ArmsUtils.startActivity(intent);
                             } else {
                                 EventBus.getDefault().post(EventBusTags.MEAL_PAY_SUCCESS);
@@ -150,10 +143,8 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());
-                                List<PayEntry> payEntryList = response.getPayEntryList();
-                                if (payEntryList != null && payEntryList.size() > 0) {
-                                    intent.putExtra("payName", payEntryList.get(0).getName());
-                                }
+                                intent.putExtra("orderType", response.getOrderType());
+                                intent.putExtra("payTypeDesc", response.getPayTypeDesc());
                                 ArmsUtils.startActivity(intent);
                             }
                         } else {

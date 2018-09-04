@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical">
 
     <include layout="@layout/title" />
@@ -15,6 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="176dp"
+            android:background="@color/white"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -71,6 +73,8 @@
             android:id="@+id/pay_result_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@color/white"
             android:orientation="vertical"
             android:paddingLeft="18dp"
             android:paddingRight="18dp">
@@ -173,6 +177,7 @@
         android:id="@+id/fail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical"
         android:visibility="gone">
 

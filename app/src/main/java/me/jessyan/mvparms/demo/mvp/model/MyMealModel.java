@@ -12,6 +12,8 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.MyMealContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.AppointmentService;
+import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentAndMealRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -47,5 +49,11 @@ public class MyMealModel extends BaseModel implements MyMealContract.Model {
     public Observable<BaseResponse> modifyAppointmentTime(ModifyAppointmentRequest request) {
         return mRepositoryManager.obtainRetrofitService(AppointmentService.class)
                 .modifyAppointmentTime(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> cancelOrder(OrderOperationRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .cancelOrder(request);
     }
 }

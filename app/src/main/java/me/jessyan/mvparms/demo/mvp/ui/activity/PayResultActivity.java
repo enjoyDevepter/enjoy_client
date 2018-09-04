@@ -81,7 +81,7 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
         failOrderV.setOnClickListener(this);
 
         orderIdTV.setText(getIntent().getStringExtra("orderId"));
-        payTypeTV.setText(getIntent().getStringExtra("payName"));
+        payTypeTV.setText(getIntent().getStringExtra("payTypeDesc"));
         moneyTV.setText(ArmsUtils.formatLong(getIntent().getLongExtra("payMoney", 0)));
         timeTV.setText(sdf.format(getIntent().getLongExtra("orderTime", 0)));
     }
@@ -122,12 +122,19 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
                 killMyself();
                 break;
             case R.id.order_center:
-                break;
-            case R.id.order_detail:
-                break;
-            case R.id.retry:
+                ArmsUtils.startActivity(MyOrderActivity.class);
+                killMyself();
                 break;
             case R.id.fail_order_detail:
+            case R.id.order_detail:
+                Intent detailIntent = new Intent(this, OrderDeatilsActivity.class);
+                detailIntent.putExtra("orderId", getIntent().getStringExtra("orderId"));
+                detailIntent.putExtra("type", Integer.valueOf(getIntent().getStringExtra("orderType")) - 1);
+                detailIntent.putExtra("isMeal", getIntent().getBooleanExtra("isMeal", false));
+                ArmsUtils.startActivity(detailIntent);
+                killMyself();
+                break;
+            case R.id.retry:
                 break;
         }
     }

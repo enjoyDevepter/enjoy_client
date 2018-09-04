@@ -105,20 +105,22 @@
 
 
                 <LinearLayout
-                    android:id="@+id/pay_for_zfb"
+                    android:id="@+id/pay_one"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <View
+                    <ImageView
+                        android:id="@+id/pay_one_img"
                         android:layout_width="23dp"
                         android:layout_height="23dp"
                         android:layout_marginLeft="15dp"
                         android:background="@mipmap/pay_zfb" />
 
                     <TextView
+                        android:id="@+id/pay_one_text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -128,7 +130,7 @@
                         android:textSize="12sp" />
 
                     <View
-                        android:id="@+id/zfb"
+                        android:id="@+id/pay_one_status"
                         android:layout_width="12dp"
                         android:layout_height="12dp"
                         android:layout_marginRight="15dp"
@@ -136,20 +138,22 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/pay_for_wx"
+                    android:id="@+id/pay_two"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <View
+                    <ImageView
+                        android:id="@+id/pay_two_img"
                         android:layout_width="23dp"
                         android:layout_height="23dp"
                         android:layout_marginLeft="15dp"
                         android:background="@mipmap/pay_wx" />
 
                     <TextView
+                        android:id="@+id/pay_two_text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -159,7 +163,7 @@
                         android:textSize="12sp" />
 
                     <View
-                        android:id="@+id/wx"
+                        android:id="@+id/pay_two_status"
                         android:layout_width="12dp"
                         android:layout_height="12dp"
                         android:layout_marginRight="15dp"

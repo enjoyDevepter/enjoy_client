@@ -1,16 +1,15 @@
-package me.jessyan.mvparms.demo.mvp.model.entity.response;
+package me.jessyan.mvparms.demo.mvp.model.entity.pay.response;
 
 import java.util.List;
 
-import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.PayEntry;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 
 /**
  * Created by guomin on 2018/7/28.
  */
 
-public class HGoodsPayOrderResponse extends BaseResponse {
-
+public class PayInfoResponse extends BaseResponse {
     private String orderId;
     private long orderTime;
     private long payMoney;
@@ -19,7 +18,6 @@ public class HGoodsPayOrderResponse extends BaseResponse {
     private String payType;
     private String payTypeDesc;
     private String payStatus;
-    private List<Goods> goodsList;
     private List<PayEntry> payEntryList;
 
     public String getOrderId() {
@@ -78,14 +76,6 @@ public class HGoodsPayOrderResponse extends BaseResponse {
         this.payStatus = payStatus;
     }
 
-    public List<Goods> getGoodsList() {
-        return goodsList;
-    }
-
-    public void setGoodsList(List<Goods> goodsList) {
-        this.goodsList = goodsList;
-    }
-
     public List<PayEntry> getPayEntryList() {
         return payEntryList;
     }
@@ -113,7 +103,6 @@ public class HGoodsPayOrderResponse extends BaseResponse {
                 ", payType='" + payType + '\'' +
                 ", payTypeDesc='" + payTypeDesc + '\'' +
                 ", payStatus='" + payStatus + '\'' +
-                ", goodsList=" + goodsList +
                 ", payEntryList=" + payEntryList +
                 '}';
     }

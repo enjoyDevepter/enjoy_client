@@ -4,7 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
@@ -15,7 +14,6 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,12 +23,12 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.PayEntry;
 import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MainActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
@@ -177,23 +175,18 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                     @Override
                     public void onNext(PayOrderResponse response) {
                         if (response.isSuccess()) {
+                            mAppManager.killAllBeforeClass(MainActivity.class);
                             if ("0".equals(response.getPayStatus())) {
                                 Intent intent = new Intent(mRootView.getActivity(), PayActivity.class);
-                                intent.putExtra("comefrom", "mall");
                                 intent.putExtra("orderId", response.getOrderId());
-                                intent.putExtra("payMoney", response.getPayMoney());
-                                intent.putExtra("orderTime", response.getOrderTime());
-                                intent.putParcelableArrayListExtra("payEntryList", (ArrayList<? extends Parcelable>) response.getPayEntryList());
                                 ArmsUtils.startActivity(intent);
                             } else {
                                 Intent intent = new Intent(mRootView.getActivity(), PayResultActivity.class);
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getPayMoney());
                                 intent.putExtra("orderTime", response.getOrderTime());
-                                List<PayEntry> payEntryList = response.getPayEntryList();
-                                if (payEntryList != null && payEntryList.size() > 0) {
-                                    intent.putExtra("payName", payEntryList.get(0).getName());
-                                }
+                                intent.putExtra("orderType", response.getOrderType());
+                                intent.putExtra("payTypeDesc", response.getPayTypeDesc());
                                 ArmsUtils.startActivity(intent);
                             }
                         } else {

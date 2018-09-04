@@ -215,6 +215,8 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
             case LEFT:
                 if ("1".equals(appointment.getOrderStatus())) {
                     // 取消订单
+                    provideCache().put("orderId", appointment.getOrderId());
+                    mPresenter.cancelOrder();
                 }
                 break;
             case RIGHT:

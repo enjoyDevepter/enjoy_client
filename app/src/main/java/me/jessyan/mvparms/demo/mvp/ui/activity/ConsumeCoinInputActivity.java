@@ -23,11 +23,13 @@ import com.paginate.Paginate;
 
 import org.simple.eventbus.Subscriber;
 
-import java.util.concurrent.Executors;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.ehanmy.pay.PayManager;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerConsumeCoinInputComponent;
 import me.jessyan.mvparms.demo.di.module.ConsumeCoinInputModule;
@@ -36,16 +38,13 @@ import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.ConsumeCoinInputPresenter;
 
-import me.jessyan.mvparms.demo.R;
-
-
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPresenter> implements ConsumeCoinInputContract.View {
+public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPresenter> implements ConsumeCoinInputContract.View, PayManager.PayListener {
 
     @BindView(R.id.back)
     View back;
@@ -68,37 +67,39 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    private Paginate mPaginate;
-    private boolean isLoadingMore;
-    private boolean isEnd;
     @BindView(R.id.no_date)
     View onDateV;
-
     @BindView(R.id.commit)
     View commit;
-
-    private MemberAccount account;
-
     @BindView(R.id.pay_for_zfb)
     View pay_for_zfb;
     @BindView(R.id.pay_for_wx)
     View pay_for_wx;
-
-    enum PayType{
-        WX("WEIXIN_APP"),  // 微信
-        ZFB("ALIPAY_APP");  // 支付宝
-
-        private String payType;
-        PayType(String payType){
-            this.payType = payType;
-        }
-    }
-
     @BindView(R.id.zfb)
     View zfb;
     @BindView(R.id.wx)
     View wx;
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean isEnd;
+    private MemberAccount account;
     private PayType currType = PayType.WX;
+    private long money_num = 0;
+
+    @Override
+    public void onPaySuccess(Map<String, String> rawResult) {
+
+    }
+
+    @Override
+    public void onPayError(int error_code, String message) {
+
+    }
+
+    @Override
+    public void onPayCancel() {
+
+    }
 
     private void selectType(PayType type){
         zfb.setSelected(false);
@@ -238,8 +239,6 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
         });
     }
 
-    private long money_num = 0;
-
     @Override
     public void showLoading() {
 
@@ -284,6 +283,7 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     public void endLoadMore() {
         isLoadingMore = false;
     }
+
     @Override
     public void showError(boolean hasDate) {
         onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
@@ -294,11 +294,23 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     public void setEnd(boolean isEnd) {
         this.isEnd = isEnd;
     }
+
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
         this.mPaginate = null;
+    }
+
+    enum PayType {
+        WX("WEIXIN_APP"),  // 微信
+        ZFB("ALIPAY_APP");  // 支付宝
+
+        private String payType;
+
+        PayType(String payType) {
+            this.payType = payType;
+        }
     }
 
 }

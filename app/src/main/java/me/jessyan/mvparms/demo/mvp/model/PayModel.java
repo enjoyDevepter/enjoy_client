@@ -9,7 +9,13 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.PayContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.pay.request.PayInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.pay.request.PayRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.pay.response.PayInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.pay.response.PayResponse;
 
 
 @ActivityScope
@@ -31,4 +37,15 @@ public class PayModel extends BaseModel implements PayContract.Model {
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<PayInfoResponse> getOrderPayInfo(PayInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .getOrderPayInfo(request);
+    }
+
+    @Override
+    public Observable<PayResponse> pay(PayRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .pay(request);
+    }
 }
