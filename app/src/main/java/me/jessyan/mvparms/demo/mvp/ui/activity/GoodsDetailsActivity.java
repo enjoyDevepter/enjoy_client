@@ -414,13 +414,14 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
 
         collectV.setSelected("1".equals(response.getGoods().getIsFavorite()) ? true : false);
 
+        provideCache().put("specValueId", response.getGoods().getGoodsSpecValue().getSpecValueId());
         String specValueId = (String) provideCache().get("specValueId");
         if (!ArmsUtils.isEmpty(specValueId)) {
             for (int i = 0; i < response.getGoodsSpecValueList().size(); i++) {
                 if (response.getGoodsSpecValueList().get(i).getSpecValueId().equals(specValueId)) {
                     adapter.setSelectedList(i);
                     goodSpecTV.setText(response.getGoodsSpecValueList().get(i).getSpecValueName());
-                    return;
+                    break;
                 }
             }
         }
@@ -530,7 +531,6 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             Goods goods = ((Goods) provideCache().get("goods"));
             spceIDTV.setText(goods.getMerchId());
             spceNameTV.setText(goods.getName());
-            adapter.setSelectedList(0);
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
             mImageLoader.loadImage(spceImageIV.getContext(),
                     ImageConfigImpl

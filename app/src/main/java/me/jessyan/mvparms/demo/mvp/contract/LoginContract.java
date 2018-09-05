@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.contract;
 
 import android.app.Activity;
 
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -9,6 +10,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginByPhoneRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginByUserRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
@@ -21,6 +23,7 @@ public interface LoginContract {
 
         void showVerity();
 
+        Cache getCache();
         //申请权限
         RxPermissions getRxPermissions();
     }
@@ -33,5 +36,9 @@ public interface LoginContract {
         Observable<RegisterResponse> loginByPhone(LoginByPhoneRequest loginByPhoneRequest);
 
         Observable<RegisterResponse> loginByUserName(LoginByUserRequest loginByUserRequest);
+
+        Observable<RegisterResponse> getProtocolURL(SimpleRequest loginByUserRequest);
+
+
     }
 }

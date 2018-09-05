@@ -14,6 +14,7 @@ import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.LoginAndRegisterService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginByPhoneRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginByUserRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
@@ -54,5 +55,11 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
     public Observable<RegisterResponse> loginByUserName(LoginByUserRequest loginByUserRequest) {
         return mRepositoryManager.obtainRetrofitService(LoginAndRegisterService.class)
                 .loginByUser(loginByUserRequest);
+    }
+
+    @Override
+    public Observable<RegisterResponse> getProtocolURL(SimpleRequest request) {
+        return mRepositoryManager.obtainRetrofitService(LoginAndRegisterService.class)
+                .getProtocolURL(request);
     }
 }

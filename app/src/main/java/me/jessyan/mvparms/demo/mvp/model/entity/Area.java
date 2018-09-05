@@ -12,6 +12,7 @@ public class Area implements Serializable {
     private String parentId;
     private String type;
 
+
     public String getCode() {
         return code;
     }

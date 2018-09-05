@@ -14,20 +14,27 @@ import android.support.v4.app.ActivityCompat;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.PermissionUtil;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import org.simple.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Area;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.response.LocationResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -111,10 +118,32 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<LocationResponse>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<CityResponse>(mErrorHandler) {
                     @Override
-                    public void onNext(LocationResponse response) {
+                    public void onNext(CityResponse response) {
                         if (response.isSuccess()) {
+                            Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+                            ArrayList<Area> areas = response.getAreaList();
+                            for (Area provice : areas) {
+                                if ("0".equals(provice.getParentId())) {
+                                    cache.put("province", provice.getCode());
+                                    for (Area city : areas) {
+                                        if (city.getParentId().equals(provice.getId())) {
+                                            cache.put("city", city.getCode());
+                                            for (Area county : areas) {
+                                                if (county.getParentId().equals(city.getId())) {
+                                                    cache.put("county", county.getCode());
+                                                    cache.put("current_location_info", provice.getName() + "-" + city.getName() + "-" + county.getName());
+                                                    EventBus.getDefault().post(county, EventBusTags.CITY_CHANGE_EVENT);
+                                                    break;
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -150,8 +179,6 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
 
     @Override
     public void onDestroy() {
-        LocationManager locationManager = (LocationManager) mRootView.getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.removeUpdates((LocationListener) mRootView.getActivity());
         this.mErrorHandler = null;
         this.mAppManager = null;
         this.mImageLoader = null;

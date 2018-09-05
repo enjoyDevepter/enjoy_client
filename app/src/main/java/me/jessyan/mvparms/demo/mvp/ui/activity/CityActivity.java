@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
@@ -39,6 +40,8 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class CityActivity extends BaseActivity<CityPresenter> implements CityContract.View, View.OnClickListener {
     @BindView(R.id.back)
     View backV;
+    @BindView(R.id.location_info)
+    TextView locationInfoTV;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -60,7 +63,8 @@ public class CityActivity extends BaseActivity<CityPresenter> implements CityCon
     @Override
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
-        mPresenter.getCities();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        locationInfoTV.setText((String) cache.get("current_location_info"));
     }
 
 

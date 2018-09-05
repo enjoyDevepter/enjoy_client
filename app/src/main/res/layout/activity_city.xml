@@ -49,9 +49,10 @@
             android:background="@mipmap/location" />
 
         <TextView
+            android:id="@+id/location_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="北京市-昌平区"
+            android:text="正在获取位置..."
             android:textColor="#FF333333"
             android:textSize="16sp" />
     </LinearLayout>

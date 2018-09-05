@@ -155,17 +155,11 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
                 });
     }
 
-    public void getHCoodsDetailsForSpecValueId() {
+    public void getHGoodsDetailsForSpecValueId() {
         GoodsDetailsRequest request = new GoodsDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         String advanceDepositId = mRootView.getActivity().getIntent().getStringExtra("advanceDepositId");
         String token = (String) cache.get(KEY_KEEP + "token");
-        if (ArmsUtils.isEmpty(token)) {
-            request.setCmd(443);
-        } else {
-            request.setCmd(444);
-        }
-
         if (ArmsUtils.isEmpty(advanceDepositId)) {
             if (ArmsUtils.isEmpty(token)) {
                 request.setCmd(447);
@@ -174,9 +168,9 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
             }
         } else {
             if (ArmsUtils.isEmpty(token)) {
-                request.setCmd(441);
+                request.setCmd(443);
             } else {
-                request.setCmd(442);
+                request.setCmd(444);
             }
         }
 

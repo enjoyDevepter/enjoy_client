@@ -8,9 +8,9 @@ import com.jess.arms.mvp.IView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.response.LocationResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 
 
@@ -31,6 +31,6 @@ public interface MainContract {
     interface Model extends IModel {
         Observable<UpdateResponse> checkUpdate(UpdateRequest request);
 
-        Observable<LocationResponse> getAreaForLoaction(LocationRequest request);
+        Observable<CityResponse> getAreaForLoaction(LocationRequest request);
     }
 }

@@ -6,6 +6,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginByPhoneRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginByUserRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.RegisterRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
@@ -42,4 +43,6 @@ public interface LoginAndRegisterService {
     @POST("gateway")
     Observable<BaseResponse> modify(@Body ModifyRequest modifyRequest);
 
+    @POST("gateway")
+    Observable<RegisterResponse> getProtocolURL(@Body SimpleRequest modifyRequest);
 }

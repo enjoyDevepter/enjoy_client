@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -50,8 +52,12 @@ public class CityPresenter extends BasePresenter<CityContract.Model, CityContrac
         this.mApplication = null;
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    void onCreate() {
+        getCities();
+    }
 
-    public void getCities() {
+    private void getCities() {
 
         SimpleRequest request = new SimpleRequest();
         request.setCmd(901);

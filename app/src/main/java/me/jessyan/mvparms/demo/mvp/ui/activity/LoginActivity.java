@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -103,7 +104,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
             }
         });
-        mPresenter.requestPermissions();
     }
 
     private void changeTabToPhone(boolean byPhone) {
@@ -161,7 +161,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 ArmsUtils.startActivity(RegisterActivity.class);
                 break;
             case R.id.protocol:
-//                ArmsUtils.startActivity(MainActivity.class);
+                Intent intent = new Intent(this, PlatformActivity.class);
+                intent.putExtra("title", "协议");
+                intent.putExtra("url", (String) provideCache().get("protocolURL"));
+                ArmsUtils.startActivity(intent);
                 break;
             case R.id.login:
                 login();
@@ -250,6 +253,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void showVerity() {
         time = 0;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
     }
 
     @Override

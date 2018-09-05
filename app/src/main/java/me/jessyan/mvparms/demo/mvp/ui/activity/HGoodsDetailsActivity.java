@@ -414,9 +414,17 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         detailWV.loadData(response.getGoods().getMobileDetail(), "text/html", "UTF-8");
 
         tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getTailMoney()));
-        if (null != goods.getGoodsSpecValue()) {
-            goodsSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
-            provideCache().put("specValueId", goods.getGoodsSpecValue().getSpecValueId());
+
+        provideCache().put("specValueId", response.getGoods().getGoodsSpecValue().getSpecValueId());
+        String specValueId = (String) provideCache().get("specValueId");
+        if (!ArmsUtils.isEmpty(specValueId)) {
+            for (int i = 0; i < response.getGoodsSpecValueList().size(); i++) {
+                if (response.getGoodsSpecValueList().get(i).getSpecValueId().equals(specValueId)) {
+                    adapter.setSelectedList(i);
+                    goodsSpecTV.setText(response.getGoodsSpecValueList().get(i).getSpecValueName());
+                    break;
+                }
+            }
         }
 
         List<Promotion> promotions = response.getPromotionList();
@@ -552,7 +560,6 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             spceIDTV.setText(response.getGoods().getAdvanceDepositId());
             spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getMarketPrice()));
             spceNameTV.setText(response.getGoods().getName());
-
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
             mImageLoader.loadImage(spceImageIV.getContext(),
                     ImageConfigImpl
@@ -596,7 +603,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         if (selectPosSet.size() > 0) {
             GoodsSpecValue goodsSpecValue = (GoodsSpecValue) adapter.getItem((int) selectPosSet.toArray()[0]);
             provideCache().put("specValueId", goodsSpecValue.getSpecValueId());
-            mPresenter.getHCoodsDetailsForSpecValueId();
+            mPresenter.getHGoodsDetailsForSpecValueId();
         } else {
             goodsSpecTV.setText("");
             provideCache().put("specValueId", "");

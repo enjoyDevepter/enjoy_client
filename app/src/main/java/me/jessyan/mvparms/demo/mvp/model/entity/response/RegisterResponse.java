@@ -8,6 +8,7 @@ public class RegisterResponse extends BaseResponse {
 
     private String token;
     private String signkey;
+    private String url;
 
     public String getToken() {
         return token;
@@ -23,5 +24,22 @@ public class RegisterResponse extends BaseResponse {
 
     public void setSignkey(String signkey) {
         this.signkey = signkey;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "RegisterResponse{" +
+                "token='" + token + '\'' +
+                ", signkey='" + signkey + '\'' +
+                ", url='" + url + '\'' +
+                '}';
     }
 }

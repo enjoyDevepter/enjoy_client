@@ -65,7 +65,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AuthenticationReque
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.response.LocationResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -202,7 +201,7 @@ public interface MainService {
     Observable<UpdateResponse> checkUpdate(@Body UpdateRequest request);
 
     @POST("gateway")
-    Observable<LocationResponse> getAreaForLoaction(@Body LocationRequest request);
+    Observable<CityResponse> getAreaForLoaction(@Body LocationRequest request);
 
     @POST("gateway")
     Observable<PayInfoResponse> getOrderPayInfo(@Body PayInfoRequest request);

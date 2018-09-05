@@ -1,6 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.response;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.Area;
 
@@ -10,13 +10,13 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Area;
 
 public class CityResponse extends BaseResponse {
 
-    private List<Area> areaList;
+    private ArrayList<Area> areaList;
 
-    public List<Area> getAreaList() {
+    public ArrayList<Area> getAreaList() {
         return areaList;
     }
 
-    public void setAreaList(List<Area> areaList) {
+    public void setAreaList(ArrayList<Area> areaList) {
         this.areaList = areaList;
     }
 
