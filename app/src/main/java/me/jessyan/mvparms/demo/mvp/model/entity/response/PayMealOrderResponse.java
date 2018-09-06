@@ -13,6 +13,7 @@ public class PayMealOrderResponse extends BaseResponse {
     private String orderId;
     private long orderTime;
     private long payMoney;
+    private long totalPrice;
     private String orderType;
     private String payType;
     private String payTypeDesc;
@@ -92,15 +93,24 @@ public class PayMealOrderResponse extends BaseResponse {
         this.payTypeDesc = payTypeDesc;
     }
 
+    public long getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(long totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public String toString() {
         return "PayMealOrderResponse{" +
+                "orderId='" + orderId + '\'' +
+                ", orderTime=" + orderTime +
+                ", payMoney=" + payMoney +
+                ", totalPrice=" + totalPrice +
                 ", orderType='" + orderType + '\'' +
                 ", payType='" + payType + '\'' +
                 ", payTypeDesc='" + payTypeDesc + '\'' +
-                ", orderId='" + orderId + '\'' +
-                ", orderTime=" + orderTime +
-                ", payMoney=" + payMoney +
                 ", payStatus='" + payStatus + '\'' +
                 ", setMealGoods=" + setMealGoods +
                 ", payEntryList=" + payEntryList +

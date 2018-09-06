@@ -143,6 +143,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (null != tabLayout.getTabAt(0)) {
+            tabLayout.getTabAt(0).select();
+        }
+        if (null != tabLayoutTwo.getTabAt(0)) {
+            tabLayoutTwo.getTabAt(0).select();
+        }
+    }
+
     /**
      * 开始加载更多
      */
@@ -212,7 +223,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         for (NaviInfo naviInfo : firstNavList) {
             tabLayout.addTab(tabLayout.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
         }
-        tabLayout.addOnTabSelectedListener(this);
 
         // 广告
         List<String> urls = new ArrayList<>();
@@ -254,6 +264,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             if ("goods".equals(module.getType())) {
                 List<GoodSummary> goods = new Gson().fromJson(module.getBody(), new TypeToken<List<GoodSummary>>() {
                 }.getType());
+                if (goods.size() <= 0) {
+                    continue;
+                }
                 moduleRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_style_margin_left), 0));
                 moduleRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                 HomeGoodsAdapter homeGoodsAdapter = new HomeGoodsAdapter(goods);
@@ -262,11 +275,15 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             } else if ("article".equals(module.getType())) {
                 List<Article> articles = new Gson().fromJson(module.getBody(), new TypeToken<List<Article>>() {
                 }.getType());
+                if (articles.size() <= 0) {
+                    continue;
+                }
                 RecyclerView articleRV = new RecyclerView(getActivity());
-                moduleRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                articleRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                articleRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.home_module_article_margin_left), 0));
                 HomeArticleAdapter homeArticleAdapter = new HomeArticleAdapter(articles);
                 homeArticleAdapter.setOnItemClickListener(this);
-                moduleRV.setAdapter(homeArticleAdapter);
+                articleRV.setAdapter(homeArticleAdapter);
                 moduleLayout.addView(articleRV);
             }
             moduleLayout.addView(moduleV);
@@ -274,30 +291,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
         // 二级导航
         tabLayoutTwo.removeAllTabs();
+        tabLayoutTwo.addOnTabSelectedListener(this);
         for (NaviInfo naviInfo : secondNavList) {
-            tabLayoutTwo.addTab(tabLayoutTwo.newTab().setText(naviInfo.getTitle()));
+            tabLayoutTwo.addTab(tabLayoutTwo.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
         }
-        tabLayoutTwo.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 1:
-                        ArmsUtils.startActivity(getActivity(), RecommendActivity.class);
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
     }
 
     @Override
@@ -401,14 +398,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 provideCache().put("memberId", diary.getMember().getMemberId());
                 mPresenter.follow("1".equals(diary.getMember().getIsFollow()) ? false : true, position);
                 break;
-            case LEFT_IMAGE:
-                break;
-            case RIGHT_IMAGE:
-                break;
             case VOTE:
                 provideCache().put("diaryId", diary.getDiaryId());
                 mPresenter.vote("1".equals(diary.getIsPraise()) ? false : true, position);
                 break;
+            case LEFT_IMAGE:
+            case RIGHT_IMAGE:
             case ITEM:
                 Intent intent = new Intent(getActivity().getApplication(), DiaryForGoodsActivity.class);
                 intent.putExtra("diaryId", diary.getDiaryId());
@@ -498,6 +493,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         } else if ("shop".equals(tag)) {
             cache.put("defaultIndex", 0);
             EventBus.getDefault().post(tab.getPosition(), EventBusTags.CHANGE_MAIN_INDEX);
+        } else if ("recom_good".equals(tag)) {
+            ArmsUtils.startActivity(getActivity(), RecommendActivity.class);
         }
     }
 

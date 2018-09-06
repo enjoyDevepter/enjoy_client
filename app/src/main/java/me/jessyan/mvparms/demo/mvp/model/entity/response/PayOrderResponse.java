@@ -17,6 +17,7 @@ public class PayOrderResponse extends BaseResponse {
     private String payStatus;
     private String payType;
     private String orderType;
+    private long totalPrice;
     private String payTypeDesc;
     private List<PayGoods> goodsList;
     private List<PayEntry> payEntryList;
@@ -93,6 +94,14 @@ public class PayOrderResponse extends BaseResponse {
         this.orderType = orderType;
     }
 
+    public long getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(long totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public String toString() {
         return "PayOrderResponse{" +
@@ -102,6 +111,7 @@ public class PayOrderResponse extends BaseResponse {
                 ", payStatus='" + payStatus + '\'' +
                 ", payType='" + payType + '\'' +
                 ", orderType='" + orderType + '\'' +
+                ", totalPrice=" + totalPrice +
                 ", payTypeDesc='" + payTypeDesc + '\'' +
                 ", goodsList=" + goodsList +
                 ", payEntryList=" + payEntryList +

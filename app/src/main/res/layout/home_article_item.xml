@@ -2,6 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="188dp"
     android:layout_height="88dp"
+    android:layout_marginBottom="7dp"
+    android:layout_marginTop="7dp"
+    android:background="@color/white"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <FrameLayout
@@ -27,11 +31,11 @@
 
     <TextView
         android:id="@+id/desc"
-        android:layout_width="match_parent"
+        android:layout_width="85dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
         android:textColor="#FF6A6A6A"
         android:textSize="9sp" />

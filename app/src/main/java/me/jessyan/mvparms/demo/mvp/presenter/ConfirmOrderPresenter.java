@@ -183,7 +183,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                             } else {
                                 Intent intent = new Intent(mRootView.getActivity(), PayResultActivity.class);
                                 intent.putExtra("orderId", response.getOrderId());
-                                intent.putExtra("payMoney", response.getPayMoney());
+                                intent.putExtra("payMoney", response.getTotalPrice());
                                 intent.putExtra("orderTime", response.getOrderTime());
                                 intent.putExtra("orderType", response.getOrderType());
                                 intent.putExtra("payTypeDesc", response.getPayTypeDesc());

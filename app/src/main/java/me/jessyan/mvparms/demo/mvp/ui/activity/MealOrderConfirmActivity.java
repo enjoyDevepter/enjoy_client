@@ -164,6 +164,7 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
         priceTV.setText(ArmsUtils.formatLong(response.getPrice()));
         payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));
         moneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
+        moneyET.setHint(ArmsUtils.formatLong(response.getMoney()));
 
         mealNameTV.setText(response.getSetMealGoods().getName());
         salesPriceTV.setText(String.valueOf(response.getSetMealGoods().getSalePrice()));

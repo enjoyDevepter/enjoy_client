@@ -29,7 +29,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_weight="1"
-            android:text="套餐专区"
             android:textColor="#FF333333"
             android:textSize="13sp" />
 
@@ -58,7 +57,6 @@
         android:id="@+id/moduleRV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
         android:scrollbars="none" />
 
 </LinearLayout>

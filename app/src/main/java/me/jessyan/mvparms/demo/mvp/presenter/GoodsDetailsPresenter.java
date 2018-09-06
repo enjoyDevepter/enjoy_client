@@ -141,7 +141,7 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                             cache.put("goods", response.getGoods());
                             adapter.notifyDataChanged();
                             mRootView.updateUI(response);
-                            getGoodsForDiary();
+//                            getGoodsForDiary();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -286,7 +286,8 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                             }
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             diaryList.addAll(response.getDiaryList());
-                            mRootView.updateDiaryUI(response.getDiaryList().size() > 0);
+//                            mRootView.updateDiaryUI(response.getDiaryList().size() > 0);
+                            mRootView.updateDiaryUI(false);
                             preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
                             lastPageIndex = diaryList.size() / 10 == 0 ? 1 : diaryList.size() / 10;
                             if (lastPageIndex == 1) {

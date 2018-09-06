@@ -129,8 +129,7 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
             case R.id.order_detail:
                 Intent detailIntent = new Intent(this, OrderDeatilsActivity.class);
                 detailIntent.putExtra("orderId", getIntent().getStringExtra("orderId"));
-                detailIntent.putExtra("type", Integer.valueOf(getIntent().getStringExtra("orderType")) - 1);
-                detailIntent.putExtra("isMeal", getIntent().getBooleanExtra("isMeal", false));
+                detailIntent.putExtra("orderType", getIntent().getStringExtra("orderType"));
                 ArmsUtils.startActivity(detailIntent);
                 killMyself();
                 break;

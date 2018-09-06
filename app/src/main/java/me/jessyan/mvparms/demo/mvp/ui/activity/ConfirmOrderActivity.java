@@ -304,7 +304,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
             Store store = (Store) cache.get(listType.getDataKey());
             selfAddressTV.setText(store.getName());
         }
-
+        moneyET.setHint(ArmsUtils.formatLong(response.getMoney()));
         balanceTV.setText(ArmsUtils.formatLong(response.getBalance()));
         totalPrice.setText(ArmsUtils.formatLong(response.getPrice()));
         payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));

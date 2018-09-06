@@ -59,22 +59,28 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
     }
 
     private void getOrderDetails() {
-        int orderType = mRootView.getActivity().getIntent().getIntExtra("type", 0);
+        String orderType = mRootView.getActivity().getIntent().getStringExtra("orderType");
         OrderDetailsRequest request = new OrderDetailsRequest();
-        boolean isMeal = mRootView.getActivity().getIntent().getBooleanExtra("isMeal", false);
-        switch (orderType) {
-            case 0:
-                request.setCmd(551);
-                break;
-            case 1:
-                return;
-            case 2:
-                if (isMeal) {
-                    request.setCmd(572);
-                } else {
-                    request.setCmd(571);
-                }
-                break;
+        if ("1".equals(orderType)) { // 普通订单
+            request.setCmd(551);
+        } else if ("2".equals(orderType)) { // 生美订单
+        } else if ("3".equals(orderType)) { // 医美订单
+            request.setCmd(571);
+        } else if ("4".equals(orderType)) { // 普通套餐订单
+            request.setCmd(551);
+        } else if ("5".equals(orderType)) { // 生美套餐订单
+        } else if ("6".equals(orderType)) { // 医美套餐订单
+            request.setCmd(572);
+        } else if ("7".equals(orderType)) { // 医美定金预售订单
+            request.setCmd(571);
+        } else if ("8".equals(orderType)) { // 商美限时秒杀订单
+            request.setCmd(551);
+        } else if ("9".equals(orderType)) { // 商美新人专区订单
+            request.setCmd(551);
+        } else if ("10".equals(orderType)) { // 医美限时秒杀订单
+            request.setCmd(571);
+        } else if ("11".equals(orderType)) { // 医美新人专区订单
+            request.setCmd(571);
         }
         request.setToken((String) ArmsUtils.obtainAppComponentFromContext(mApplication).extras().get(KEY_KEEP + "token"));
         request.setOrderId(mRootView.getActivity().getIntent().getStringExtra("orderId"));
@@ -88,7 +94,7 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
                     public void onNext(OrderDetailsResponse response) {
                         if (response.isSuccess()) {
                             orderGoods.clear();
-                            if (isMeal) {
+                            if ("6".equals(orderType)) {
                                 for (MealGoods mealGoods : response.getOrder().getSetMealGoodsList()) {
                                     OrderGoods goods = new OrderGoods();
                                     goods.setType("6");
@@ -98,7 +104,7 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
                                     orderGoods.add(goods);
                                 }
                             } else {
-                                if (orderType == 2) {
+                                if ("7".equals(orderType)) {
                                     for (OrderGoods goods : response.getOrder().getGoodsList()) {
                                         goods.setType("7");
                                     }

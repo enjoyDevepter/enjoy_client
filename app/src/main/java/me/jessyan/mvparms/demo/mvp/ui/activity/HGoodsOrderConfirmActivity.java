@@ -217,6 +217,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         balanceTV.setText(ArmsUtils.formatLong(response.getBalance()));
         tailMoneyButtomTV.setText(String.valueOf(goods.getTailMoney()));
         moneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
+        moneyET.setHint(ArmsUtils.formatLong(response.getMoney()));
         couponButtomTV.setText(ArmsUtils.formatLong(response.getCoupon()));
         payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));
 

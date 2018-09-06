@@ -144,7 +144,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                         .imageView(imageTV)
                         .build());
 
-        nameTV.setText(member.getNickName());
+        nameTV.setText(member.getNickName() + "");
         maleTV.setText("0".equals(member.getSex()) ? "保密" : "1".equals(member.getSex()) ? "男" : "女");
         ageTV.setText(member.getAge() + "");
         Area city = member.getCity();

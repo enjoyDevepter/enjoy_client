@@ -204,6 +204,7 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
                 mPresenter.apply(true);
                 break;
             case R.id.release:
+                ArmsUtils.startActivity(ReleaseDiaryActivity.class);
                 break;
         }
     }

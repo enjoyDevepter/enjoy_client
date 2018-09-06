@@ -395,7 +395,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
 
         initViewPage();
 
-        detailWV.loadData(response.getGoods().getMobileDetail(), "text/html", "UTF-8");
+        detailWV.loadDataWithBaseURL(null, response.getGoods().getMobileDetail(), "text/html", "UTF-8", null);
 
 
         List<Promotion> promotions = response.getPromotionList();

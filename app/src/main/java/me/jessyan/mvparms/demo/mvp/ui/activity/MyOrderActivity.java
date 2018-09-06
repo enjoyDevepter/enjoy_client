@@ -360,8 +360,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
             case ITEM:
                 Intent detailIntent = new Intent(this, OrderDeatilsActivity.class);
                 detailIntent.putExtra("orderId", order.getOrderId());
-                detailIntent.putExtra("type", (int) provideCache().get("type"));
-                detailIntent.putExtra("isMeal", "6".equals(order.getOrderType()) ? true : false);
+                detailIntent.putExtra("orderType", order.getOrderType());
                 ArmsUtils.startActivity(detailIntent);
                 break;
         }

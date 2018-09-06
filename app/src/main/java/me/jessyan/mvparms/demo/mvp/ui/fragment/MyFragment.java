@@ -156,9 +156,9 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
             public void onClick(View v) {
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
                 Object o = cache.get(KEY_KEEP + "token");
-                if(o == null){
+                if (o == null) {
                     ArmsUtils.startActivity(LoginActivity.class);
-                }else{
+                } else {
                     ArmsUtils.startActivity(UserInfoActivity.class);
                 }
             }
@@ -296,7 +296,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
 
     @Subscriber(tag = EventBusTags.USER_LOGOUT)
-    public void clear(){
+    public void clear() {
         image.setImageResource(R.mipmap.place_holder_user);
         nickNameTV.setText("");
         level_icon.setBackground(null);
@@ -342,6 +342,6 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
             recommenderV.setVisibility(View.INVISIBLE);
         }
 
-        chenghao.setText(member.getRank().getPointLevelName());
+        chenghao.setText(member.getDistributionRank().getDistributionLevelName());
     }
 }

@@ -411,7 +411,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         saleCountTV.setText(String.valueOf(goods.getSales()));
 
         initViewPage();
-        detailWV.loadData(response.getGoods().getMobileDetail(), "text/html", "UTF-8");
+        detailWV.loadDataWithBaseURL(null, response.getGoods().getMobileDetail(), "text/html", "UTF-8", null);
 
         tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getTailMoney()));
 
