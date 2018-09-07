@@ -515,17 +515,23 @@
                 android:textColor="#FF666666"
                 android:textSize="13sp" />
 
-            <com.zhy.view.flowlayout.TagFlowLayout
+            <me.jessyan.mvparms.demo.mvp.ui.widget.LabelsView
                 android:id="@+id/specs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/spce_tag"
                 android:layout_below="@id/spce_tag"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
-                app:max_select="1"
-                app:tag_gravity="left" />
+                app:labelBackground="@drawable/goods_spec_item_bg"
+                app:labelTextColor="@drawable/goods_spec_item_text_bg"
+                app:labelTextPaddingBottom="5dp"
+                app:labelTextPaddingLeft="10dp"
+                app:labelTextPaddingRight="10dp"
+                app:labelTextPaddingTop="5dp"
+                app:labelTextSize="12sp"
+                app:lineMargin="10dp"
+                app:selectType="SINGLE_IRREVOCABLY"
+                app:wordMargin="10dp" />
 
         </RelativeLayout>
 

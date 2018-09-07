@@ -95,7 +95,8 @@
         android:gravity="center"
         android:text="立即购买"
         android:textColor="#FFFFFF"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="invisible" />
 
 
 </RelativeLayout>

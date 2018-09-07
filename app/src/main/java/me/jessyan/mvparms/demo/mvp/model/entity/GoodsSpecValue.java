@@ -32,5 +32,20 @@ public class GoodsSpecValue {
                 ", specValueName='" + specValueName + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GoodsSpecValue that = (GoodsSpecValue) o;
+
+        return specValueId.equals(that.specValueId);
+    }
+
+    @Override
+    public int hashCode() {
+        return specValueId.hashCode();
+    }
 }
 

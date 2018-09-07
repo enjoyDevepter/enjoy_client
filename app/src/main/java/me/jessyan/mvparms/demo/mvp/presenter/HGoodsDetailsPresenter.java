@@ -12,7 +12,6 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
-import com.zhy.view.flowlayout.TagAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,6 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
@@ -55,10 +53,6 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
     ImageLoader mImageLoader;
     @Inject
     List<Promotion> promotionList;
-    @Inject
-    List<GoodsSpecValue> goodsSpecValues;
-    @Inject
-    TagAdapter adapter;
     @Inject
     GoodsPromotionAdapter goodsPromotionAdapter;
     @Inject
@@ -142,10 +136,7 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
                                 promotionList.addAll(response.getPromotionList());
                                 promotionList.get(0).setCheck(true);
                             }
-                            goodsSpecValues.clear();
-                            goodsSpecValues.addAll(response.getGoodsSpecValueList());
                             mRootView.updateUI(response);
-                            adapter.notifyDataChanged();
                             goodsPromotionAdapter.notifyDataSetChanged();
                             getGoodsForDiary();
                         } else {
@@ -179,7 +170,7 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
         request.setCounty((String) (cache.get("county")));
         request.setProvince((String) (cache.get("province")));
         request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
-        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        request.setMerchId((String) (mRootView.getCache().get("merchId")));
         request.setSpecValueId((String) (mRootView.getCache().get("specValueId")));
         request.setAdvanceDepositId(advanceDepositId);
         mModel.getHGoodsDetails(request)
@@ -194,10 +185,7 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
                             hGoodsDetailsResponse = response;
                             promotionList.clear();
                             promotionList.addAll(response.getPromotionList());
-                            goodsSpecValues.clear();
-                            goodsSpecValues.addAll(response.getGoodsSpecValueList());
                             mRootView.updateUI(response);
-                            adapter.notifyDataChanged();
                             goodsPromotionAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());

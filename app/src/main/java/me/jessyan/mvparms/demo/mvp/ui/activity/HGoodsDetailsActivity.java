@@ -34,12 +34,9 @@ import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
-import com.zhy.view.flowlayout.TagAdapter;
-import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -57,14 +54,16 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.HGoodsDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.SpecLabelTextProvider;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
+import me.jessyan.mvparms.demo.mvp.ui.widget.LabelsView;
 
 import static android.graphics.Paint.STRIKE_THRU_TEXT_FLAG;
 import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> implements HGoodsDetailsContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TagFlowLayout.OnSelectListener {
+public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> implements HGoodsDetailsContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, LabelsView.OnLabelSelectChangeListener {
 
     @BindView(R.id.back)
     View backV;
@@ -127,7 +126,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     @BindView(R.id.promotionCV)
     RecyclerView promotionCV;
     @BindView(R.id.specs)
-    TagFlowLayout speceflowLayout;
+    LabelsView speceLabelsView;
 
     @BindView(R.id.deposit_tag)
     TextView depositTagTV;
@@ -159,8 +158,6 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     View newlyInfoV;
     @BindView(R.id.priceInfo)
     View priceInfoV;
-    @Inject
-    TagAdapter adapter;
     @Inject
     GoodsPromotionAdapter promotionAdapter;
     @Inject
@@ -222,8 +219,6 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         ArmsUtils.configRecyclerView(promotionCV, mLayoutManager);
         promotionCV.setAdapter(promotionAdapter);
         promotionAdapter.setOnItemClickListener(this);
-        speceflowLayout.setAdapter(adapter);
-        speceflowLayout.setOnSelectListener(this);
 
         String where = getIntent().getStringExtra("where");
         if ("timelimitdetail".equals(where)) {
@@ -232,17 +227,17 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             cartV.setVisibility(View.GONE);
             priceInfoV.setVisibility(View.GONE);
             priceTagTV.setText("限时秒杀价");
+            speceLabelsView.setSelectType(LabelsView.SelectType.NONE);
             promotionV.setVisibility(View.GONE);
             newlyInfoV.setVisibility(View.GONE);
-            speceflowLayout.setMaxSelectCount(0);
 
         } else if ("newpeople".equals(where)) {
             cartV.setVisibility(View.GONE);
             timeLimitPriceV.setVisibility(View.GONE);
             priceTagTV.setText("新人专享价");
+            speceLabelsView.setSelectType(LabelsView.SelectType.NONE);
             promotionV.setVisibility(View.GONE);
             timeLimitLayoutV.setVisibility(View.GONE);
-            speceflowLayout.setMaxSelectCount(0);
             newlyInfoV.setVisibility(View.VISIBLE);
             priceInfoV.setVisibility(View.GONE);
         } else {
@@ -251,7 +246,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             timeLimitPriceV.setVisibility(View.GONE);
             promotionV.setVisibility(View.VISIBLE);
             priceTagTV.setText("项目预订金");
-            speceflowLayout.setOnSelectListener(this);
+            speceLabelsView.setSelectType(LabelsView.SelectType.SINGLE_IRREVOCABLY);
             newlyInfoV.setVisibility(View.GONE);
             priceInfoV.setVisibility(View.VISIBLE);
         }
@@ -397,6 +392,25 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
 
     @Override
     public void updateUI(HGoodsDetailsResponse response) {
+        provideCache().put("specValueId", response.getGoods().getGoodsSpecValue().getSpecValueId());
+        if (null == this.response ||
+                !this.response.getGoodsSpecValueList().equals(response.getGoodsSpecValueList())) {
+            speceLabelsView.setLabels(response.getGoodsSpecValueList(), new SpecLabelTextProvider());
+            String specValueId = (String) provideCache().get("specValueId");
+            if (!ArmsUtils.isEmpty(specValueId)) {
+                for (int i = 0; i < response.getGoodsSpecValueList().size(); i++) {
+                    if (response.getGoodsSpecValueList().get(i).getSpecValueId().equals(specValueId)) {
+                        if (speceLabelsView.getSelectType() == LabelsView.SelectType.NONE) {
+                            speceLabelsView.setSelectOne(i);
+                        } else {
+                            speceLabelsView.setSelects(i);
+                        }
+                        goodsSpecTV.setText(response.getGoodsSpecValueList().get(i).getSpecValueName());
+                        break;
+                    }
+                }
+            }
+        }
         this.response = response;
         Goods goods = response.getGoods();
         imagesB.setImages(response.getImages());
@@ -414,18 +428,6 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         detailWV.loadDataWithBaseURL(null, response.getGoods().getMobileDetail(), "text/html", "UTF-8", null);
 
         tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getTailMoney()));
-
-        provideCache().put("specValueId", response.getGoods().getGoodsSpecValue().getSpecValueId());
-        String specValueId = (String) provideCache().get("specValueId");
-        if (!ArmsUtils.isEmpty(specValueId)) {
-            for (int i = 0; i < response.getGoodsSpecValueList().size(); i++) {
-                if (response.getGoodsSpecValueList().get(i).getSpecValueId().equals(specValueId)) {
-                    adapter.setSelectedList(i);
-                    goodsSpecTV.setText(response.getGoodsSpecValueList().get(i).getSpecValueName());
-                    break;
-                }
-            }
-        }
 
         List<Promotion> promotions = response.getPromotionList();
         if (promotions == null || promotions.size() <= 0) {
@@ -549,10 +551,11 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
 
 
     private void showSpec() {
-        if (adapter.getCount() <= 0) {
+        if (null == speceLabelsView.getLabels() || (null != speceLabelsView.getLabels() && speceLabelsView.getLabels().size() <= 0)) {
             return;
         }
         if (!maskSpecV.isShown()) {
+            speceLabelsView.setOnLabelSelectChangeListener(this);
             maskSpecV.setVisibility(View.VISIBLE);
             maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
             specLayoutV.setVisibility(View.VISIBLE);
@@ -570,6 +573,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                             .build());
 
         } else {
+            speceLabelsView.setOnLabelSelectChangeListener(null);
             maskSpecV.setVisibility(View.GONE);
             maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_out));
             specLayoutV.setVisibility(View.GONE);
@@ -599,24 +603,34 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     }
 
     @Override
-    public void onSelected(Set<Integer> selectPosSet) {
-        if (selectPosSet.size() > 0) {
-            GoodsSpecValue goodsSpecValue = (GoodsSpecValue) adapter.getItem((int) selectPosSet.toArray()[0]);
-            provideCache().put("specValueId", goodsSpecValue.getSpecValueId());
-            mPresenter.getHGoodsDetailsForSpecValueId();
-        } else {
-            goodsSpecTV.setText("");
-            provideCache().put("specValueId", "");
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(promotionCV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         DefaultAdapter.releaseAllHolder(dirayRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
 
     }
+
+    @Override
+    public void onLabelSelectChange(TextView label, Object data, boolean isSelect, int position) {
+        if (isSelect) {
+            GoodsSpecValue goodsSpecValue = (GoodsSpecValue) data;
+            provideCache().put("specValueId", goodsSpecValue.getSpecValueId());
+            provideCache().put("merchId", response.getGoods().getMerchId());
+            goodsSpecTV.setText(goodsSpecValue.getSpecValueName());
+            mPresenter.getHGoodsDetailsForSpecValueId();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (maskProV.isShown() || maskSpecV.isShown()) {
+            showSpec();
+            showPro();
+            return;
+        }
+        super.onBackPressed();
+    }
+
 
     private class Mobile {
         @JavascriptInterface

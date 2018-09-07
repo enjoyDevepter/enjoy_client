@@ -12,7 +12,6 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
-import com.zhy.view.flowlayout.TagAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,6 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.GoodsDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
@@ -57,10 +55,6 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
     GoodsDetailsResponse goodsDetailsResponse;
     @Inject
     List<Promotion> promotionList;
-    @Inject
-    List<GoodsSpecValue> goodsSpecValues;
-    @Inject
-    TagAdapter adapter;
     @Inject
     DiaryListAdapter mAdapter;
     @Inject
@@ -111,8 +105,18 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
             } else {
                 request.setCmd(452);
             }
+        } else if ("recom_good".equals(where)) {
+            if (ArmsUtils.isEmpty(token)) {
+                request.setCmd(405);
+            } else {
+                request.setCmd(415);
+            }
         } else {
-            request.setCmd(403);
+            if (ArmsUtils.isEmpty(token)) {
+                request.setCmd(403);
+            } else {
+                request.setCmd(413);
+            }
         }
         request.setToken(token);
         request.setCity((String) (cache.get("city")));
@@ -135,13 +139,10 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                                 promotionList.addAll(response.getPromotionList());
                                 promotionList.get(0).setCheck(true);
                             }
-                            goodsSpecValues.clear();
-                            goodsSpecValues.addAll(response.getGoodsSpecValueList());
                             Cache<String, Object> cache = mRootView.getCache();
                             cache.put("goods", response.getGoods());
-                            adapter.notifyDataChanged();
                             mRootView.updateUI(response);
-//                            getGoodsForDiary();
+//                            getGoodsForDiary(); // 临时去掉
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -185,13 +186,18 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
     public void getCoodsDetailsForSpecValueId() {
         GoodsDetailsRequest request = new GoodsDetailsRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setCmd(409);
-        request.setToken((String) cache.get(KEY_KEEP + "token"));
+        String token = (String) cache.get(KEY_KEEP + "token");
+        if (ArmsUtils.isEmpty(token)) {
+            request.setCmd(409);
+        } else {
+            request.setCmd(419);
+        }
+        request.setToken(token);
         request.setCity((String) (cache.get("city")));
         request.setCounty((String) (cache.get("county")));
         request.setProvince((String) (cache.get("province")));
         request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
-        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        request.setMerchId((String) mRootView.getCache().get("merchId"));
         request.setSpecValueId((String) (mRootView.getCache().get("specValueId")));
         mModel.getGoodsDetails(request)
                 .subscribeOn(Schedulers.io())
@@ -205,11 +211,8 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                             goodsDetailsResponse = response;
                             promotionList.clear();
                             promotionList.addAll(response.getPromotionList());
-                            goodsSpecValues.clear();
-                            goodsSpecValues.addAll(response.getGoodsSpecValueList());
                             Cache<String, Object> cache = mRootView.getCache();
                             cache.put("goods", response.getGoods());
-                            adapter.notifyDataChanged();
                             mRootView.updateUI(response);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
