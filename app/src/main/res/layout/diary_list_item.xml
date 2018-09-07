@@ -42,7 +42,6 @@
             android:id="@+id/publishDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:gravity="right"
             android:textColor="#FFB3B3B3"
@@ -62,7 +61,6 @@
             android:layout_height="match_parent"
             android:layout_marginRight="12dp"
             android:layout_weight="1"
-            android:background="@mipmap/place_holder_img"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -70,7 +68,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@mipmap/place_holder_img"
             android:scaleType="fitXY" />
     </LinearLayout>
 

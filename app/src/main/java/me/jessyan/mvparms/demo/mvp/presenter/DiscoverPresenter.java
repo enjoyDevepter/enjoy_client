@@ -227,7 +227,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
         FollowMemberRequest request = new FollowMemberRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
-        request.setCmd(follow ? 201 : 211);
+        request.setCmd(follow ? 210 : 211);
         request.setMemberId((String) mRootView.getCache().get("memberId"));
         mModel.follow(request)
                 .subscribeOn(Schedulers.io())
