@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
 import me.jessyan.mvparms.demo.mvp.model.entity.diary.DiaryCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryCommentListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryDetailsRequest;
@@ -20,6 +21,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryCommentListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 
 
 @ActivityScope
@@ -70,4 +73,11 @@ public class DiaryDetailsModel extends BaseModel implements DiaryDetailsContract
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .comment(request);
     }
+
+    @Override
+    public Observable<ShareResponse> share(FollowRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .share(request);
+    }
+
 }

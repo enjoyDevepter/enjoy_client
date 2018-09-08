@@ -144,7 +144,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
      */
     public void cancelAppointment() {
         ModifyAppointmentRequest request = new ModifyAppointmentRequest();
-        request.setCmd(2108);
+        request.setCmd(2008);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setReservationId((String) mRootView.getCache().get("reservationId"));

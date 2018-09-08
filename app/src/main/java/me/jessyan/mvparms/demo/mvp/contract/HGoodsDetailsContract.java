@@ -43,5 +43,6 @@ public interface HGoodsDetailsContract {
         Observable<DiaryListResponse> getDiaryForGoodsIdList(DiaryForGoodsRequest request);
 
         Observable<BaseResponse> collectGoods(CollectGoodsRequest request);
+
     }
 }

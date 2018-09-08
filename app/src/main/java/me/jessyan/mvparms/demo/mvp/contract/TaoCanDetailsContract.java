@@ -10,9 +10,6 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 
 
 public interface TaoCanDetailsContract {
@@ -24,8 +21,6 @@ public interface TaoCanDetailsContract {
 
         void updateUI(MealDetailsResponse response);
 
-        void showWX(Share share);
-
         //申请权限
         RxPermissions getRxPermissions();
     }
@@ -36,8 +31,5 @@ public interface TaoCanDetailsContract {
         Observable<MealDetailsResponse> getMealDetail(MealDetailsRequest request);
 
         Observable<BaseResponse> collectGoods(MealDetailsRequest request);
-
-        Observable<ShareResponse> share(FollowRequest request);
-
     }
 }

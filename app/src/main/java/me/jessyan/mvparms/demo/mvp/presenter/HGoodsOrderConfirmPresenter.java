@@ -64,10 +64,18 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
 
         HGoodsOrderConfirmInfoRequest request = new HGoodsOrderConfirmInfoRequest();
         boolean payAll = mRootView.getActivity().getIntent().getBooleanExtra("payAll", false);
-        if (payAll) {
-            request.setCmd(525);
+
+        String where = mRootView.getActivity().getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            request.setCmd(545);
+        } else if ("newpeople".equals(where)) {
+            request.setCmd(535);
         } else {
-            request.setCmd(523);
+            if (payAll) {
+                request.setCmd(525);
+            } else {
+                request.setCmd(523);
+            }
         }
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
@@ -116,16 +124,24 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
         }
 
         boolean payAll = mRootView.getActivity().getIntent().getBooleanExtra("payAll", false);
-        if (payAll) {
-            request.setCmd(526);
+        String where = mRootView.getActivity().getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            request.setCmd(546);
+        } else if ("newpeople".equals(where)) {
+            request.setCmd(536);
         } else {
-            request.setCmd(524);
+            if (payAll) {
+                request.setCmd(526);
+            } else {
+                request.setCmd(524);
+            }
         }
+
 
         Address address = (Address) cache.get("memberAddressInfo");
         request.setMemberAddressId(address.getAddressId());
-        request.setAppointmentsDate((String) cache.get("appointmentsDate"));
-        request.setAppointmentsTime((String) cache.get("appointmentsTime"));
+        request.setReservationDate((String) cache.get("appointmentsDate"));
+        request.setReservationTime((String) cache.get("appointmentsTime"));
         request.setHospitalId(((HospitalBaseInfoBean) (cache.get(listType.getDataKey()))).getHospitalId());
         request.setCouponId((String) mRootView.getCache().get("couponId"));
         request.setCoupon(hGoodsOrderConfirmInfoResponse.getCoupon());

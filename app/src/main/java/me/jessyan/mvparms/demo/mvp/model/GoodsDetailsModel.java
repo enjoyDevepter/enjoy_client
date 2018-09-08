@@ -63,5 +63,4 @@ public class GoodsDetailsModel extends BaseModel implements GoodsDetailsContract
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getDiaryForGoodsIdList(request);
     }
-
 }

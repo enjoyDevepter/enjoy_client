@@ -329,6 +329,7 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
             case R.layout.goods_list_item:
                 Goods goods = mAdapter.getInfos().get(position);
                 Intent intent = new Intent(getActivity().getApplication(), GoodsDetailsActivity.class);
+                intent.putExtra("where", "recom");
                 intent.putExtra("type", goods.getType());
                 intent.putExtra("goodsId", goods.getGoodsId());
                 intent.putExtra("merchId", goods.getMerchId());

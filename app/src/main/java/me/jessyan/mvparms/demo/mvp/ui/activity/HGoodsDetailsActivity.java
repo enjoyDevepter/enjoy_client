@@ -32,6 +32,12 @@ import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -68,7 +74,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.share)
-    View cartV;
+    View shareV;
     @BindView(R.id.buy)
     View buyV;
     @BindView(R.id.tab)
@@ -186,6 +192,41 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
 
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+        }
+    };
+
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerHGoodsDetailsComponent //如找不到该类,请编译一下项目
@@ -208,7 +249,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         specV.setOnClickListener(this);
         imagesB.setImageLoader(new GlideImageLoader());
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
-
+        shareV.setOnClickListener(this);
         maskProV.setOnClickListener(this);
         maskSpecV.setOnClickListener(this);
         promotionCloseV.setOnClickListener(this);
@@ -224,7 +265,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         if ("timelimitdetail".equals(where)) {
             timeLimitPriceV.setVisibility(View.VISIBLE);
             timeLimitLayoutV.setVisibility(View.VISIBLE);
-            cartV.setVisibility(View.GONE);
+//            cartV.setVisibility(View.GONE);
             priceInfoV.setVisibility(View.GONE);
             priceTagTV.setText("限时秒杀价");
             speceLabelsView.setSelectType(LabelsView.SelectType.NONE);
@@ -232,7 +273,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             newlyInfoV.setVisibility(View.GONE);
 
         } else if ("newpeople".equals(where)) {
-            cartV.setVisibility(View.GONE);
+//            cartV.setVisibility(View.GONE);
             timeLimitPriceV.setVisibility(View.GONE);
             priceTagTV.setText("新人专享价");
             speceLabelsView.setSelectType(LabelsView.SelectType.NONE);
@@ -242,7 +283,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             priceInfoV.setVisibility(View.GONE);
         } else {
             timeLimitLayoutV.setVisibility(View.GONE);
-            cartV.setVisibility(View.VISIBLE);
+//            cartV.setVisibility(View.VISIBLE);
             timeLimitPriceV.setVisibility(View.GONE);
             promotionV.setVisibility(View.VISIBLE);
             priceTagTV.setText("项目预订金");
@@ -418,6 +459,8 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         imagesB.start();
         imagesB.isAutoPlay(false);
 
+        shareV.setVisibility(ArmsUtils.isEmpty(goods.getShareUrl()) ? View.INVISIBLE : View.VISIBLE);
+
         imageCountTV.setText("1/" + response.getImages().size());
         nameTV.setText(goods.getName());
 
@@ -513,6 +556,9 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             case R.id.back:
                 killMyself();
                 break;
+            case R.id.share:
+                share();
+                break;
             case R.id.promotion_close:
             case R.id.promotion:
             case R.id.mask_pro:
@@ -523,13 +569,32 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             case R.id.spec_close:
                 showSpec();
                 break;
-            case R.id.isFavorite: // 缺接口
+            case R.id.isFavorite:
                 mPresenter.collectGoods(!isFavoriteV.isSelected());
                 break;
             case R.id.buy:
                 mPresenter.goOrderConfirm();
                 break;
         }
+    }
+
+    private void share() {
+        Goods goods = response.getGoods();
+        UMWeb web = new UMWeb(goods.getShareUrl());
+        web.setTitle(goods.getName());//标题
+        web.setDescription(goods.getTitle());
+        web.setThumb(new UMImage(this, goods.getImage()));
+        new ShareAction(this)
+                .withMedia(web)
+                .setCallback(shareListener)
+                .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                .open();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     private void showPro() {

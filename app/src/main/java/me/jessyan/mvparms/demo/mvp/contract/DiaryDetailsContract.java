@@ -15,6 +15,9 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryCommentListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 
 
 public interface DiaryDetailsContract {
@@ -30,6 +33,8 @@ public interface DiaryDetailsContract {
 
         void updateVoteStatus(boolean vote);
 
+        void showWX(Share share);
+
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -44,6 +49,8 @@ public interface DiaryDetailsContract {
         Observable<BaseResponse> follow(FollowMemberRequest request);
 
         Observable<BaseResponse> comment(DiaryCommentRequest request);
+
+        Observable<ShareResponse> share(FollowRequest request);
 
     }
 }

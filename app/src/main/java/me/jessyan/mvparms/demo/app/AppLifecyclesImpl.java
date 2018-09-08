@@ -72,7 +72,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
             UMConfigure.setLogEnabled(true);
         }
         UMConfigure.init(application, UMConfigure.DEVICE_TYPE_PHONE, "");
-        PlatformConfig.setWeixin("wxb3206f9ac6441de4", "57240413f17564b90084b7635aba924a");
+        PlatformConfig.setWeixin("wx6a033664a671cd72", "57240413f17564b90084b7635aba924a");
 
         //LeakCanary 内存泄露检查
         //使用 IntelligentCache.KEY_KEEP 作为 key 的前缀, 可以使储存的数据永久存储在内存中

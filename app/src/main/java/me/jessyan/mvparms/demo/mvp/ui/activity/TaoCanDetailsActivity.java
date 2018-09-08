@@ -9,7 +9,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
@@ -17,12 +16,9 @@ import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -34,7 +30,6 @@ import me.jessyan.mvparms.demo.di.component.DaggerTaoCanDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.TaoCanDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
 import me.jessyan.mvparms.demo.mvp.presenter.TaoCanDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -98,7 +93,6 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
          */
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            Toast.makeText(TaoCanDetailsActivity.this, "成功了", Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -108,7 +102,6 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
          */
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            Toast.makeText(TaoCanDetailsActivity.this, "失败" + t.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -117,7 +110,6 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
          */
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(TaoCanDetailsActivity.this, "取消了", Toast.LENGTH_LONG).show();
         }
     };
 
@@ -214,18 +206,6 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     }
 
     @Override
-    public void showWX(Share share) {
-        UMWeb web = new UMWeb(share.getUrl());
-        web.setTitle(share.getTitle());//标题
-        web.setDescription(share.getIntro());
-        web.setThumb(new UMImage(this, share.getImage()));
-        new ShareAction(this)
-                .withMedia(web)
-                .setCallback(shareListener)
-                .open();
-    }
-
-    @Override
     public RxPermissions getRxPermissions() {
         return mRxPermissions;
     }
@@ -247,10 +227,24 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
                 // 打电话
                 break;
             case R.id.share:
-                mPresenter.share();
+                share();
                 break;
         }
     }
+
+    private void share() {
+//        MealGoods goods = response.getSetMealGoods();
+//        UMWeb web = new UMWeb(goods.());
+//        web.setTitle(goods.getName());//标题
+//        web.setDescription(goods.getTitle());
+//        web.setThumb(new UMImage(this, goods.getImage()));
+//        new ShareAction(this)
+//                .withMedia(web)
+//                .setCallback(shareListener)
+//                .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+//                .open();
+    }
+
 
     @Override
     protected void onDestroy() {

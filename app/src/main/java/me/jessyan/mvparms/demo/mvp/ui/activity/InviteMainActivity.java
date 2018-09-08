@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
@@ -32,9 +31,6 @@ import me.jessyan.mvparms.demo.di.module.InviteMainModule;
 import me.jessyan.mvparms.demo.mvp.contract.InviteMainContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
 import me.jessyan.mvparms.demo.mvp.presenter.InviteMainPresenter;
-
-import me.jessyan.mvparms.demo.R;
-
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -87,7 +83,6 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
          */
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            Toast.makeText(InviteMainActivity.this, "成功了", Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -97,7 +92,6 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
          */
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            Toast.makeText(InviteMainActivity.this, "失败" + t.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -106,7 +100,6 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
          */
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(InviteMainActivity.this, "取消了", Toast.LENGTH_LONG).show();
         }
     };
 
@@ -158,13 +151,13 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
         return R.layout.activity_invite_main; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
-    public void updateUrl(String url){
+    public void updateUrl(String url) {
         look_rule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(InviteMainActivity.this,WebActivity.class);
-                intent.putExtra(WebActivity.KEY_FOR_WEB_TITLE,"规则");
-                intent.putExtra(WebActivity.KEY_FOR_WEB_URL,url);
+                Intent intent = new Intent(InviteMainActivity.this, WebActivity.class);
+                intent.putExtra(WebActivity.KEY_FOR_WEB_TITLE, "规则");
+                intent.putExtra(WebActivity.KEY_FOR_WEB_URL, url);
                 ArmsUtils.startActivity(intent);
             }
         });
@@ -228,6 +221,7 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
         new ShareAction(this)
                 .withMedia(web)
                 .setCallback(shareListener)
+                .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
                 .open();
     }
 

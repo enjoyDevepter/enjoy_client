@@ -105,7 +105,7 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
             } else {
                 request.setCmd(452);
             }
-        } else if ("recom_good".equals(where)) {
+        } else if ("recom".equals(where)) {
             if (ArmsUtils.isEmpty(token)) {
                 request.setCmd(405);
             } else {

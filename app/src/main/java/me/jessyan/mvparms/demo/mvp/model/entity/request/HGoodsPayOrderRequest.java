@@ -11,8 +11,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 public class HGoodsPayOrderRequest extends BaseRequest {
     private int cmd = 524;
     private String memberAddressId;
-    private String appointmentsDate;
-    private String appointmentsTime;
+    private String reservationDate;
+    private String reservationTime;
     private String hospitalId;
     private String couponId;
     private long coupon;
@@ -42,20 +42,20 @@ public class HGoodsPayOrderRequest extends BaseRequest {
         this.memberAddressId = memberAddressId;
     }
 
-    public String getAppointmentsDate() {
-        return appointmentsDate;
+    public String getReservationDate() {
+        return reservationDate;
     }
 
-    public void setAppointmentsDate(String appointmentsDate) {
-        this.appointmentsDate = appointmentsDate;
+    public void setReservationDate(String reservationDate) {
+        this.reservationDate = reservationDate;
     }
 
-    public String getAppointmentsTime() {
-        return appointmentsTime;
+    public String getReservationTime() {
+        return reservationTime;
     }
 
-    public void setAppointmentsTime(String appointmentsTime) {
-        this.appointmentsTime = appointmentsTime;
+    public void setReservationTime(String reservationTime) {
+        this.reservationTime = reservationTime;
     }
 
     public String getHospitalId() {
@@ -159,8 +159,8 @@ public class HGoodsPayOrderRequest extends BaseRequest {
         return "HGoodsPayOrderRequest{" +
                 "cmd=" + cmd +
                 ", memberAddressId='" + memberAddressId + '\'' +
-                ", appointmentsDate='" + appointmentsDate + '\'' +
-                ", appointmentsTime='" + appointmentsTime + '\'' +
+                ", reservationDate='" + reservationDate + '\'' +
+                ", reservationTime='" + reservationTime + '\'' +
                 ", hospitalId='" + hospitalId + '\'' +
                 ", couponId='" + couponId + '\'' +
                 ", coupon=" + coupon +
