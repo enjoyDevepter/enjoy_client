@@ -14,10 +14,13 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.EventBus;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerAddressListComponent;
 import me.jessyan.mvparms.demo.di.module.AddressListModule;
 import me.jessyan.mvparms.demo.mvp.contract.AddressListContract;
@@ -170,8 +173,7 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
     public void onItemClick(View view, int viewType, Object data, int position) {
         switch (viewType) {
             case R.layout.addrsss_list_item:
-                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-                cache.put("memberAddressInfo", addressListAdapter.getInfos().get(position));
+                EventBus.getDefault().post(addressListAdapter.getInfos().get(position), EventBusTags.ADDRESS_CHANGE_EVENT);
                 // 回传地址信息
                 killMyself();
                 break;

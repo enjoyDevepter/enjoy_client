@@ -55,7 +55,7 @@ public class ChoiceStoreModule {
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideStoreAdapter(List<CommonStoreDateType> list) {
+    StoresListAdapter provideStoreAdapter(List<CommonStoreDateType> list) {
         return new StoresListAdapter(list);
     }
 }

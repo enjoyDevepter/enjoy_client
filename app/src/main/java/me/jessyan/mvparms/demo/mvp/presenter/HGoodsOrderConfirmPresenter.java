@@ -18,8 +18,6 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.Address;
-import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HGoodsOrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HGoodsPayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsOrderConfirmInfoResponse;
@@ -33,6 +31,7 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
 
 
 @ActivityScope
@@ -110,15 +109,15 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
     public void placeHGoodsOrder() {
         HGoodsPayOrderRequest request = new HGoodsPayOrderRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        if (cache.get(listType.getDataKey()) == null) {
+        if (null == mRootView.getCache().get(KEY_FOR_HOSPITAL_ID)) {
             mRootView.showMessage("请选择医院！");
             return;
         }
-        if ((cache.get("appointmentsDate") == null || cache.get("appointmentsTime") == null)) {
+        if (null == mRootView.getCache().get("hAppointments")) {
             mRootView.showMessage("请预约时间！");
             return;
         }
-        if (null == cache.get("memberAddressInfo")) {
+        if (null == mRootView.getCache().get("addressId")) {
             mRootView.showMessage("请选择地址！");
             return;
         }
@@ -137,12 +136,10 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
             }
         }
 
-
-        Address address = (Address) cache.get("memberAddressInfo");
-        request.setMemberAddressId(address.getAddressId());
-        request.setReservationDate((String) cache.get("appointmentsDate"));
-        request.setReservationTime((String) cache.get("appointmentsTime"));
-        request.setHospitalId(((HospitalBaseInfoBean) (cache.get(listType.getDataKey()))).getHospitalId());
+        request.setMemberAddressId((String) mRootView.getCache().get("addressId"));
+        request.setReservationDate((String) mRootView.getCache().get("appointmentsDate"));
+        request.setReservationTime((String) mRootView.getCache().get("appointmentsTime"));
+        request.setHospitalId((String) mRootView.getCache().get(KEY_FOR_HOSPITAL_ID));
         request.setCouponId((String) mRootView.getCache().get("couponId"));
         request.setCoupon(hGoodsOrderConfirmInfoResponse.getCoupon());
         request.setDeductionMoney(hGoodsOrderConfirmInfoResponse.getDeductionMoney());

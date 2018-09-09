@@ -21,7 +21,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.MealOrderConfirmContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealOrderConfrimRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayMealOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealOrderConfirmResponse;
@@ -101,12 +100,11 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
     public void placeMealOrder() {
         PayMealOrderRequest request = new PayMealOrderRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        if (null == cache.get("memberAddressInfo")) {
+        if (ArmsUtils.isEmpty((String) mRootView.getCache().get("addressId"))) {
             mRootView.showMessage("请选择地址！");
             return;
         }
-        Address address = (Address) cache.get("memberAddressInfo");
-        request.setMemberAddressId(address.getAddressId());
+        request.setMemberAddressId((String) mRootView.getCache().get("addressId"));
         request.setMoney(orderConfirmInfoResponse.getMoney());
         request.setPrice(orderConfirmInfoResponse.getPrice());
         request.setTotalPrice(orderConfirmInfoResponse.getTotalPrice());

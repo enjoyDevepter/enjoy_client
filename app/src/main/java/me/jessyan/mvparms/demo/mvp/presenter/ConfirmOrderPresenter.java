@@ -21,9 +21,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ConfirmOrderContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
@@ -130,19 +128,17 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         PayOrderRequest request = new PayOrderRequest();
         if ("1".equals(mRootView.getCache().get("deliveryMethodId"))) {
-            if (null == cache.get("memberAddressInfo")) {
+            if (ArmsUtils.isEmpty((String) mRootView.getCache().get("addressId"))) {
                 mRootView.showMessage("请选择地址！");
                 return;
             }
-            Address address = (Address) cache.get("memberAddressInfo");
-            request.setMemberAddressId(address.getAddressId());
+            request.setMemberAddressId((String) mRootView.getCache().get("addressId"));
         } else {
-            if (null == cache.get(listType.getDataKey())) {
+            if (ArmsUtils.isEmpty((String) mRootView.getCache().get("storeId"))) {
                 mRootView.showMessage("请选择自取店铺！");
                 return;
             }
-            Store store = (Store) cache.get(listType.getDataKey());
-            request.setStoreId(store.getStoreId());
+            request.setStoreId((String) mRootView.getCache().get("storeId"));
         }
         String where = mRootView.getActivity().getIntent().getStringExtra("where");
         if ("timelimitdetail".equals(where)) {

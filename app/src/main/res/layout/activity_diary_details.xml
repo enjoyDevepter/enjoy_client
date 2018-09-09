@@ -50,7 +50,7 @@
             <View
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:background="@mipmap/share" />
+                android:background="@mipmap/share_black" />
 
         </LinearLayout>
 

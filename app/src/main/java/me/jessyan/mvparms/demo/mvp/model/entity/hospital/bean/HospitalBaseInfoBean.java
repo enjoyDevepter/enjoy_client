@@ -70,13 +70,8 @@ public class HospitalBaseInfoBean extends CommonStoreDateType {
     @Override
     public String toString() {
         return "HospitalBaseInfoBean{" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", distance='" + distance + '\'' +
-                ", hospitalId='" + hospitalId + '\'' +
-                ", distanceDesc='" + distanceDesc + '\'' +
+                "hospitalId='" + hospitalId + '\'' +
                 ", province='" + province + '\'' +
-                ", check=" + check +
                 ", provinceName='" + provinceName + '\'' +
                 ", city='" + city + '\'' +
                 ", cityName='" + cityName + '\'' +

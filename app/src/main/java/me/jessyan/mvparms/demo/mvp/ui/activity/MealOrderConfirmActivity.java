@@ -16,8 +16,11 @@ import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.Subscriber;
+
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMealOrderConfirmComponent;
 import me.jessyan.mvparms.demo.di.module.MealOrderConfirmModule;
 import me.jessyan.mvparms.demo.mvp.contract.MealOrderConfirmContract;
@@ -96,22 +99,16 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
         moneyET.setOnFocusChangeListener(this);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-        if (cache.get("memberAddressInfo") != null) {
-            Address address = (Address) cache.get("memberAddressInfo");
-            addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
-            nameTV.setText(address.getReceiverName());
-            phoneTV.setText(address.getPhone());
-            noAddressV.setVisibility(View.GONE);
-            addressInfoV.setVisibility(View.VISIBLE);
-        } else {
-            noAddressV.setVisibility(View.VISIBLE);
-            addressInfoV.setVisibility(View.GONE);
-        }
+    @Subscriber(tag = EventBusTags.ADDRESS_CHANGE_EVENT)
+    private void updateAddress(Address address) {
+        provideCache().put("addressId", address.getAddressId());
+        addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
+        nameTV.setText(address.getReceiverName());
+        phoneTV.setText(address.getPhone());
+        noAddressV.setVisibility(View.GONE);
+        addressInfoV.setVisibility(View.VISIBLE);
     }
+
 
     @Override
     public void showLoading() {

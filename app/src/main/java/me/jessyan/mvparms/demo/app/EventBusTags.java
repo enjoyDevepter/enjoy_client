@@ -77,4 +77,24 @@ public interface EventBusTags {
      */
     String CHANGE_DIRAY_PROJECT = "change_diray_project";
 
+    /**
+     * 切换医院
+     */
+    String HOSPITAL_CHANGE_EVENT = "hospital_change_event";
+    /**
+     * 切换地址
+     */
+    String ADDRESS_CHANGE_EVENT = "address_change_event";
+    /**
+     * 切换店铺
+     */
+    String STORE_CHANGE_EVENT = "store_change_event";
+    /**
+     * 切换预约时间
+     */
+    String APPOINTMENTS_CHANGE_EVENT = "appointments_change_event";
+    /**
+     * 切换优惠卷
+     */
+    String COUPON_CHANGE_EVENT = "coupon_change_event";
 }

@@ -14,6 +14,7 @@
     <dimen name="home_module_article_margin_left">8dp</dimen>
     <dimen name="address_list_item_space">5dp</dimen>
     <dimen name="address_list_item_space_15">15dp</dimen>
+    <dimen name="space_10">10dp</dimen>
 
     <dimen name="dialog_height">100dp</dimen>
     <dimen name="order_image_height">100dp</dimen>
@@ -28,6 +29,6 @@
     <dimen name="order_item_height">244dp</dimen>
     <dimen name="plus_width">10dp</dimen>
     <dimen name="search_type_width">80dp</dimen>
-
+    <dimen name="consumer_coin_height">62dp</dimen>
 
 </resources>

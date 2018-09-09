@@ -10,7 +10,6 @@ import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
-
 import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinInputContract;
 import me.jessyan.mvparms.demo.mvp.model.ConsumeCoinInputModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.ChargeBean;
@@ -44,7 +43,7 @@ public class ConsumeCoinInputModule {
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideStoreAdapter(List<ChargeBean> list) {
+    ConsumeInputAdapter provideStoreAdapter(List<ChargeBean> list) {
         return new ConsumeInputAdapter(list);
     }
 

@@ -3,7 +3,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.doctor.request;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
 public class DoctorCommentInfoRequest extends BaseRequest {
-    private final int cmd = 662;
+    private int cmd = 662;
     private String commentId;
 
     @Override
@@ -16,6 +16,10 @@ public class DoctorCommentInfoRequest extends BaseRequest {
 
     public int getCmd() {
         return cmd;
+    }
+
+    public void setCmd(int cmd) {
+        this.cmd = cmd;
     }
 
     public String getCommentId() {

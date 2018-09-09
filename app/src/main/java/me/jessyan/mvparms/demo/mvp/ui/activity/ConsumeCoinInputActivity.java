@@ -37,6 +37,7 @@ import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinInputContract;
 import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.ConsumeCoinInputPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.ConsumeInputAdapter;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -61,7 +62,7 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    ConsumeInputAdapter mAdapter;
     @BindView(R.id.contentList)
     RecyclerView contentList;
 
@@ -79,12 +80,13 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     View zfb;
     @BindView(R.id.wx)
     View wx;
-    private Paginate mPaginate;
-    private boolean isLoadingMore;
-    private boolean isEnd;
     private MemberAccount account;
     private PayType currType = PayType.WX;
     private long money_num = 0;
+
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
 
     @Override
     public void onPaySuccess(Map<String, String> rawResult) {
@@ -101,11 +103,11 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
 
     }
 
-    private void selectType(PayType type){
+    private void selectType(PayType type) {
         zfb.setSelected(false);
         wx.setSelected(false);
 
-        switch (type){
+        switch (type) {
             case ZFB:
                 zfb.setSelected(true);
                 break;
@@ -117,8 +119,8 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     }
 
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
-    public void updateUserAccount(MemberAccount account){
-        if(account == null){
+    public void updateUserAccount(MemberAccount account) {
+        if (account == null) {
             return;
         }
         this.account = account;
@@ -130,7 +132,7 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.nextPage();
+                    mPresenter.requestOrderList(false);
                 }
 
                 @Override
@@ -140,7 +142,7 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
 
                 @Override
                 public boolean hasLoadedAllItems() {
-                    return isEnd;
+                    return hasLoadedAllItems;
                 }
             };
 
@@ -170,7 +172,7 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        updateUserAccount((MemberAccount)cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT));
+        updateUserAccount((MemberAccount) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT));
         title.setText("消费币");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,13 +202,13 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String s1 = s + "";
-                if(TextUtils.isEmpty(s1)){
+                if (TextUtils.isEmpty(s1)) {
                     money.setText("0");
                     money_num = 0;
-                }else{
+                } else {
                     long i = 0;
                     i = Long.parseLong(s1);
-                    money.setText(""+i);
+                    money.setText("" + i);
                     money_num = i * 100;
                 }
             }
@@ -230,18 +232,18 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currType == null){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请选择支付方式");
+                if (currType == null) {
+                    ArmsUtils.makeText(ArmsUtils.getContext(), "请选择支付方式");
                     return;
                 }
-                mPresenter.recharge(money_num,currType.payType);
+                mPresenter.recharge(money_num, currType.payType);
             }
         });
     }
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -267,7 +269,7 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     }
 
     @Override
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
@@ -285,14 +287,19 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     }
 
     @Override
-    public void showError(boolean hasDate) {
-        onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
-        contentList.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+    public void setLoadedAllItems(boolean has) {
+        hasLoadedAllItems = has;
     }
 
     @Override
-    public void setEnd(boolean isEnd) {
-        this.isEnd = isEnd;
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    public void showError(boolean hasDate) {
+        onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
+        contentList.setVisibility(hasDate ? VISIBLE : INVISIBLE);
     }
 
     @Override

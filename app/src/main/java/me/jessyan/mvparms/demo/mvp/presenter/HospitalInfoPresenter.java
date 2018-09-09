@@ -204,13 +204,18 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
 
     public void getHGoodsList(final boolean pullToRefresh) {
         GoodsListRequest request = new GoodsListRequest();
-        request.setCmd(440);
+        request.setCmd(449);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-
+        request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID));
+        request.setCity(String.valueOf(cache.get("city")));
+        request.setCounty(String.valueOf(cache.get("county")));
+        request.setProvince(String.valueOf(cache.get("province")));
         GoodsListRequest.OrderBy orderBy = new GoodsListRequest.OrderBy();
         orderBy.setAsc(false);
         orderBy.setField("sales");
         request.setOrderBy(orderBy);
+
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
         mModel.getHGoodsList(request)
                 .subscribeOn(Schedulers.io())

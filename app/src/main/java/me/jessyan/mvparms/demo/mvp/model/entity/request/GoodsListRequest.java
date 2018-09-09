@@ -6,6 +6,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
 
 public class GoodsListRequest extends BaseRequest {
     private int cmd = 402;
+    private String hospitalId;
     private String name;
     private String province;
     private String city;
@@ -16,6 +17,15 @@ public class GoodsListRequest extends BaseRequest {
     private int pageIndex = 1;
     private int pageSize = 10;
     private OrderBy orderBy;
+
+
+    public String getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(String hospitalId) {
+        this.hospitalId = hospitalId;
+    }
 
     public int getCmd() {
         return cmd;
@@ -109,6 +119,7 @@ public class GoodsListRequest extends BaseRequest {
     public String toString() {
         return "GoodsListRequest{" +
                 "cmd=" + cmd +
+                ", hospitalId='" + hospitalId + '\'' +
                 ", name='" + name + '\'' +
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +

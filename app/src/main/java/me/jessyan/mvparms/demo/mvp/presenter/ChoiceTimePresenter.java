@@ -66,8 +66,18 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
         String type = mRootView.getActivity().getIntent().getStringExtra("type");
         if ("choice_time".equals(type)) {
             appointments.addAll(mRootView.getActivity().getIntent().getParcelableArrayListExtra("appointmnetInfo"));
-            appointments.get(0).setChoice(true);
-            timeList.addAll(appointments.get(0).getReservationTimeList());
+            boolean hasChoice = false;
+            for (HAppointments appointment : appointments) {
+                if (appointment.isChoice()) {
+                    hasChoice = true;
+                    timeList.addAll(appointment.getReservationTimeList());
+                    break;
+                }
+            }
+            if (!hasChoice) {
+                appointments.get(0).setChoice(true);
+                timeList.addAll(appointments.get(0).getReservationTimeList());
+            }
             timeAdapter.notifyDataSetChanged();
             dateAdapter.notifyDataSetChanged();
         } else {

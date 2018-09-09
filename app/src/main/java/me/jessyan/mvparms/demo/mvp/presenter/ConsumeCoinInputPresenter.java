@@ -3,7 +3,6 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -26,6 +25,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetRechargeListRequ
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.RechargeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetRechargeListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.RechargeResponse;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.ConsumeInputAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
@@ -44,10 +44,11 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
     AppManager mAppManager;
 
     @Inject
-    RecyclerView.Adapter mAdapter;
+    ConsumeInputAdapter mAdapter;
     @Inject
     List<ChargeBean> orderBeanList;
-    private int nextPageIndex = 1;
+    private int preEndIndex;
+    private int lastPageIndex = 1;
 
     @Inject
     public ConsumeCoinInputPresenter(ConsumeCoinInputContract.Model model, ConsumeCoinInputContract.View rootView) {
@@ -56,33 +57,29 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void requestOrderList(){
-        requestOrderList(1,true);
+        requestOrderList(false);
     }
 
-    public void nextPage(){
-        requestOrderList(nextPageIndex,false);
-    }
-
-    private void requestOrderList(int pageIndex,final boolean clear) {
+    public void requestOrderList(boolean pullToRefresh) {
         GetRechargeListRequest request = new GetRechargeListRequest();
-        request.setPageIndex(pageIndex);
         request.setPageSize(10);
 
         Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token=(String)cache.get(KEY_KEEP+"token");
         request.setToken(token);
-
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
         mModel.getRechargeList(request)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
-                    if (clear) {
+                    if (pullToRefresh) {
                         //                        mRootView.showLoading();//显示下拉刷新的进度条
                     }else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
-                    if (clear)
+                    if (pullToRefresh)
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
@@ -92,15 +89,20 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                     @Override
                     public void onNext(GetRechargeListResponse response) {
                         if (response.isSuccess()) {
-                            if(clear){
+
+                            if (pullToRefresh) {
                                 orderBeanList.clear();
                             }
-                            nextPageIndex = response.getNextPageIndex();
-                            mRootView.setEnd(nextPageIndex == -1);
-                            mRootView.showError(response.getChargeList().size() > 0);
                             orderBeanList.addAll(response.getChargeList());
-                            mAdapter.notifyDataSetChanged();
-                            mRootView.hideLoading();
+                            mRootView.showError(response.getChargeList().size() > 0);
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            preEndIndex = orderBeanList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = orderBeanList.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, orderBeanList.size());
+                            }
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

@@ -99,6 +99,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     @Inject
     RecyclerView.Adapter mAdapter;
     OrderConfirmInfoResponse response;
+    private Address address;
 
     private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.STORE;
     private volatile boolean shouldSubmit;
@@ -118,30 +119,29 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         return R.layout.activity_confirm_order; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+    @Subscriber(tag = EventBusTags.STORE_CHANGE_EVENT)
+    private void updateStore(Store store) {
+        provideCache().put("storeId", store.getStoreId());
+        selfAddressTV.setText(store.getAddress() + " " + store.getName());
+    }
 
-        if ("1".equals(provideCache().get("deliveryMethodId"))) {
-            if (cache.get("memberAddressInfo") != null) {
-                Address address = (Address) cache.get("memberAddressInfo");
-                addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
-                nameTV.setText(address.getReceiverName());
-                phoneTV.setText(address.getPhone());
-                noAddressV.setVisibility(View.GONE);
-                addressV.setVisibility(View.VISIBLE);
-            } else {
-                noAddressV.setVisibility(View.VISIBLE);
-                addressV.setVisibility(View.GONE);
-            }
-        } else {
-            if (cache.get(listType.getDataKey()) != null) {
-                Store store = (Store) cache.get(listType.getDataKey());
-                selfAddressTV.setText(store.getAddress() + " " + store.getName());
-            }
-        }
+    @Subscriber(tag = EventBusTags.CHANGE_COUPON)
+    private void updateCoupon(Coupon coupon) {
+        provideCache().put("couponId", coupon.getCouponId());
+        couponTextTV.setText(coupon.getName());
+        mPresenter.getOrderConfirmInfo();
+    }
+
+    @Subscriber(tag = EventBusTags.ADDRESS_CHANGE_EVENT)
+    private void updateAddress(Address address) {
+        this.address = address;
+        provideCache().put("addressId", address.getAddressId());
+        addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
+        nameTV.setText(address.getReceiverName());
+        phoneTV.setText(address.getPhone());
+        noAddressV.setVisibility(View.GONE);
+        addressV.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -227,13 +227,6 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         }
     }
 
-    @Subscriber(tag = EventBusTags.CHANGE_COUPON)
-    private void updateCoupon(Coupon coupon) {
-        provideCache().put("couponId", coupon.getCouponId());
-        couponTextTV.setText(coupon.getName());
-        mPresenter.getOrderConfirmInfo();
-    }
-
     private void changtDispatch(boolean self) {
         provideCache().put("deliveryMethodId", self ? "1" : "0");
         selfV.setSelected(!self);
@@ -241,8 +234,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         selfV.setTextColor(!self ? seletcedColor : unseletcedColor);
         dispatchV.setTextColor(self ? seletcedColor : unseletcedColor);
         selfInfoV.setVisibility(!self ? View.VISIBLE : View.GONE);
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-        if (cache.get("memberAddressInfo") != null) {
+        if (provideCache().get("addressId") != null) {
             addressV.setVisibility(self ? View.VISIBLE : View.GONE);
         } else {
             noAddressV.setVisibility(self ? View.VISIBLE : View.GONE);
@@ -289,8 +281,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         }
 
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-        if (cache.get("memberAddressInfo") != null) {
-            Address address = (Address) cache.get("memberAddressInfo");
+        if (address != null) {
             addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
             nameTV.setText(address.getReceiverName());
             phoneTV.setText(address.getPhone());

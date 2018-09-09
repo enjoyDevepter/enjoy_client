@@ -97,7 +97,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         views[0] = hospitalInfo;
 
         // 初始化第二个页面
-        goodsSwipeRefreshLayout = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview,null);
+        goodsSwipeRefreshLayout = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview, null);
         goodsList = goodsSwipeRefreshLayout.findViewById(R.id.list);
         goodsList.setAdapter(hospitalGoodsListAdapter);
         LinearLayoutManager goodsListLayoutManager = new LinearLayoutManager(this);
@@ -132,15 +132,15 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         });
 
         // 初始化第三个页面
-        doctorSwipeRefreshLayout = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview,null);
+        doctorSwipeRefreshLayout = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview, null);
         doctorList = doctorSwipeRefreshLayout.findViewById(R.id.list);
         LinearLayoutManager doctorLayoutManager = new LinearLayoutManager(this);
         ArmsUtils.configRecyclerView(doctorList, doctorLayoutManager);
         doctorListAdapter.setOnItemClickListener(new DefaultAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int viewType, Object data, int position) {
-                Intent intent = new Intent(HospitalInfoActivity.this,DoctorMainActivity.class);
-                intent.putExtra(DoctorMainActivity.KEY_FOR_DOCTOR_ID,((DoctorBean)data).getDoctorId());
+                Intent intent = new Intent(HospitalInfoActivity.this, DoctorMainActivity.class);
+                intent.putExtra(DoctorMainActivity.KEY_FOR_DOCTOR_ID, ((DoctorBean) data).getDoctorId());
                 ArmsUtils.startActivity(intent);
             }
         });
@@ -273,35 +273,35 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     }
 
-    public void hideDoctorLoading(){
-        ((SwipeRefreshLayout)views[2]).setRefreshing(false);
+    public void hideDoctorLoading() {
+        ((SwipeRefreshLayout) views[2]).setRefreshing(false);
     }
 
-    public void hideGoodsLoading(){
-        ((SwipeRefreshLayout)views[1]).setRefreshing(false);
+    public void hideGoodsLoading() {
+        ((SwipeRefreshLayout) views[1]).setRefreshing(false);
     }
 
-    public void startLoadGoodsMore(){
+    public void startLoadGoodsMore() {
         isGoodsLoadingMore = true;
     }
 
-    public void endLoadGoodsMore(){
+    public void endLoadGoodsMore() {
         isGoodsLoadingMore = false;
     }
 
-    public void startLoadDoctorMore(){
+    public void startLoadDoctorMore() {
         isGoodsLoadingMore = true;
     }
 
-    public void endLoadDoctorMore(){
+    public void endLoadDoctorMore() {
         isGoodsLoadingMore = false;
     }
 
-    public void endGoods(boolean isGoodsEnd){
+    public void endGoods(boolean isGoodsEnd) {
         this.isGoodsEnd = isGoodsEnd;
     }
 
-    public void endDoctor(boolean isDoctorEnd){
+    public void endDoctor(boolean isDoctorEnd) {
         this.isDoctorEnd = isDoctorEnd;
     }
 
@@ -331,13 +331,14 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         }
     }
 
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
-    public void updateHosptialInfo(HospitalInfoBean hospital){
+    public void updateHosptialInfo(HospitalInfoBean hospital) {
         WebView webView = (WebView) views[0];
-        webView.loadData(hospital.getIntro(),"text/html","UTF-8");
+        webView.setPadding(ArmsUtils.getDimens(this, R.dimen.space_10), ArmsUtils.getDimens(this, R.dimen.space_10), ArmsUtils.getDimens(this, R.dimen.space_10), ArmsUtils.getDimens(this, R.dimen.space_10));
+        webView.loadDataWithBaseURL("", hospital.getIntro(), "text/html", "UTF-8", "");
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
@@ -353,7 +354,6 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         DefaultAdapter.releaseAllHolder(envList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         DefaultAdapter.releaseAllHolder(goodsList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
-
         doctorPaginate = null;
         goodsPaginate = null;
     }

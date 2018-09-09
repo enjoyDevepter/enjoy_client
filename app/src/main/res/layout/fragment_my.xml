@@ -128,275 +128,115 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/my_item_bg"
-        android:gravity="center_vertical">
-
-        <LinearLayout
-            android:id="@+id/cash"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/money"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FF333333"
-                android:textSize="13sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="现金币"
-                android:textColor="#FF9B9B9B"
-                android:textSize="11sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/consume"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/member_money"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FF333333"
-                android:textSize="13sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="消费币"
-                android:textColor="#FF9B9B9B"
-                android:textSize="11sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/bouns_parent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/bonus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FF333333"
-                android:textSize="13sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="积分"
-                android:textColor="#FF9B9B9B"
-                android:textSize="11sp" />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/my_item_bg"
-        android:gravity="center_vertical">
-
-        <LinearLayout
-            android:id="@+id/goods_order"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:background="@mipmap/order" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="商美订单"
-                android:textColor="#FF333333"
-                android:textSize="11sp" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/kgoods_order"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:background="@mipmap/order" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="生美/科美订单"
-                android:textColor="#FF333333"
-                android:textSize="11sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/hgoods_order"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:background="@mipmap/order" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="医美订单"
-                android:textColor="#FF333333"
-                android:textSize="11sp" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/my_item_bg"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="84dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/my_item_bg"
                 android:gravity="center_vertical">
 
                 <LinearLayout
-                    android:id="@+id/friend"
+                    android:id="@+id/cash"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
-                    <View
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
-                        android:background="@mipmap/friend" />
+                    <TextView
+                        android:id="@+id/money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FF333333"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="邀请好友"
-                        android:textColor="#FF333333"
+                        android:layout_marginTop="8dp"
+                        android:text="现金币"
+                        android:textColor="#FF9B9B9B"
                         android:textSize="11sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/diary"
+                    android:id="@+id/consume"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
-                    <View
-                        android:layout_width="25dp"
-                        android:layout_height="23dp"
-                        android:background="@mipmap/diary" />
+                    <TextView
+                        android:id="@+id/member_money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FF333333"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="我的日记"
-                        android:textColor="#FF333333"
+                        android:layout_marginTop="8dp"
+                        android:text="消费币"
+                        android:textColor="#FF9B9B9B"
                         android:textSize="11sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/collect"
+                    android:id="@+id/bouns_parent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
-                    <View
-                        android:layout_width="24dp"
-                        android:layout_height="21dp"
-                        android:background="@mipmap/collect" />
+                    <TextView
+                        android:id="@+id/bonus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FF333333"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="我的收藏"
-                        android:textColor="#FF333333"
+                        android:layout_marginTop="8dp"
+                        android:text="积分"
+                        android:textColor="#FF9B9B9B"
                         android:textSize="11sp" />
 
                 </LinearLayout>
+
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="84dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/my_item_bg"
                 android:gravity="center_vertical">
 
-
                 <LinearLayout
-                    android:id="@+id/follow"
+                    android:id="@+id/goods_order"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -404,22 +244,23 @@
                     android:orientation="vertical">
 
                     <View
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
-                        android:background="@mipmap/follow" />
+                        android:layout_width="22dp"
+                        android:layout_height="25dp"
+                        android:background="@mipmap/order" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="我的关注"
+                        android:text="商美订单"
                         android:textColor="#FF333333"
                         android:textSize="11sp" />
 
                 </LinearLayout>
 
+
                 <LinearLayout
-                    android:id="@+id/meal"
+                    android:id="@+id/kgoods_order"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -427,22 +268,22 @@
                     android:orientation="vertical">
 
                     <View
-                        android:layout_width="25dp"
-                        android:layout_height="23dp"
-                        android:background="@mipmap/meal" />
+                        android:layout_width="22dp"
+                        android:layout_height="25dp"
+                        android:background="@mipmap/order" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="我的套餐"
+                        android:text="生美/科美订单"
                         android:textColor="#FF333333"
                         android:textSize="11sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/coupon"
+                    android:id="@+id/hgoods_order"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -450,79 +291,243 @@
                     android:orientation="vertical">
 
                     <View
-                        android:layout_width="24dp"
-                        android:layout_height="21dp"
-                        android:background="@mipmap/coupon" />
+                        android:layout_width="22dp"
+                        android:layout_height="25dp"
+                        android:background="@mipmap/order" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="我的优惠卷"
+                        android:text="医美订单"
                         android:textColor="#FF333333"
                         android:textSize="11sp" />
 
                 </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="84dp"
-                android:gravity="center_vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/my_item_bg"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/store"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="84dp"
+                    android:gravity="center_vertical">
 
-                    <View
-                        android:layout_width="25dp"
-                        android:layout_height="23dp"
-                        android:background="@mipmap/store" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/friend"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="店铺信息"
-                        android:textColor="#FF333333"
-                        android:textSize="11sp" />
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="23dp"
+                            android:layout_height="23dp"
+                            android:background="@mipmap/friend" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="邀请好友"
+                            android:textColor="#FF333333"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/diary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="25dp"
+                            android:layout_height="23dp"
+                            android:background="@mipmap/diary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="我的日记"
+                            android:textColor="#FF333333"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/collect"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="24dp"
+                            android:layout_height="21dp"
+                            android:background="@mipmap/collect" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="我的收藏"
+                            android:textColor="#FF333333"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/recommender"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="84dp"
+                    android:gravity="center_vertical">
 
-                    <View
-                        android:layout_width="25dp"
-                        android:layout_height="24dp"
-                        android:background="@mipmap/recommender" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/follow"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="推荐上属"
-                        android:textColor="#FF333333"
-                        android:textSize="11sp" />
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="23dp"
+                            android:layout_height="23dp"
+                            android:background="@mipmap/follow" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="我的关注"
+                            android:textColor="#FF333333"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/meal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="25dp"
+                            android:layout_height="23dp"
+                            android:background="@mipmap/meal" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="我的套餐"
+                            android:textColor="#FF333333"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/coupon"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="24dp"
+                            android:layout_height="21dp"
+                            android:background="@mipmap/coupon" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="我的优惠卷"
+                            android:textColor="#FF333333"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="84dp"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:id="@+id/store"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="25dp"
+                            android:layout_height="23dp"
+                            android:background="@mipmap/store" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="店铺信息"
+                            android:textColor="#FF333333"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/recommender"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="25dp"
+                            android:layout_height="24dp"
+                            android:background="@mipmap/recommender" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="推荐上属"
+                            android:textColor="#FF333333"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

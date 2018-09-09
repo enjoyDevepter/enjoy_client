@@ -5,11 +5,11 @@ package me.jessyan.mvparms.demo.mvp.model.entity;
  */
 
 public class CommonStoreDateType {
-    public String name;
-    public String address;
-    public String distance;
-    public String distanceDesc;
-    public boolean check;
+    private String name;
+    private String address;
+    private String distance;
+    private String distanceDesc;
+    private boolean check;
 
     public String getName() {
         return name;

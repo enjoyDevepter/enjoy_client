@@ -16,12 +16,15 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.EventBus;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerChoiceTimeComponent;
 import me.jessyan.mvparms.demo.di.module.ChoiceTimeModule;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceTimeContract;
@@ -119,10 +122,12 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
                 killMyself();
                 break;
             case R.id.confirm:
+                if (ArmsUtils.isEmpty((String) provideCache().get("appointmentsTime"))) {
+                    showMessage("请选择预约时间");
+                    return;
+                }
                 if ("choice_time".equals(getActivity().getIntent().getStringExtra("type"))) {
-                    Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-                    cache.put("appointmentsDate", provideCache().get("appointmentsDate"));
-                    cache.put("appointmentsTime", provideCache().get("appointmentsTime"));
+                    EventBus.getDefault().post(dateAdapter.getInfos(), EventBusTags.APPOINTMENTS_CHANGE_EVENT);
                     killMyself();
                 } else {
                     mPresenter.modifyAppointmentTime();

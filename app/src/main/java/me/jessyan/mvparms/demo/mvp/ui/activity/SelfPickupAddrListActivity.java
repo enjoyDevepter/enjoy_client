@@ -10,8 +10,9 @@ import android.widget.TextView;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +21,14 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerSelfPickupAddrListComponent;
 import me.jessyan.mvparms.demo.di.module.SelfPickupAddrListModule;
 import me.jessyan.mvparms.demo.mvp.contract.SelfPickupAddrListContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
-import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.SelfPickupAddrListPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -84,25 +88,36 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
         confirmV.setOnClickListener(this);
         storeLayoutV.setOnClickListener(this);
         districtLayoutV.setOnClickListener(this);
+
+        districtV.setText(listType.getDistrict());
+        storeV.setText(listType.getStoreName());
+
+        provideCache().put("province", listType.getProvince());
+        provideCache().put("city", listType.getCity());
+        provideCache().put("county", listType.getCity());
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-        if (null != cache.get(listType.getDataKey())) {
-            storeV.setText(((CommonStoreDateType) cache.get(listType.getDataKey())).getName());
-        }
+    @Subscriber(tag = EventBusTags.HOSPITAL_CHANGE_EVENT)
+    private void updateHospitalInfo(HospitalBaseInfoBean hospitalBaseInfoBean) {
+        storeV.setText(hospitalBaseInfoBean.getName());
+    }
+
+    @Subscriber(tag = EventBusTags.STORE_CHANGE_EVENT)
+    private void updateStoreInfo(Store store) {
+        storeV.setText(store.getName());
+    }
+
+    @Subscriber(tag = EventBusTags.ADDRESS_CHANGE_EVENT)
+    private void updateAddressInfo(Address address) {
+        storeV.setText(address.getAddress());
     }
 
     @Override
     public void showLoading() {
-
     }
 
     @Override
     public void hideLoading() {
-
     }
 
     @Override
@@ -141,19 +156,23 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                 ArmsUtils.startActivity(intent);
                 break;
             case R.id.confirm:
-                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-                if (cache.get(listType.getDataKey()) == null) {
-                    switch (listType) {
-                        case HOP:
+                SelfPickupAddrListActivity.ListType listType = (SelfPickupAddrListActivity.ListType) this.getIntent().getSerializableExtra(KEY_FOR_ACTIVITY_LIST_TYPE);
+                switch (listType) {
+                    case HOP:
+                        if (ArmsUtils.isEmpty(storeV.getText().toString())) {
                             showMessage("请选择医院！");
-                            break;
-                        case STORE:
+                            return;
+                        }
+                    case STORE:
+                        if (ArmsUtils.isEmpty(storeV.getText().toString())) {
                             showMessage("请选择店铺！");
-                            break;
-                        case ADDR:
-                            break;
-                    }
-                    return;
+                            return;
+                        }
+                    case ADDR:
+                        if (ArmsUtils.isEmpty(storeV.getText().toString())) {
+                            showMessage("请选择地址！");
+                            return;
+                        }
                 }
                 killMyself();
                 break;
@@ -228,6 +247,11 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
         private String secendListTitle;  // 第二个选项的标题，也就是第二个Activity的大标题
         private String infoText;  // 第二个页面的说明文字
         private String dataKey;  // 携带数据的时候，使用的key。每个页面使用的Key应该不一样，避免相互覆盖
+        private String district;
+        private String province;
+        private String city;
+        private String county;
+        private String storeName;
 
         ListType(String title, String secendListTitle, String infoText, String dataKey) {
             this.title = title;
@@ -252,6 +276,14 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
             this.secendListTitle = secendListTitle;
         }
 
+        public String getStoreName() {
+            return storeName;
+        }
+
+        public void setStoreName(String storeName) {
+            this.storeName = storeName;
+        }
+
         public String getInfoText() {
             return infoText;
         }
@@ -266,6 +298,38 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
 
         public void setDataKey(String dataKey) {
             this.dataKey = dataKey;
+        }
+
+        public String getDistrict() {
+            return district;
+        }
+
+        public void setDistrict(String district) {
+            this.district = district;
+        }
+
+        public String getProvince() {
+            return province;
+        }
+
+        public void setProvince(String province) {
+            this.province = province;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
+        public String getCounty() {
+            return county;
+        }
+
+        public void setCounty(String county) {
+            this.county = county;
         }
     }
 }

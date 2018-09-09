@@ -17,21 +17,29 @@ import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerHGoodsOrderConfirmComponent;
 import me.jessyan.mvparms.demo.di.module.HGoodsOrderConfirmModule;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
+import me.jessyan.mvparms.demo.mvp.model.HAppointments;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.Coupon;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.HAppointmentsTime;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsOrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.HGoodsOrderConfirmPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_NAME;
 
 
 public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmPresenter> implements HGoodsOrderConfirmContract.View, View.OnClickListener, View.OnFocusChangeListener {
@@ -145,36 +153,51 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         moneyET.setOnFocusChangeListener(this);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-        if (cache.get("memberAddressInfo") != null) {
-            Address address = (Address) cache.get("memberAddressInfo");
-            addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
-            nameTV.setText(address.getReceiverName());
-            phoneTV.setText(address.getPhone());
-            noAddressV.setVisibility(View.GONE);
-            addressInfoV.setVisibility(View.VISIBLE);
-        } else {
-            noAddressV.setVisibility(View.VISIBLE);
-            addressInfoV.setVisibility(View.GONE);
+
+    @Subscriber(tag = EventBusTags.HOSPITAL_CHANGE_EVENT)
+    private void updateHospitalInfo(HospitalBaseInfoBean baseInfoBean) {
+        this.hospitalBaseInfoBean = baseInfoBean;
+        provideCache().put(KEY_FOR_HOSPITAL_NAME, hospitalBaseInfoBean.getName());
+        provideCache().put(KEY_FOR_HOSPITAL_ID, hospitalBaseInfoBean.getHospitalId());
+        hospitalTV.setText(hospitalBaseInfoBean.getName());
+        provideCache().put("baseInfoBean", baseInfoBean);
+    }
+
+    @Subscriber(tag = EventBusTags.APPOINTMENTS_CHANGE_EVENT)
+    private void updateAppointments(List<HAppointments> hAppointmentsList) {
+        for (HAppointments appointments : hAppointmentsList) {
+            if (appointments.isChoice()) {
+                provideCache().put("appointmentsDate", appointments.getDate());
+                for (HAppointmentsTime hAppointmentsTime : appointments.getReservationTimeList()) {
+                    if (hAppointmentsTime.isChoice()) {
+                        provideCache().put("appointmentsTime", hAppointmentsTime.getTime());
+                        appointmnetTV.setText(appointments.getDate() + " " + hAppointmentsTime.getTime());
+                        break;
+                    }
+                }
+                break;
+            }
         }
-
-        if (cache.get("appointmentsDate") != null && cache.get("appointmentsTime") != null) {
-            appointmnetTV.setText((String) cache.get("appointmentsDate") + " " + cache.get("appointmentsTime"));
-        }
-
-        if (cache.get("coupon") != null) {
-            couponTV.setText(((Coupon) cache.get("coupon")).getName());
-        }
-
-        if (cache.get(listType.getDataKey()) != null) {
-            hospitalBaseInfoBean = (HospitalBaseInfoBean) cache.get(listType.getDataKey());
-            hospitalTV.setText(hospitalBaseInfoBean.getName());
-        }
+        provideCache().put("hAppointments", hAppointmentsList);
+    }
 
 
+    @Subscriber(tag = EventBusTags.CHANGE_COUPON)
+    private void updateCoupon(Coupon coupon) {
+        provideCache().put("couponId", coupon.getCouponId());
+        couponTV.setText(coupon.getName());
+        mPresenter.getOrderConfirmInfo();
+    }
+
+
+    @Subscriber(tag = EventBusTags.ADDRESS_CHANGE_EVENT)
+    private void updateAddress(Address address) {
+        provideCache().put("addressId", address.getAddressId());
+        addressTV.setText(address.getProvinceName() + " " + address.getCityName() + " " + address.getCountyName() + " " + address.getAddress());
+        nameTV.setText(address.getReceiverName());
+        phoneTV.setText(address.getPhone());
+        noAddressV.setVisibility(View.GONE);
+        addressInfoV.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -220,6 +243,17 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         moneyET.setHint(ArmsUtils.formatLong(response.getMoney()));
         couponButtomTV.setText(ArmsUtils.formatLong(response.getCoupon()));
         payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));
+        List<Coupon> couponList = response.getCouponList();
+        if (null == couponList || null != couponList && couponList.size() <= 0) {
+            couponTV.setText("暂无优惠卷");
+        } else {
+            for (Coupon coupon : couponList) {
+                if (coupon.getCouponId().equals(response.getCouponId())) {
+                    couponTV.setText(coupon.getName());
+                    break;
+                }
+            }
+        }
 
         AppComponent mAppComponent = ArmsUtils.obtainAppComponentFromContext(this);
         mAppComponent.imageLoader()
@@ -259,35 +293,51 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                 killMyself();
                 break;
             case R.id.hospital_info:
-                if (hospitalBaseInfoBean == null) {
-                    ArmsUtils.makeText(this, "请先选择医院");
+                if (provideCache().get(KEY_FOR_HOSPITAL_ID) == null) {
+                    ArmsUtils.makeText(this, "请选择医院");
                     break;
                 }
                 Intent hospitalIntent = new Intent(HGoodsOrderConfirmActivity.this, HospitalInfoActivity.class);
-                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_NAME, hospitalBaseInfoBean.name);
-                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID, hospitalBaseInfoBean.getHospitalId());
+                hospitalIntent.putExtra(KEY_FOR_HOSPITAL_NAME, (String) provideCache().get(KEY_FOR_HOSPITAL_NAME));
+                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID, (String) provideCache().get(KEY_FOR_HOSPITAL_ID));
                 ArmsUtils.startActivity(hospitalIntent);
                 break;
             case R.id.hospital:
                 Intent intent2 = new Intent(this, SelfPickupAddrListActivity.class);
                 intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
+                if (null != hospitalBaseInfoBean) {
+                    listType.setStoreName(hospitalBaseInfoBean.getName());
+                    listType.setCity(hospitalBaseInfoBean.getCity());
+                    listType.setCounty(hospitalBaseInfoBean.getCounty());
+                    listType.setProvince(hospitalBaseInfoBean.getProvince());
+                    listType.setDistrict(hospitalBaseInfoBean.getProvinceName() + " " + hospitalBaseInfoBean.getCityName() + " " + hospitalBaseInfoBean.getCountyName());
+                }
                 intent2.putExtra("specValueId", response.getGoodsList().get(0).getGoodsSpecValue().getSpecValueId());
                 ArmsUtils.startActivity(intent2);
                 break;
             case R.id.appointments_layout:
                 Intent appointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
                 appointmentsIntent.putExtra("type", "choice_time");
-                appointmentsIntent.putParcelableArrayListExtra("appointmnetInfo", (ArrayList<? extends Parcelable>) response.getReservationDateList());
+                if (null != provideCache().get("hAppointments")) {
+                    appointmentsIntent.putParcelableArrayListExtra("appointmnetInfo", (ArrayList<? extends Parcelable>) provideCache().get("hAppointments"));
+                } else {
+                    appointmentsIntent.putParcelableArrayListExtra("appointmnetInfo", (ArrayList<? extends Parcelable>) response.getReservationDateList());
+                }
                 ArmsUtils.startActivity(appointmentsIntent);
+
                 break;
             case R.id.no_address:
             case R.id.addres_info_layout:
                 ArmsUtils.startActivity(AddressListActivity.class);
                 break;
             case R.id.coupon_layout:
+                List<Coupon> couponList = response.getCouponList();
+                if (null == couponList || null != couponList && couponList.size() <= 0) {
+                    return;
+                }
                 Intent intent = new Intent(this, CouponActivity.class);
                 intent.putExtra("type", "优惠券");
-                intent.putParcelableArrayListExtra("coupons", (ArrayList<? extends Parcelable>) response.getCouponList());
+                intent.putParcelableArrayListExtra("coupons", (ArrayList<? extends Parcelable>) couponList);
                 ArmsUtils.startActivity(intent);
                 break;
             case R.id.confirm:

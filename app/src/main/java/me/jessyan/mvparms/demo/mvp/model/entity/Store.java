@@ -73,14 +73,9 @@ public class Store extends CommonStoreDateType {
     @Override
     public String toString() {
         return "Store{" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", province='" + province + '\'' +
-                ", distance='" + distance + '\'' +
+                "province='" + province + '\'' +
                 ", provinceName='" + provinceName + '\'' +
-                ", distanceDesc='" + distanceDesc + '\'' +
                 ", city='" + city + '\'' +
-                ", check=" + check +
                 ", cityName='" + cityName + '\'' +
                 ", county='" + county + '\'' +
                 ", countyName='" + countyName + '\'' +

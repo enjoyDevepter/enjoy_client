@@ -3,7 +3,6 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -26,6 +25,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListRe
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -44,9 +44,12 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
     @Inject
     ImageLoader mImageLoader;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    StoresListAdapter mAdapter;
     @Inject
     List<CommonStoreDateType> commonStoreDateTypeList;
+
+    private int preEndIndex;
+    private int lastPageIndex = 1;
 
     @Inject
     public ChoiceStorePresenter(ChoiceStoreContract.Model model, ChoiceStoreContract.View rootView) {
@@ -64,24 +67,32 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
+        getData(true);
+    }
+
+    public void getData(boolean pullToRefresh) {
         SelfPickupAddrListActivity.ListType listType = (SelfPickupAddrListActivity.ListType) mRootView.getActivity().getIntent().getSerializableExtra(KEY_FOR_ACTIVITY_LIST_TYPE);
         switch (listType) {
             case HOP:
-                getHospital();
+                getHospital(pullToRefresh);
                 break;
             case STORE:
-                getStores();
+                getStores(pullToRefresh);
                 break;
             case ADDR:
                 break;
         }
     }
 
-    private void getStores() {
+    private void getStores(boolean pullToRefresh) {
+
         StoresListRequest request = new StoresListRequest();
         request.setCountyId(mRootView.getActivity().getIntent().getStringExtra("county"));
         request.setCityId(mRootView.getActivity().getIntent().getStringExtra("city"));
         request.setProvinceId(mRootView.getActivity().getIntent().getStringExtra("province"));
+
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
         List<StoresListRequest.OrderBy> orderByList = new ArrayList<>();
         StoresListRequest.OrderBy orderBy = new StoresListRequest.OrderBy();
@@ -92,15 +103,37 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
         mModel.getStores(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                })
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<StoresListResponse>(mErrorHandler) {
                     @Override
                     public void onNext(StoresListResponse response) {
-                        if (response.isSuccess() && response.getStoreList() != null) {
-                            commonStoreDateTypeList.clear();
+                        if (response.isSuccess()) {
+                            mRootView.showConent(response.getStoreList().size() > 0);
+                            if (pullToRefresh) {
+                                commonStoreDateTypeList.clear();
+                            }
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             commonStoreDateTypeList.addAll(response.getStoreList());
-                            mAdapter.notifyDataSetChanged();
+                            preEndIndex = commonStoreDateTypeList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = commonStoreDateTypeList.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, commonStoreDateTypeList.size());
+                            }
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -108,12 +141,14 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
                 });
     }
 
-    private void getHospital() {
+    private void getHospital(boolean pullToRefresh) {
         HospitalListRequest request = new HospitalListRequest();
         request.setCountyId(mRootView.getActivity().getIntent().getStringExtra("county"));
         request.setCityId(mRootView.getActivity().getIntent().getStringExtra("city"));
         request.setProvinceId(mRootView.getActivity().getIntent().getStringExtra("province"));
         request.setSpecValueId(mRootView.getActivity().getIntent().getStringExtra("specValueId"));
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
         List<OrderBy> orderByList = new ArrayList<>();
         OrderBy orderBy = new OrderBy();
         orderBy.setField("distance");
@@ -123,15 +158,37 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
         mModel.getHospitals(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                })
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<HospitalListResponse>(mErrorHandler) {
                     @Override
                     public void onNext(HospitalListResponse response) {
-                        if (response.isSuccess() && response.getHospitalList() != null) {
-                            commonStoreDateTypeList.clear();
+                        if (response.isSuccess()) {
+                            mRootView.showConent(response.getHospitalList().size() > 0);
+                            if (pullToRefresh) {
+                                commonStoreDateTypeList.clear();
+                            }
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             commonStoreDateTypeList.addAll(response.getHospitalList());
-                            mAdapter.notifyDataSetChanged();
+                            preEndIndex = commonStoreDateTypeList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = commonStoreDateTypeList.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, commonStoreDateTypeList.size());
+                            }
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

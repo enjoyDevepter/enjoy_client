@@ -212,6 +212,8 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
             orderBy.setAsc((Boolean) mRootView.getCache().get("orderByAsc"));
             request.setOrderBy(orderBy);
         }
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
         mModel.getHGoodsList(request)
                 .subscribeOn(Schedulers.io())
