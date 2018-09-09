@@ -28,8 +28,6 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
     View backV;
     @BindView(R.id.title)
     TextView titleTV;
-    @BindView(R.id.order_center)
-    TextView orderCenterTV;
     @BindView(R.id.order_detail)
     TextView orderDetailTV;
     @BindView(R.id.pay_img)
@@ -75,7 +73,6 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
     public void initData(Bundle savedInstanceState) {
         titleTV.setText("支付成功");
         backV.setOnClickListener(this);
-        orderCenterTV.setOnClickListener(this);
         orderDetailTV.setOnClickListener(this);
         retryV.setOnClickListener(this);
         failOrderV.setOnClickListener(this);
@@ -119,10 +116,6 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
-                killMyself();
-                break;
-            case R.id.order_center:
-                ArmsUtils.startActivity(MyOrderActivity.class);
                 killMyself();
                 break;
             case R.id.fail_order_detail:
