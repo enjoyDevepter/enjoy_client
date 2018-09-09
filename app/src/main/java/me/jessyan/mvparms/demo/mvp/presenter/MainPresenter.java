@@ -32,13 +32,17 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Area;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeADRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeAdResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
 
 @ActivityScope
@@ -62,6 +66,46 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     void onCreate() {
         requestLocation();//打开 App 时自动加载列表
         checkUpdate();
+        getOrCancelAd(false);
+    }
+
+    public void getOrCancelAd(boolean cancel) {
+        HomeADRequest request = new HomeADRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) (cache.get(KEY_KEEP + "token"));
+        if (!cancel) {
+            if (ArmsUtils.isEmpty(token)) {
+                request.setCmd(914);
+            } else {
+                request.setCmd(915);
+            }
+        } else {
+            if (ArmsUtils.isEmpty(token)) {
+                request.setCmd(916);
+            } else {
+                request.setCmd(917);
+            }
+        }
+        request.setAdId((String) mRootView.getCache().get("adId"));
+        request.setToken(token);
+        mModel.getOrCancelAD(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HomeAdResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(HomeAdResponse response) {
+                        if (response.isSuccess()) {
+                            if (!cancel && null != response.getAd()) {
+                                mRootView.getCache().put("adId", response.getAd().getAdId());
+                                mRootView.showAD(response.getAd());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
     }
 
     private void checkUpdate() {

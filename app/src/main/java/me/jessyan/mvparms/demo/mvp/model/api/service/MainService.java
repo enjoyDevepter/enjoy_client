@@ -25,6 +25,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.EidtCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeADRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HotRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MealDetailsRequest;
@@ -51,6 +52,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryTypeListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeAdResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HotResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
@@ -203,6 +205,9 @@ public interface MainService {
 
     @POST("gateway")
     Observable<CityResponse> getAreaForLoaction(@Body LocationRequest request);
+
+    @POST("gateway")
+    Observable<HomeAdResponse> getOrCancelAD(@Body HomeADRequest request);
 
     @POST("gateway")
     Observable<PayInfoResponse> getOrderPayInfo(@Body PayInfoRequest request);

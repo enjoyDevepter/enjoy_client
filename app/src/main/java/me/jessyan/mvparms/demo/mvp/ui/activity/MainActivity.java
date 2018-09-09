@@ -24,11 +24,14 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chaychan.library.BottomBarLayout;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -47,6 +50,7 @@ import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMainComponent;
 import me.jessyan.mvparms.demo.di.module.MainModule;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.HomeAd;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.MainPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.fragment.AppointmentFragment;
@@ -78,7 +82,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     ViewPager viewPager;
     @Inject
     RxPermissions mRxPermissions;
-
+    @Inject
+    ImageLoader mImageLoader;
     CustomDialog dialog = null;
 
     DownloadManager downloadManager;
@@ -254,6 +259,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     }
 
     @Override
+    public void showAD(HomeAd ad) {
+        showAdDailog(ad.getImageUrl());
+    }
+
+    @Override
     public RxPermissions getRxPermissions() {
         return mRxPermissions;
     }
@@ -326,6 +336,42 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 .isCenter(true)
                 .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
                 .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
+                .show();
+    }
+
+    private void showAdDailog(String imageURL) {
+        dialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        ImageView image = view.findViewById(R.id.ad);
+                        mImageLoader.loadImage(image.getContext(),
+                                ImageConfigImpl
+                                        .builder()
+                                        .placeholder(R.mipmap.place_holder_img)
+                                        .url(imageURL)
+                                        .imageView(image)
+                                        .build());
+                        view.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        image.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mPresenter.getOrCancelAd(true);
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.dialog_ad)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setWidth(ArmsUtils.getDimens(this, R.dimen.ad_dialog_width))
+                .setHeight(ArmsUtils.getDimens(this, R.dimen.ad_dialog_height))
                 .show();
     }
 

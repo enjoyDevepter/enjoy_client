@@ -17,8 +17,10 @@
     <dimen name="space_10">10dp</dimen>
 
     <dimen name="dialog_height">100dp</dimen>
-    <dimen name="order_image_height">100dp</dimen>
+    <dimen name="ad_dialog_height">482dp</dimen>
     <dimen name="dialog_width">220dp</dimen>
+    <dimen name="ad_dialog_width">294dp</dimen>
+    <dimen name="order_image_height">100dp</dimen>
     <dimen name="diray_apply_width">264dp</dimen>
     <dimen name="diray_apply_height">236dp</dimen>
 

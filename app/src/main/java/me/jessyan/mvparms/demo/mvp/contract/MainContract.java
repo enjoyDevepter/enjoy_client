@@ -8,7 +8,10 @@ import com.jess.arms.mvp.IView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.HomeAd;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeADRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeAdResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
@@ -21,6 +24,8 @@ public interface MainContract {
 
         Cache getCache();
 
+        void showAD(HomeAd ad);
+
         //申请权限
         RxPermissions getRxPermissions();
 
@@ -32,5 +37,7 @@ public interface MainContract {
         Observable<UpdateResponse> checkUpdate(UpdateRequest request);
 
         Observable<CityResponse> getAreaForLoaction(LocationRequest request);
+
+        Observable<HomeAdResponse> getOrCancelAD(HomeADRequest request);
     }
 }
