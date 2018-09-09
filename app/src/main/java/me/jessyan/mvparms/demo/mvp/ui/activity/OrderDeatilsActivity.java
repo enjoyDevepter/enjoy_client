@@ -191,6 +191,9 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                             showCancelDailog();
                         } else if ("4".equals(order.getOrderStatus())) {
                             // 查看物流
+                            Intent intent = new Intent(getActivity(), LogisticsActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
                         }
                         break;
                     case 1:

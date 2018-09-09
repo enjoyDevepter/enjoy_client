@@ -305,6 +305,9 @@
         <activity
             android:name=".mvp.ui.activity.RechargeFinishedActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.LogisticsActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

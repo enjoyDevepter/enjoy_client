@@ -5,6 +5,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.diary.DiaryCommentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.response.LogisticsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.pay.request.PayInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.pay.request.PayRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.pay.response.PayInfoResponse;
@@ -208,4 +209,8 @@ public interface MainService {
 
     @POST("gateway")
     Observable<PayResponse> pay(@Body PayRequest request);
+
+    @POST("gateway")
+    Observable<LogisticsResponse> getLogistics(@Body OrderOperationRequest request);
+
 }

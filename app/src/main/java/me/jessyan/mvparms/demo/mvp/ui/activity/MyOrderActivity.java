@@ -296,6 +296,9 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                             mPresenter.cancelOrder();
                         } else if ("4".equals(order.getOrderStatus())) {
                             // 查看物流
+                            Intent intent = new Intent(getActivity(), LogisticsActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
                         }
                         break;
                     case 1:
