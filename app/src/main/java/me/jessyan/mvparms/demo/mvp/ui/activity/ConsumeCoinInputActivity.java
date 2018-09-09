@@ -38,6 +38,7 @@ import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.ConsumeCoinInputPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.ConsumeInputAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -80,17 +81,17 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     View zfb;
     @BindView(R.id.wx)
     View wx;
+    CustomDialog dialog = null;
     private MemberAccount account;
     private PayType currType = PayType.WX;
     private long money_num = 0;
-
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
 
     @Override
     public void onPaySuccess(Map<String, String> rawResult) {
-
+        showDailog();
     }
 
     @Override
@@ -101,6 +102,36 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     @Override
     public void onPayCancel() {
 
+    }
+
+    private void showDailog() {
+        dialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        ((TextView) view.findViewById(R.id.content)).setText("支付成功");
+                        view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                mPresenter.getRechargeStatus();
+                            }
+                        });
+                        view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                mPresenter.getRechargeStatus();
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.dialog_remove_good_for_cart)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
+                .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
+                .show();
     }
 
     private void selectType(PayType type) {

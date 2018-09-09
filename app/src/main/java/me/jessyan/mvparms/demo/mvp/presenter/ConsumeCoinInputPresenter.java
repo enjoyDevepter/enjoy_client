@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.Intent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -25,6 +26,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetRechargeListRequ
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.RechargeRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetRechargeListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.RechargeResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.RechargeFinishedActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.ConsumeInputAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -56,7 +58,7 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void requestOrderList(){
+    public void requestOrderList() {
         requestOrderList(false);
     }
 
@@ -64,8 +66,8 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
         GetRechargeListRequest request = new GetRechargeListRequest();
         request.setPageSize(10);
 
-        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        String token=(String)cache.get(KEY_KEEP+"token");
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
         request.setToken(token);
         if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
@@ -74,7 +76,7 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh) {
                         //                        mRootView.showLoading();//显示下拉刷新的进度条
-                    }else
+                    } else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -110,13 +112,13 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                 });
     }
 
-    public void recharge(long money,String payType) {// 单位分
+    public void recharge(long money, String payType) {// 单位分
         RechargeRequest request = new RechargeRequest();
         request.setAmount(money);
         request.setType("1");
         request.setPayId(payType);
-        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        String token=(String)cache.get(KEY_KEEP+"token");
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
         request.setToken(token);
 
         mModel.recharge(request)
@@ -133,6 +135,7 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                     @Override
                     public void onNext(RechargeResponse response) {
                         if (response.isSuccess()) {
+                            mRootView.getCache().put("orderId", response.getOrderId());
                             PayManager.getInstace(mRootView.getActivity()).toPay("ALIPAY_APP".equals(payType) ? PayManager.PayMode.ALIPAY : PayManager.PayMode.WXPAY, response.getParams(), (PayManager.PayListener) mRootView.getActivity());
                         } else {
                             mRootView.showMessage(response.getRetDesc());
@@ -142,6 +145,41 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
     }
 
 
+    public void getRechargeStatus() {// 单位分
+        RechargeRequest request = new RechargeRequest();
+        request.setCmd(1266);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+        request.setToken(token);
+        request.setOrderId((String) mRootView.getCache().get("orderId"));
+        mModel.recharge(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<RechargeResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(RechargeResponse response) {
+                        if (response.isSuccess()) {
+                            Intent intent = new Intent(mRootView.getActivity(), RechargeFinishedActivity.class);
+                            if ("0".equals(response.getStatus())) {
+                                intent.putExtra("success", true);
+                                intent.putExtra("money", response.getMoney());
+                            } else {
+                                intent.putExtra("success", false);
+                            }
+                            ArmsUtils.startActivity(intent);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
 
     @Override
     public void onDestroy() {

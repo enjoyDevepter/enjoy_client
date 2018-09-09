@@ -193,11 +193,19 @@
 
                         <TextView
                             android:id="@+id/hospital_address"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="15dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:gravity="right"
                             android:textColor="#FF333333"
                             android:textSize="13sp" />
+
+                        <View
+                            android:layout_width="5dp"
+                            android:layout_height="9dp"
+                            android:layout_marginRight="15dp"
+                            android:background="@mipmap/more_right" />
 
                     </LinearLayout>
 
@@ -218,15 +226,16 @@
 
                         <TextView
                             android:id="@+id/appointments_time"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="15dp"
+                            android:layout_weight="1"
+                            android:gravity="right"
                             android:textColor="#FF333333"
                             android:textSize="13sp" />
 
                     </LinearLayout>
-
 
                 </LinearLayout>
 

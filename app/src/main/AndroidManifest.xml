@@ -261,7 +261,6 @@
             android:name="UMENG_CHANNEL"
             android:value="umeng" />
 
-
         <!-- 支付宝 相关 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
@@ -280,13 +279,11 @@
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             tools:ignore="DuplicateActivity" />
-
         <activity
             android:name="cn.ehanmy.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name=".mvp.ui.activity.FansActivity"
             android:screenOrientation="portrait" />
@@ -304,6 +301,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.MyStoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.RechargeFinishedActivity"
             android:screenOrientation="portrait" />
     </application>
 

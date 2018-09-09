@@ -85,10 +85,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setOrderId((String) mRootView.getCache().get("orderId"));
-        int type = 0;
-        if (null != mRootView.getCache().get("type")) {
-            type = (int) mRootView.getCache().get("type");
-        }
         request.setCmd(553);
         mModel.cancelOrder(request)
                 .subscribeOn(Schedulers.io())
@@ -112,10 +108,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setOrderId((String) mRootView.getCache().get("orderId"));
-        int type = 0;
-        if (null != mRootView.getCache().get("type")) {
-            type = (int) mRootView.getCache().get("type");
-        }
         request.setCmd(555);
         mModel.cancelOrder(request)
                 .subscribeOn(Schedulers.io())
@@ -140,10 +132,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setOrderId((String) mRootView.getCache().get("orderId"));
-        int type = 0;
-        if (null != mRootView.getCache().get("type")) {
-            type = (int) mRootView.getCache().get("type");
-        }
         request.setCmd(556);
         mModel.cancelOrder(request)
                 .subscribeOn(Schedulers.io())

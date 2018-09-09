@@ -361,6 +361,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                 Intent detailIntent = new Intent(this, OrderDeatilsActivity.class);
                 detailIntent.putExtra("orderId", order.getOrderId());
                 detailIntent.putExtra("orderType", order.getOrderType());
+                detailIntent.putExtra("type", (int) provideCache().get("type"));
                 ArmsUtils.startActivity(detailIntent);
                 break;
         }

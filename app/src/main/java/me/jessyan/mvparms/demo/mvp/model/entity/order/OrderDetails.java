@@ -19,14 +19,15 @@ public class OrderDetails {
     private long freight;
     private long money;
     private int nums;
-    private String appointmentsDate;
-    private String appointmentsTime;
+    private String reservationDate;
+    private String reservationTime;
     private String orderId;
     private String orderStatus;
     private String orderStatusDesc;
     private String payType;
     private String payTypeDesc;
     private String remark;
+    private String orderType;
     private long orderTime;
     private long payMoney;
     private long payTime;
@@ -102,20 +103,28 @@ public class OrderDetails {
         this.orderStatusDesc = orderStatusDesc;
     }
 
-    public String getAppointmentsDate() {
-        return appointmentsDate;
+    public String getOrderType() {
+        return orderType;
     }
 
-    public void setAppointmentsDate(String appointmentsDate) {
-        this.appointmentsDate = appointmentsDate;
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 
-    public String getAppointmentsTime() {
-        return appointmentsTime;
+    public String getReservationDate() {
+        return reservationDate;
     }
 
-    public void setAppointmentsTime(String appointmentsTime) {
-        this.appointmentsTime = appointmentsTime;
+    public void setReservationDate(String reservationDate) {
+        this.reservationDate = reservationDate;
+    }
+
+    public String getReservationTime() {
+        return reservationTime;
+    }
+
+    public void setReservationTime(String reservationTime) {
+        this.reservationTime = reservationTime;
     }
 
     public List<MealGoods> getSetMealGoodsList() {
@@ -248,14 +257,15 @@ public class OrderDetails {
                 ", freight=" + freight +
                 ", money=" + money +
                 ", nums=" + nums +
-                ", appointmentsDate='" + appointmentsDate + '\'' +
-                ", appointmentsTime='" + appointmentsTime + '\'' +
+                ", reservationDate='" + reservationDate + '\'' +
+                ", reservationTime='" + reservationTime + '\'' +
                 ", orderId='" + orderId + '\'' +
                 ", orderStatus='" + orderStatus + '\'' +
                 ", orderStatusDesc='" + orderStatusDesc + '\'' +
                 ", payType='" + payType + '\'' +
                 ", payTypeDesc='" + payTypeDesc + '\'' +
                 ", remark='" + remark + '\'' +
+                ", orderType='" + orderType + '\'' +
                 ", orderTime=" + orderTime +
                 ", payMoney=" + payMoney +
                 ", payTime=" + payTime +

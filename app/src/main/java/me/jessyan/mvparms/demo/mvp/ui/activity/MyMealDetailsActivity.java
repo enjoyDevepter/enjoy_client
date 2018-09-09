@@ -26,7 +26,6 @@ import me.jessyan.mvparms.demo.di.component.DaggerMyMealDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.MyMealDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyMealDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.MyMealDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealDetailListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -118,12 +117,6 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
         onDate.setVisibility(hasDate ? INVISIBLE : VISIBLE);
         swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
     }
-
-    @Override
-    public void updateUI(AppointmentResponse response) {
-//        orderIdTV.setText(response.get);
-    }
-
 
     @Override
     public void showMessage(@NonNull String message) {

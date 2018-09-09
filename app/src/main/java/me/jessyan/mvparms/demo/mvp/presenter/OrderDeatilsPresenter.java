@@ -126,10 +126,6 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setOrderId((String) mRootView.getCache().get("orderId"));
-        int type = 0;
-        if (null != mRootView.getCache().get("type")) {
-            type = (int) mRootView.getCache().get("type");
-        }
         request.setCmd(553);
         mModel.cancelOrder(request)
                 .subscribeOn(Schedulers.io())
@@ -140,7 +136,7 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
                     @Override
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
-//                            getOrder(true);
+                            mRootView.killMyself();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
@@ -153,10 +149,6 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setOrderId((String) mRootView.getCache().get("orderId"));
-        int type = 0;
-        if (null != mRootView.getCache().get("type")) {
-            type = (int) mRootView.getCache().get("type");
-        }
         request.setCmd(555);
         mModel.cancelOrder(request)
                 .subscribeOn(Schedulers.io())
@@ -166,9 +158,7 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
                 .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
                     public void onNext(BaseResponse response) {
-                        if (response.isSuccess()) {
-//                            getOrder(true);
-                        } else {
+                        if (!response.isSuccess()) {
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }
@@ -181,10 +171,6 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setOrderId((String) mRootView.getCache().get("orderId"));
-        int type = 0;
-        if (null != mRootView.getCache().get("type")) {
-            type = (int) mRootView.getCache().get("type");
-        }
         request.setCmd(556);
         mModel.cancelOrder(request)
                 .subscribeOn(Schedulers.io())
@@ -194,9 +180,7 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
                 .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
                     public void onNext(BaseResponse response) {
-                        if (response.isSuccess()) {
-//                            getOrder(true);
-                        } else {
+                        if (!response.isSuccess()) {
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }

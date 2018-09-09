@@ -27,8 +27,11 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderDetails;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.OrderDeatilsPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_NAME;
 
 
 public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> implements OrderDeatilsContract.View, View.OnClickListener {
@@ -106,9 +109,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     RecyclerView.Adapter mAdapter;
-
+    CustomDialog dialog = null;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
     private OrderDetailsResponse response;
 
     @Override
@@ -132,7 +134,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
         backV.setOnClickListener(this);
         leftTV.setOnClickListener(this);
         rightTV.setOnClickListener(this);
-
+        hospitalAddressTV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(ordersRV, mLayoutManager);
         ordersRV.setAdapter(mAdapter);
     }
@@ -175,12 +177,18 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             case R.id.back:
                 killMyself();
                 break;
+            case R.id.hospital_address:
+                Intent hospitalIntent = new Intent(OrderDeatilsActivity.this, HospitalInfoActivity.class);
+                hospitalIntent.putExtra(KEY_FOR_HOSPITAL_NAME, order.getHospital().getName());
+                hospitalIntent.putExtra(KEY_FOR_HOSPITAL_ID, order.getHospital().getHospitalId());
+                ArmsUtils.startActivity(hospitalIntent);
+                break;
             case R.id.left:
                 switch (orderType) {
                     case 0:
                         if ("1".equals(order.getOrderStatus())) {
                             // 取消订单
-                            mPresenter.cancelOrder();
+                            showCancelDailog();
                         } else if ("4".equals(order.getOrderStatus())) {
                             // 查看物流
                         }
@@ -190,7 +198,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                     case 2:
                         if ("1".equals(order.getOrderStatus())) {
                             // 取消订单
-                            mPresenter.cancelOrder();
+                            showCancelDailog();
                         }
                         break;
                 }
@@ -200,7 +208,9 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                     case 0:
                         if ("1".equals(order.getOrderStatus())) {
                             // 去支付
-
+                            Intent intent = new Intent(this, PayActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
                         } else if ("3".equals(order.getOrderStatus())) {
                             // 提醒发货
                             mPresenter.reminding();
@@ -219,15 +229,19 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                     case 2:
                         if ("1".equals(order.getOrderStatus())) {
                             // 去支付
-
+                            Intent intent = new Intent(this, PayActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
                         } else if ("2".equals(order.getOrderStatus())) {
                             // 付尾款
-
+                            Intent intent = new Intent(this, PayActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
                         } else if ("31".equals(order.getOrderStatus())) {
                             // 预约
                             Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
                             makeIntent.putExtra("orderId", order.getOrderId());
-                            makeIntent.putExtra("mealName", order.getSetMealGoodsList().get(0).getName());
+                            makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
                             ArmsUtils.startActivity(makeIntent);
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记
@@ -308,18 +322,15 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                     rightTV.setVisibility(View.VISIBLE);
                     leftTV.setVisibility(View.GONE);
                 }
-                if (response.getOrder().equals("7")) {
-                    orderV.setVisibility(View.GONE);
-                    hOrderV.setVisibility(View.VISIBLE);
-                    orderPayV.setVisibility(View.GONE);
+                hOrderV.setVisibility(View.VISIBLE);
+                orderPayV.setVisibility(View.GONE);
+                hospitalAddressTV.setText(orderDetails.getHospital().getName());
+                appointmentsTimeTV.setText(orderDetails.getReservationDate() + " " + orderDetails.getReservationTime());
+                orderV.setVisibility(View.GONE);
+                if ("7".equals(response.getOrder().getOrderType())) {
                     hOrderPayV.setVisibility(View.VISIBLE);
                     mealOrderV.setVisibility(View.GONE);
-                    hospitalAddressTV.setText(orderDetails.getHospital().getAddress());
-                    appointmentsTimeTV.setText(orderDetails.getAppointmentsDate() + " " + orderDetails.getAppointmentsTime());
                 } else {
-                    orderV.setVisibility(View.GONE);
-                    hOrderV.setVisibility(View.GONE);
-                    orderPayV.setVisibility(View.GONE);
                     hOrderPayV.setVisibility(View.GONE);
                     mealOrderV.setVisibility(View.VISIBLE);
                     mealPriceTV.setText(ArmsUtils.formatLong(response.getOrder().getPayMoney()));
@@ -327,7 +338,6 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                 }
                 break;
         }
-
 
         payTimeTV.setText(sdf.format(orderDetails.getOrderTime()));
         orderStatusDescTV.setText(orderDetails.getOrderStatusDesc());
@@ -349,5 +359,33 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
         horderCouponV.setText(ArmsUtils.formatLong(orderDetails.getCoupon()));
         freightTV.setText(ArmsUtils.formatLong(orderDetails.getFreight()));
         payMoneyTV.setMoneyText(ArmsUtils.formatLong(orderDetails.getPayMoney()));
+    }
+
+    private void showCancelDailog() {
+        dialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        ((TextView) view.findViewById(R.id.content)).setText("确认取消该订单吗？");
+                        view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mPresenter.cancelOrder();
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.dialog_remove_good_for_cart)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
+                .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
+                .show();
     }
 }

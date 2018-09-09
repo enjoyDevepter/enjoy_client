@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/success"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <View
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_marginTop="36dp"
+                android:background="@mipmap/recharge_sucess" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="充值成功"
+                android:textColor="#FF333333"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="您的现金币充值后的余额为300元"
+                android:textColor="#FF666666"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/finish"
+                android:layout_width="272dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:text="完成充值"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/wait"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_marginTop="36dp"
+                android:background="@mipmap/recharge_wait" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="充值成功，等待后台确认"
+                android:textColor="#FF333333"
+                android:textSize="17sp" />
+
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

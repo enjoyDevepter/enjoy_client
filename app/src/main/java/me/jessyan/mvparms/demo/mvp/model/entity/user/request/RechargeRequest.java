@@ -4,7 +4,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
 /**充值*/
 public class RechargeRequest extends BaseRequest {
-    private final int cmd = 1262;
+    private int cmd = 1262;
     private String payId;
     private long amount;
     private String orderId;
@@ -25,6 +25,10 @@ public class RechargeRequest extends BaseRequest {
 
     public int getCmd() {
         return cmd;
+    }
+
+    public void setCmd(int cmd) {
+        this.cmd = cmd;
     }
 
     public String getPayId() {
