@@ -22,11 +22,13 @@ import me.jessyan.mvparms.demo.mvp.model.entity.User;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddressListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DelAddressRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAddressRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.PickCouponRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.PickCouponListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AddBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
@@ -155,6 +157,14 @@ public interface UserService {
     @POST("gateway")
         // 优惠卷
     Observable<MyCouponListResponse> getMyCouponList(@Body MyCouponListRequest request);
+
+    @POST("gateway")
+        // 优惠卷
+    Observable<PickCouponListResponse> getPickCouponList(@Body PickCouponRequest request);
+
+    @POST("gateway")
+        // 优惠卷
+    Observable<BaseResponse> pickCoupon(@Body PickCouponRequest request);
 
     @POST("gateway")
         // 我的收藏

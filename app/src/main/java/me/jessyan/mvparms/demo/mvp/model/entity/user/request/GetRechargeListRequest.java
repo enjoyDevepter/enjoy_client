@@ -4,8 +4,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
 public class GetRechargeListRequest extends BaseRequest {
     private final int cmd = 1263;
-    private int pageIndex;
-    private int pageSize;
+    private int pageIndex = 1;
+    private int pageSize = 10;
     private String token;
 
     @Override

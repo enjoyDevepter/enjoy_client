@@ -27,6 +27,8 @@ public class Coupon implements Parcelable {
     private String remark;
     private String status;
     private String statusDesc;
+    private String couponTemplateId;
+    private String couponPromotionId;
 
     public Coupon() {
     }
@@ -41,6 +43,8 @@ public class Coupon implements Parcelable {
         remark = in.readString();
         status = in.readString();
         statusDesc = in.readString();
+        couponTemplateId = in.readString();
+        couponPromotionId = in.readString();
     }
 
     public String getCouponId() {
@@ -115,6 +119,22 @@ public class Coupon implements Parcelable {
         this.statusDesc = statusDesc;
     }
 
+    public String getCouponTemplateId() {
+        return couponTemplateId;
+    }
+
+    public void setCouponTemplateId(String couponTemplateId) {
+        this.couponTemplateId = couponTemplateId;
+    }
+
+    public String getCouponPromotionId() {
+        return couponPromotionId;
+    }
+
+    public void setCouponPromotionId(String couponPromotionId) {
+        this.couponPromotionId = couponPromotionId;
+    }
+
     @Override
     public String toString() {
         return "Coupon{" +
@@ -127,6 +147,8 @@ public class Coupon implements Parcelable {
                 ", remark='" + remark + '\'' +
                 ", status='" + status + '\'' +
                 ", statusDesc='" + statusDesc + '\'' +
+                ", couponTemplateId='" + couponTemplateId + '\'' +
+                ", couponPromotionId='" + couponPromotionId + '\'' +
                 '}';
     }
 
@@ -146,5 +168,7 @@ public class Coupon implements Parcelable {
         dest.writeString(remark);
         dest.writeString(status);
         dest.writeString(statusDesc);
+        dest.writeString(couponTemplateId);
+        dest.writeString(couponPromotionId);
     }
 }

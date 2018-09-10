@@ -362,6 +362,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                             @Override
                             public void onClick(View v) {
                                 mPresenter.getOrCancelAd(true);
+                                ArmsUtils.startActivity(PickCouponActivity.class);
                                 dialog.dismiss();
                             }
                         });

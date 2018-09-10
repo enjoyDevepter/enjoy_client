@@ -59,13 +59,11 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void requestOrderList() {
-        requestOrderList(false);
+        requestOrderList(true);
     }
 
     public void requestOrderList(boolean pullToRefresh) {
         GetRechargeListRequest request = new GetRechargeListRequest();
-        request.setPageSize(10);
-
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
         request.setToken(token);
@@ -75,7 +73,7 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh) {
-                        //                        mRootView.showLoading();//显示下拉刷新的进度条
+                        mRootView.showLoading();//显示下拉刷新的进度条
                     } else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 }).subscribeOn(AndroidSchedulers.mainThread())
@@ -168,10 +166,10 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                         if (response.isSuccess()) {
                             Intent intent = new Intent(mRootView.getActivity(), RechargeFinishedActivity.class);
                             if ("0".equals(response.getStatus())) {
+                                intent.putExtra("success", false);
+                            } else {
                                 intent.putExtra("success", true);
                                 intent.putExtra("money", response.getMoney());
-                            } else {
-                                intent.putExtra("success", false);
                             }
                             ArmsUtils.startActivity(intent);
                         } else {
