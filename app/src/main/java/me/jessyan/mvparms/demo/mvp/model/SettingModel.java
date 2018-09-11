@@ -9,7 +9,11 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.SettingContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 
 
 @ActivityScope
@@ -31,4 +35,9 @@ public class SettingModel extends BaseModel implements SettingContract.Model {
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<BaseResponse> getTel(SimpleRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getTel(request);
+    }
 }

@@ -91,12 +91,10 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
 
             @Override
             public void onRequestPermissionFailure(List<String> permissions) {
-                mRootView.showMessage("Request permissions failure");
             }
 
             @Override
             public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
-                mRootView.showMessage("Need to go to the settings");
             }
         }, mRxPermissions, mErrorHandler);
         SimpleRequest request = new SimpleRequest();

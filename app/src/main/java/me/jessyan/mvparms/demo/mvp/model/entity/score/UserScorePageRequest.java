@@ -3,10 +3,10 @@ package me.jessyan.mvparms.demo.mvp.model.entity.score;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
 public class UserScorePageRequest extends BaseRequest {
-    private final int cmd = 201;
+    private final int cmd = 1201;
     private String token;
-    private int pageIndex;
-    private int pageSize;
+    private int pageIndex = 1;
+    private int pageSize = 10;
 
     @Override
     public String toString() {

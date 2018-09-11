@@ -34,6 +34,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerHospitalInfoComponent;
 import me.jessyan.mvparms.demo.di.module.HospitalInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.HospitalInfoPresenter;
@@ -44,7 +45,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalEnvImageAdapter;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> implements HospitalInfoContract.View, View.OnClickListener {
+public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> implements HospitalInfoContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener {
 
     public static final String KEY_FOR_HOSPITAL_ID = "key_for_hospital_id";
     public static final String KEY_FOR_HOSPITAL_NAME = "key_for_hospital_name";
@@ -100,6 +101,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         goodsSwipeRefreshLayout = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview, null);
         goodsList = goodsSwipeRefreshLayout.findViewById(R.id.list);
         goodsList.setAdapter(hospitalGoodsListAdapter);
+        hospitalGoodsListAdapter.setOnItemClickListener(this);
         LinearLayoutManager goodsListLayoutManager = new LinearLayoutManager(this);
         ArmsUtils.configRecyclerView(goodsList, goodsListLayoutManager);
         views[1] = goodsSwipeRefreshLayout;
@@ -356,5 +358,15 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         super.onDestroy();
         doctorPaginate = null;
         goodsPaginate = null;
+    }
+
+    @Override
+    public void onItemClick(View view, int viewType, Object data, int position) {
+        HGoods hGoods = hospitalGoodsListAdapter.getInfos().get(position);
+        Intent hGoodsintent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
+        hGoodsintent.putExtra("goodsId", hGoods.getGoodsId());
+        hGoodsintent.putExtra("merchId", hGoods.getMerchId());
+        hGoodsintent.putExtra("advanceDepositId", hGoods.getAdvanceDepositId());
+        ArmsUtils.startActivity(hGoodsintent);
     }
 }

@@ -1,5 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +13,6 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import org.simple.eventbus.EventBus;
-import org.simple.eventbus.Subscriber;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
@@ -20,7 +20,6 @@ import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerSettingComponent;
 import me.jessyan.mvparms.demo.di.module.SettingModule;
 import me.jessyan.mvparms.demo.mvp.contract.SettingContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.SettingPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 
@@ -137,6 +136,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                 ArmsUtils.startActivity(FeedBackActivity.class);
                 break;
             case R.id.contact:
+                mPresenter.getTel();
                 break;
             case R.id.clean:
                 showDailog("确认清除应用缓存吗?");
@@ -182,5 +182,10 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                 .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
                 .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
                 .show();
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 }

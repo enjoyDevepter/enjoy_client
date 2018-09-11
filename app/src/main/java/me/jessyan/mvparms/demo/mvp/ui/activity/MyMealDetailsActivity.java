@@ -226,12 +226,14 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
                 if (appointment.getStatus().equals("1")) {
                     // 预约
                     Intent addappointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
+                    addappointmentsIntent.putExtra("isMeal", true);
                     addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
                     addappointmentsIntent.putExtra("type", "add_appointment_time");
                     ArmsUtils.startActivity(addappointmentsIntent);
                 } else if (appointment.getStatus().equals("2")) {
                     // 改约
                     Intent addappointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
+                    addappointmentsIntent.putExtra("isMeal", true);
                     addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
                     addappointmentsIntent.putExtra("type", "modify_appointment_time");
                     ArmsUtils.startActivity(addappointmentsIntent);

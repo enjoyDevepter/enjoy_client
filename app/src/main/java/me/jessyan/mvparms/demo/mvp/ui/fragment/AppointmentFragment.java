@@ -265,6 +265,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 if (appointment.getStatus().equals("1")) {
                     // 预约
                     Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
+                    addappointmentsIntent.putExtra("isMeal", false);
                     addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
                     addappointmentsIntent.putExtra("type", "add_appointment_time");
                     addappointmentsIntent.putExtra("index", position);
@@ -272,6 +273,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 } else if (appointment.getStatus().equals("2")) {
                     // 改约
                     Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
+                    addappointmentsIntent.putExtra("isMeal", false);
                     addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
                     addappointmentsIntent.putExtra("type", "modify_appointment_time");
                     addappointmentsIntent.putExtra("index", position);

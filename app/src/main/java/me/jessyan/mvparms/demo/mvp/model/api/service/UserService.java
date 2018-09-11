@@ -225,6 +225,10 @@ public interface UserService {
         // 充值
     Observable<RechargeResponse> recharge(@Body RechargeRequest request);
 
+    @POST("gateway")
+        // 咨询电话
+    Observable<BaseResponse> getTel(@Body SimpleRequest request);
+
 
     @POST("gateway")
         // 获取充值记录

@@ -22,14 +22,8 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.HAppointments;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.ScorePointBean;
 
 /**
@@ -52,23 +46,20 @@ public class UserScoreHolder extends BaseHolder<ScorePointBean> {
     @BindView(R.id.fuhao)
     TextView fuhao;
 
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
-
     public UserScoreHolder(View itemView) {
         super(itemView);
     }
 
     @Override
     public void setData(ScorePointBean scorePointBean, int position) {
-        type.setText(scorePointBean.getTypeDesc());
-        time.setText(simpleDateFormat.format(new Date(scorePointBean.getCreateDate())));
+        type.setText(scorePointBean.getDesc());
+        time.setText(scorePointBean.getCreateDate());
         long inMoney = scorePointBean.getInMoney();
-        if(inMoney == 0){
-            score_num.setText(""+ scorePointBean.getOutMoney());
+        if (inMoney == 0) {
+            score_num.setText("" + scorePointBean.getOutMoney());
             fuhao.setText("-");
-        }else{
-            score_num.setText(""+ scorePointBean.getInMoney());
+        } else {
+            score_num.setText("" + scorePointBean.getInMoney());
             fuhao.setText("+");
         }
     }

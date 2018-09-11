@@ -42,6 +42,15 @@ public class BaseResponse implements Serializable {
     private String retDesc;
     private ImageUrl result;
     private String content;
+    private String tellphone;
+
+    public String getTellphone() {
+        return tellphone;
+    }
+
+    public void setTellphone(String tellphone) {
+        this.tellphone = tellphone;
+    }
 
     public String getSequence() {
         return sequence;
@@ -154,6 +163,7 @@ public class BaseResponse implements Serializable {
                 ", retDesc='" + retDesc + '\'' +
                 ", result=" + result +
                 ", content='" + content + '\'' +
+                ", tellphone='" + tellphone + '\'' +
                 '}';
     }
 

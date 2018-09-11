@@ -120,12 +120,10 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
 
                 @Override
                 public void onRequestPermissionFailure(List<String> permissions) {
-                    mRootView.showMessage("Request permissions failure");
                 }
 
                 @Override
                 public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
-                    mRootView.showMessage("Need to go to the settings");
                 }
             }, mRootView.getRxPermissions(), mErrorHandler);
         } else {
@@ -207,12 +205,10 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
 
                 @Override
                 public void onRequestPermissionFailure(List<String> permissions) {
-                    mRootView.showMessage("Request permissions failure");
                 }
 
                 @Override
                 public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
-                    mRootView.showMessage("Need to go to the settings");
                 }
             }, mRootView.getRxPermissions(), mErrorHandler);
             return;

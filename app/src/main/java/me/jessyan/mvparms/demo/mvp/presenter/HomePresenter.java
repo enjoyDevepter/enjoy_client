@@ -69,12 +69,10 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
 
             @Override
             public void onRequestPermissionFailure(List<String> permissions) {
-                mRootView.showMessage("Request permissions failure");
             }
 
             @Override
             public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
-                mRootView.showMessage("Need to go to the settings");
             }
         }, mRootView.getRxPermissions(), mErrorHandler);
 

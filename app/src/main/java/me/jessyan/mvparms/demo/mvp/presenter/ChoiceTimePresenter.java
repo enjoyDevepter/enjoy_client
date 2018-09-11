@@ -121,11 +121,12 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         String type = mRootView.getActivity().getIntent().getStringExtra("type");
+        boolean isMeal = mRootView.getActivity().getIntent().getBooleanExtra("isMeal", false);
         if ("add_appointment_time".equals(type)) {
-            request.setCmd(2106);
+            request.setCmd(isMeal ? 2106 : 2006);
             request.setProjectId(mRootView.getActivity().getIntent().getStringExtra("projectId"));
         } else if ("modify_appointment_time".equals(type)) {
-            request.setCmd(2107);
+            request.setCmd(isMeal ? 2107 : 2007);
             request.setReservationId(mRootView.getActivity().getIntent().getStringExtra("reservationId"));
         }
         request.setReservationDate((String) mRootView.getCache().get("appointmentsDate"));

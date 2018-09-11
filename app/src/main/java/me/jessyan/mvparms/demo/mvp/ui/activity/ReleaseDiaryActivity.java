@@ -202,12 +202,10 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
 
             @Override
             public void onRequestPermissionFailure(List<String> permissions) {
-                showMessage("Request permissions failure");
             }
 
             @Override
             public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
-                showMessage("Need to go to the settings");
             }
         }, mRxPermissions, mErrorHandler);
 
@@ -225,12 +223,10 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
 
             @Override
             public void onRequestPermissionFailure(List<String> permissions) {
-                showMessage("Request permissions failure");
             }
 
             @Override
             public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
-                showMessage("Need to go to the settings");
             }
         }, mRxPermissions, mErrorHandler);
         ImageUploadUtils.startCamera(this, CAMERA_OPEN_REQUEST_CODE, generateCameraFilePath());
