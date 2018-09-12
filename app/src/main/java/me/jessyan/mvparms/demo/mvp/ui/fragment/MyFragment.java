@@ -34,6 +34,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.CashCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ConsumeCoinActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CouponActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.FansActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.GrowthActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.InviteMainActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
@@ -107,6 +108,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     @BindView(R.id.chenghao)
     TextView chenghao;
+    @BindView(R.id.growth)
+    TextView growthTV;
 
 
     @Inject
@@ -151,6 +154,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         recommenderV.setOnClickListener(this);
         consume.setOnClickListener(this);
         cash.setOnClickListener(this);
+        growthTV.setOnClickListener(this);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -284,6 +288,9 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 Intent cashIntent = new Intent(getContext(), CashCoinActivity.class);
                 ArmsUtils.startActivity(cashIntent);
                 break;
+            case R.id.growth:
+                ArmsUtils.startActivity(GrowthActivity.class);
+                break;
         }
     }
 
@@ -292,6 +299,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         moneyTV.setText(String.format("%.2f", account.getBonus() * 1.0 / 100));
         memberMoneyTV.setText(String.format("%.2f", account.getTotal() * 1.0 / 100));
         bonusTV.setText(account.getPoint() + "");
+        growthTV.setText("成长值 " + account.getGrowth());
     }
 
 

@@ -1,48 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="220dp"
-    android:layout_height="120dp"
-    android:layout_gravity="center"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/update_dialog_width"
+    android:layout_height="@dimen/update_dialog_height"
     android:background="@drawable/dailog_bg"
     android:orientation="vertical">
+
+    <View
+        android:id="@+id/close"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@mipmap/close_black" />
+
+    <View
+        android:id="@+id/logo"
+        android:layout_width="172dp"
+        android:layout_height="176dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp"
+        android:background="@mipmap/update" />
 
     <TextView
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:text="为了为您提供更优质的服务，我们计划在6月28-30日 期间进行系统升级，期间暂停现金币提现、消费币充值等 功"
+        android:textColor="#FF3D3D3D"
+        android:textSize="9sp" />
+
+
+    <TextView
+        android:id="@+id/confirm"
+        android:layout_width="156dp"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/dialog_confirm_bg"
         android:gravity="center"
-        android:textColor="#FF000000"
-        android:textSize="16sp" />
+        android:text="立即升级"
+        android:textColor="#FFFFFFFF"
+        android:textSize="13sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:background="@drawable/top_divider_bg"
-        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/confirm"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/dialog_confirm_bg"
-            android:gravity="center"
-            android:text="立即升级"
-            android:textColor="#FFFFFFFF"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/cancel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/dialog_cancel_bg"
-            android:gravity="center"
-            android:text="以后在说"
-            android:textColor="#FF333333"
-            android:textSize="13sp" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

@@ -90,30 +90,51 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/nickName"
+        <LinearLayout
+            android:id="@+id/nickName_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/info"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
-            android:textColor="#FFFFFFFF"
-            android:textSize="13sp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/nickName"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical">
+            <TextView
+                android:id="@+id/nickName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp" />
 
             <ImageView
                 android:id="@+id/level_icon"
                 android:layout_width="20dp"
                 android:layout_height="27dp"
                 android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nickName_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/growth"
+                android:layout_width="70dp"
+                android:layout_height="16dp"
+                android:background="@drawable/growth_text_bg"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/chenghao"

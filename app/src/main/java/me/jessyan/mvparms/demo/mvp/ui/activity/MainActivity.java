@@ -162,7 +162,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         foundV.setOnClickListener(this);
         appointmentV.setOnClickListener(this);
         myV.setOnClickListener(this);
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(0, false);
 
         downloadManager = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
     }
@@ -177,7 +177,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
     public void updateIndex(int index) {
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(1, false);
     }
 
     @Override
@@ -211,7 +211,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
         if (position == 2 && positionOffset > 0 && ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
-            viewPager.setCurrentItem(2);
+            viewPager.setCurrentItem(2, false);
         }
     }
 
@@ -271,7 +271,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public void showUpdateInfo(UpdateResponse updateResponse) {
         if (updateResponse.isNeedUpgrade()) {
-            showDailog(updateResponse);
+            showUpdateDailog(updateResponse);
         }
     }
 
@@ -279,13 +279,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_home:
-                viewPager.setCurrentItem(0);
+                viewPager.setCurrentItem(0, false);
                 break;
             case R.id.ll_mall:
-                viewPager.setCurrentItem(1);
+                viewPager.setCurrentItem(1, false);
                 break;
             case R.id.ll_found:
-                viewPager.setCurrentItem(2);
+                viewPager.setCurrentItem(2, false);
                 break;
             case R.id.ll_appointment:
                 Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
@@ -293,7 +293,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                     ArmsUtils.startActivity(LoginActivity.class);
                     return;
                 }
-                viewPager.setCurrentItem(3);
+                viewPager.setCurrentItem(3, false);
                 break;
             case R.id.ll_my:
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
@@ -301,18 +301,18 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                     ArmsUtils.startActivity(LoginActivity.class);
                     return;
                 }
-                viewPager.setCurrentItem(4);
+                viewPager.setCurrentItem(4, false);
                 break;
         }
     }
 
-    private void showDailog(UpdateResponse updateResponse) {
+    private void showUpdateDailog(UpdateResponse updateResponse) {
         dialog = CustomDialog.create(getSupportFragmentManager())
                 .setViewListener(new CustomDialog.ViewListener() {
                     @Override
                     public void bindView(View view) {
                         ((TextView) view.findViewById(R.id.content)).setText(updateResponse.getDescription());
-                        view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                        view.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
@@ -334,8 +334,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 .setLayoutRes(R.layout.dialog_update)
                 .setDimAmount(0.5f)
                 .isCenter(true)
-                .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
-                .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
+                .setWidth(ArmsUtils.getDimens(this, R.dimen.update_dialog_width))
+                .setHeight(ArmsUtils.getDimens(this, R.dimen.update_dialog_height))
                 .show();
     }
 

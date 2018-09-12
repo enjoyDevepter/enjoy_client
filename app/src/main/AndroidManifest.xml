@@ -311,6 +311,9 @@
         <activity
             android:name=".mvp.ui.activity.PickCouponActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.GrowthActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
