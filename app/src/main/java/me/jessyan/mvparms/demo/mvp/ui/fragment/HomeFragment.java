@@ -54,8 +54,10 @@ import me.jessyan.mvparms.demo.mvp.model.entity.NaviInfo;
 import me.jessyan.mvparms.demo.mvp.presenter.HomePresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CityActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DiaryForGoodsActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.HospitalActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.NewlywedsActivity;
@@ -495,6 +497,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             EventBus.getDefault().post(tab.getPosition(), EventBusTags.CHANGE_MAIN_INDEX);
         } else if ("recom_good".equals(tag)) {
             ArmsUtils.startActivity(getActivity(), RecommendActivity.class);
+        } else if ("hospital".equals(tag)) {
+            ArmsUtils.startActivity(getActivity(), HospitalActivity.class);
+        } else if ("doctor".equals(tag)) {
+            ArmsUtils.startActivity(getActivity(), DoctorActivity.class);
         }
     }
 

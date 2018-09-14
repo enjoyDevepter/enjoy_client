@@ -42,7 +42,7 @@
             android:layout_width="17dp"
             android:layout_height="17dp"
             android:layout_marginRight="15dp"
-            android:background="@mipmap/messge" />
+            android:background="@mipmap/home_msg" />
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -66,7 +66,7 @@
                     android:background="@color/white"
                     app:tabIndicatorColor="#FF50C8F5"
                     app:tabIndicatorHeight="2dp"
-                    app:tabMode="fixed"
+                    app:tabMode="scrollable"
                     app:tabPaddingEnd="0dp"
                     app:tabPaddingStart="0dp"
                     app:tabSelectedTextColor="#FF50C8F5"
@@ -96,17 +96,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:background="@color/white"
+                        android:paddingLeft="15dp"
                         app:tabIndicatorColor="#FF5FBFE3"
                         app:tabIndicatorHeight="2dp"
                         app:tabMode="scrollable"
                         app:tabPaddingEnd="0dp"
-                        android:paddingLeft="15dp"
                         app:tabPaddingStart="0dp"
                         app:tabSelectedTextColor="#FF333333"
                         app:tabTextAppearance="@style/TabLayoutTextStyle"
                         app:tabTextColor="#FF333333" />
 
-                    <View style="@style/divider_1"/>
+                    <View style="@style/divider_1" />
 
                     <FrameLayout
                         android:layout_width="match_parent"

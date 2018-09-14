@@ -6,7 +6,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.OrderBy;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
 public class HospitalListRequest extends BaseRequest {
-    private final int cmd = 601;
+    private int cmd = 601;
     private int pageIndex = 1;
     private int pageSize = 10;
     private String provinceId;
@@ -30,6 +30,14 @@ public class HospitalListRequest extends BaseRequest {
                 ", specValueId='" + specValueId + '\'' +
                 ", orderBys=" + orderBys +
                 '}';
+    }
+
+    public int getCmd() {
+        return cmd;
+    }
+
+    public void setCmd(int cmd) {
+        this.cmd = cmd;
     }
 
     public int getPageIndex() {

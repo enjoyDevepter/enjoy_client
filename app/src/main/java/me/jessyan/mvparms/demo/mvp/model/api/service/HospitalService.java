@@ -6,6 +6,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalListReq
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -16,10 +17,14 @@ public interface HospitalService {
     Observable<HospitalListResponse> requestHospitalPage(@Body HospitalListRequest request);
 
     @POST("gateway")
-    // 未登录用户获取医院详情
+        // 未登录用户获取医院详情
     Observable<HospitalInfoResponse> requestHospitalInfo(@Body HospitalInfoRequest request);
 
     @POST("gateway")
-    // 已登录用户获取医院详情
+        // 已登录用户获取医院详情
     Observable<LoginUserHospitalInfoResponse> requestHospitalInfoForLoginUser(@Body LoginUserHospitalInfoRequest request);
+
+    @POST("gateway")
+    Observable<HospitalResponse> getHospitalList(@Body HospitalListRequest request);
+
 }

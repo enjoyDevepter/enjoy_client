@@ -302,6 +302,8 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         // 初始化商品详情
         detailWV = new WebView(this);
         views.add(detailWV);
+        detailWV.getSettings().setUseWideViewPort(true);
+        detailWV.getSettings().setLoadWithOverviewMode(true);
         detailWV.addJavascriptInterface(mobile, "mobile");
         detailWV.setWebViewClient(mClient);
 
