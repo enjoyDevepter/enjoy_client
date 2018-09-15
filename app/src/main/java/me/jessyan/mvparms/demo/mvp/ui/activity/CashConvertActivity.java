@@ -154,8 +154,10 @@ public class CashConvertActivity extends BaseActivity<CashConvertPresenter> impl
     }
 
     public void showConvertOk(){
-        convert_ok.setVisibility(View.VISIBLE);
+//        convert_ok.setVisibility(View.VISIBLE);
         et_money.setText("");
+        ArmsUtils.makeText(ArmsUtils.getContext(),"转换成功");
+        killMyself();
     }
 
 }

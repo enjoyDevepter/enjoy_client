@@ -246,7 +246,9 @@
         <RelativeLayout
             android:background="@color/white"
             android:layout_centerInParent="true"
-            android:layout_width="219dp"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
             android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/tishi"
@@ -319,6 +321,7 @@
                 android:background="@drawable/get_cash_password_et_back"
                 android:layout_below="@+id/money_parent"
                 android:id="@+id/et_password"
+                android:inputType="numberPassword"
                 android:layout_width="match_parent"
                 android:layout_height="30dp" />
 

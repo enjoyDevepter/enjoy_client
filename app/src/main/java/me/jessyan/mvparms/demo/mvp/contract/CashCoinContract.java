@@ -7,7 +7,9 @@ import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashCoinRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashCoinResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 
 
 public interface CashCoinContract {
@@ -22,5 +24,6 @@ public interface CashCoinContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<GetCashCoinResponse> getCashCoin(GetCashCoinRequest request);
+        Observable<UserInfoResponse> getUserInfo(UserInfoRequest request);
     }
 }

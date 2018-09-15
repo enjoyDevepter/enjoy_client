@@ -132,56 +132,8 @@ public class ChooseBankActivity extends BaseActivity<ChooseBankPresenter> implem
         });
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
-        contentList.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                super.onDraw(c, parent, state);
-                drawVertical(c,parent);
-            }
 
-            private final Rect mBounds = new Rect();
-            private int height = 2;
-            private Paint paint = new Paint();{
-                paint.setColor(Color.parseColor("#EEEEEE"));
-            }
-
-            private void drawVertical(Canvas canvas, RecyclerView parent) {
-                canvas.save();
-                final int left;
-                final int right;
-                //noinspection AndroidLintNewApi - NewApi lint fails to handle overrides.
-                if (parent.getClipToPadding()) {
-                    left = parent.getPaddingLeft();
-                    right = parent.getWidth() - parent.getPaddingRight();
-                    canvas.clipRect(left, parent.getPaddingTop(), right,
-                            parent.getHeight() - parent.getPaddingBottom());
-                } else {
-                    left = 0;
-                    right = parent.getWidth();
-                }
-
-                final int childCount = parent.getChildCount();
-                for (int i = 0; i < childCount - 1; i++) {
-                    final View child = parent.getChildAt(i);
-                    parent.getDecoratedBoundsWithMargins(child, mBounds);
-                    final int bottom = mBounds.bottom + Math.round(child.getTranslationY());
-                    final int top = bottom - height;
-                    canvas.drawRect(left, top, right, bottom,paint);
-                }
-                canvas.restore();
-            }
-
-            @Override
-            public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                super.onDrawOver(c, parent, state);
-            }
-
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                outRect.set(0, 0, 0, height);
-            }
-        });
+        contentList.addItemDecoration(new MyItemDecoration());
         ((ChooseBankAdapter) mAdapter).setOnChildItemClickLinstener(new ChooseBankAdapter.OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ChooseBankAdapter.ViewName viewname, int position) {

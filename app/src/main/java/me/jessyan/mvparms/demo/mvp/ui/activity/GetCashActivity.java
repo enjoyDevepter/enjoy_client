@@ -255,5 +255,6 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
     public void showOk(){
         convert_ok.setVisibility(View.GONE);
         ArmsUtils.makeText(this,"提现成功");
+        killMyself();
     }
 }

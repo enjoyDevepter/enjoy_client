@@ -13,16 +13,22 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import org.simple.eventbus.EventBus;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.CashCoinContract;
+import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.CashBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashCoinRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashCoinResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -60,6 +66,11 @@ public class CashCoinPresenter extends BasePresenter<CashCoinContract.Model, Cas
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void init(){
+        requestOrderList();
+        getUserInfo();
+    }
+
     public void requestOrderList() {
         requestOrderList(1, true);
     }
@@ -113,5 +124,40 @@ public class CashCoinPresenter extends BasePresenter<CashCoinContract.Model, Cas
                 });
     }
 
+
+    public void getUserInfo() {
+        UserInfoRequest request = new UserInfoRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+        if (ArmsUtils.isEmpty(token)) {
+            return;
+        }
+        request.setToken(token);
+
+        mModel.getUserInfo(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<UserInfoResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(UserInfoResponse response) {
+                        if (response.isSuccess()) {
+                            cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_INFO, response.getMember());
+                            cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT, response.getMemberAccount());
+                            EventBus.getDefault().post(response.getMember(), EventBusTags.USER_INFO_CHANGE);
+                            EventBus.getDefault().post(response.getMemberAccount(), EventBusTags.USER_ACCOUNT_CHANGE);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
 
 }
