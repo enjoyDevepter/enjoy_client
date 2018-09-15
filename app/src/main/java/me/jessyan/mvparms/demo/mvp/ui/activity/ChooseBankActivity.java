@@ -2,6 +2,10 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -107,7 +111,7 @@ public class ChooseBankActivity extends BaseActivity<ChooseBankPresenter> implem
     @Override
     public void showError(boolean hasDate) {
         onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
-        swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+        contentList.setVisibility(hasDate ? VISIBLE : INVISIBLE);
     }
 
 
@@ -128,13 +132,63 @@ public class ChooseBankActivity extends BaseActivity<ChooseBankPresenter> implem
         });
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
-        ((ChooseBankAdapter)mAdapter).setOnChildItemClickLinstener(new ChooseBankAdapter.OnChildItemClickLinstener() {
+        contentList.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                super.onDraw(c, parent, state);
+                drawVertical(c,parent);
+            }
+
+            private final Rect mBounds = new Rect();
+            private int height = 2;
+            private Paint paint = new Paint();{
+                paint.setColor(Color.parseColor("#EEEEEE"));
+            }
+
+            private void drawVertical(Canvas canvas, RecyclerView parent) {
+                canvas.save();
+                final int left;
+                final int right;
+                //noinspection AndroidLintNewApi - NewApi lint fails to handle overrides.
+                if (parent.getClipToPadding()) {
+                    left = parent.getPaddingLeft();
+                    right = parent.getWidth() - parent.getPaddingRight();
+                    canvas.clipRect(left, parent.getPaddingTop(), right,
+                            parent.getHeight() - parent.getPaddingBottom());
+                } else {
+                    left = 0;
+                    right = parent.getWidth();
+                }
+
+                final int childCount = parent.getChildCount();
+                for (int i = 0; i < childCount - 1; i++) {
+                    final View child = parent.getChildAt(i);
+                    parent.getDecoratedBoundsWithMargins(child, mBounds);
+                    final int bottom = mBounds.bottom + Math.round(child.getTranslationY());
+                    final int top = bottom - height;
+                    canvas.drawRect(left, top, right, bottom,paint);
+                }
+                canvas.restore();
+            }
+
+            @Override
+            public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                super.onDrawOver(c, parent, state);
+            }
+
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                outRect.set(0, 0, 0, height);
+            }
+        });
+        ((ChooseBankAdapter) mAdapter).setOnChildItemClickLinstener(new ChooseBankAdapter.OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ChooseBankAdapter.ViewName viewname, int position) {
-                switch (viewname){
+                switch (viewname) {
                     case ITEM:
-                        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-                        cache.put(KEY_FOR_CHOOSE_BANK,((ChooseBankAdapter) mAdapter).getItem(position));
+                        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+                        cache.put(KEY_FOR_CHOOSE_BANK, ((ChooseBankAdapter) mAdapter).getItem(position));
                         killMyself();
                         break;
                     case DELETE:
@@ -167,7 +221,7 @@ public class ChooseBankActivity extends BaseActivity<ChooseBankPresenter> implem
     }
 
     @Override
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
@@ -183,10 +237,12 @@ public class ChooseBankActivity extends BaseActivity<ChooseBankPresenter> implem
     public void endLoadMore() {
         isLoadingMore = false;
     }
+
     @Override
     public void setEnd(boolean isEnd) {
         this.isEnd = isEnd;
     }
+
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
