@@ -69,7 +69,7 @@ public class ModifyUserInfoActivity extends BaseActivity<ModifyUserInfoPresenter
         submitV.setOnClickListener(this);
         String type = getIntent().getStringExtra("type");
         titleTV.setText(getIntent().getStringExtra("title"));
-        if ("age".equals(type) || "name".equals(type)) {
+        if ("name".equals(type) || ("age".equals(type) || ("nick".equals(type)))) {
 
             if ("age".equals(type)) {
                 contentET.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -125,6 +125,9 @@ public class ModifyUserInfoActivity extends BaseActivity<ModifyUserInfoPresenter
                 if ("age".equals(type)) {
                     provideCache().put("label", Integer.valueOf(contentET.getText().toString()));
                     provideCache().put("value", Integer.valueOf(contentET.getText().toString()));
+                } else if ("nick".equals(type)) {
+                    provideCache().put("lable", contentET.getText().toString());
+                    provideCache().put("value", contentET.getText().toString());
                 } else if ("name".equals(type)) {
                     provideCache().put("lable", contentET.getText().toString());
                     provideCache().put("value", contentET.getText().toString());

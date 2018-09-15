@@ -65,7 +65,7 @@ public class ModifyUserInfoPresenter extends BasePresenter<ModifyUserInfoContrac
     private void getCommonUserInfo() {
         SimpleRequest request = new SimpleRequest();
         String type = mRootView.getActivity().getIntent().getStringExtra("type");
-        if ("name".equals(type) || ("age".equals(type))) {
+        if ("name".equals(type) || ("age".equals(type) || ("nick".equals(type)))) {
 
             return;
         }

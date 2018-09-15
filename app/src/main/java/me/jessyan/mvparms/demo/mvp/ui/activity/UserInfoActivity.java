@@ -133,9 +133,9 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
         areaV.setOnClickListener(this);
         constellationV.setOnClickListener(this);
         hobbyV.setOnClickListener(this);
-        nameTV.setOnClickListener(this);
+        nameV.setOnClickListener(this);
         occupationV.setOnClickListener(this);
-        nickNameTV.setOnClickListener(this);
+        nickV.setOnClickListener(this);
 
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
         Member member = (Member) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_INFO);
