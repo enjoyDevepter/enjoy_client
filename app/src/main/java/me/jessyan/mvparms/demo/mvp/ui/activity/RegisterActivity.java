@@ -61,7 +61,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     @Inject
     RxPermissions mRxPermissions;
 
-    private int time = 30;
+    private int time = 60;
     private Timer timer;
     private TimerTask timerTask;
 
