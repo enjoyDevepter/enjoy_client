@@ -61,7 +61,8 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     @Inject
     RxPermissions mRxPermissions;
 
-    private int time = 60;
+    private static final int time_limit = 60;
+    private int time = time_limit;
     private Timer timer;
     private TimerTask timerTask;
 
@@ -160,8 +161,8 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
             showMessage("手机号码格式不正确");
             return;
         }
-        if (time == 30 || time <= 0) {
-            time = 29;
+        if (time == time_limit || time <= 0) {
+            time = time_limit - 1;
             initTimer();
             timer.schedule(timerTask, 0, 1000);
             mPresenter.getVerify(mobileET.getText().toString());
