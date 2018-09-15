@@ -259,7 +259,7 @@
             android:value="5b84ca1ef43e481641000018" />
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="umeng" />
+            android:value="${UMENG_CHANNEL_VALUE}" />
 
         <!-- 支付宝 相关 -->
         <activity

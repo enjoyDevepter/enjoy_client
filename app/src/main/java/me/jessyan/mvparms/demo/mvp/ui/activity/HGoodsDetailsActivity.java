@@ -295,7 +295,6 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
 
 
     private void initViewPage() {
-
         viewpager.removeAllViews();
         views.clear();
 
@@ -470,7 +469,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         saleCountTV.setText(String.valueOf(goods.getSales()));
 
         initViewPage();
-        detailWV.loadDataWithBaseURL(null, response.getGoods().getMobileDetail(), "text/html", "UTF-8", null);
+        detailWV.loadUrl(response.getGoods().getMobileDetail());
 
         tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getTailMoney()));
 
@@ -507,6 +506,9 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             tailMoneyButtomTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             depositButtomTV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
             spcePriceTV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
+            layoutParams.topMargin = 0;
+            specV.setLayoutParams(layoutParams);
         } else if ("newpeople".equals(where)) {
             spcePriceTV.setMoneyText(String.valueOf(goods.getVipPrice()));
             vipPriceTV.setMoneyText(String.valueOf(goods.getVipPrice()));
@@ -515,7 +517,13 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getSalePrice()));
             tailMoneyButtomTV.getPaint().setFlags(STRIKE_THRU_TEXT_FLAG);
             depositButtomTV.setMoneyText(String.valueOf(goods.getVipPrice()));
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
+            layoutParams.topMargin = 0;
+            specV.setLayoutParams(layoutParams);
         } else {
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
+            layoutParams.topMargin = ArmsUtils.getDimens(this, R.dimen.space_5);
+            specV.setLayoutParams(layoutParams);
             spcePriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
             if (goods.getDeposit() == 0 && goods.getTailMoney() == 0 && ArmsUtils.isEmpty(goods.getAdvanceDepositId())) {
                 depositTagTV.setText("总金额:");
@@ -600,7 +608,8 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     }
 
     private void showPro() {
-        if (promotionAdapter.getInfos().size() <= 0) {
+        if (promotionAdapter.getInfos().size() <= 0
+                || !ArmsUtils.isEmpty(getIntent().getStringExtra("where"))) {
             return;
         }
         if (!maskProV.isShown()) {
@@ -618,7 +627,9 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
 
 
     private void showSpec() {
-        if (null == speceLabelsView.getLabels() || (null != speceLabelsView.getLabels() && speceLabelsView.getLabels().size() <= 0)) {
+        if (null == speceLabelsView.getLabels()
+                || (null != speceLabelsView.getLabels() && speceLabelsView.getLabels().size() <= 0)
+                || !ArmsUtils.isEmpty(getIntent().getStringExtra("where"))) {
             return;
         }
         if (!maskSpecV.isShown()) {

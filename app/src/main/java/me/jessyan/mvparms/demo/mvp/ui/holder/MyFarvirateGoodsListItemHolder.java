@@ -63,7 +63,7 @@ public class MyFarvirateGoodsListItemHolder extends BaseHolder<Goods> {
 
     @Override
     public void setData(Goods data, int position) {
-        priceTV.setMoneyText(String.valueOf(data.getCostPrice()));
+        priceTV.setMoneyText(String.valueOf(data.getSalePrice()));
         Observable.just(data.getName())
                 .subscribe(s -> nameTV.setText(String.valueOf(s)));
         Observable.just(data.getSales())

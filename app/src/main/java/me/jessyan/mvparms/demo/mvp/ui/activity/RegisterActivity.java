@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -38,12 +39,15 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class RegisterActivity extends BaseActivity<RegisterPresenter> implements RegisterContract.View, View.OnClickListener {
+    private static final int time_limit = 60;
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.info)
     TextView infoTV;
     @BindView(R.id.register)
     TextView registerTV;
+    @BindView(R.id.protocol)
+    TextView protocoTV;
     @BindView(R.id.choice)
     TextView choiceV;
     @BindView(R.id.get_validate)
@@ -60,8 +64,6 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     RecyclerView.Adapter mAdapter;
     @Inject
     RxPermissions mRxPermissions;
-
-    private static final int time_limit = 60;
     private int time = time_limit;
     private Timer timer;
     private TimerTask timerTask;
@@ -85,8 +87,10 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        protocoTV.setText(Html.fromHtml("<font color='#9A9A9A'>同意</font><font color='#5FBFE3'>《创享会员实用协议》</font>"));
         infoTV.setText(Html.fromHtml("<font color='#666666'>已注册过，</font> <font color='#5FBFE3'>登录</font>"));
         backV.setOnClickListener(this);
+        protocoTV.setOnClickListener(this);
         infoTV.setOnClickListener(this);
         choiceV.setOnClickListener(this);
         getValidateV.setOnClickListener(this);
@@ -147,6 +151,12 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
                 break;
             case R.id.info:
                 killMyself();
+                break;
+            case R.id.protocol:
+                Intent intent = new Intent(this, PlatformActivity.class);
+                intent.putExtra("title", "协议");
+                intent.putExtra("url", (String) provideCache().get("protocolURL"));
+                ArmsUtils.startActivity(intent);
                 break;
         }
     }
@@ -246,6 +256,11 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     @Override
     public void showVerity() {
         time = 0;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
     }
 
     @Override

@@ -192,17 +192,13 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    int type = (int) provideCache().get("type");
-                    switch (type) {
-                        case 0:
-                            mPresenter.getGoodsList(false);
-                            break;
-                        case 1:
-                            mPresenter.getKGoodsList(false);
-                            break;
-                        case 2:
-                            mPresenter.getHGoodsList(false);
-                            break;
+                    String type = (String) provideCache().get("type");
+                    if ("1".equals(type)) {
+                        mPresenter.getGoodsList(true);
+                    } else if ("2".equals(type)) {
+                        mPresenter.getKGoodsList(true);
+                    } else if ("3".equals(type)) {
+                        mPresenter.getHGoodsList(true);
                     }
                 }
 
@@ -277,6 +273,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
     @Override
     public void onClick(View v) {
+        String type = (String) provideCache().get("type");
         switch (v.getId()) {
             case R.id.cart:
                 mPresenter.goCart();
@@ -304,17 +301,12 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 priceTV.setTextColor(unChoiceColor);
                 priceV.setSelected(false);
                 priceStautsV.setBackground(descD);
-
-                switch ((int) provideCache().get("type")) {
-                    case 0:
-                        mPresenter.getGoodsList(true);
-                        break;
-                    case 1:
-                        mPresenter.getKGoodsList(true);
-                        break;
-                    case 2:
-                        mPresenter.getHGoodsList(true);
-                        break;
+                if ("1".equals(type)) {
+                    mPresenter.getGoodsList(true);
+                } else if ("2".equals(type)) {
+                    mPresenter.getKGoodsList(true);
+                } else if ("3".equals(type)) {
+                    mPresenter.getHGoodsList(true);
                 }
                 break;
             case R.id.price_layout:
@@ -329,16 +321,12 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 saleStatusV.setBackground(descD);
 
                 showFilter(false);
-                switch ((int) provideCache().get("type")) {
-                    case 0:
-                        mPresenter.getGoodsList(true);
-                        break;
-                    case 1:
-                        mPresenter.getKGoodsList(true);
-                        break;
-                    case 2:
-                        mPresenter.getHGoodsList(true);
-                        break;
+                if ("1".equals(type)) {
+                    mPresenter.getGoodsList(true);
+                } else if ("2".equals(type)) {
+                    mPresenter.getKGoodsList(true);
+                } else if ("3".equals(type)) {
+                    mPresenter.getHGoodsList(true);
                 }
                 break;
         }
@@ -376,21 +364,23 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
 
     @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
-    public void updateIndex(int index) {
+    public void updateIndex(String index) {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
-        int type = (int) cache.get("defaultIndex");
+        String type = (String) cache.get("defaultIndex");
         provideCache().put("type", type);
-        tabLayout.getTabAt(type).select();
-        switch (type) {
-            case 0:
-                mRecyclerView.setAdapter(mAdapter);
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            if (type.equals(tabLayout.getTabAt(i).getTag())) {
+                tabLayout.getTabAt(i).select();
                 break;
-            case 1:
-                mRecyclerView.setAdapter(mAdapter);
-                break;
-            case 2:
-                mRecyclerView.setAdapter(mHAdapter);
-                break;
+            }
+        }
+        provideCache().put("type", type);
+        if ("1".equals(type)) {
+            mRecyclerView.setAdapter(mAdapter);
+        } else if ("2".equals(type)) {
+            mRecyclerView.setAdapter(mAdapter);
+        } else if ("3".equals(type)) {
+            mRecyclerView.setAdapter(mHAdapter);
         }
         initPaginate();
     }
@@ -404,30 +394,24 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 navi.add(category);
             }
         }
-        TabLayout.Tab tab1 = tabLayout.newTab().setText(navi.get(0).getName());
-        TabLayout.Tab tab2 = tabLayout.newTab().setText(navi.get(1).getName());
-        TabLayout.Tab tab3 = tabLayout.newTab().setText(navi.get(2).getName());
-        tabLayout.addTab(tab1);
-        tabLayout.addTab(tab2);
-        tabLayout.addTab(tab3);
+        for (Category category : navi) {
+            TabLayout.Tab tab1 = tabLayout.newTab().setTag(category.getBusType()).setText(category.getName());
+            tabLayout.addTab(tab1);
+
+        }
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
         if (cache.get("defaultIndex") != null) {
-            int defaultIndex = (int) cache.get("defaultIndex");
+            String type = (String) cache.get("defaultIndex");
             cache.put("defaultIndex", null);
-            provideCache().put("type", defaultIndex);
-            switch (defaultIndex) {
-                case 0:
-                    tab1.select();
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                if (type.equals(tabLayout.getTabAt(i).getTag())) {
+                    provideCache().put("type", type);
+                    tabLayout.getTabAt(i).select();
                     break;
-                case 1:
-                    tab2.select();
-                    break;
-                case 2:
-                    tab3.select();
-                    break;
+                }
             }
         } else {
-            tab1.select();
+            tabLayout.getTabAt(0).select();
             mPresenter.getGoodsList(true);
         }
         LinearLayout linearLayout = (LinearLayout) tabLayout.getChildAt(0);
@@ -473,16 +457,13 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                     provideCache().put("categoryId", "");
                     typeTV.setTextColor(choiceColor);
                     typeTV.setText(childs.get(position).getName());
-                    switch ((int) provideCache().get("type")) {
-                        case 0:
-                            mPresenter.getGoodsList(true);
-                            break;
-                        case 1:
-                            mPresenter.getKGoodsList(true);
-                            break;
-                        case 2:
-                            mPresenter.getHGoodsList(true);
-                            break;
+                    String type = (String) provideCache().get("defaultIndex");
+                    if ("1".equals(type)) {
+                        mPresenter.getGoodsList(true);
+                    } else if ("2".equals(type)) {
+                        mPresenter.getKGoodsList(true);
+                    } else if ("3".equals(type)) {
+                        mPresenter.getHGoodsList(true);
                     }
                     return;
                 }
@@ -502,16 +483,13 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getId());
                 showFilter(false);
-                switch ((int) provideCache().get("type")) {
-                    case 0:
-                        mPresenter.getGoodsList(true);
-                        break;
-                    case 1:
-                        mPresenter.getKGoodsList(true);
-                        break;
-                    case 2:
-                        mPresenter.getHGoodsList(true);
-                        break;
+                String type = (String) provideCache().get("defaultIndex");
+                if ("1".equals(type)) {
+                    mPresenter.getGoodsList(true);
+                } else if ("2".equals(type)) {
+                    mPresenter.getKGoodsList(true);
+                } else if ("3".equals(type)) {
+                    mPresenter.getHGoodsList(true);
                 }
                 break;
         }
@@ -519,7 +497,8 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        provideCache().put("type", tab.getPosition());
+        String type = (String) tab.getTag();
+        provideCache().put("type", type);
         priceTV.setTextColor(unChoiceColor);
         priceV.setSelected(false);
         priceStautsV.setBackground(descD);
@@ -535,19 +514,15 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         provideCache().put("secondCategoryId", "");
         provideCache().put("categoryId", "");
 
-        switch (tab.getPosition()) {
-            case 0:
-                mRecyclerView.setAdapter(mAdapter);
-                mPresenter.getGoodsList(true);
-                break;
-            case 1:
-                mRecyclerView.setAdapter(mAdapter);
-                mPresenter.getKGoodsList(true);
-                break;
-            case 2:
-                mRecyclerView.setAdapter(mHAdapter);
-                mPresenter.getHGoodsList(true);
-                break;
+        if ("1".equals(type)) {
+            mRecyclerView.setAdapter(mAdapter);
+            mPresenter.getGoodsList(true);
+        } else if ("2".equals(type)) {
+            mRecyclerView.setAdapter(mAdapter);
+            mPresenter.getKGoodsList(true);
+        } else if ("3".equals(type)) {
+            mRecyclerView.setAdapter(mHAdapter);
+            mPresenter.getHGoodsList(true);
         }
         initPaginate();
     }
@@ -574,17 +549,13 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     @Override
     public void onRefresh() {
         if (null != provideCache().get("type")) {
-            int type = (int) provideCache().get("type");
-            switch (type) {
-                case 0:
-                    mPresenter.getGoodsList(true);
-                    break;
-                case 1:
-                    mPresenter.getKGoodsList(true);
-                    break;
-                case 2:
-                    mPresenter.getHGoodsList(true);
-                    break;
+            String type = (String) provideCache().get("type");
+            if ("1".equals(type)) {
+                mPresenter.getGoodsList(true);
+            } else if ("2".equals(type)) {
+                mPresenter.getKGoodsList(true);
+            } else if ("3".equals(type)) {
+                mPresenter.getHGoodsList(true);
             }
         } else {
             mPresenter.getGoodsList(true);

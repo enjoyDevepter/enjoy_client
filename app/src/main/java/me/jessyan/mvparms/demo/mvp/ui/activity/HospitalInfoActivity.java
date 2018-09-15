@@ -95,6 +95,8 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     private void initViewPager() {
         // 初始化第一个页面
         hospitalInfo = new WebView(this);
+        hospitalInfo.getSettings().setUseWideViewPort(true);
+        hospitalInfo.getSettings().setLoadWithOverviewMode(true);
         views[0] = hospitalInfo;
 
         // 初始化第二个页面
@@ -339,8 +341,9 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     public void updateHosptialInfo(HospitalInfoBean hospital) {
         WebView webView = (WebView) views[0];
-        webView.setPadding(ArmsUtils.getDimens(this, R.dimen.space_10), ArmsUtils.getDimens(this, R.dimen.space_10), ArmsUtils.getDimens(this, R.dimen.space_10), ArmsUtils.getDimens(this, R.dimen.space_10));
-        webView.loadDataWithBaseURL("", hospital.getIntro(), "text/html", "UTF-8", "");
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.loadUrl(hospital.getIntro());
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()

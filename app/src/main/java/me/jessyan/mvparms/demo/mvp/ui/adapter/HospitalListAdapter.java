@@ -47,6 +47,6 @@ public class HospitalListAdapter extends DefaultAdapter<Hospital> {
 
     @Override
     public int getLayoutId(int viewType) {
-        return R.layout.stroe_list_item;
+        return R.layout.hospital_list_item;
     }
 }

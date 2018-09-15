@@ -7,6 +7,7 @@ public class ModifyUserInfoRequest extends BaseRequest {
     private String token;
     private String headImage;
     private String nickName;
+    private String realName;
     private String sex;
     private String province;
     private String city;
@@ -57,6 +58,14 @@ public class ModifyUserInfoRequest extends BaseRequest {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public String getProvince() {
@@ -146,6 +155,7 @@ public class ModifyUserInfoRequest extends BaseRequest {
                 ", token='" + token + '\'' +
                 ", headImage='" + headImage + '\'' +
                 ", nickName='" + nickName + '\'' +
+                ", realName='" + realName + '\'' +
                 ", sex='" + sex + '\'' +
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +

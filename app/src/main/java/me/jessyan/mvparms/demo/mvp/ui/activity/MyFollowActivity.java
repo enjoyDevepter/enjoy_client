@@ -88,6 +88,7 @@ public class MyFollowActivity extends BaseActivity<MyFollowPresenter> implements
         tabLayout.addTab(tabLayout.newTab().setText("医院"));
         tabLayout.addOnTabSelectedListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
+        mRecyclerView.setAdapter(memberAdapter);
         memberAdapter.setOnChildItemClickLinstener(this);
         hospitalAdapter.setOnChildItemClickLinstener(this);
         doctorAdapter.setOnChildItemClickLinstener(this);

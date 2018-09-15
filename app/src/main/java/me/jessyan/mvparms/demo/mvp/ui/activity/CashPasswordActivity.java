@@ -17,13 +17,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerCashPasswordComponent;
 import me.jessyan.mvparms.demo.di.module.CashPasswordModule;
 import me.jessyan.mvparms.demo.mvp.contract.CashPasswordContract;
 import me.jessyan.mvparms.demo.mvp.presenter.CashPasswordPresenter;
-
-import me.jessyan.mvparms.demo.R;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -46,7 +44,9 @@ public class CashPasswordActivity extends BaseActivity<CashPasswordPresenter> im
     TextView get_code;
     @BindView(R.id.commit)
     View commit;
-
+    private int time = 60;
+    private Timer timer;
+    private TimerTask timerTask;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -132,14 +132,10 @@ public class CashPasswordActivity extends BaseActivity<CashPasswordPresenter> im
         confirm.setText("");
     }
 
-    private int time = 30;
-    private Timer timer;
-    private TimerTask timerTask;
-
     private void getVerify() {
 
-        if (time == 30 || time <= 0) {
-            time = 29;
+        if (time == 60 || time <= 0) {
+            time = 59;
             initTimer();
             timer.schedule(timerTask, 0, 1000);
             mPresenter.getVerifyForFind();

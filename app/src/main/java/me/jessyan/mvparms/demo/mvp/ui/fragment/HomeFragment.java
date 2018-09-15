@@ -30,7 +30,6 @@ import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -58,12 +57,14 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HospitalActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.NewlywedsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PlatformActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.RecommendActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.SearchResultActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.TaoCanActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.TaoCanDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.TimelimitActivity;
@@ -75,9 +76,11 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_NAME;
 
 
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, DiaryListAdapter.OnChildItemClickLinstener, DefaultAdapter.OnRecyclerViewItemClickListener, OnBannerListener, TabLayout.OnTabSelectedListener {
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, DiaryListAdapter.OnChildItemClickLinstener, DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener {
 
     @BindView(R.id.message)
     View messageV;
@@ -235,7 +238,48 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         //banner设置方法全部调用完毕时最后调用
         banner.start();
         banner.isAutoPlay(false);
-        banner.setOnBannerListener(this);
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                Ad ad = ads.get(position);
+                String redirectType = ads.get(position).getRedirectType();
+                try {
+                    JSONObject object = new JSONObject(ads.get(position).getExtendParam());
+                    if ("project".equals(redirectType)) {
+                        if ("1".equals(object.optString("type"))) {
+                            Intent intent = new Intent(getActivity().getApplication(), GoodsDetailsActivity.class);
+                            intent.putExtra("type", object.optString("type"));
+                            intent.putExtra("goodsId", object.optString("goodsId"));
+                            intent.putExtra("merchId", object.optString("merchId"));
+                            ArmsUtils.startActivity(intent);
+                        } else if ("2".equals(object.optString("type"))) {
+                            // fixme 暂无功能
+
+                        } else if ("3".equals(object.optString("type"))) {
+                            Intent hGoodsintent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
+                            hGoodsintent.putExtra("goodsId", object.optString("goodsId"));
+                            hGoodsintent.putExtra("merchId", object.optString("merchId"));
+                            hGoodsintent.putExtra("advanceDepositId", object.optString("advanceDepositId"));
+                            ArmsUtils.startActivity(hGoodsintent);
+                        }
+                    } else if ("hospital".equals(redirectType)) {
+                        Intent hospitalIntent = new Intent(getActivity(), HospitalInfoActivity.class);
+                        hospitalIntent.putExtra(KEY_FOR_HOSPITAL_NAME, ad.getTitle());
+                        hospitalIntent.putExtra(KEY_FOR_HOSPITAL_ID, object.optString("hospitalId"));
+                        ArmsUtils.startActivity(hospitalIntent);
+
+                    } else if ("article".equals(redirectType)) {
+                        Intent articleIntent = new Intent(getContext(), PlatformActivity.class);
+                        articleIntent.putExtra("url", object.optString("url"));
+                        ArmsUtils.startActivity(articleIntent);
+                    } else if ("store".equals(redirectType)) {
+                        //fixme 暂无功能
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         moduleLayout.removeAllViews();
         // 模块
@@ -423,7 +467,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.layout.home_article_item: // 文章
                 Article article = (Article) data;
                 Intent articleIntent = new Intent(getContext(), PlatformActivity.class);
-                articleIntent.putExtra("title", article.getTitle());
                 articleIntent.putExtra("url", article.getUrl());
                 ArmsUtils.startActivity(articleIntent);
                 break;
@@ -478,23 +521,21 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
     @Override
-    public void OnBannerClick(int position) {
-
-    }
-
-    @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
         String tag = (String) tab.getTag();
         if ("".equals(tab.getTag())) {
         } else if ("combo".equals(tag)) {
             ArmsUtils.startActivity(TaoCanActivity.class);
         } else if ("medicalcosmetology".equals(tag)) {
-            cache.put("defaultIndex", 2);
-            EventBus.getDefault().post(tab.getPosition(), EventBusTags.CHANGE_MAIN_INDEX);
+            Intent result = new Intent(getActivity(), SearchResultActivity.class);
+            result.putExtra("type", 2);
+            result.putExtra("keywords", tab.getText());
+            ArmsUtils.startActivity(result);
         } else if ("shop".equals(tag)) {
-            cache.put("defaultIndex", 0);
-            EventBus.getDefault().post(tab.getPosition(), EventBusTags.CHANGE_MAIN_INDEX);
+            Intent result = new Intent(getActivity(), SearchResultActivity.class);
+            result.putExtra("type", 1);
+            result.putExtra("keywords", tab.getText());
+            ArmsUtils.startActivity(result);
         } else if ("recom_good".equals(tag)) {
             ArmsUtils.startActivity(getActivity(), RecommendActivity.class);
         } else if ("hospital".equals(tag)) {

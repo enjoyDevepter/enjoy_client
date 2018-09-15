@@ -31,8 +31,8 @@
                 android:layout_alignTop="@id/blue_back"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="46dp"
-                app:radius="17dp"
                 android:background="@color/white"
+                app:radius="17dp"
                 app:shape_type="round" />
 
             <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
@@ -75,6 +75,7 @@
                     android:text="1234"
                     android:textColor="#666666"
                     android:textSize="12sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -156,10 +157,12 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
+
                     <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:background="@mipmap/doctor_intro_icon" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -168,6 +171,7 @@
                         android:textColor="#ff333333"
                         android:textSize="13sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/doctor_paper"
                     android:layout_width="0dp"
@@ -175,10 +179,12 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
+
                     <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:background="@mipmap/doctor_paper_icon" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -187,6 +193,7 @@
                         android:textColor="#ff333333"
                         android:textSize="13sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/doctor_honor"
                     android:layout_width="0dp"
@@ -194,10 +201,12 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
+
                     <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:background="@mipmap/doctor_honor_icon" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -255,14 +264,15 @@
                 android:gravity="left|center"
                 android:paddingLeft="16dp">
 
-            <com.zhy.view.flowlayout.TagFlowLayout
-                android:id="@+id/skill_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:max_select="0"
-                app:tag_gravity="left" />
+                <com.zhy.view.flowlayout.TagFlowLayout
+                    android:id="@+id/skill_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:max_select="0"
+                    app:tag_gravity="left" />
 
             </RelativeLayout>
+
             <View
                 android:id="@+id/divide2"
                 style="@style/divider_3"
@@ -315,14 +325,12 @@
                 android:id="@+id/swipeRefreshLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/title2"
-                >
+                android:layout_below="@id/title2">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/contentList"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
+                    android:layout_height="match_parent" />
 
             </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -365,8 +373,7 @@
                 android:textColor="#666666"
                 android:textSize="12sp" />
 
-            <me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:a_zhon="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/comment_star"
                 android:layout_width="wrap_content"
@@ -380,8 +387,7 @@
                 a_zhon:star="3"
                 a_zhon:star_count="5"
                 a_zhon:star_img="@mipmap/doctor_star"
-                a_zhon:unstar_img="@mipmap/doctor_no_star"
-                />
+                a_zhon:unstar_img="@mipmap/doctor_no_star" />
 
             <TextView
                 android:id="@+id/project"

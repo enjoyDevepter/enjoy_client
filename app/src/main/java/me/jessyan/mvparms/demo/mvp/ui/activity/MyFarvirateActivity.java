@@ -75,12 +75,12 @@ public class MyFarvirateActivity extends BaseActivity<MyFarviratePresenter> impl
         titleTV.setText("我的收藏");
         backV.setOnClickListener(this);
         backV.setOnClickListener(this);
-        provideCache().put("status", "0");
+        provideCache().put("status", "1");
         swipeRefreshLayout.setOnRefreshListener(this);
-        tabLayout.addTab(tabLayout.newTab().setText("全部"));
         tabLayout.addTab(tabLayout.newTab().setText("商美"));
-        tabLayout.addTab(tabLayout.newTab().setText("生美/科美"));
+        tabLayout.addTab(tabLayout.newTab().setText("生美"));
         tabLayout.addTab(tabLayout.newTab().setText("医美"));
+        tabLayout.addTab(tabLayout.newTab().setText("套餐"));
         tabLayout.addOnTabSelectedListener(this);
         LinearLayout linearLayout = (LinearLayout) tabLayout.getChildAt(0);
         linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
@@ -200,7 +200,7 @@ public class MyFarvirateActivity extends BaseActivity<MyFarviratePresenter> impl
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        provideCache().put("status", tab.getPosition() + "");
+        provideCache().put("status", tab.getPosition() + 1 + "");
         mPresenter.getMyFarvirate(true);
     }
 

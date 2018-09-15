@@ -456,7 +456,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
 
         initViewPage();
 
-        detailWV.loadDataWithBaseURL(null, response.getGoods().getMobileDetail(), "text/html", "UTF-8", null);
+        detailWV.loadUrl(response.getGoods().getMobileDetail());
 
 
         List<Promotion> promotions = response.getPromotionList();
@@ -496,6 +496,9 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             secKillPriceTV.setMoneyText(String.valueOf(response.getGoods().getSecKillPrice()));
             spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getSecKillPrice()));
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
+            layoutParams.topMargin = 0;
+            specV.setLayoutParams(layoutParams);
         } else if ("newpeople".equals(where)) {
             salePriceTopTV.setText("￥" + String.valueOf(response.getGoods().getSalePrice()));
             salePriceTopTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -504,9 +507,15 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             priceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
             secKillPriceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
             spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
+            layoutParams.topMargin = 0;
+            specV.setLayoutParams(layoutParams);
         } else {
             priceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
             spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
+            layoutParams.topMargin = ArmsUtils.getDimens(this, R.dimen.space_5);
+            specV.setLayoutParams(layoutParams);
         }
 
     }
@@ -581,7 +590,9 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     }
 
     private void showSpec() {
-        if (null == speceLabelsView.getLabels() || (null != speceLabelsView.getLabels() && speceLabelsView.getLabels().size() <= 0)) {
+        if (null == speceLabelsView.getLabels()
+                || (null != speceLabelsView.getLabels() && speceLabelsView.getLabels().size() <= 0)
+                || !ArmsUtils.isEmpty(getIntent().getStringExtra("where"))) {
             return;
         }
         if (!maskSpecV.isShown()) {
@@ -612,7 +623,8 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     }
 
     private void showPro() {
-        if (promotionAdapter.getInfos().size() <= 0) {
+        if (promotionAdapter.getInfos().size() <= 0
+                || !ArmsUtils.isEmpty(getIntent().getStringExtra("where"))) {
             return;
         }
         if (!maskProV.isShown()) {

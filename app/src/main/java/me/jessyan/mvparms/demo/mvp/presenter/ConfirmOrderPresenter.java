@@ -99,7 +99,6 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
             request.setMoney((Long) mRootView.getCache().get("money"));
         }
         request.setCouponId((String) mRootView.getCache().get("couponId"));
-        mRootView.showLoading();
         mModel.getOrderConfirmInfo(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -108,7 +107,6 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                 .subscribe(new ErrorHandleSubscriber<OrderConfirmInfoResponse>(mErrorHandler) {
                     @Override
                     public void onNext(OrderConfirmInfoResponse response) {
-                        mRootView.hideLoading();
                         if (response.isSuccess()) {
                             goodsBeans.clear();
                             goodsBeans.addAll(response.getGoodsList());

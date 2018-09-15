@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -16,6 +18,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.RegisterContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.RegisterRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
@@ -41,6 +44,33 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
     public RegisterPresenter(RegisterContract.Model model, RegisterContract.View rootView) {
         super(model, rootView);
     }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    void onCreate() {
+        getProtocolURL();
+    }
+
+    private void getProtocolURL() {
+        SimpleRequest request = new SimpleRequest();
+        request.setCmd(913);
+
+        mModel.getProtocolURL(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<RegisterResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(RegisterResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.getCache().put("protocolURL", response.getUrl());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
 
     @Override
     public void onDestroy() {

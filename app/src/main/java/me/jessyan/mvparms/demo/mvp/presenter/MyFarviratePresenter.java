@@ -63,8 +63,13 @@ public class MyFarviratePresenter extends BasePresenter<MyFarvirateContract.Mode
         MyCouponListRequest request = new MyCouponListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
-        request.setType(String.valueOf(mRootView.getCache().get("status")));
-        request.setCmd(1160);
+        String type = (String) mRootView.getCache().get("status");
+        request.setType(type);
+        if ("4".equals(type)) {
+            request.setCmd(1161);
+        } else {
+            request.setCmd(1160);
+        }
         if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
@@ -89,12 +94,16 @@ public class MyFarviratePresenter extends BasePresenter<MyFarvirateContract.Mode
                     @Override
                     public void onNext(GoodsListResponse response) {
                         if (response.isSuccess()) {
-                            mRootView.showConent(response.getGoodsList().size() > 0);
+                            if (response.getCmd() == 1160) {
+                                mRootView.showConent(response.getGoodsList().size() > 0);
+                            } else {
+                                mRootView.showConent(response.getSetMealGoodsList().size() > 0);
+                            }
                             if (pullToRefresh) {
                                 goodsList.clear();
                             }
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                            goodsList.addAll(response.getGoodsList());
+                            goodsList.addAll(response.getCmd() == 1160 ? response.getGoodsList() : response.getSetMealGoodsList());
                             preEndIndex = goodsList.size();//更新之前列表总长度,用于确定加载更多的起始位置
                             lastPageIndex = goodsList.size() / 10;
                             if (pullToRefresh) {

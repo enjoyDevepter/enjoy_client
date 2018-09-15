@@ -47,7 +47,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/name_layout"
+            android:id="@+id/nick_layout"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center_vertical"
@@ -59,6 +59,39 @@
                 android:layout_marginLeft="15dp"
                 android:layout_weight="1"
                 android:text="昵称"
+                android:textColor="#FF000000"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/nickName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:textColor="#FF000000"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="5dp"
+                android:layout_height="9dp"
+                android:layout_marginRight="15dp"
+                android:background="@mipmap/more_right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:text="姓名"
                 android:textColor="#FF000000"
                 android:textSize="13sp" />
 

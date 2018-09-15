@@ -58,7 +58,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     View closeV;
     @Inject
     RxPermissions mRxPermissions;
-    private int time = 30;
+    private int time = 60;
     private Timer timer;
     private TimerTask timerTask;
 
@@ -189,8 +189,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             return;
         }
 
-        if (time == 30 || time <= 0) {
-            time = 29;
+        if (time == 60 || time <= 0) {
+            time = 59;
             initTimer();
             timer.schedule(timerTask, 0, 1000);
             mPresenter.getVerifyForUser(userNameET.getText().toString());

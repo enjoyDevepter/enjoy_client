@@ -60,6 +60,10 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     View imageV;
     @BindView(R.id.image)
     ShapeImageView imageTV;
+    @BindView(R.id.nick_layout)
+    View nickV;
+    @BindView(R.id.nickName)
+    TextView nickNameTV;
     @BindView(R.id.name_layout)
     View nameV;
     @BindView(R.id.name)
@@ -129,13 +133,12 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
         areaV.setOnClickListener(this);
         constellationV.setOnClickListener(this);
         hobbyV.setOnClickListener(this);
+        nameTV.setOnClickListener(this);
         occupationV.setOnClickListener(this);
+        nickNameTV.setOnClickListener(this);
 
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
         Member member = (Member) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_INFO);
-        if (ArmsUtils.isEmpty(member.getNickName())) {
-            nameV.setOnClickListener(this);
-        }
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
@@ -143,12 +146,12 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                         .url(member.getHeadImage())
                         .imageView(imageTV)
                         .build());
-
-        nameTV.setText(member.getNickName() + "");
+        nameTV.setText(member.getRealName());
+        nickNameTV.setText(member.getNickName() + "");
         maleTV.setText("0".equals(member.getSex()) ? "保密" : "1".equals(member.getSex()) ? "男" : "女");
         ageTV.setText(member.getAge() + "");
         Area city = member.getCity();
-        if(city != null){
+        if (city != null) {
             areaTV.setText(city.getName());
         }
         constellationTV.setText(member.getConstellationDesc());
@@ -214,6 +217,9 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
             case 1109:
                 occupationTV.setText((String) cache.get("label"));
                 break;
+            case 1111:
+                nameTV.setText((String) cache.get("label"));
+                break;
         }
         cache.put("lable", null);
     }
@@ -227,6 +233,12 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
             case R.id.image_layout:
                 provideCache().put("type", 1);
                 ActionSheet.showSheet(this, this, null);
+                break;
+            case R.id.nick_layout:
+                Intent nickIntent = new Intent(getActivity(), ModifyUserInfoActivity.class);
+                nickIntent.putExtra("type", "nick");
+                nickIntent.putExtra("title", "更改昵称");
+                ArmsUtils.startActivity(nickIntent);
                 break;
             case R.id.name_layout:
                 Intent nameIntent = new Intent(getActivity(), ModifyUserInfoActivity.class);

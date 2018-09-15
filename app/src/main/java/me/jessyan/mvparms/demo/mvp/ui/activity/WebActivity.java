@@ -13,28 +13,25 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerWebComponent;
 import me.jessyan.mvparms.demo.di.module.WebModule;
 import me.jessyan.mvparms.demo.mvp.contract.WebContract;
 import me.jessyan.mvparms.demo.mvp.presenter.WebPresenter;
-
-import me.jessyan.mvparms.demo.R;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class WebActivity extends BaseActivity<WebPresenter> implements WebContract.View {
 
+    public static final String KEY_FOR_WEB_TITLE = "KEY_FOR_WEB_TITLE";
+    public static final String KEY_FOR_WEB_URL = "KEY_FOR_WEB_URL";
     @BindView(R.id.webview)
     WebView webView;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.back)
     View back;
-
-    public static final String KEY_FOR_WEB_TITLE = "KEY_FOR_WEB_TITLE";
-    public static final String KEY_FOR_WEB_URL = "KEY_FOR_WEB_URL";
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -62,6 +59,8 @@ public class WebActivity extends BaseActivity<WebPresenter> implements WebContra
         Intent intent = getIntent();
         title.setText(intent.getStringExtra(KEY_FOR_WEB_TITLE));
         webView.loadUrl(intent.getStringExtra(KEY_FOR_WEB_URL));
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
     }
 
     @Override

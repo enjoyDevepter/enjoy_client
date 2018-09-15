@@ -36,7 +36,7 @@ public class ForgetActivity extends BaseActivity<ForgetPresenter> implements For
     @BindView(R.id.forget)
     View forgetV;
 
-    private int time = 30;
+    private int time = 60;
     private Timer timer;
     private TimerTask timerTask;
 
@@ -125,8 +125,8 @@ public class ForgetActivity extends BaseActivity<ForgetPresenter> implements For
             return;
         }
 
-        if (time == 30 || time <= 0) {
-            time = 29;
+        if (time == 60 || time <= 0) {
+            time = 59;
             initTimer();
             timer.schedule(timerTask, 0, 1000);
             mPresenter.getVerifyForFind(mobileET.getText().toString());

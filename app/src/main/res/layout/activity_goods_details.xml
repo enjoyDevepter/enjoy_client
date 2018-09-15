@@ -41,7 +41,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFFFFFFF"
+                android:background="@drawable/list_item_bg"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -134,7 +134,7 @@
                 android:id="@+id/promotion"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:background="@drawable/main_tab_bg"
+                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -186,7 +186,7 @@
                 android:id="@+id/time_limit_layout"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:background="@drawable/main_tab_bg"
+                android:background="@drawable/list_item_bg"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -225,7 +225,7 @@
                 android:layout_height="40dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:background="#FFFFFFFF"
+                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -259,7 +259,7 @@
                 android:id="@+id/tab"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
-                android:background="#FFFFFFFF"
+                android:background="@drawable/list_item_bg"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 app:tabGravity="fill"
@@ -272,11 +272,15 @@
                 app:tabTextAppearance="@style/TabLayoutTextStyle"
                 app:tabTextColor="#FF666666" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/white" />
+
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp" />
+                android:layout_height="match_parent" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

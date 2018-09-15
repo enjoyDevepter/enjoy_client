@@ -12,7 +12,7 @@
         android:id="@+id/tab"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:background="#FFFFFFFF"
+        android:background="@drawable/list_item_bg"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         app:tabGravity="fill"

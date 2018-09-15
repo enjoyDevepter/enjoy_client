@@ -3,8 +3,10 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -47,8 +49,20 @@ public class PlatformActivity extends BaseActivity<PlatformPresenter> implements
     @Override
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
-        titleTV.setText(getIntent().getStringExtra("title"));
+        titleTV.setText("");
         webView.loadUrl(getIntent().getStringExtra("url"));
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                String title = view.getTitle();
+                if (!TextUtils.isEmpty(title)) {
+                    titleTV.setText(title);
+                }
+            }
+        });
     }
 
 

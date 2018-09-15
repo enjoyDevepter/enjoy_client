@@ -42,7 +42,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
  * ================================================
  */
 public class HospitalListItemHolder extends BaseHolder<Hospital> {
-    @BindView(R.id.images)
+    @BindView(R.id.image)
     ShapeImageView iamgeV;
     TextView nameTV;
     @BindView(R.id.distance)

@@ -18,6 +18,7 @@ android {
         versionName rootProject.ext.android["versionName"]
         multiDexEnabled true
         multiDexKeepProguard file('multiDexKeep.pro') // keep specific classes using proguard syntax
+        flavorDimensions "versionCode"
     }
 
     signingConfigs {
@@ -33,6 +34,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "true"
+            buildConfigField "String", "API_HOST", "\"http://api.donhonet.net/ehanmy/\""
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -41,12 +43,22 @@ android {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             buildConfigField "boolean", "USE_CANARY", "false"
+            buildConfigField "String", "API_HOST", "\"http://sj.ehanmy.cn/ehanmy/\""
             signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+//        prerelease {
+//            buildConfigField "boolean", "LOG_DEBUG", "false"
+//            buildConfigField "boolean", "USE_CANARY", "false"
+//            buildConfigField "String", "API_HOST", "\"http://stage.ehanmy.cn/ehanmy\""
+//            signingConfig signingConfigs.release
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
     }
     sourceSets { // 从ANT迁移的工程，可以使用 sourceSets 来配置工程结构.
         main {
@@ -54,6 +66,24 @@ android {
         }
     }
 
+    productFlavors {
+        android_yybao{}
+    }
+
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+    //给apk添加对应的版本号：
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "hibeauty-${buildType.name}-${defaultConfig.versionName}.apk"
+//            def outputFile = output.outputFile
+//            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//                def fileName = outputFile.name.replace(".apk", "-${defaultConfig.versionName}.apk")
+//                output.outputFile = new File(outputFile.parent, fileName)
+//            }
+        }
+    }
 
     lintOptions {
         disable 'InvalidPackage'

@@ -13,6 +13,7 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.RegisterContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.LoginAndRegisterService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.RegisterRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
@@ -47,6 +48,12 @@ public class RegisterModel extends BaseModel implements RegisterContract.Model {
     public Observable<BaseResponse> getVerify(VeritfyRequest veritfyRequest) {
         return mRepositoryManager.obtainRetrofitService(LoginAndRegisterService.class)
                 .getVerify(veritfyRequest);
+    }
+
+    @Override
+    public Observable<RegisterResponse> getProtocolURL(SimpleRequest request) {
+        return mRepositoryManager.obtainRetrofitService(LoginAndRegisterService.class)
+                .getProtocolURL(request);
     }
 
 }

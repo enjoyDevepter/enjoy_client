@@ -15,6 +15,8 @@
  */
 package me.jessyan.mvparms.demo.mvp.model.api;
 
+import me.jessyan.mvparms.demo.BuildConfig;
+
 /**
  * ================================================
  * 存放一些与 API 有关的东西,如请求地址,请求码等
@@ -25,6 +27,7 @@ package me.jessyan.mvparms.demo.mvp.model.api;
  * ================================================
  */
 public interface Api {
-    String APP_DOMAIN = "http://api.donhonet.net/conson-shop/";
+    //    String APP_DOMAIN = "http://api.donhonet.net/conson-shop/";
+    String APP_DOMAIN = BuildConfig.API_HOST;
     int RequestSuccess = 0;
 }

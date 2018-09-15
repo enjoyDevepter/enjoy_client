@@ -12,6 +12,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 public class GoodsListResponse extends BaseResponse {
 
     private List<Goods> goodsList;
+    private List<Goods> setMealGoodsList;
     private List<Ad> carouselList;
     private int nextPageIndex;
 
@@ -39,10 +40,19 @@ public class GoodsListResponse extends BaseResponse {
         this.nextPageIndex = nextPageIndex;
     }
 
+    public List<Goods> getSetMealGoodsList() {
+        return setMealGoodsList;
+    }
+
+    public void setSetMealGoodsList(List<Goods> setMealGoodsList) {
+        this.setMealGoodsList = setMealGoodsList;
+    }
+
     @Override
     public String toString() {
         return "GoodsListResponse{" +
                 "goodsList=" + goodsList +
+                ", setMealGoodsList=" + setMealGoodsList +
                 ", carouselList=" + carouselList +
                 ", nextPageIndex=" + nextPageIndex +
                 '}';

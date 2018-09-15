@@ -161,7 +161,7 @@ public class ModifyUserInfoPresenter extends BasePresenter<ModifyUserInfoContrac
         if ("constellation".equals(type)) {
             request.setCmd(1107);
             request.setConstellation((String) mRootView.getCache().get("value"));
-        } else if ("name".equals(type)) {
+        } else if ("nick".equals(type)) {
             request.setCmd(1102);
             request.setNickName((String) mRootView.getCache().get("value"));
         } else if ("male".equals(type)) {
@@ -176,6 +176,9 @@ public class ModifyUserInfoPresenter extends BasePresenter<ModifyUserInfoContrac
         } else if ("occupation".equals(type)) {
             request.setCmd(1109);
             request.setOccupation((String) mRootView.getCache().get("value"));
+        } else if ("name".equals(type)) {
+            request.setCmd(1111);
+            request.setRealName((String) mRootView.getCache().get("value"));
         }
         request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
         mModel.modifyUserInfo(request)
