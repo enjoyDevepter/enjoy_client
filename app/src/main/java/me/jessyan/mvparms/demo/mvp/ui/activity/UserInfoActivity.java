@@ -200,7 +200,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
         switch (type) {
             case 1102:
-                nameTV.setText((String) cache.get("label"));
+                nickNameTV.setText((String) cache.get("label"));
                 break;
             case 1104:
                 maleTV.setText((String) cache.get("label"));
