@@ -51,6 +51,7 @@ public class Goods implements Parcelable {
     private double deposit;
     private double tailMoney;
     private String orderId;
+    private String canSale;
 
 
     public Goods() {
@@ -87,6 +88,7 @@ public class Goods implements Parcelable {
         deposit = in.readDouble();
         tailMoney = in.readDouble();
         orderId = in.readString();
+        canSale = in.readString();
     }
 
     public int getAttention() {
@@ -338,6 +340,14 @@ public class Goods implements Parcelable {
         this.tailMoney = tailMoney;
     }
 
+    public String getCanSale() {
+        return canSale;
+    }
+
+    public void setCanSale(String canSale) {
+        this.canSale = canSale;
+    }
+
     @Override
     public String toString() {
         return "Goods{" +
@@ -372,6 +382,7 @@ public class Goods implements Parcelable {
                 ", deposit=" + deposit +
                 ", tailMoney=" + tailMoney +
                 ", orderId='" + orderId + '\'' +
+                ", canSale='" + canSale + '\'' +
                 '}';
     }
 
@@ -412,6 +423,7 @@ public class Goods implements Parcelable {
         dest.writeDouble(deposit);
         dest.writeDouble(tailMoney);
         dest.writeString(orderId);
+        dest.writeString(canSale);
     }
 }
 

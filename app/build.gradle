@@ -67,7 +67,7 @@ android {
     }
 
     productFlavors {
-        android_yybao{}
+        android_yybao {}
     }
 
     productFlavors.all { flavor ->

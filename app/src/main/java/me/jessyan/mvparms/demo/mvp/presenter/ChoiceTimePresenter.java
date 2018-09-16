@@ -105,8 +105,11 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
                         if (response.isSuccess()) {
                             appointments.clear();
                             appointments.addAll(response.getReservationDateList());
-                            appointments.get(0).setChoice(true);
-                            timeList.addAll(appointments.get(0).getReservationTimeList());
+                            if (appointments.size() > 0) {
+                                appointments.get(0).setChoice(true);
+                                mRootView.getCache().put("appointmentsDate", appointments.get(0).getDate());
+                                timeList.addAll(appointments.get(0).getReservationTimeList());
+                            }
                             timeAdapter.notifyDataSetChanged();
                             dateAdapter.notifyDataSetChanged();
                         } else {

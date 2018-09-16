@@ -20,7 +20,39 @@ public class MealGoods {
     private double salePrice;
     private String title;
     private int nums;
+    private String content;
     private List<Goods> goodsList;
+    private String canSale;
+
+    @Override
+    public String toString() {
+        return "MealGoods{" +
+                "favorite=" + favorite +
+                ", isFavorite='" + isFavorite + '\'' +
+                ", cnt=" + cnt +
+                ", totalPrice=" + totalPrice +
+                ", setMealId='" + setMealId + '\'' +
+                ", image='" + image + '\'' +
+                ", images=" + images +
+                ", name='" + name + '\'' +
+                ", sales=" + sales +
+                ", salePrice=" + salePrice +
+                ", title='" + title + '\'' +
+                ", nums=" + nums +
+                ", content='" + content + '\'' +
+                ", goodsList=" + goodsList +
+                ", canSale='" + canSale + '\'' +
+                '}';
+    }
+
+
+    public String getCanSale() {
+        return canSale;
+    }
+
+    public void setCanSale(String canSale) {
+        this.canSale = canSale;
+    }
 
     public String getIsFavorite() {
         return isFavorite;
@@ -126,22 +158,12 @@ public class MealGoods {
         this.images = images;
     }
 
-    @Override
-    public String toString() {
-        return "MealGoods{" +
-                "favorite=" + favorite +
-                ", isFavorite='" + isFavorite + '\'' +
-                ", cnt=" + cnt +
-                ", totalPrice=" + totalPrice +
-                ", setMealId='" + setMealId + '\'' +
-                ", image='" + image + '\'' +
-                ", images=" + images +
-                ", name='" + name + '\'' +
-                ", sales=" + sales +
-                ", salePrice=" + salePrice +
-                ", title='" + title + '\'' +
-                ", goodsList=" + goodsList +
-                '}';
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public static class Goods {
@@ -206,6 +228,7 @@ public class MealGoods {
         public double getSalePrice() {
             return salePrice;
         }
+
 
         public void setSalePrice(double salePrice) {
             this.salePrice = salePrice;

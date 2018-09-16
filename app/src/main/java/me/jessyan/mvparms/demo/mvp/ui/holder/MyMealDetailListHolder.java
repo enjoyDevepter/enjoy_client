@@ -16,6 +16,7 @@
 package me.jessyan.mvparms.demo.mvp.ui.holder;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -58,14 +59,16 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
     ImageView imageIV;
     @BindView(R.id.name)
     TextView nameTV;
-    @BindView(R.id.count)
-    TextView countTV;
     @BindView(R.id.price)
     MoneyView priceTV;
     @BindView(R.id.project)
     TextView projectTV;
     @BindView(R.id.date)
     TextView dateTV;
+    @BindView(R.id.confirmTime)
+    TextView confirmTimeTV;
+    @BindView(R.id.deductTime)
+    TextView deductTimeTV;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -113,19 +116,42 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
         statusTV.setText(appointment.getStatusDesc());
         nameTV.setText(mealGoods.getName());
         priceTV.setMoneyText(String.valueOf(mealGoods.getSalePrice()));
-        countTV.setText(String.valueOf(mealGoods.getNums()));
-        projectTV.setText("项目号：" + appointment.getProjectId());
-        if (!ArmsUtils.isEmpty(appointment.getReservationDate())) {
-            dateTV.setVisibility(View.VISIBLE);
-            dateTV.setText("预约时间：" + appointment.getReservationDate() + " " + appointment.getReservationTime());
+        if ("0".equals(appointment.getIsExperience())) {
+            projectTV.setVisibility(View.VISIBLE);
+            projectTV.setText("项目号：" + appointment.getProjectId());
         } else {
-            dateTV.setVisibility(View.INVISIBLE);
+            projectTV.setVisibility(View.INVISIBLE);
+        }
+        if (!ArmsUtils.isEmpty(appointment.getReservationDate())) {
+            priceTV.setVisibility(View.GONE);
+            dateTV.setVisibility(View.VISIBLE);
+            dateTV.setText(Html.fromHtml("<font color='#666666'>预约时间：</font><font color='#333333'>" + appointment.getReservationDate() + " " + appointment.getReservationTime() + "</font>"));
+        } else {
+            dateTV.setVisibility(View.GONE);
+            priceTV.setVisibility(View.VISIBLE);
+        }
+
+        if (!ArmsUtils.isEmpty(appointment.getConfirmTime())) {
+            confirmTimeTV.setVisibility(View.VISIBLE);
+            confirmTimeTV.setText(Html.fromHtml("<font color='#666666'>确认时间：</font><font color='#333333'>" + appointment.getConfirmTime() + "</font>"));
+        } else {
+            confirmTimeTV.setVisibility(View.GONE);
+        }
+        if (!ArmsUtils.isEmpty(appointment.getDeductTime())) {
+            deductTimeTV.setVisibility(View.VISIBLE);
+            deductTimeTV.setText(Html.fromHtml("<font color='#666666'>划扣时间：</font><font color='#333333'>" + appointment.getDeductTime() + "</font>"));
+        } else {
+            deductTimeTV.setVisibility(View.GONE);
         }
 
         if (appointment.getStatus().equals("1")) {
             statusTV.setText("可预约");
-            leftTV.setVisibility(View.VISIBLE);
-            leftTV.setText("复制");
+            if (!"1".equals(appointment.getIsExperience())) {
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("复制");
+            } else {
+                leftTV.setVisibility(View.GONE);
+            }
             rightTV.setVisibility(View.VISIBLE);
             rightTV.setText("预约");
         } else if (appointment.getStatus().equals("2")) {
@@ -168,8 +194,9 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
         this.imageIV = null;
         this.nameTV = null;
         this.priceTV = null;
-        this.countTV = null;
         this.projectTV = null;
         this.dateTV = null;
+        this.deductTimeTV = null;
+        this.confirmTimeTV = null;
     }
 }

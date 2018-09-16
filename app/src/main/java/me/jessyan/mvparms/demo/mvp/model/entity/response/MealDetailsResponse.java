@@ -10,6 +10,16 @@ public class MealDetailsResponse extends BaseResponse {
 
     private MealGoods setMealGoods;
 
+    private String shareUrl;
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
+
     public MealGoods getSetMealGoods() {
         return setMealGoods;
     }
@@ -22,6 +32,7 @@ public class MealDetailsResponse extends BaseResponse {
     public String toString() {
         return "MealDetailsResponse{" +
                 "setMealGoods=" + setMealGoods +
+                ", shareUrl='" + shareUrl + '\'' +
                 '}';
     }
 }

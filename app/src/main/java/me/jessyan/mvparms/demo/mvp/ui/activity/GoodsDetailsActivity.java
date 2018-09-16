@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -232,7 +233,6 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         backV.setOnClickListener(this);
         shareV.setOnClickListener(this);
         cartV.setOnClickListener(this);
-        buyV.setOnClickListener(this);
         specV.setOnClickListener(this);
         specLayoutV.setOnClickListener(this);
         promLayoutV.setOnClickListener(this);
@@ -458,6 +458,12 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
 
         detailWV.loadUrl(response.getGoods().getMobileDetail());
 
+        if ("0".equals(response.getGoods().getCanSale())) {
+            buyV.setBackgroundColor(Color.parseColor("#ffc6c6c6"));
+        } else {
+            buyV.setBackgroundColor(Color.parseColor("#FFFF5656"));
+            buyV.setOnClickListener(this);
+        }
 
         List<Promotion> promotions = response.getPromotionList();
         if (promotions == null || promotions.size() <= 0) {

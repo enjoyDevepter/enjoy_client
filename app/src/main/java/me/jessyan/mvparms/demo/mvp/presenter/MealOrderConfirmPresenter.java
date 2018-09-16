@@ -131,7 +131,7 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
                             mAppManager.killAllBeforeClass(MainActivity.class);
-                            if ("0".equals(response.getPayStatus())) {
+                            if ("1".equals(response.getPayStatus())) {
                                 Intent intent = new Intent(mRootView.getActivity(), PayActivity.class);
                                 intent.putExtra("orderId", response.getOrderId());
                                 ArmsUtils.startActivity(intent);

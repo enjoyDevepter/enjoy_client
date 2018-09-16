@@ -13,7 +13,6 @@ import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import org.simple.eventbus.EventBus;
-import org.simple.eventbus.Subscriber;
 
 import javax.inject.Inject;
 
@@ -58,11 +57,6 @@ public class MyPresenter extends BasePresenter<MyContract.Model, MyContract.View
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void initUser() {
-        getUserInfo();
-    }
-
-    @Subscriber(tag = EventBusTags.USER_BASE_INFO_CHANGE)
-    public void updateUserInfo(int type) {
         getUserInfo();
     }
 

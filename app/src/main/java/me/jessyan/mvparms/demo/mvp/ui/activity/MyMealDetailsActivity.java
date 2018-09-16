@@ -50,6 +50,8 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
     TextView nameTV;
     @BindView(R.id.orderId)
     TextView orderIdTV;
+    @BindView(R.id.desc)
+    TextView descTV;
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
@@ -88,6 +90,10 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
 
         nameTV.setText(getIntent().getStringExtra("mealName"));
         orderIdTV.setText(getIntent().getStringExtra("orderId"));
+        String desc = getIntent().getStringExtra("desc");
+        if (!ArmsUtils.isEmpty(desc)) {
+            descTV.setText(desc);
+        }
     }
 
 

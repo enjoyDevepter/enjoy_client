@@ -95,17 +95,14 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     View consume;
     @BindView(R.id.cash)
     View cash;
-
     @BindView(R.id.image)
     ImageView image;
     @BindView(R.id.level_icon)
     ImageView level_icon;
-
     @BindView(R.id.fans)
     View fans;
     @BindView(R.id.follow_view)
     View follow_view;
-
     @BindView(R.id.chenghao)
     TextView chenghao;
     @BindView(R.id.growth)
@@ -195,6 +192,11 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     @Subscriber(tag = EventBusTags.LOGIN_STATUS_CHANGE_EVENT)
     private void updateLoginStatus() {
+        mPresenter.getUserInfo();
+    }
+
+    @Subscriber(tag = EventBusTags.USER_BASE_INFO_CHANGE)
+    private void updateUserInfo() {
         mPresenter.getUserInfo();
     }
 
@@ -349,7 +351,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         if (null == member.getRecomMember()) {
             recommenderV.setVisibility(View.INVISIBLE);
         }
-
-        chenghao.setText(member.getDistributionRank().getDistributionLevelName());
+        if (null != member.getDistributionRank()) {
+            chenghao.setText(member.getDistributionRank().getDistributionLevelName());
+        }
     }
 }

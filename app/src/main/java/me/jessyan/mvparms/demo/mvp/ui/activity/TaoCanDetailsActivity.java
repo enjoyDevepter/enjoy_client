@@ -2,12 +2,17 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.cchao.MoneyView;
@@ -63,6 +68,10 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     RecyclerView detailRV;
     @BindView(R.id.tab)
     TabLayout tabLayout;
+    @BindView(R.id.detail_layout)
+    TabLayout detailTab;
+    @BindView(R.id.detailWV)
+    WebView detailWV;
     @BindView(R.id.deposit)
     MoneyView depositTV;
     @BindView(R.id.tailMoney)
@@ -77,6 +86,15 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     RxPermissions mRxPermissions;
 
     MealDetailsResponse response;
+
+
+    private Mobile mobile = new Mobile();
+    private WebViewClient mClient = new WebViewClient() {
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            mobile.onGetWebContentHeight();
+        }
+    };
 
     private UMShareListener shareListener = new UMShareListener() {
         /**
@@ -131,16 +149,21 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     @Override
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
-        buyV.setOnClickListener(this);
         collectV.setOnClickListener(this);
         shareV.setOnClickListener(this);
         imagesB.setImageLoader(new GlideImageLoader());
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
-        tabLayout.addTab(tabLayout.newTab().setText("套餐详情"));
+        tabLayout.addTab(tabLayout.newTab().setText("套餐项目"));
         ArmsUtils.configRecyclerView(detailRV, layoutManager);
         detailRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(this, R.dimen.divice_width), 0));
         detailRV.setAdapter(mAdapter);
         telV.setOnClickListener(this);
+
+        detailWV.getSettings().setUseWideViewPort(true);
+        detailWV.getSettings().setLoadWithOverviewMode(true);
+        detailWV.addJavascriptInterface(mobile, "mobile");
+        detailWV.setWebViewClient(mClient);
+        detailTab.addTab(detailTab.newTab().setText("套餐详情"));
     }
 
 
@@ -192,6 +215,14 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         collectV.setSelected("1".equals(response.getSetMealGoods().getFavorite()) ? true : false);
         depositTV.setMoneyText(String.valueOf(response.getSetMealGoods().getSalePrice()));
         tailMoneyTV.setMoneyText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
+        detailWV.loadUrl(response.getSetMealGoods().getContent());
+        if ("0".equals(response.getSetMealGoods().getCanSale())) {
+            buyV.setBackgroundColor(Color.parseColor("#ffc6c6c6"));
+        } else {
+            buyV.setBackgroundColor(Color.parseColor("#FFFF5656"));
+            buyV.setOnClickListener(this);
+        }
+
     }
 
     @Override
@@ -250,5 +281,19 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(detailRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
+    }
+
+    private class Mobile {
+        @JavascriptInterface
+        public void onGetWebContentHeight() {
+            //重新调整webview高度
+            detailWV.post(() -> {
+                detailWV.measure(0, 0);
+                int measuredHeight = detailWV.getMeasuredHeight();
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) detailWV.getLayoutParams();
+                layoutParams.height = measuredHeight;
+                detailWV.setLayoutParams(layoutParams);
+            });
+        }
     }
 }

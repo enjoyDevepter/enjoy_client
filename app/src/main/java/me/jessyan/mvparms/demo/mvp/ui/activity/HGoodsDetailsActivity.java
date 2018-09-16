@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -255,7 +256,6 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         promotionCloseV.setOnClickListener(this);
         spceCloseV.setOnClickListener(this);
         isFavoriteV.setOnClickListener(this);
-        buyV.setOnClickListener(this);
 
         ArmsUtils.configRecyclerView(promotionCV, mLayoutManager);
         promotionCV.setAdapter(promotionAdapter);
@@ -461,6 +461,13 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         imagesB.isAutoPlay(false);
 
         shareV.setVisibility(ArmsUtils.isEmpty(goods.getShareUrl()) ? View.INVISIBLE : View.VISIBLE);
+
+        if ("0".equals(goods.getCanSale())) {
+            buyV.setBackgroundColor(Color.parseColor("#ffc6c6c6"));
+        } else {
+            buyV.setBackgroundColor(Color.parseColor("#FFFF5656"));
+            buyV.setOnClickListener(this);
+        }
 
         imageCountTV.setText("1/" + response.getImages().size());
         nameTV.setText(goods.getName());

@@ -55,14 +55,14 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
     ImageView imageIV;
     @BindView(R.id.name)
     TextView nameTV;
+    @BindView(R.id.time_type)
+    View tiemV;
     @BindView(R.id.time)
     TextView timeTV;
     @BindView(R.id.count)
     TextView countTV;
     @BindView(R.id.price)
     MoneyView priceTV;
-    @BindView(R.id.time_layout)
-    View timeV;
 
 
     private AppointmentListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
@@ -104,33 +104,32 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
                         .url(appointment.getGoods().getImage())
                         .imageView(imageIV)
                         .build());
-        noTV.setText(appointment.getCode());
+        noTV.setText(appointment.getProjectId());
         if ("1".equals(appointment.getStatus())) {
             rightTV.setVisibility(View.VISIBLE);
             rightTV.setText("预约");
-            timeV.setVisibility(View.GONE);
+            timeTV.setVisibility(View.GONE);
             leftTV.setVisibility(View.GONE);
-            statusTV.setVisibility(View.GONE);
         } else if ("2".equals(appointment.getStatus())) {
             leftTV.setVisibility(View.VISIBLE);
             leftTV.setText("取消");
             rightTV.setVisibility(View.VISIBLE);
             rightTV.setText("改约");
-            statusTV.setVisibility(View.GONE);
 
             if (ArmsUtils.isEmpty(appointment.getReservationDate()) || ArmsUtils.isEmpty(appointment.getReservationTime())) {
-                timeV.setVisibility(View.INVISIBLE);
+                timeTV.setVisibility(View.INVISIBLE);
+                tiemV.setVisibility(View.INVISIBLE);
             } else {
-                timeV.setVisibility(View.VISIBLE);
+                tiemV.setVisibility(View.VISIBLE);
+                timeTV.setVisibility(View.VISIBLE);
+                timeTV.setText(appointment.getReservationDate() + "\n" + appointment.getReservationTime());
             }
-            timeTV.setText(appointment.getReservationDate() + appointment.getReservationTime());
         } else { // 3.4.5
-            statusTV.setVisibility(View.VISIBLE);
-            statusTV.setText(appointment.getStatusDesc());
             leftTV.setVisibility(View.GONE);
             rightTV.setVisibility(View.GONE);
-            timeV.setVisibility(View.GONE);
+            timeTV.setVisibility(View.GONE);
         }
+        statusTV.setText(appointment.getStatusDesc());
         nameTV.setText(appointment.getGoods().getName());
         priceTV.setMoneyText(String.valueOf(appointment.getGoods().getSalePrice()));
         countTV.setText(String.valueOf(appointment.getSurplusNum()));
@@ -149,7 +148,6 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
                 .imageViews(imageIV)
                 .build());
         this.noTV = null;
-        this.timeTV = null;
         this.leftTV = null;
         this.rightTV = null;
         this.statusTV = null;
@@ -157,6 +155,7 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
         this.nameTV = null;
         this.priceTV = null;
         this.countTV = null;
-        this.timeV = null;
+        this.timeTV = null;
+        this.tiemV = null;
     }
 }

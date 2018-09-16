@@ -4,15 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp">
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="34dp"
-        android:layout_marginBottom="6dp"
-        android:layout_marginTop="12dp"
+        android:layout_alignParentTop="true"
         android:background="@drawable/list_item_butom_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -20,6 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="8dp"
             android:text="编号："
             android:textColor="#FF666666"
@@ -35,30 +34,10 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/left"
-            android:layout_width="52dp"
-            android:layout_height="20dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/order_btn_bg"
-            android:gravity="center"
-            android:text="取消"
-            android:textColor="@color/white"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/right"
-            android:layout_width="52dp"
-            android:layout_height="20dp"
-            android:background="@drawable/order_btn_bg"
-            android:gravity="center"
-            android:text="预约"
-            android:textColor="@color/white"
-            android:textSize="13sp" />
-
-        <TextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
             android:gravity="center"
             android:text="预约"
             android:textColor="#FF333333"
@@ -69,6 +48,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="142dp"
+        android:background="@drawable/list_item_butom_bg"
         android:orientation="vertical">
 
         <ImageView
@@ -76,6 +56,7 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
             android:scaleType="fitXY" />
 
         <TextView
@@ -84,81 +65,98 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/image"
             android:layout_marginLeft="8dp"
+            android:layout_marginRight="15dp"
             android:layout_toRightOf="@id/image"
             android:lines="2"
             android:textColor="#FF000000"
             android:textSize="13sp" />
 
-        <LinearLayout
-            android:id="@+id/time_layout"
-            android:layout_width="match_parent"
-            android:layout_height="34dp"
+        <TextView
+            android:id="@+id/time_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@id/name"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="6dp"
-            android:layout_marginTop="12dp"
+            android:layout_below="@id/name"
+            android:layout_marginTop="8dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:text="预约时间："
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:text="预约时间："
-                android:textColor="#FF666666"
-                android:textSize="13sp" />
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/time_type"
+            android:layout_marginRight="15dp"
+            android:layout_toRightOf="@id/time_type"
+            android:gravity="center_vertical"
+            android:textColor="#FF333333"
+            android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FF333333"
-                android:textSize="13sp" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/price_layout"
-            android:layout_width="match_parent"
+        <com.github.cchao.MoneyView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/image"
             android:layout_alignLeft="@id/name"
+            android:layout_centerVertical="true"
             android:layout_marginBottom="10dp"
-            android:gravity="center_vertical">
+            money:cent_size="14sp"
+            money:money_color="#FFFF0000"
+            money:money_text="0.00"
+            money:point_padding_left="1dp"
+            money:point_padding_right="5dp"
+            money:prefix_padding="2dp"
+            money:prefix_size="12sp"
+            money:yuan_size="17sp" />
 
-
-            <com.github.cchao.MoneyView
-                android:id="@+id/price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                money:cent_size="14sp"
-                money:money_color="#FFFF0000"
-                money:money_text="0.00"
-                money:point_padding_left="1dp"
-                money:point_padding_right="5dp"
-                money:prefix_padding="2dp"
-                money:prefix_size="12sp"
-                money:yuan_size="17sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="剩余次数："
-                android:textColor="#FF666666"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:textColor="#FF666666"
-                android:textSize="13sp" />
-        </LinearLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="剩余次数："
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/left"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/order_btn_bg"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/right"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/order_btn_bg"
+            android:gravity="center"
+            android:text="预约"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+
+    </LinearLayout>
 </LinearLayout>

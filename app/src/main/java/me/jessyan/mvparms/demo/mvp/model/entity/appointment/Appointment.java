@@ -11,7 +11,11 @@ public class Appointment {
     private String reservationDate;
     private String reservationTime;
     private String reservationId;
+    private String isExperience;
+    private String confirmTime;
+    private String deductTime;
     private int surplusNum;
+    private String desc;
     private String reservationStatus;
     private String status;
     private String statusDesc;
@@ -33,6 +37,38 @@ public class Appointment {
 
     public void setReservationDate(String reservationDate) {
         this.reservationDate = reservationDate;
+    }
+
+    public String getIsExperience() {
+        return isExperience;
+    }
+
+    public void setIsExperience(String isExperience) {
+        this.isExperience = isExperience;
+    }
+
+    public String getConfirmTime() {
+        return confirmTime;
+    }
+
+    public void setConfirmTime(String confirmTime) {
+        this.confirmTime = confirmTime;
+    }
+
+    public String getDeductTime() {
+        return deductTime;
+    }
+
+    public void setDeductTime(String deductTime) {
+        this.deductTime = deductTime;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public String getReservationTime() {
@@ -114,11 +150,15 @@ public class Appointment {
                 ", reservationDate='" + reservationDate + '\'' +
                 ", reservationTime='" + reservationTime + '\'' +
                 ", reservationId='" + reservationId + '\'' +
+                ", isExperience='" + isExperience + '\'' +
+                ", confirmTime='" + confirmTime + '\'' +
+                ", deductTime='" + deductTime + '\'' +
                 ", surplusNum=" + surplusNum +
+                ", desc='" + desc + '\'' +
                 ", reservationStatus='" + reservationStatus + '\'' +
                 ", status='" + status + '\'' +
                 ", statusDesc='" + statusDesc + '\'' +
-                ", createDate='" + createDate + '\'' +
+                ", createDate=" + createDate +
                 ", code='" + code + '\'' +
                 ", goods=" + goods +
                 '}';

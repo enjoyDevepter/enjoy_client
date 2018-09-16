@@ -17,6 +17,7 @@ public class Order {
     private long payMoney;
     private long price;
     private long totalPrice;
+    private String desc;
     private List<OrderGoods> goodsList;
     private List<MealGoods> setMealGoodsList;
 
@@ -109,6 +110,14 @@ public class Order {
         this.setMealGoodsList = setMealGoodsList;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -121,6 +130,7 @@ public class Order {
                 ", payMoney=" + payMoney +
                 ", price=" + price +
                 ", totalPrice=" + totalPrice +
+                ", desc='" + desc + '\'' +
                 ", goodsList=" + goodsList +
                 ", setMealGoodsList=" + setMealGoodsList +
                 '}';

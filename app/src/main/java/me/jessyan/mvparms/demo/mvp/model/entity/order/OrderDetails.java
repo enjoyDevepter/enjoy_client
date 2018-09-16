@@ -38,6 +38,7 @@ public class OrderDetails {
     private Address orderRecipientInfo;
     private Hospital hospital;
     private Store store;
+    private String desc;
 
     public long getCoupon() {
         return coupon;
@@ -247,6 +248,14 @@ public class OrderDetails {
         this.store = store;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
     @Override
     public String toString() {
         return "OrderDetails{" +
@@ -276,6 +285,7 @@ public class OrderDetails {
                 ", orderRecipientInfo=" + orderRecipientInfo +
                 ", hospital=" + hospital +
                 ", store=" + store +
+                ", desc='" + desc + '\'' +
                 '}';
     }
 }

@@ -154,7 +154,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:background="@color/white"
+                android:paddingBottom="10dp" />
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/detail_layout"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/list_item_bg"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                money:tabGravity="fill"
+                money:tabIndicatorColor="#FF50C8F5"
+                money:tabIndicatorHeight="2dp"
+                money:tabMode="scrollable"
+                money:tabPaddingEnd="0dp"
+                money:tabPaddingStart="0dp"
+                money:tabSelectedTextColor="#FF5FBFE3"
+                money:tabTextAppearance="@style/TabLayoutTextStyle"
+                money:tabTextColor="#FF666666" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
                 android:background="@color/white" />
+
+            <WebView
+                android:id="@+id/detailWV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

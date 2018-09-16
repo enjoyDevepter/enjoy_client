@@ -45,7 +45,7 @@
     </LinearLayout>
 
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/buttom"
         android:layout_width="match_parent"
         android:layout_height="34dp"
@@ -54,28 +54,38 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/right"
-            android:layout_width="76dp"
+            android:id="@+id/project"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:lines="1"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/left"
+            android:layout_width="50dp"
             android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="6dp"
             android:background="@drawable/order_btn_bg"
             android:gravity="center"
             android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/left"
-            android:layout_width="76dp"
+            android:id="@+id/right"
+            android:layout_width="50dp"
             android:layout_height="20dp"
-            android:layout_marginRight="4dp"
-            android:layout_toLeftOf="@id/right"
+            android:layout_marginRight="15dp"
             android:background="@drawable/order_btn_bg"
             android:gravity="center"
             android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -105,70 +115,55 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/project"
+            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/name"
             android:layout_below="@id/name"
+            android:layout_marginTop="10dp"
+            android:lines="1"
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/confirmTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/name"
+            android:layout_below="@id/date"
             android:layout_marginTop="8dp"
             android:lines="1"
             android:textColor="#FF666666"
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/date"
+            android:id="@+id/deductTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/project"
-            android:layout_below="@id/project"
+            android:layout_alignLeft="@id/name"
+            android:layout_below="@id/confirmTime"
             android:layout_marginTop="8dp"
             android:lines="1"
             android:textColor="#FF666666"
             android:textSize="13sp" />
 
-
-        <LinearLayout
-            android:id="@+id/price_layout"
-            android:layout_width="match_parent"
+        <com.github.cchao.MoneyView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/image"
             android:layout_alignLeft="@id/name"
+            android:layout_gravity="right|center_vertical"
             android:layout_marginBottom="10dp"
-            android:gravity="center_vertical">
+            android:layout_marginRight="15dp"
+            money:cent_size="14sp"
+            money:money_color="#FFFF0000"
+            money:money_text="0.00"
+            money:point_padding_left="1dp"
+            money:point_padding_right="5dp"
+            money:prefix_padding="2dp"
+            money:prefix_size="12sp"
+            money:yuan_size="17sp" />
 
-
-            <com.github.cchao.MoneyView
-                android:id="@+id/price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="15dp"
-                money:cent_size="14sp"
-                money:money_color="#FFFF0000"
-                money:money_text="0.00"
-                money:point_padding_left="1dp"
-                money:point_padding_right="5dp"
-                money:prefix_padding="2dp"
-                money:prefix_size="12sp"
-                money:yuan_size="17sp" />
-
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="数量："
-                android:textColor="#FF666666"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:textColor="#FF666666"
-                android:textSize="13sp" />
-        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>
