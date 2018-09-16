@@ -97,4 +97,9 @@ public interface EventBusTags {
      * 切换优惠卷
      */
     String COUPON_CHANGE_EVENT = "coupon_change_event";
+
+    /**
+     * 添加地址成功
+     */
+    String ADD_ADDRESS_SUCCESS = "add_address_success";
 }

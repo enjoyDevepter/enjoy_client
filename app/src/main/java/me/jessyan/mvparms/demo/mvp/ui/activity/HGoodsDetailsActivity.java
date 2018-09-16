@@ -608,8 +608,16 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     }
 
     private void showPro() {
+        String where = getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            showMessage("限时秒杀商品不可参加活动");
+            return;
+        } else if ("newpeople".equals(where)) {
+            showMessage("新人专项商品不可参加活动");
+            return;
+        }
         if (promotionAdapter.getInfos().size() <= 0
-                || !ArmsUtils.isEmpty(getIntent().getStringExtra("where"))) {
+                || !ArmsUtils.isEmpty(where)) {
             return;
         }
         if (!maskProV.isShown()) {
@@ -627,9 +635,17 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
 
 
     private void showSpec() {
+        String where = getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            showMessage("限时秒杀商品不可选择规格");
+            return;
+        } else if ("newpeople".equals(where)) {
+            showMessage("新人专项商品不可选择规格");
+            return;
+        }
         if (null == speceLabelsView.getLabels()
                 || (null != speceLabelsView.getLabels() && speceLabelsView.getLabels().size() <= 0)
-                || !ArmsUtils.isEmpty(getIntent().getStringExtra("where"))) {
+                || !ArmsUtils.isEmpty(where)) {
             return;
         }
         if (!maskSpecV.isShown()) {

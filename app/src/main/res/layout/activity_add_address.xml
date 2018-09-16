@@ -57,6 +57,8 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:hint="请输入联系电话"
+            android:inputType="number"
+            android:maxLength="11"
             android:textColor="#FF000000"
             android:textSize="13sp" />
 

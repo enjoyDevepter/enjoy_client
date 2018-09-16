@@ -51,6 +51,9 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
     @Inject
     List<Address> addressList;
 
+    private int preEndIndex;
+    private int lastPageIndex = 1;
+
     @Inject
     public AddressListPresenter(AddressListContract.Model model, AddressListContract.View rootView) {
         super(model, rootView);
@@ -58,7 +61,7 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     void onCreate() {
-        getAddressList();
+        getAddressList(true);
     }
 
     @Override
@@ -84,6 +87,10 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             addressList.remove(delIndex);
+                            if (addressList.size() < 1) {
+                                mRootView.showConent(false);
+                                return;
+                            }
                             addressEditListAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
@@ -92,33 +99,54 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                 });
     }
 
-    public void getAddressList() {
+    public void getAddressList(boolean pullToRefresh) {
         AddressListRequest request = new AddressListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
-        request.setPageIndex(1);
-        request.setPageSize(10);
+
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
         mModel.getAddressList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                })
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<AddressListResponse>(mErrorHandler) {
                     @Override
                     public void onNext(AddressListResponse response) {
                         if (response.isSuccess()) {
-                            addressList.clear();
-                            addressList.addAll(response.getMemberAddressList());
-                            if (addressList.size() <= 0) {
-                                return;
+                            mRootView.showConent(response.getMemberAddressList().size() > 0);
+                            if (pullToRefresh) {
+                                addressList.clear();
                             }
-                            addressListAdapter.notifyDataSetChanged();
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            addressList.addAll(response.getMemberAddressList());
+                            preEndIndex = addressList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = addressList.size() / 10;
+                            if (pullToRefresh) {
+                                addressListAdapter.notifyDataSetChanged();
+                            } else {
+                                addressListAdapter.notifyItemRangeInserted(preEndIndex, addressList.size());
+                            }
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
+
     }
 
     private void modifyAddress(Address address) {

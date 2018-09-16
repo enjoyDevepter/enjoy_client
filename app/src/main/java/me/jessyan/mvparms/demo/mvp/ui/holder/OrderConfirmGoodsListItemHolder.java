@@ -48,6 +48,8 @@ public class OrderConfirmGoodsListItemHolder extends BaseHolder<Goods> {
     ImageView imageIV;
     @BindView(R.id.name)
     TextView nameTV;
+    @BindView(R.id.spce)
+    TextView spceTV;
     @BindView(R.id.price)
     MoneyView priceTV;
     @BindView(R.id.count)
@@ -89,9 +91,6 @@ public class OrderConfirmGoodsListItemHolder extends BaseHolder<Goods> {
 
     @Override
     public void setData(Goods data, int position) {
-        if (!"1".equals(data.getType())) {
-            operationV.setVisibility(View.INVISIBLE);
-        }
         if (data.getSecKillPrice() != 0) {
             priceTV.setMoneyText(String.valueOf(data.getSecKillPrice()));
         } else if (data.getVipPrice() != 0) {
@@ -103,6 +102,8 @@ public class OrderConfirmGoodsListItemHolder extends BaseHolder<Goods> {
                 .subscribe(s -> nameTV.setText(String.valueOf(s)));
         Observable.just(data.getNums())
                 .subscribe(s -> countTV.setText(String.valueOf(s)));
+        Observable.just(data.getGoodsSpecValue().getSpecValueName())
+                .subscribe(s -> spceTV.setText("规格：" + String.valueOf(s)));
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),

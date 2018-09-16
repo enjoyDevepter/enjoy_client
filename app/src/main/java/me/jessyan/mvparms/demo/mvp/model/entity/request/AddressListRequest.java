@@ -6,8 +6,8 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
 
 public class AddressListRequest extends BaseRequest {
     private int cmd = 203;
-    private int pageIndex;
-    private int pageSize;
+    private int pageIndex = 1;
+    private int pageSize = 10;
     private String token;
 
     public int getCmd() {

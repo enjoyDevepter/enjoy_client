@@ -57,7 +57,7 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
     }
 
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
         getCategory();
         getRecommendGoodsList(true);

@@ -12,12 +12,15 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import org.simple.eventbus.EventBus;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.AddAddressContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
@@ -115,7 +118,6 @@ public class AddAddressPresenter extends BasePresenter<AddAddressContract.Model,
             return;
         }
 
-        mRootView.showLoading();
         request.setMemberAddress(address);
         mModel.modifyAddress(request)
                 .subscribeOn(Schedulers.io())
@@ -125,10 +127,9 @@ public class AddAddressPresenter extends BasePresenter<AddAddressContract.Model,
                 .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
                     public void onNext(BaseResponse response) {
-                        mRootView.hideLoading();
                         if (response.isSuccess()) {
                             mRootView.killMyself();
-                            mRootView.showMessage(response.getRetDesc());
+                            EventBus.getDefault().post(address, EventBusTags.ADD_ADDRESS_SUCCESS);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

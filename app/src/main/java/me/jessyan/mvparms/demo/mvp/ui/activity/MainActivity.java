@@ -260,7 +260,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void showAD(HomeAd ad) {
-        showAdDailog(ad.getImageUrl());
+        showAdDailog(ad);
     }
 
     @Override
@@ -339,7 +339,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 .show();
     }
 
-    private void showAdDailog(String imageURL) {
+    private void showAdDailog(HomeAd ad) {
         dialog = CustomDialog.create(getSupportFragmentManager())
                 .setViewListener(new CustomDialog.ViewListener() {
                     @Override
@@ -349,7 +349,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                                 ImageConfigImpl
                                         .builder()
                                         .placeholder(R.mipmap.place_holder_img)
-                                        .url(imageURL)
+                                        .url(ad.getImageUrl())
                                         .imageView(image)
                                         .build());
                         view.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
@@ -361,9 +361,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                         image.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                mPresenter.getOrCancelAd(true);
-                                ArmsUtils.startActivity(PickCouponActivity.class);
                                 dialog.dismiss();
+                                if ("coupon".equals(ad.getRedirectType())) {
+                                    ArmsUtils.startActivity(PickCouponActivity.class);
+                                } else if ("login".equals(ad.getRedirectType())) {
+                                    ArmsUtils.startActivity(LoginActivity.class);
+                                } else if ("web".equals(ad.getRedirectType())) {
+                                    ArmsUtils.startActivity(PlatformActivity.class);
+                                }
                             }
                         });
                     }

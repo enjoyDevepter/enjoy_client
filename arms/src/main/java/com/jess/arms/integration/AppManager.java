@@ -23,14 +23,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.jess.arms.R;
 import com.jess.arms.base.delegate.AppLifecycles;
-import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.widget.Toasty;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -162,19 +157,22 @@ public final class AppManager {
         }
 //        View view = getCurrentActivity().getWindow().getDecorView().findViewById(android.R.id.content);
 //        Snackbar.make(view, message, isLong ? Snackbar.LENGTH_LONG : Snackbar.LENGTH_SHORT).show();
-
+//
 //        SnackbarUtils.Short(getCurrentActivity().getWindow().getDecorView(),message)
 //                .gravityFrameLayout(Gravity.CENTER)
+//                .alpha(0.5f)
 //                .radius(20)
 //                .show();
 
-        Toast toast = Toast.makeText(mApplication, message, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        View view = toast.getView();
-        view.setLayoutParams(new LinearLayout.LayoutParams(ArmsUtils.getDimens(view.getContext(), R.dimen.toast_width), ArmsUtils.getDimens(view.getContext(), R.dimen.toast_height)));
-        view.setBackgroundResource(R.drawable.toast_bg);
-        toast.setView(view);
-        toast.show();
+//        Toast toast = Toast.makeText(mApplication, message, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+//        toast.setGravity(Gravity.CENTER, 0, 0);
+//        View view = toast.getView();
+//        view.setLayoutParams(new LinearLayout.LayoutParams(ArmsUtils.getDimens(view.getContext(), R.dimen.toast_width), ArmsUtils.getDimens(view.getContext(), R.dimen.toast_height)));
+//        view.setBackgroundResource(R.drawable.toast_bg);
+//        toast.setView(view);
+//        toast.show();
+
+        Toasty.normal(getCurrentActivity(), message).show();
     }
 
 

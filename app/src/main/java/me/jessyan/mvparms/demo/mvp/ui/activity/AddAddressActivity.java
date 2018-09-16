@@ -29,7 +29,6 @@ import me.jessyan.mvparms.demo.mvp.contract.AddAddressContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
 import me.jessyan.mvparms.demo.mvp.presenter.AddAddressPresenter;
-import me.jessyan.mvparms.demo.mvp.ui.widget.CustomProgressDailog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -52,9 +51,6 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
     TextView titleTV;
     @BindView(R.id.confirm)
     View confirmV;
-
-    CustomProgressDailog progressDailog;
-
     @Inject
     List<AreaAddress> addressList;
 
@@ -100,15 +96,10 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
 
     @Override
     public void showLoading() {
-        progressDailog = new CustomProgressDailog(this);
-        progressDailog.show();
     }
 
     @Override
     public void hideLoading() {
-        if (progressDailog != null) {
-            progressDailog.dismiss();
-        }
     }
 
     @Override
@@ -139,8 +130,13 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
                 showPickerView();
                 break;
             case R.id.confirm:
+                String phone = phoneET.getText().toString();
+                if (!ArmsUtils.isPhoneNum(phone)) {
+                    showMessage("手机格式有误");
+                    break;
+                }
                 provideCache().put("receiverName", nameET.getText().toString());
-                provideCache().put("phone", phoneET.getText().toString());
+                provideCache().put("phone", phone);
                 provideCache().put("address", addressET.getText().toString());
                 Address address = getIntent().getParcelableExtra("address");
                 if (address != null) { //从地址列表点击编辑跳转过来

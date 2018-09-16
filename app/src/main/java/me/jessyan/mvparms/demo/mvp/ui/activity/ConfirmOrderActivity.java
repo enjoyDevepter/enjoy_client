@@ -319,7 +319,8 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     public void onChildItemClick(View v, OrderConfirmGoodsListAdapter.ViewName viewname, int position) {
         List<Goods> goodsList = ((OrderConfirmGoodsListAdapter) mAdapter).getInfos();
         Goods goods = goodsList.get(position);
-        if (!"1".equals(goods.getType())) {
+        String where = getIntent().getStringExtra("where");
+        if (!ArmsUtils.isEmpty(where)) {
             return;
         }
         switch (viewname) {

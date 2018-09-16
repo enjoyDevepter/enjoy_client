@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -13,8 +14,10 @@ import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
 import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import javax.inject.Inject;
 
@@ -24,6 +27,7 @@ import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerAddressListComponent;
 import me.jessyan.mvparms.demo.di.module.AddressListModule;
 import me.jessyan.mvparms.demo.mvp.contract.AddressListContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.presenter.AddressListPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressEditListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AddressListAdapter;
@@ -32,7 +36,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class AddressListActivity extends BaseActivity<AddressListPresenter> implements AddressListContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, AddressEditListAdapter.OnChildItemClickLinstener {
+public class AddressListActivity extends BaseActivity<AddressListPresenter> implements AddressListContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, AddressEditListAdapter.OnChildItemClickLinstener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.back)
     View backV;
@@ -42,6 +46,10 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
     TextView titleTV;
     @BindView(R.id.add_address)
     View addV;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.no_data)
+    View noData;
     @BindView(R.id.content)
     RecyclerView contentRV;
     @Inject
@@ -50,6 +58,10 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
     AddressListAdapter addressListAdapter;
     @Inject
     AddressEditListAdapter addressEditListAdapter;
+
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -74,20 +86,92 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
         titleTV.setText("收货地址");
         ArmsUtils.configRecyclerView(contentRV, mLayoutManager);
         contentRV.setAdapter(addressListAdapter);
+        swipeRefreshLayout.setOnRefreshListener(this);
         addressEditListAdapter.setOnChildItemClickLinstener(this);
         addressListAdapter.setOnItemClickListener(this);
-
     }
 
+    @Subscriber(tag = EventBusTags.ADD_ADDRESS_SUCCESS)
+    public void updateAddressInfo(Address address) {
+        mPresenter.getAddressList(true);
+        swtichToEditMode(true);
+    }
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
 
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    public void showConent(boolean hasData) {
+        contentRV.setVisibility(hasData ? View.VISIBLE : View.GONE);
+        noData.setVisibility(hasData ? View.GONE : View.VISIBLE);
+    }
+
+    /**
+     * 开始加载更多
+     */
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    @Override
+    public void setLoadedAllItems(boolean has) {
+        this.hasLoadedAllItems = has;
+    }
+
+    /**
+     * 初始化Paginate,用于加载更多
+     */
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    if (!editTV.isSelected()) {
+                        mPresenter.getAddressList(false);
+                    }
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return hasLoadedAllItems;
+                }
+            };
+            mPaginate = Paginate.with(contentRV, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
     }
 
     @Override
@@ -132,12 +216,8 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
             contentRV.setAdapter(addressEditListAdapter);
         } else {
             contentRV.setAdapter(addressListAdapter);
+            initPaginate();
         }
-    }
-
-    @Override
-    public Activity getActivity() {
-        return this;
     }
 
     @Override
@@ -165,11 +245,6 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
     }
 
     @Override
-    public Cache getCache() {
-        return provideCache();
-    }
-
-    @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
         switch (viewType) {
             case R.layout.addrsss_list_item:
@@ -177,6 +252,13 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
                 // 回传地址信息
                 killMyself();
                 break;
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        if (!editTV.isSelected()) {
+            mPresenter.getAddressList(true);
         }
     }
 }

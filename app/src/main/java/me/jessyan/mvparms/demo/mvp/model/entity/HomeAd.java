@@ -7,7 +7,16 @@ public class HomeAd {
 
     private String adId;
     private String imageUrl;
+    private String h5Url;
     private String redirectType;
+
+    public String getH5Url() {
+        return h5Url;
+    }
+
+    public void setH5Url(String h5Url) {
+        this.h5Url = h5Url;
+    }
 
     public String getAdId() {
         return adId;
@@ -38,6 +47,7 @@ public class HomeAd {
         return "HomeAd{" +
                 "adId='" + adId + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", h5Url='" + h5Url + '\'' +
                 ", redirectType='" + redirectType + '\'' +
                 '}';
     }

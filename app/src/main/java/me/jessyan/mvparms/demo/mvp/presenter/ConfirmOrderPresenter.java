@@ -127,13 +127,13 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
         PayOrderRequest request = new PayOrderRequest();
         if ("1".equals(mRootView.getCache().get("deliveryMethodId"))) {
             if (ArmsUtils.isEmpty((String) mRootView.getCache().get("addressId"))) {
-                mRootView.showMessage("请选择地址！");
+                mRootView.showMessage("请选择地址");
                 return;
             }
             request.setMemberAddressId((String) mRootView.getCache().get("addressId"));
         } else {
             if (ArmsUtils.isEmpty((String) mRootView.getCache().get("storeId"))) {
-                mRootView.showMessage("请选择自取店铺！");
+                mRootView.showMessage("请选择自取店铺");
                 return;
             }
             request.setStoreId((String) mRootView.getCache().get("storeId"));
