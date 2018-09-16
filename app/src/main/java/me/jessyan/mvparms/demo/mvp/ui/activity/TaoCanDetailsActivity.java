@@ -21,9 +21,12 @@ import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -34,6 +37,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerTaoCanDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.TaoCanDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.TaoCanDetailsContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.TaoCanDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
@@ -264,16 +268,16 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     }
 
     private void share() {
-//        MealGoods goods = response.getSetMealGoods();
-//        UMWeb web = new UMWeb(goods.());
-//        web.setTitle(goods.getName());//标题
-//        web.setDescription(goods.getTitle());
-//        web.setThumb(new UMImage(this, goods.getImage()));
-//        new ShareAction(this)
-//                .withMedia(web)
-//                .setCallback(shareListener)
-//                .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
-//                .open();
+        MealGoods goods = response.getSetMealGoods();
+        UMWeb web = new UMWeb(response.getShareUrl());
+        web.setTitle(goods.getName());//标题
+        web.setDescription(goods.getTitle());
+        web.setThumb(new UMImage(this, goods.getImage()));
+        new ShareAction(this)
+                .withMedia(web)
+                .setCallback(shareListener)
+                .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                .open();
     }
 
 
