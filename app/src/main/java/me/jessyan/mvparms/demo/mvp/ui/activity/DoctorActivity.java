@@ -250,8 +250,12 @@ public class DoctorActivity extends BaseActivity<DoctorPresenter> implements Doc
         typeV.setSelected(show);
         if (show && secondAdapter.getInfos().size() > 0) {
             secondAdapter.notifyDataSetChanged();
-            thirdCategoryList = new ArrayList<>();
-            thirdCategoryList.addAll(secondAdapter.getInfos().get(0).getCatagories());
+            for (Category category : secondAdapter.getInfos()) {
+                if (category.isChoice()) {
+                    thirdCategoryList = new ArrayList<>();
+                    thirdCategoryList.addAll(category.getCatagories());
+                }
+            }
             thirdAdapter = new GoodsFilterThirdAdapter(thirdCategoryList);
             ArmsUtils.configRecyclerView(thirdFilterRV, new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             thirdFilterRV.setAdapter(thirdAdapter);
@@ -290,6 +294,11 @@ public class DoctorActivity extends BaseActivity<DoctorPresenter> implements Doc
                 List<Category> childs = secondAdapter.getInfos();
                 for (int i = 0; i < childs.size(); i++) {
                     childs.get(i).setChoice(i == position ? true : false);
+                    if (null != childs.get(1).getCatagories()) {
+                        for (Category childCategory : childs.get(i).getCatagories()) {
+                            childCategory.setChoice(false);
+                        }
+                    }
                 }
                 if (childs.get(position).getCatagories() == null || childs.get(position).getCatagories() != null && childs.get(position).getCatagories().size() == 0) {
                     showFilter(false);

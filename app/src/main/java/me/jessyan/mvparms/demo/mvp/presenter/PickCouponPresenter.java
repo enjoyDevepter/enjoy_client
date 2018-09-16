@@ -70,6 +70,7 @@ public class PickCouponPresenter extends BasePresenter<PickCouponContract.Model,
                     @Override
                     public void onNext(PickCouponListResponse response) {
                         if (response.isSuccess()) {
+                            couponList.clear();
                             couponList.addAll(response.getCouponList());
                             mAdapter.notifyDataSetChanged();
                         } else {

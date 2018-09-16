@@ -245,7 +245,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//设置背景
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(true);
-        popupWindow.showAsDropDown(choiceV, 0, -ArmsUtils.getDimens(this, R.dimen.code_height));
+        popupWindow.showAsDropDown(choiceV, 0, 0);
     }
 
     @Override

@@ -50,7 +50,6 @@ public class RegisterModule {
     @Provides
     List<String> provideCodeList() {
         List<String> codes = new ArrayList<>();
-        codes.add("请选择");
         codes.add("邀请码");
         codes.add("邀请人");
         return codes;

@@ -175,7 +175,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     DiaryListAdapter mAdapter;
     HGoodsDetailsResponse response;
     private List<View> views = new ArrayList<>();
-    private String[] titles = new String[]{"商品详情", "相关日志"};
+    private String[] titles = new String[]{"项目", "相关日志"};
     // 第一个页面
     private WebView detailWV;
     // 第二个页面

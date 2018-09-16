@@ -46,7 +46,6 @@ public interface EventBusTags {
      */
     String MEAL_PAY_SUCCESS = "meal_pay_success";
 
-    String CHANGE_MAIN_INDEX = "change_main_index";
     /**
      * 修改预约时间
      */

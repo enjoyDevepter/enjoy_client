@@ -23,8 +23,6 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
-import org.simple.eventbus.Subscriber;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +32,6 @@ import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMallComponent;
 import me.jessyan.mvparms.demo.di.module.MallModule;
 import me.jessyan.mvparms.demo.mvp.contract.MallContract;
@@ -336,8 +333,12 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         typeV.setSelected(show);
         if (show && secondAdapter.getInfos().size() > 0) {
             secondAdapter.notifyDataSetChanged();
-            thirdCategoryList = new ArrayList<>();
-            thirdCategoryList.addAll(secondAdapter.getInfos().get(0).getCatagories());
+            for (Category category : secondAdapter.getInfos()) {
+                if (category.isChoice()) {
+                    thirdCategoryList = new ArrayList<>();
+                    thirdCategoryList.addAll(category.getCatagories());
+                }
+            }
             thirdAdapter = new GoodsFilterThirdAdapter(thirdCategoryList);
             ArmsUtils.configRecyclerView(thirdFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             thirdFilterRV.setAdapter(thirdAdapter);
@@ -362,30 +363,6 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         }
     }
 
-
-    @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
-    public void updateIndex(String index) {
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
-        String type = (String) cache.get("defaultIndex");
-        provideCache().put("type", type);
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            if (type.equals(tabLayout.getTabAt(i).getTag())) {
-                tabLayout.getTabAt(i).select();
-                break;
-            }
-        }
-        provideCache().put("type", type);
-        if ("1".equals(type)) {
-            mRecyclerView.setAdapter(mAdapter);
-        } else if ("2".equals(type)) {
-            mRecyclerView.setAdapter(mAdapter);
-        } else if ("3".equals(type)) {
-            mRecyclerView.setAdapter(mHAdapter);
-        }
-        initPaginate();
-    }
-
-
     @Override
     public void refreshNaviTitle(List<Category> categories) {
         List<Category> navi = new ArrayList<>();
@@ -399,21 +376,20 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
             tabLayout.addTab(tab1);
 
         }
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
-        if (cache.get("defaultIndex") != null) {
-            String type = (String) cache.get("defaultIndex");
-            cache.put("defaultIndex", null);
-            for (int i = 0; i < tabLayout.getTabCount(); i++) {
-                if (type.equals(tabLayout.getTabAt(i).getTag())) {
-                    provideCache().put("type", type);
-                    tabLayout.getTabAt(i).select();
-                    break;
-                }
-            }
-        } else {
-            tabLayout.getTabAt(0).select();
+        String type = (String) tabLayout.getTabAt(0).getTag();
+        provideCache().put("type", type);
+        tabLayout.getTabAt(0).select();
+        if ("1".equals(type)) {
+            mRecyclerView.setAdapter(mAdapter);
             mPresenter.getGoodsList(true);
+        } else if ("2".equals(type)) {
+            mRecyclerView.setAdapter(mAdapter);
+            mPresenter.getKGoodsList(true);
+        } else if ("3".equals(type)) {
+            mRecyclerView.setAdapter(mHAdapter);
+            mPresenter.getHGoodsList(true);
         }
+        initPaginate();
         LinearLayout linearLayout = (LinearLayout) tabLayout.getChildAt(0);
         linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
         linearLayout.setDividerDrawable(ContextCompat.getDrawable(getActivity(),
@@ -450,6 +426,11 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 List<Category> childs = secondAdapter.getInfos();
                 for (int i = 0; i < childs.size(); i++) {
                     childs.get(i).setChoice(i == position ? true : false);
+                    if (null != childs.get(1).getCatagories()) {
+                        for (Category childCategory : childs.get(i).getCatagories()) {
+                            childCategory.setChoice(false);
+                        }
+                    }
                 }
                 if (childs.get(position).getCatagories() == null || childs.get(position).getCatagories() != null && childs.get(position).getCatagories().size() == 0) {
                     showFilter(false);
@@ -457,7 +438,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                     provideCache().put("categoryId", "");
                     typeTV.setTextColor(choiceColor);
                     typeTV.setText(childs.get(position).getName());
-                    String type = (String) provideCache().get("defaultIndex");
+                    String type = (String) provideCache().get("type");
                     if ("1".equals(type)) {
                         mPresenter.getGoodsList(true);
                     } else if ("2".equals(type)) {
@@ -483,7 +464,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getId());
                 showFilter(false);
-                String type = (String) provideCache().get("defaultIndex");
+                String type = (String) provideCache().get("type");
                 if ("1".equals(type)) {
                     mPresenter.getGoodsList(true);
                 } else if ("2".equals(type)) {

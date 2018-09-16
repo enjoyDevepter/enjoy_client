@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/image"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:id="@+id/follow_view"
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:text="关注"
                 android:textColor="#FFFFFFFF"
-                android:textSize="11sp" />
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="1dp"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:text="粉丝"
                 android:textColor="#FFFFFFFF"
-                android:textSize="11sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 

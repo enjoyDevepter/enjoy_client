@@ -166,7 +166,15 @@ public class DoctorPresenter extends BasePresenter<DoctorContract.Model, DoctorC
             allCategory.setId("");
             allCategory.setBusType("");
             allCategory.setParentId("");
-            allCategory.setCatagories(new ArrayList<>());
+            ArrayList childList = new ArrayList();
+            Category allChildCategory = new Category();
+            allChildCategory.setChoice(true);
+            allChildCategory.setName("全部");
+            allChildCategory.setId("");
+            allChildCategory.setBusType("");
+            allChildCategory.setParentId("");
+            childList.add(allChildCategory);
+            allCategory.setCatagories(childList);
             category.getCatagories().add(allCategory);
             // 子
             for (Category child : categoryList) {
