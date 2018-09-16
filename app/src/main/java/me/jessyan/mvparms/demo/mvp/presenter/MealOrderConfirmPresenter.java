@@ -138,6 +138,7 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                             } else {
                                 EventBus.getDefault().post(EventBusTags.MEAL_PAY_SUCCESS);
                                 Intent intent = new Intent(mRootView.getActivity(), PayResultActivity.class);
+                                intent.putExtra("wait", false);
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getTotalPrice());
                                 intent.putExtra("orderTime", response.getOrderTime());

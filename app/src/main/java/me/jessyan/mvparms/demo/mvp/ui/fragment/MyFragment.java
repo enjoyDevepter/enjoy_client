@@ -304,18 +304,6 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         growthTV.setText("成长值 " + account.getGrowth());
     }
 
-
-    @Subscriber(tag = EventBusTags.USER_LOGOUT)
-    public void clear() {
-        image.setImageResource(R.mipmap.place_holder_user);
-        nickNameTV.setText("");
-        level_icon.setBackground(null);
-        moneyTV.setText("");
-        memberMoneyTV.setText("");
-        bonusTV.setText("");
-    }
-
-
     @Subscriber(tag = EventBusTags.USER_INFO_CHANGE)
     public void updateUserInfo(Member member) {
         mImageLoader.loadImage(getContext(),

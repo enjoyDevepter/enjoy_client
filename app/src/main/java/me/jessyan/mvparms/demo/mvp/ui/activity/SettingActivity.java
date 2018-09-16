@@ -147,7 +147,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
                 cache.put(KEY_KEEP + "token", null);
                 cache.put(KEY_KEEP + "signkey", null);
-                EventBus.getDefault().post(EventBusTags.USER_LOGOUT);
+                EventBus.getDefault().post(0, EventBusTags.USER_LOGOUT);
                 killMyself();
                 break;
             case R.id.get_cash_password:

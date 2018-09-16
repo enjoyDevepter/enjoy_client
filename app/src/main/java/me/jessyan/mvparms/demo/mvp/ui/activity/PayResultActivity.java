@@ -29,19 +29,15 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
     @BindView(R.id.title)
     TextView titleTV;
     @BindView(R.id.order_detail)
-    TextView orderDetailTV;
-    @BindView(R.id.pay_img)
-    View payImg;
-    @BindView(R.id.pay_result_info)
-    View payResultInfoV;
-    @BindView(R.id.success)
-    View successV;
-    @BindView(R.id.fail)
-    View failV;
-    @BindView(R.id.retry)
-    View retryV;
-    @BindView(R.id.fail_order_detail)
-    View failOrderV;
+    View orderDetailV;
+    @BindView(R.id.charge_order_detail)
+    View chargeOrderTetailV;
+    @BindView(R.id.pay_success)
+    View paySuccessV;
+    @BindView(R.id.charge_success)
+    View chargeSuccessV;
+    @BindView(R.id.order_center)
+    View orderCenterV;
 
     @BindView(R.id.order_id)
     TextView orderIdTV;
@@ -73,10 +69,13 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
     public void initData(Bundle savedInstanceState) {
         titleTV.setText("支付成功");
         backV.setOnClickListener(this);
-        orderDetailTV.setOnClickListener(this);
-        retryV.setOnClickListener(this);
-        failOrderV.setOnClickListener(this);
+        orderDetailV.setOnClickListener(this);
+        chargeOrderTetailV.setOnClickListener(this);
+        orderCenterV.setOnClickListener(this);
 
+        boolean wait = getIntent().getBooleanExtra("wait", false);
+        paySuccessV.setVisibility(wait ? View.INVISIBLE : View.VISIBLE);
+        chargeSuccessV.setVisibility(wait ? View.VISIBLE : View.INVISIBLE);
         orderIdTV.setText(getIntent().getStringExtra("orderId"));
         payTypeTV.setText(getIntent().getStringExtra("payTypeDesc"));
         moneyTV.setText(ArmsUtils.formatLong(getIntent().getLongExtra("payMoney", 0)));
@@ -118,15 +117,25 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
             case R.id.back:
                 killMyself();
                 break;
-            case R.id.fail_order_detail:
+            case R.id.order_center:
+                Intent intent = new Intent(this, MyOrderActivity.class);
+                String orderType = getIntent().getStringExtra("orderType");
+                if ("1".equals(orderType) || "4".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) { // 普通订单
+                    intent.putExtra("type", 0);
+                } else if ("2".equals(orderType) || "5".equals(orderType)) { // 生美订单
+                    intent.putExtra("type", 1);
+                } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) { // 医美订单
+                    intent.putExtra("type", 2);
+                }
+                ArmsUtils.startActivity(intent);
+                break;
             case R.id.order_detail:
+            case R.id.charge_order_detail:
                 Intent detailIntent = new Intent(this, OrderDeatilsActivity.class);
                 detailIntent.putExtra("orderId", getIntent().getStringExtra("orderId"));
                 detailIntent.putExtra("orderType", getIntent().getStringExtra("orderType"));
                 ArmsUtils.startActivity(detailIntent);
                 killMyself();
-                break;
-            case R.id.retry:
                 break;
         }
     }

@@ -171,6 +171,7 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
                                 ArmsUtils.startActivity(intent);
                             } else {
                                 Intent intent = new Intent(mRootView.getActivity(), PayResultActivity.class);
+                                intent.putExtra("wait", false);
                                 intent.putExtra("orderId", response.getOrderId());
                                 intent.putExtra("payMoney", response.getTotalPrice());
                                 intent.putExtra("orderTime", response.getOrderTime());

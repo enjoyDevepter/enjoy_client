@@ -1,12 +1,15 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.text.Html;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -82,7 +85,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         protocoTV.setText(Html.fromHtml("<font color='#9A9A9A'>同意</font><font color='#5FBFE3'>《创享会员实用协议》</font>"));
         forgetV.setOnClickListener(this);
         registerV.setOnClickListener(this);
-        protocoTV.setOnClickListener(this);
         loginV.setOnClickListener(this);
         closeV.setOnClickListener(this);
         getValidateV.setOnClickListener(this);
@@ -243,6 +245,50 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             // 短信验证码登录
             mPresenter.loginByPhone(userNameET.getText().toString(), validateET.getText().toString());
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (isShouldHideInput(v, ev)) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        // 必不可少，否则所有的组件都不会有TouchEvent了
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
+
+    public boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] leftTop = {0, 0};
+            //获取输入框当前的location位置
+            v.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int bottom = top + v.getHeight();
+            int right = left + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                // 点击的是输入框区域，保留点击EditText的事件
+                return false;
+            } else {
+                //使EditText触发一次失去焦点事件
+                v.setFocusable(false);
+//                v.setFocusable(true); //这里不需要是因为下面一句代码会同时实现这个功能
+                v.setFocusableInTouchMode(true);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

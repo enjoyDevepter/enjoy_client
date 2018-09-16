@@ -72,7 +72,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                 break;
             case 1:
                 mRootView.showConent(false);
-//                getKOrder(pullToRefresh);
                 break;
             case 2:
                 getHOrder(pullToRefresh);

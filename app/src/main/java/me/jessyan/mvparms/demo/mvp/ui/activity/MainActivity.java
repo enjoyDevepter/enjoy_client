@@ -36,6 +36,8 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import org.simple.eventbus.Subscriber;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMainComponent;
 import me.jessyan.mvparms.demo.di.module.MainModule;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
@@ -180,6 +183,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public void hideLoading() {
 
+    }
+
+    @Subscriber(tag = EventBusTags.USER_LOGOUT)
+    public void logout(int index) {
+        viewPager.setCurrentItem(0, false);
     }
 
     @Override
