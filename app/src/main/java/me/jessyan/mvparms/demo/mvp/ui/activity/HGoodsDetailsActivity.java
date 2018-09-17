@@ -94,8 +94,10 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     MoneyView depositTV;
     @BindView(R.id.tailMoney)
     MoneyView tailMoneyTV;
-    @BindView(R.id.isFavorite)
-    View isFavoriteV;
+    @BindView(R.id.collect)
+    View collectV;
+    @BindView(R.id.collect_layout)
+    View collectLayoutV;
     @BindView(R.id.saleCount)
     TextView saleCountTV;
     @BindView(R.id.name)
@@ -176,7 +178,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     DiaryListAdapter mAdapter;
     HGoodsDetailsResponse response;
     private List<View> views = new ArrayList<>();
-    private String[] titles = new String[]{"项目", "相关日志"};
+    private String[] titles = new String[]{"项目详情", "相关日志"};
     // 第一个页面
     private WebView detailWV;
     // 第二个页面
@@ -255,7 +257,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         maskSpecV.setOnClickListener(this);
         promotionCloseV.setOnClickListener(this);
         spceCloseV.setOnClickListener(this);
-        isFavoriteV.setOnClickListener(this);
+        collectLayoutV.setOnClickListener(this);
 
         ArmsUtils.configRecyclerView(promotionCV, mLayoutManager);
         promotionCV.setAdapter(promotionAdapter);
@@ -472,7 +474,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         imageCountTV.setText("1/" + response.getImages().size());
         nameTV.setText(goods.getName());
 
-        isFavoriteV.setSelected("1".equals(goods.getIsFavorite()) ? true : false);
+        collectV.setSelected("1".equals(goods.getIsFavorite()) ? true : false);
         saleCountTV.setText(String.valueOf(goods.getSales()));
 
         initViewPage();
@@ -558,13 +560,17 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             ArmsUtils.configRecyclerView(dirayRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             initPaginate();
             views.add(diraySRL);
+
+            LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
+            layoutParams1.height = Math.max(layoutParams1.height, mAdapter.getInfos().size() * ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.diray_apply_height));
+            viewpager.setLayoutParams(layoutParams1);
             viewpager.getAdapter().notifyDataSetChanged();
         }
     }
 
     @Override
     public void updateCollect(boolean collect) {
-        isFavoriteV.setSelected(collect);
+        collectV.setSelected(collect);
     }
 
     @Override
@@ -586,8 +592,8 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             case R.id.spec_close:
                 showSpec();
                 break;
-            case R.id.isFavorite:
-                mPresenter.collectGoods(!isFavoriteV.isSelected());
+            case R.id.collect_layout:
+                mPresenter.collectGoods(!collectV.isSelected());
                 break;
             case R.id.buy:
                 mPresenter.goOrderConfirm();
@@ -620,7 +626,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             showMessage("限时秒杀商品不可参加活动");
             return;
         } else if ("newpeople".equals(where)) {
-            showMessage("新人专项商品不可参加活动");
+            showMessage("新人专享商品不可选择规格");
             return;
         }
         if (promotionAdapter.getInfos().size() <= 0
@@ -647,7 +653,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             showMessage("限时秒杀商品不可选择规格");
             return;
         } else if ("newpeople".equals(where)) {
-            showMessage("新人专项商品不可选择规格");
+            showMessage("新人专享商品不可选择规格");
             return;
         }
         if (null == speceLabelsView.getLabels()
@@ -741,11 +747,11 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                 detailWV.measure(0, 0);
                 int measuredHeight = detailWV.getMeasuredHeight();
                 ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) detailWV.getLayoutParams();
-                layoutParams.height = measuredHeight;
+                layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
                 detailWV.setLayoutParams(layoutParams);
 
                 LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
-                layoutParams1.height = measuredHeight;
+                layoutParams1.height = Math.max(layoutParams1.height, layoutParams.height);
                 viewpager.setLayoutParams(layoutParams1);
             });
         }

@@ -75,7 +75,7 @@ public class ReleaseDiaryPresenter extends BasePresenter<ReleaseDiaryContract.Mo
                     @Override
                     public void onNext(GoodsListResponse response) {
                         if (response.isSuccess()) {
-                            mRootView.updateProject(response.getGoodsList().get(0));
+                            mRootView.updateProject(response);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

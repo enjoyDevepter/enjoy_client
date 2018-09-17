@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<me.jessyan.mvparms.demo.mvp.ui.widget.MaterialLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ml="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    ml:alpha="200"
+    ml:color="#FFD306"
+    ml:duration="200"
+    ml:scale="1.2">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -78,8 +83,6 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="46dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <LinearLayout
@@ -252,4 +255,4 @@
         android:textSize="13sp"
         android:visibility="gone" />
 
-</LinearLayout>
+</me.jessyan.mvparms.demo.mvp.ui.widget.MaterialLinearLayout>

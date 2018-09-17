@@ -80,8 +80,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:visibility="invisible">
+                android:orientation="vertical">
 
                 <View
                     android:id="@+id/charge_pay_img"
@@ -104,18 +103,14 @@
                     android:id="@+id/charge_order_detail"
                     android:layout_width="102dp"
                     android:layout_height="27dp"
-                    android:layout_marginBottom="25dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/order_bg"
                     android:gravity="center"
                     android:text="订单详情"
                     android:textColor="#FFFFFFFF"
                     android:textSize="12sp" />
-
-
             </LinearLayout>
-
-
         </FrameLayout>
 
         <LinearLayout

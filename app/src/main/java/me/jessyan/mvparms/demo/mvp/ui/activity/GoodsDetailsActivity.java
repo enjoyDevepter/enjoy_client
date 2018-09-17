@@ -121,6 +121,8 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     TextView spceIDTV;
     @BindView(R.id.collect)
     View collectV;
+    @BindView(R.id.collect_layout)
+    View collectLayoutV;
     @BindView(R.id.promotion_close)
     View promotionCloseV;
     @BindView(R.id.spec_close)
@@ -241,7 +243,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         maskSpecV.setOnClickListener(this);
         imagesB.setImageLoader(new GlideImageLoader());
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
-        collectV.setOnClickListener(this);
+        collectLayoutV.setOnClickListener(this);
         spceCloseV.setOnClickListener(this);
         promotionCloseV.setOnClickListener(this);
 
@@ -570,7 +572,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             case R.id.spec_close:
                 showSpec();
                 break;
-            case R.id.collect:
+            case R.id.collect_layout:
                 mPresenter.collectGoods(!collectV.isSelected());
                 break;
         }
@@ -601,7 +603,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             showMessage("限时秒杀商品不可选择规格");
             return;
         } else if ("newpeople".equals(where)) {
-            showMessage("新人专项商品不可选择规格");
+            showMessage("新人专享商品不可选择规格");
             return;
         }
 
@@ -642,7 +644,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             showMessage("限时秒杀商品不可参加活动");
             return;
         } else if ("newpeople".equals(where)) {
-            showMessage("新人专项商品不可参加活动");
+            showMessage("新人专享商品不可选择规格");
             return;
         }
         if (promotionAdapter.getInfos().size() <= 0
@@ -703,6 +705,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     @Override
     public void onBackPressed() {
         if (maskProV.isShown() || maskSpecV.isShown()) {
+
             showSpec();
             showPro();
             return;
@@ -718,11 +721,11 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 detailWV.measure(0, 0);
                 int measuredHeight = detailWV.getMeasuredHeight();
                 ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) detailWV.getLayoutParams();
-                layoutParams.height = measuredHeight;
+                layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
                 detailWV.setLayoutParams(layoutParams);
 
                 LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
-                layoutParams1.height = measuredHeight;
+                layoutParams1.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
                 viewpager.setLayoutParams(layoutParams1);
             });
         }

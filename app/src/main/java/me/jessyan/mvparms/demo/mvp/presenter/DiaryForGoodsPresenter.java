@@ -143,12 +143,6 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
                 });
     }
 
-    public void getDiaryForGoods() {
-
-
-    }
-
-
     public void vote(boolean vote, int position) {
         if (checkLoginStatus()) {
             ArmsUtils.startActivity(LoginActivity.class);

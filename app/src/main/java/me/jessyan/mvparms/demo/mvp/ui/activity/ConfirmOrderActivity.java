@@ -157,7 +157,6 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         backV.setOnClickListener(this);
         selfV.setOnClickListener(this);
         dispatchV.setOnClickListener(this);
-        couponLayoutV.setOnClickListener(this);
         confirmV.setOnClickListener(this);
         moneyET.setOnFocusChangeListener(this);
 
@@ -248,11 +247,18 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     @Override
     public void updateUI(OrderConfirmInfoResponse response) {
         this.response = response;
+
         List<Coupon> couponList = response.getCouponList();
-        if (couponList == null || (couponList != null && couponList.size() <= 0)) {
-            couponLayoutV.setVisibility(View.GONE);
+        if (null == couponList || null != couponList && couponList.size() <= 0) {
+            couponTextTV.setText("暂无优惠卷");
         } else {
-            couponLayoutV.setVisibility(View.VISIBLE);
+            couponLayoutV.setOnClickListener(this);
+            for (Coupon coupon : couponList) {
+                if (coupon.getCouponId().equals(response.getCouponId())) {
+                    couponTextTV.setText(coupon.getName());
+                    break;
+                }
+            }
         }
 
         // 配送方式
@@ -298,6 +304,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
             Store store = (Store) cache.get(listType.getDataKey());
             selfAddressTV.setText(store.getName());
         }
+
         moneyET.setHint(ArmsUtils.formatLong(response.getMoney()));
         balanceTV.setText(ArmsUtils.formatLong(response.getBalance()));
         totalPrice.setText(ArmsUtils.formatLong(response.getPrice()));

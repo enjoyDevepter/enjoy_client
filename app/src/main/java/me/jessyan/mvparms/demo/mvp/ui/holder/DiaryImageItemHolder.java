@@ -18,7 +18,6 @@ package me.jessyan.mvparms.demo.mvp.ui.holder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
@@ -52,9 +51,6 @@ public class DiaryImageItemHolder extends BaseHolder<DiaryAlbum> {
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
-        LinearLayout.LayoutParams linearLayout = (LinearLayout.LayoutParams) itemView.getLayoutParams();
-        linearLayout.width = (ArmsUtils.getScreenWidth(ArmsUtils.getContext()) - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.plus_width)) / 2;
-        itemView.setLayoutParams(linearLayout);
     }
 
     @Override

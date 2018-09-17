@@ -95,7 +95,7 @@
                         android:id="@+id/tabTwo"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
-                        android:background="@color/white"
+                        android:background="@drawable/list_item_bg"
                         android:paddingLeft="15dp"
                         app:tabIndicatorColor="#FF5FBFE3"
                         app:tabIndicatorHeight="2dp"
@@ -105,8 +105,6 @@
                         app:tabSelectedTextColor="#FF333333"
                         app:tabTextAppearance="@style/TabLayoutTextStyle"
                         app:tabTextColor="#FF333333" />
-
-                    <View style="@style/divider_1" />
 
                     <FrameLayout
                         android:layout_width="match_parent"

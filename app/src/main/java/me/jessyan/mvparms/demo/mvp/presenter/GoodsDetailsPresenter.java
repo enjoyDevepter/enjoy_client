@@ -171,10 +171,14 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                     @Override
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
-                            mRootView.showMessage("收藏成功");
+                            if (response.getCmd() == 407) {
+                                mRootView.showMessage("收藏成功");
+                            } else {
+                                mRootView.showMessage("取消收藏");
+                            }
                             mRootView.updateCollect(collect);
                         } else {
-                            mRootView.showMessage("收藏失败");
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

@@ -3,7 +3,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.response;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.DiaryAlbum;
-import me.jessyan.mvparms.demo.mvp.model.entity.DiaryGoods;
+import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.Member;
 
 /**
@@ -14,7 +14,7 @@ public class DiaryResponse extends BaseResponse {
 
     private Member member;
     private List<DiaryAlbum> diaryAlbumList;
-    private DiaryGoods goods;
+    private Goods goods;
 
     public Member getMember() {
         return member;
@@ -32,11 +32,11 @@ public class DiaryResponse extends BaseResponse {
         this.diaryAlbumList = diaryAlbumList;
     }
 
-    public DiaryGoods getGoods() {
+    public Goods getGoods() {
         return goods;
     }
 
-    public void setGoods(DiaryGoods goods) {
+    public void setGoods(Goods goods) {
         this.goods = goods;
     }
 

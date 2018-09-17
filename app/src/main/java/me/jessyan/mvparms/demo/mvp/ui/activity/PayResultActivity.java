@@ -74,8 +74,8 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
         orderCenterV.setOnClickListener(this);
 
         boolean wait = getIntent().getBooleanExtra("wait", false);
-        paySuccessV.setVisibility(wait ? View.INVISIBLE : View.VISIBLE);
-        chargeSuccessV.setVisibility(wait ? View.VISIBLE : View.INVISIBLE);
+        paySuccessV.setVisibility(wait ? View.GONE : View.VISIBLE);
+        chargeSuccessV.setVisibility(wait ? View.VISIBLE : View.GONE);
         orderIdTV.setText(getIntent().getStringExtra("orderId"));
         payTypeTV.setText(getIntent().getStringExtra("payTypeDesc"));
         moneyTV.setText(ArmsUtils.formatLong(getIntent().getLongExtra("payMoney", 0)));

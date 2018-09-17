@@ -41,6 +41,9 @@ public class DiaryImagePresenter extends BasePresenter<DiaryImageContract.Model,
     @Inject
     DiaryImageAdapter mAdapter;
 
+    private int preEndIndex;
+    private int lastPageIndex = 1;
+
     @Inject
     public DiaryImagePresenter(DiaryImageContract.Model model, DiaryImageContract.View rootView) {
         super(model, rootView);
@@ -49,25 +52,51 @@ public class DiaryImagePresenter extends BasePresenter<DiaryImageContract.Model,
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        getDiaryImages();
+        getDiaryImages(true);
     }
 
-    private void getDiaryImages() {
+    public void getDiaryImages(boolean pullToRefresh) {
         DiaryImagesRequest request = new DiaryImagesRequest();
         request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
         request.setMemberId(mRootView.getActivity().getIntent().getStringExtra("memberId"));
         request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
         mModel.getDiaryImages(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                })
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<DiaryImagesResponse>(mErrorHandler) {
                     @Override
                     public void onNext(DiaryImagesResponse response) {
                         if (response.isSuccess()) {
-                            diaryAlbumList.clear();
+                            if (pullToRefresh) {
+                                diaryAlbumList.clear();
+                            }
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             diaryAlbumList.addAll(response.getDiaryAlbumList());
+                            preEndIndex = diaryAlbumList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = diaryAlbumList.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, diaryAlbumList.size());
+                            }
                             mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());

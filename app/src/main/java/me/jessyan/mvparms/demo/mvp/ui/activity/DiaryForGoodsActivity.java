@@ -20,6 +20,8 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -28,11 +30,11 @@ import me.jessyan.mvparms.demo.di.component.DaggerDiaryForGoodsComponent;
 import me.jessyan.mvparms.demo.di.module.DiaryForGoodsModule;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryForGoodsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
+import me.jessyan.mvparms.demo.mvp.model.entity.DiaryAlbum;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.DiaryForGoodsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyDiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
-import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -105,7 +107,6 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         followV.setOnClickListener(this);
         goodsInfoV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(diaryRV, mLayoutManager);
-        diaryRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         diaryRV.setAdapter(mAdapter);
         mAdapter.setOnChildItemClickLinstener(this);
         tabLayout.addTab(tabLayout.newTab().setText("我的日记"));
@@ -158,19 +159,24 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                 ArmsUtils.startActivity(intent);
                 break;
             case R.id.left:
+                List<DiaryAlbum> diaryAlbumList = response.getDiaryAlbumList();
+                if (null == diaryAlbumList || diaryAlbumList.size() <= 0) {
+                    return;
+                }
                 Intent leftIntent = new Intent(getActivity().getApplication(), DiaryImageActivity.class);
-                leftIntent.putExtra("diaryAlbumId", response.getDiaryAlbumList().get(0).getDiaryAlbumId());
+                leftIntent.putExtra("diaryAlbumId", diaryAlbumList.get(0).getDiaryAlbumId());
                 leftIntent.putExtra("goodsId", response.getGoods().getGoodsId());
                 leftIntent.putExtra("merchId", response.getGoods().getMerchId());
                 leftIntent.putExtra("memberId", response.getMember().getMemberId());
                 ArmsUtils.startActivity(leftIntent);
                 break;
             case R.id.right:
-                if (response.getDiaryAlbumList().size() <= 1) {
+                List<DiaryAlbum> diaryList = response.getDiaryAlbumList();
+                if (null == diaryList || diaryList.size() <= 1) {
                     return;
                 }
                 Intent rightIntent = new Intent(getActivity().getApplication(), DiaryImageActivity.class);
-                rightIntent.putExtra("diaryAlbumId", response.getDiaryAlbumList().get(0).getDiaryAlbumId());
+                rightIntent.putExtra("diaryAlbumId", diaryList.get(0).getDiaryAlbumId());
                 rightIntent.putExtra("goodsId", response.getGoods().getGoodsId());
                 rightIntent.putExtra("merchId", response.getGoods().getMerchId());
                 rightIntent.putExtra("memberId", response.getMember().getMemberId());
@@ -269,6 +275,8 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                             .imageView(leftIV)
                             .build());
             leftCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(0).getNum()));
+        } else {
+            leftCountTV.setVisibility(View.GONE);
         }
         if (response.getDiaryAlbumList().size() > 1) {
             rightCountTV.setVisibility(View.VISIBLE);
@@ -300,14 +308,12 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
     public void onChildItemClick(View v, MyDiaryListAdapter.ViewName viewname, int position) {
         Diary diary = mAdapter.getInfos().get(position);
         switch (viewname) {
-            case LEFT_IMAGE:
-                break;
-            case RIGHT_IMAGE:
-                break;
             case VOTE:
                 provideCache().put("diaryId", diary.getDiaryId());
                 mPresenter.vote("1".equals(diary.getIsPraise()) ? false : true, position);
                 break;
+            case LEFT_IMAGE:
+            case RIGHT_IMAGE:
             case ITEM:
                 Intent intent = new Intent(getActivity().getApplication(), DiaryDetailsActivity.class);
                 intent.putExtra("diaryId", diary.getDiaryId());

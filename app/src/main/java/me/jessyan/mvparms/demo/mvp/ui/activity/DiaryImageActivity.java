@@ -2,8 +2,10 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -11,7 +13,9 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
 import javax.inject.Inject;
 
@@ -22,22 +26,27 @@ import me.jessyan.mvparms.demo.di.module.DiaryImageModule;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryImageContract;
 import me.jessyan.mvparms.demo.mvp.presenter.DiaryImagePresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryImageAdapter;
-import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class DiaryImageActivity extends BaseActivity<DiaryImagePresenter> implements DiaryImageContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener {
+public class DiaryImageActivity extends BaseActivity<DiaryImagePresenter> implements DiaryImageContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
     TextView titleTV;
     @BindView(R.id.images)
     RecyclerView mRecyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     DiaryImageAdapter mAdapter;
+
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -60,19 +69,82 @@ public class DiaryImageActivity extends BaseActivity<DiaryImagePresenter> implem
         titleTV.setText("日记图片");
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.plus_width), ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.plus_width)));
+        swipeRefreshLayout.setOnRefreshListener(this);
+        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                int margin = ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.space_10);
+                if (parent.getChildLayoutPosition(view) % 2 == 0) {
+                    outRect.set(0, 0, margin, margin);
+                } else {
+                    outRect.set(0, 0, 0, margin);
+                }
+            }
+        });
         mAdapter.setOnItemClickListener(this);
+        initPaginate();
+    }
+
+    /**
+     * 开始加载更多
+     */
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    @Override
+    public void setLoadedAllItems(boolean has) {
+        this.hasLoadedAllItems = has;
+    }
+
+    /**
+     * 初始化Paginate,用于加载更多
+     */
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.getDiaryImages(false);
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return hasLoadedAllItems;
+                }
+            };
+
+            mPaginate = Paginate.with(mRecyclerView, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
     }
 
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -108,6 +180,11 @@ public class DiaryImageActivity extends BaseActivity<DiaryImagePresenter> implem
     }
 
     @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
 
     }
@@ -116,5 +193,10 @@ public class DiaryImageActivity extends BaseActivity<DiaryImagePresenter> implem
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.getDiaryImages(true);
     }
 }

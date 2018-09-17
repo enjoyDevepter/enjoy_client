@@ -40,6 +40,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerReleaseDiaryComponent;
 import me.jessyan.mvparms.demo.di.module.ReleaseDiaryModule;
 import me.jessyan.mvparms.demo.mvp.contract.ReleaseDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.ReleaseDiaryPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -317,17 +318,20 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
 
     @Override
     @Subscriber(tag = EventBusTags.CHANGE_DIRAY_PROJECT)
-    public void updateProject(Goods goods) {
-        provideCache().put("goodsId", goods.getGoodsId());
-        provideCache().put("merchId", goods.getMerchId());
-        mImageLoader.loadImage(this,
-                ImageConfigImpl
-                        .builder()
-                        .placeholder(R.mipmap.place_holder_img)
-                        .url(goods.getImage())
-                        .imageView(imageIV)
-                        .build());
-        nameTV.setText(goods.getName());
-        priceMV.setMoneyText(String.valueOf(goods.getSalePrice()));
+    public void updateProject(GoodsListResponse response) {
+        if (null != response.getGoodsList() && response.getGoodsList().size() > 0) {
+            Goods goods = response.getGoodsList().get(0);
+            provideCache().put("goodsId", goods.getGoodsId());
+            provideCache().put("merchId", goods.getMerchId());
+            mImageLoader.loadImage(this,
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.mipmap.place_holder_img)
+                            .url(goods.getImage())
+                            .imageView(imageIV)
+                            .build());
+            nameTV.setText(goods.getName());
+            priceMV.setMoneyText(String.valueOf(goods.getSalePrice()));
+        }
     }
 }

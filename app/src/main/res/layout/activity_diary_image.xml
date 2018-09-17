@@ -6,12 +6,20 @@
 
     <include layout="@layout/title" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/images"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/white" />
+        android:background="@color/white"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/images"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </LinearLayout>

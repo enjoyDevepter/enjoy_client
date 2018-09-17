@@ -271,7 +271,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         if (payAll) {
             tailMoneyLayoutV.setVisibility(View.INVISIBLE);
             depositTV.setMoneyText(String.valueOf(goods.getSalePrice()));
-            depositTVTV.setText("总金额");
+            depositTVTV.setText("预付款");
             depositTagTV.setText("总金额");
             tailMoney_layout_xxV.setVisibility(View.GONE);
             deductionMoney_layoutV.setVisibility(View.VISIBLE);
@@ -280,7 +280,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
 
         } else {
             depositTVTV.setText("预付款");
-            depositTagTV.setText("总金额");
+            depositTagTV.setText("预付款");
             deductionMoney_layoutV.setVisibility(View.GONE);
             tailMoney_layout_xxV.setVisibility(View.VISIBLE);
             tailMoneyLayoutV.setVisibility(View.VISIBLE);

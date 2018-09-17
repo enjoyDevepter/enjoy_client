@@ -64,6 +64,8 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     MoneyView totalPriceTV;
     @BindView(R.id.collect)
     View collectV;
+    @BindView(R.id.collect_layout)
+    View collectLayoutV;
     @BindView(R.id.sales)
     TextView salesTV;
     @BindView(R.id.title)
@@ -153,7 +155,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     @Override
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
-        collectV.setOnClickListener(this);
+        collectLayoutV.setOnClickListener(this);
         shareV.setOnClickListener(this);
         imagesB.setImageLoader(new GlideImageLoader());
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
@@ -216,7 +218,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         totalPriceTV.setMoneyText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
         totalPriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         salesTV.setText(String.valueOf(response.getSetMealGoods().getSales()));
-        collectV.setSelected("1".equals(response.getSetMealGoods().getFavorite()) ? true : false);
+        collectV.setSelected("1".equals(response.getSetMealGoods().getIsFavorite()) ? true : false);
         depositTV.setMoneyText(String.valueOf(response.getSetMealGoods().getSalePrice()));
         tailMoneyTV.setMoneyText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
         detailWV.loadUrl(response.getSetMealGoods().getContent());
@@ -254,7 +256,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
             case R.id.buy:
                 mPresenter.buy();
                 break;
-            case R.id.collect:
+            case R.id.collect_layout:
                 mPresenter.collectGoods(!collectV.isSelected());
                 break;
             case R.id.tel:

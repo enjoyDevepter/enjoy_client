@@ -222,6 +222,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 mPresenter.follow(!followV.isSelected());
                 break;
             case R.id.praise_layout:
+                provideCache().put("diaryId", response.getDiary().getDiaryId());
+                mPresenter.vote(voteV.isSelected() ? false : true);
                 break;
             case R.id.goods_info:
                 Intent intent = new Intent(getActivity().getApplication(), GoodsDetailsActivity.class);
@@ -231,7 +233,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 break;
             case R.id.vote:
                 provideCache().put("diaryId", response.getDiary().getDiaryId());
-                mPresenter.vote("1".equals(response.getDiary().getIsPraise()) ? false : true);
+                mPresenter.vote(voteV.isSelected() ? false : true);
                 break;
         }
     }

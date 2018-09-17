@@ -228,18 +228,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:lines="2" />
+                    android:maxLines="2"
+                    android:minLines="1" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="8dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingRight="10dp">
@@ -266,7 +267,7 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center_vertical|right"
                         android:orientation="horizontal"
                         android:paddingLeft="10dp">
@@ -286,11 +287,10 @@
 
                     </LinearLayout>
 
-
                     <LinearLayout
                         android:id="@+id/praise_layout"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="10dp">

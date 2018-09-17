@@ -11,6 +11,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -285,6 +286,7 @@ public class Toasty {
                                @ColorInt int tintColor, int duration,
                                boolean withIcon, boolean shouldTint) {
         final Toast currentToast = Toast.makeText(context, "", duration);
+        currentToast.setGravity(Gravity.CENTER, 0, 0);
         final View toastLayout = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.toast_layout, null);
         final ImageView toastIcon = toastLayout.findViewById(R.id.toast_icon);
