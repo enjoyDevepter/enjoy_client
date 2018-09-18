@@ -59,7 +59,7 @@ public class DiaryImageItemHolder extends BaseHolder<DiaryAlbum> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .placeholder(R.mipmap.place_holder_img)
+                        .placeholder(R.drawable.place_holder_img)
                         .url(album.getImage())
                         .imageView(imageIV)
                         .build());

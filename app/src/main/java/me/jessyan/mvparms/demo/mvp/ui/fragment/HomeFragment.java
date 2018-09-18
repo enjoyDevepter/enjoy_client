@@ -30,6 +30,7 @@ import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -458,6 +459,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 intent.putExtra("memberId", diary.getMember().getMemberId());
                 ArmsUtils.startActivity(intent);
                 break;
+            case COMMENT:
+                break;
         }
     }
 
@@ -532,10 +535,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             result.putExtra("keywords", tab.getText());
             ArmsUtils.startActivity(result);
         } else if ("shop".equals(tag)) {
-            Intent result = new Intent(getActivity(), SearchResultActivity.class);
-            result.putExtra("type", 1);
-            result.putExtra("keywords", tab.getText());
-            ArmsUtils.startActivity(result);
+            EventBus.getDefault().post(0, EventBusTags.CHANGE_MAIN_INDEX);
         } else if ("recom_good".equals(tag)) {
             ArmsUtils.startActivity(getActivity(), RecommendActivity.class);
         } else if ("hospital".equals(tag)) {

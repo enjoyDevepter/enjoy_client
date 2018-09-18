@@ -24,6 +24,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerMyDiaryComponent;
 import me.jessyan.mvparms.demo.di.module.MyDiaryModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyDiaryContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.presenter.MyDiaryPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
@@ -32,7 +33,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements MyDiaryContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements MyDiaryContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, DiaryListAdapter.OnChildItemClickLinstener {
 
     @BindView(R.id.back)
     View backV;
@@ -83,6 +84,7 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnChildItemClickLinstener(this);
         initPaginate();
     }
 
@@ -237,5 +239,16 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
+    }
+
+    @Override
+    public void onChildItemClick(View v, DiaryListAdapter.ViewName viewname, int position) {
+        Diary diary = mAdapter.getInfos().get(position);
+        Intent intent = new Intent(getActivity().getApplication(), DiaryForGoodsActivity.class);
+        intent.putExtra("diaryId", diary.getDiaryId());
+        intent.putExtra("goodsId", diary.getGoods().getGoodsId());
+        intent.putExtra("merchId", diary.getGoods().getMerchId());
+        intent.putExtra("memberId", diary.getMember().getMemberId());
+        ArmsUtils.startActivity(intent);
     }
 }

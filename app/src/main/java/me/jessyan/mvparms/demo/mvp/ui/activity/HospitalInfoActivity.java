@@ -347,7 +347,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
-                        .placeholder(R.mipmap.place_holder_img)
+                        .placeholder(R.drawable.place_holder_img)
                         .url(hospital.getImage())
                         .imageView(hot_img)
                         .build());

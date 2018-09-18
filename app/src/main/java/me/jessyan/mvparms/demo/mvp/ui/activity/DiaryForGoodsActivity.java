@@ -270,7 +270,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
             mImageLoader.loadImage(this,
                     ImageConfigImpl
                             .builder()
-                            .placeholder(R.mipmap.place_holder_img)
+                            .placeholder(R.drawable.place_holder_img)
                             .url(response.getDiaryAlbumList().get(0).getImage())
                             .imageView(leftIV)
                             .build());
@@ -283,7 +283,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
             mImageLoader.loadImage(this,
                     ImageConfigImpl
                             .builder()
-                            .placeholder(R.mipmap.place_holder_img)
+                            .placeholder(R.drawable.place_holder_img)
                             .url(response.getDiaryAlbumList().get(1).getImage())
                             .imageView(rightIV)
                             .build());
@@ -295,7 +295,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
-                        .placeholder(R.mipmap.place_holder_img)
+                        .placeholder(R.drawable.place_holder_img)
                         .url(response.getGoods().getImage())
                         .imageView(goodsImageIV)
                         .build());
@@ -313,7 +313,19 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                 mPresenter.vote("1".equals(diary.getIsPraise()) ? false : true, position);
                 break;
             case LEFT_IMAGE:
+                if (diary.getImageList() != null && diary.getImageList().size() > 0) {
+                    Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+                    intent.putExtra("images", new String[]{diary.getImageList().get(0)});
+                    ArmsUtils.startActivity(intent);
+                }
+                break;
             case RIGHT_IMAGE:
+                if (diary.getImageList() != null && diary.getImageList().size() > 1) {
+                    Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+                    intent.putExtra("images", new String[]{diary.getImageList().get(1)});
+                    ArmsUtils.startActivity(intent);
+                }
+                break;
             case ITEM:
                 Intent intent = new Intent(getActivity().getApplication(), DiaryDetailsActivity.class);
                 intent.putExtra("diaryId", diary.getDiaryId());

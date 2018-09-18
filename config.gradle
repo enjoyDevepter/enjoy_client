@@ -47,7 +47,6 @@ ext {
             "butterknife"              : "com.jakewharton:butterknife:${version["butterknifeSdkVersion"]}",
             "butterknife-compiler"     : "com.jakewharton:butterknife-compiler:${version["butterknifeSdkVersion"]}",
             "pickerview"               : "com.contrarywind:Android-PickerView:3.2.5",
-            "photoview"                : "com.github.chrisbanes.photoview:library:1.2.3",
             "numberprogressbar"        : "com.daimajia.numberprogressbar:library:1.2@aar",
             "bottomBarLayout"          : "com.github.chaychan:BottomBarLayout:1.1.1",
             "nineoldandroids"          : "com.nineoldandroids:library:2.4.0",
@@ -60,6 +59,7 @@ ext {
             "moneyview"                : "com.github.cchao:moneyview:1.0.1",
             "actionsheet"              : "com.guoqi.widget:actionsheet:1.0",
             "barlibrary"               : "com.gyf.barlibrary:barlibrary:2.3.0",
+            "photoview"                : "com.bm.photoview:library:1.4.1",
             "wechat"                   : "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+",
 
             //rx1

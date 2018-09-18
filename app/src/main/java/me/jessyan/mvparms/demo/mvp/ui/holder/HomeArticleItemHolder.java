@@ -70,7 +70,7 @@ public class HomeArticleItemHolder extends BaseHolder<Article> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .placeholder(R.mipmap.place_holder_img)
+                        .placeholder(R.drawable.place_holder_img)
                         .url(article.getImage())
                         .imageView(imageIV)
                         .build());

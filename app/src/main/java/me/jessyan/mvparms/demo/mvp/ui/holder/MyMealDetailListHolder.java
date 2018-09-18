@@ -108,7 +108,7 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .placeholder(R.mipmap.place_holder_img)
+                        .placeholder(R.drawable.place_holder_img)
                         .url(mealGoods.getImage())
                         .imageView(imageIV)
                         .build());

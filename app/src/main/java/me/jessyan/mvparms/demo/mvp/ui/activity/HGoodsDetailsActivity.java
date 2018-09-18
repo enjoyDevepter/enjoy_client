@@ -674,7 +674,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             mImageLoader.loadImage(spceImageIV.getContext(),
                     ImageConfigImpl
                             .builder()
-                            .placeholder(R.mipmap.place_holder_img)
+                            .placeholder(R.drawable.place_holder_img)
                             .url(response.getGoods().getImage())
                             .imageView(spceImageIV)
                             .build());

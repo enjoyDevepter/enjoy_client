@@ -211,7 +211,6 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="12dp"
                         android:layout_weight="1"
-                        android:background="@mipmap/place_holder_img"
                         android:scaleType="fitXY" />
 
                     <ImageView
@@ -219,7 +218,6 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@mipmap/place_holder_img"
                         android:scaleType="fitXY" />
                 </LinearLayout>
 
@@ -321,6 +319,7 @@
                 android:layout_height="36dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/title_bg"
+                android:paddingLeft="15dp"
                 app:tabIndicatorColor="#FF50C8F5"
                 app:tabIndicatorHeight="2dp"
                 app:tabMode="scrollable"

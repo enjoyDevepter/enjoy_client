@@ -65,7 +65,7 @@ public class DiaryListAdapter extends DefaultAdapter<Diary> {
     }
 
     public enum ViewName {
-        FLLOW, LEFT_IMAGE, RIGHT_IMAGE, VOTE, ITEM
+        FLLOW, LEFT_IMAGE, RIGHT_IMAGE, VOTE, ITEM, COMMENT,
     }
 
     public interface OnChildItemClickLinstener {

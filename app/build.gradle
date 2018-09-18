@@ -97,6 +97,7 @@ dependencies {
     implementation rootProject.ext.dependencies['moneyview']
     implementation rootProject.ext.dependencies['actionsheet']
     implementation rootProject.ext.dependencies['multidex']
+    implementation rootProject.ext.dependencies['photoview']
     implementation rootProject.ext.dependencies['wechat']
 
     //tools

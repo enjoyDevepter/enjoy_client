@@ -316,7 +316,6 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 saleTV.setTextColor(unChoiceColor);
                 saleV.setSelected(false);
                 saleStatusV.setBackground(descD);
-
                 showFilter(false);
                 if ("1".equals(type)) {
                     mPresenter.getGoodsList(true);
@@ -426,7 +425,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 List<Category> childs = secondAdapter.getInfos();
                 for (int i = 0; i < childs.size(); i++) {
                     childs.get(i).setChoice(i == position ? true : false);
-                    if (null != childs.get(1).getCatagories()) {
+                    if (null != childs.get(i).getCatagories()) {
                         for (Category childCategory : childs.get(i).getCatagories()) {
                             childCategory.setChoice(false);
                         }
@@ -436,7 +435,13 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                     showFilter(false);
                     provideCache().put("secondCategoryId", "");
                     provideCache().put("categoryId", "");
-                    typeTV.setTextColor(choiceColor);
+                    if (position != 0) {
+                        typeTV.setTextColor(choiceColor);
+                        typeStatusV.setBackground(asceD);
+                    } else {
+                        typeTV.setTextColor(unChoiceColor);
+                        typeStatusV.setBackground(descD);
+                    }
                     typeTV.setText(childs.get(position).getName());
                     String type = (String) provideCache().get("type");
                     if ("1".equals(type)) {
@@ -459,8 +464,14 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 for (int i = 0; i < grands.size(); i++) {
                     grands.get(i).setChoice(i == position ? true : false);
                 }
+                if ("全部".equals(grands.get(position).getName())) {
+                    typeTV.setTextColor(unChoiceColor);
+                    typeStatusV.setBackground(descD);
+                } else {
+                    typeTV.setTextColor(choiceColor);
+                    typeStatusV.setBackground(asceD);
+                }
                 thirdAdapter.notifyDataSetChanged();
-                typeTV.setTextColor(choiceColor);
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getId());
                 showFilter(false);
@@ -494,6 +505,17 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
         provideCache().put("secondCategoryId", "");
         provideCache().put("categoryId", "");
+
+        List<Category> childs = secondAdapter.getInfos();
+        for (int i = 0; i < childs.size(); i++) {
+            childs.get(i).setChoice(i == 0 ? true : false);
+            List<Category> categories = childs.get(i).getCatagories();
+            if (null != categories) {
+                for (int j = 0; j < categories.size(); j++) {
+                    categories.get(j).setChoice(j == 0 ? true : false);
+                }
+            }
+        }
 
         if ("1".equals(type)) {
             mRecyclerView.setAdapter(mAdapter);

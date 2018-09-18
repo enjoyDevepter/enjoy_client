@@ -61,7 +61,7 @@ public class HospitalEnvImageHolder extends BaseHolder<String> {
                 ImageConfigImpl
                         .builder()
                         .url(data)
-                        .placeholder(R.mipmap.place_holder_img)
+                        .placeholder(R.drawable.place_holder_img)
                         .imageView(hospital_evn_image)
                         .build());
     }

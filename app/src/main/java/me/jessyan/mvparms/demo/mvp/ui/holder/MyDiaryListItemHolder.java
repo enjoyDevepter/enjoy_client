@@ -123,7 +123,7 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
             mImageLoader.loadImage(itemView.getContext(),
                     ImageConfigImpl
                             .builder()
-                            .placeholder(R.mipmap.place_holder_img)
+                            .placeholder(R.drawable.place_holder_img)
                             .url(diary.getImageList().get(0))
                             .imageView(leftIV)
                             .build());
@@ -132,7 +132,7 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
             mImageLoader.loadImage(itemView.getContext(),
                     ImageConfigImpl
                             .builder()
-                            .placeholder(R.mipmap.place_holder_img)
+                            .placeholder(R.drawable.place_holder_img)
                             .url(diary.getImageList().get(1))
                             .imageView(rightIV)
                             .build());

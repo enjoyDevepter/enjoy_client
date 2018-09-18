@@ -86,6 +86,8 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
     Drawable asceD;
     @BindDrawable(R.mipmap.arrow_down)
     Drawable descD;
+    @BindColor(R.color.unchoice)
+    int unChoiceColor;
     @BindColor(R.color.choice)
     int choiceColor;
     @BindColor(R.color.unchoice)
@@ -343,7 +345,7 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
                 List<Category> childs = secondAdapter.getInfos();
                 for (int i = 0; i < childs.size(); i++) {
                     childs.get(i).setChoice(i == position ? true : false);
-                    if (null != childs.get(1).getCatagories()) {
+                    if (null != childs.get(i).getCatagories()) {
                         for (Category childCategory : childs.get(i).getCatagories()) {
                             childCategory.setChoice(false);
                         }
@@ -353,7 +355,13 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
                     showFilter(false);
                     provideCache().put("secondCategoryId", "");
                     provideCache().put("categoryId", "");
-                    typeTV.setTextColor(choiceColor);
+                    if (position != 0) {
+                        typeTV.setTextColor(choiceColor);
+                        typeStatusV.setBackground(asceD);
+                    } else {
+                        typeTV.setTextColor(unChoiceColor);
+                        typeStatusV.setBackground(descD);
+                    }
                     typeTV.setText(childs.get(position).getName());
                     mPresenter.getRecommendGoodsList(true);
                     return;
@@ -370,7 +378,13 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
                     grands.get(i).setChoice(i == position ? true : false);
                 }
                 thirdAdapter.notifyDataSetChanged();
-                typeTV.setTextColor(choiceColor);
+                if ("全部".equals(grands.get(position).getName())) {
+                    typeTV.setTextColor(unChoiceColor);
+                    typeStatusV.setBackground(descD);
+                } else {
+                    typeTV.setTextColor(choiceColor);
+                    typeStatusV.setBackground(asceD);
+                }
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getId());
                 showFilter(false);

@@ -624,7 +624,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             mImageLoader.loadImage(spceImageIV.getContext(),
                     ImageConfigImpl
                             .builder()
-                            .placeholder(R.mipmap.place_holder_img)
+                            .placeholder(R.drawable.place_holder_img)
                             .url(goods.getImage())
                             .imageView(spceImageIV)
                             .build());

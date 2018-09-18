@@ -34,6 +34,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.DiaryNavi;
 import me.jessyan.mvparms.demo.mvp.presenter.DiscoverPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DiaryForGoodsActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.ImageShowActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
@@ -61,7 +62,6 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
-    private List<DiaryNavi> diaryNavis;
 
     public static DiscoverFragment newInstance() {
         DiscoverFragment fragment = new DiscoverFragment();
@@ -192,8 +192,6 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
 
     @Override
     public void updateTab(List<DiaryNavi> diaryNavis) {
-        this.diaryNavis = diaryNavis;
-
         // 一级导航
         tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText("推荐"));
@@ -259,7 +257,19 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
                 mPresenter.vote("1".equals(diary.getIsPraise()) ? false : true, position);
                 break;
             case LEFT_IMAGE:
+                if (diary.getImageList() != null && diary.getImageList().size() > 0) {
+                    Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+                    intent.putExtra("images", new String[]{diary.getImageList().get(0)});
+                    ArmsUtils.startActivity(intent);
+                }
+                break;
             case RIGHT_IMAGE:
+                if (diary.getImageList() != null && diary.getImageList().size() > 1) {
+                    Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+                    intent.putExtra("images", new String[]{diary.getImageList().get(1)});
+                    ArmsUtils.startActivity(intent);
+                }
+                break;
             case ITEM:
                 Intent intent = new Intent(getActivity().getApplication(), DiaryForGoodsActivity.class);
                 intent.putExtra("diaryId", diary.getDiaryId());

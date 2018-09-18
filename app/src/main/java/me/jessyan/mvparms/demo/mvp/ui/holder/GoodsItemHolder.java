@@ -81,8 +81,7 @@ public class GoodsItemHolder extends BaseHolder<GoodSummary> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .placeholder(R.mipmap.place_holder_img)
-                        .placeholder(R.mipmap.place_holder_img)
+                        .placeholder(R.drawable.place_holder_img)
                         .url(goodSummary.getImage())
                         .imageView(imageIV)
                         .build());

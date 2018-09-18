@@ -173,7 +173,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
-                        .placeholder(R.mipmap.place_holder_img)
+                        .placeholder(R.drawable.place_holder_img)
                         .url(response.getPayEntryList().get(0).getImage())
                         .imageView(payOneIV)
                         .build());
@@ -183,7 +183,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
-                        .placeholder(R.mipmap.place_holder_img)
+                        .placeholder(R.drawable.place_holder_img)
                         .url(response.getPayEntryList().get(1).getImage())
                         .imageView(payTwoIV)
                         .build());

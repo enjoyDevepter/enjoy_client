@@ -129,6 +129,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         return R.layout.activity_main; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    @Subscriber(tag = EventBusTags.CHANGE_MAIN_INDEX)
+    public void updateIndex(int index) {
+        viewPager.setCurrentItem(1, false);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -348,7 +353,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                         mImageLoader.loadImage(image.getContext(),
                                 ImageConfigImpl
                                         .builder()
-                                        .placeholder(R.mipmap.place_holder_img)
+                                        .placeholder(R.drawable.place_holder_img)
                                         .url(ad.getImageUrl())
                                         .imageView(image)
                                         .build());

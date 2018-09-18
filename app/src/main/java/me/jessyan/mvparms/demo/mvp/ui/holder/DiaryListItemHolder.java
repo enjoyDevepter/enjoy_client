@@ -63,6 +63,8 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
     TextView browseTV;
     @BindView(R.id.comment)
     TextView commentTV;
+    @BindView(R.id.comment_layout)
+    View commentV;
     @BindView(R.id.isPraise)
     View isPraiseTV;
     @BindView(R.id.praise)
@@ -83,6 +85,7 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
         mImageLoader = mAppComponent.imageLoader();
         fllowV.setOnClickListener(this);
         praiseLayoutV.setOnClickListener(this);
+        commentV.setOnClickListener(this);
         leftIV.setOnClickListener(this);
         rightIV.setOnClickListener(this);
         this.onChildItemClickLinstener = onChildItemClickLinstener;
@@ -103,6 +106,9 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
                     return;
                 case R.id.praise_layout:
                     onChildItemClickLinstener.onChildItemClick(view, DiaryListAdapter.ViewName.VOTE, getAdapterPosition());
+                    return;
+                case R.id.comment_layout:
+                    onChildItemClickLinstener.onChildItemClick(view, DiaryListAdapter.ViewName.COMMENT, getAdapterPosition());
                     return;
             }
         }
@@ -141,7 +147,7 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
             mImageLoader.loadImage(itemView.getContext(),
                     ImageConfigImpl
                             .builder()
-                            .placeholder(R.mipmap.place_holder_img)
+                            .placeholder(R.drawable.place_holder_img)
                             .url(diary.getImageList().get(0))
                             .imageView(leftIV)
                             .build());
@@ -150,7 +156,7 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
                     ImageConfigImpl
                             .builder()
                             .url("")
-                            .placeholder(R.mipmap.place_holder_img)
+                            .placeholder(R.drawable.place_holder_img)
                             .imageView(leftIV)
                             .build());
         }
@@ -158,7 +164,7 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
             mImageLoader.loadImage(itemView.getContext(),
                     ImageConfigImpl
                             .builder()
-                            .placeholder(R.mipmap.place_holder_img)
+                            .placeholder(R.drawable.place_holder_img)
                             .url(diary.getImageList().get(1))
                             .imageView(rightIV)
                             .build());
@@ -167,7 +173,7 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
                     ImageConfigImpl
                             .builder()
                             .url("")
-                            .placeholder(R.mipmap.place_holder_img)
+                            .placeholder(R.drawable.place_holder_img)
                             .imageView(rightIV)
                             .build());
         }
