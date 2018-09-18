@@ -75,7 +75,7 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
                     @Override
                     public void onNext(CategoryResponse response) {
                         if (response.isSuccess()) {
-                            sortCategory(response.getGoodsCategoryList());
+                            mRootView.refreshNaviTitle(sortCategory(response.getGoodsCategoryList()));
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

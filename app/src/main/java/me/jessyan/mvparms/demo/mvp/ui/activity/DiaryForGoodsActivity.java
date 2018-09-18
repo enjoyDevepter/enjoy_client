@@ -35,6 +35,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.DiaryForGoodsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyDiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
+import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -108,6 +109,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         goodsInfoV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(diaryRV, mLayoutManager);
         diaryRV.setAdapter(mAdapter);
+        diaryRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         mAdapter.setOnChildItemClickLinstener(this);
         tabLayout.addTab(tabLayout.newTab().setText("我的日记"));
         initPaginate();
@@ -276,6 +278,13 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                             .build());
             leftCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(0).getNum()));
         } else {
+            mImageLoader.loadImage(this,
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.drawable.place_holder_img)
+                            .url("")
+                            .imageView(leftIV)
+                            .build());
             leftCountTV.setVisibility(View.GONE);
         }
         if (response.getDiaryAlbumList().size() > 1) {
@@ -289,6 +298,13 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                             .build());
             rightCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(1).getNum()));
         } else {
+            mImageLoader.loadImage(this,
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.drawable.place_holder_img)
+                            .url("")
+                            .imageView(rightIV)
+                            .build());
             rightCountTV.setVisibility(View.INVISIBLE);
         }
 

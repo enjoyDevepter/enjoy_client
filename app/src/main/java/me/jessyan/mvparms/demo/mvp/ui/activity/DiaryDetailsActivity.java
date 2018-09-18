@@ -308,6 +308,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                             .url(response.getDiary().getImageList().get(0))
                             .imageView(leftIV)
                             .build());
+        } else {
+            leftIV.setBackgroundResource(R.drawable.place_holder_img);
         }
         if (response.getDiary().getImageList() != null && response.getDiary().getImageList().size() > 1) {
             mImageLoader.loadImage(this,
@@ -317,6 +319,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                             .url(response.getDiary().getImageList().get(1))
                             .imageView(rightIV)
                             .build());
+        } else {
+            rightIV.setBackgroundResource(R.drawable.place_holder_img);
         }
     }
 

@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.contract;
 
 import android.app.Activity;
 
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 
@@ -20,6 +21,8 @@ public interface SearchContract {
         Activity getActivity();
 
         void dimissHotLayout();
+
+        Cache getCache();
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存

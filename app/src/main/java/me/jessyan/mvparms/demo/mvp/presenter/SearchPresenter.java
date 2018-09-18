@@ -89,11 +89,6 @@ public class SearchPresenter extends BasePresenter<SearchContract.Model, SearchC
                 });
     }
 
-    public void goSearch(String keywords) {
-
-    }
-
-
     public void getCategory() {
 
         SimpleRequest request = new SimpleRequest();
@@ -124,7 +119,7 @@ public class SearchPresenter extends BasePresenter<SearchContract.Model, SearchC
                 categories.add(category);
             }
         }
-
+        mRootView.getCache().put("busType", categories.size() > 0 ? categories.get(0).getBusType() : "1");
         for (Category category : categories) {
             // 子
             for (Category child : categoryList) {

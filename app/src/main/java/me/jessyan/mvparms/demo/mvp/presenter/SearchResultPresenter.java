@@ -76,16 +76,13 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
     }
 
     public void getSearchResult(boolean pullToRefresh) {
-        switch (mRootView.getActivity().getIntent().getIntExtra("type", 0)) {
-            case 0:
-                getGoodsList(pullToRefresh);
-                break;
-            case 1:
-                getKGoodsList(pullToRefresh);
-                break;
-            case 2:
-                getHGoodsList(pullToRefresh);
-                break;
+        String busType = mRootView.getActivity().getIntent().getStringExtra("busType");
+        if ("1".equals(busType)) {
+            getGoodsList(pullToRefresh);
+        } else if ("2".equals(busType)) {
+            getKGoodsList(pullToRefresh);
+        } else if ("3".equals(busType)) {
+            getHGoodsList(pullToRefresh);
         }
     }
 
@@ -302,7 +299,16 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
             }
         }
         this.categories.clear();
-        this.categories.addAll(categories.get(0).getCatagories());
+        String busType = mRootView.getActivity().getIntent().getStringExtra("busType");
+        for (Category category : categories) {
+            if (busType.equals(category.getBusType())) {
+                this.categories.addAll(category.getCatagories());
+                break;
+            }
+        }
+        if (this.categories.size() <= 0) {
+            this.categories.addAll(categories.get(0).getCatagories());
+        }
         return categories;
     }
 

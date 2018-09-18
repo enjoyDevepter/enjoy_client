@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<me.jessyan.mvparms.demo.mvp.ui.widget.MaterialRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ml="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@drawable/title_bg"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    ml:alpha="200"
+    ml:color="#FFD306"
+    ml:duration="200"
+    ml:scale="1.2">
 
 
     <LinearLayout
@@ -30,4 +35,4 @@
         android:text="当前定位"
         android:textColor="#FF333333"
         android:textSize="18sp" />
-</RelativeLayout>
+</me.jessyan.mvparms.demo.mvp.ui.widget.MaterialRelativeLayout>

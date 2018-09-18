@@ -127,6 +127,8 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
                             .url(diary.getImageList().get(0))
                             .imageView(leftIV)
                             .build());
+        } else {
+            leftIV.setBackgroundResource(R.drawable.place_holder_img);
         }
         if (diary.getImageList() != null && diary.getImageList().size() > 1) {
             mImageLoader.loadImage(itemView.getContext(),
@@ -136,6 +138,8 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
                             .url(diary.getImageList().get(1))
                             .imageView(rightIV)
                             .build());
+        } else {
+            rightIV.setBackgroundResource(R.drawable.place_holder_img);
         }
 
     }

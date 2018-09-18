@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -91,7 +92,6 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         ((HistoryAdapter) historyAdapter).setOnItemClickListener(this);
         cleanV.setOnClickListener(this);
         contentET.setOnEditorActionListener(this);
-        provideCache().put("type", 0);
         mPresenter.getHot();
         mPresenter.getCategory();
     }
@@ -126,7 +126,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
     @Override
     public boolean onTagClick(View view, int position, FlowLayout parent) {
         Intent result = new Intent(this, SearchResultActivity.class);
-        result.putExtra("type", (int) provideCache().get("type"));
+        result.putExtra("busType", (String) provideCache().get("busType"));
         result.putExtra("keywords", (String) adapter.getItem(position));
         ArmsUtils.startActivity(result);
         return true;
@@ -140,6 +140,11 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
     @Override
     public void dimissHotLayout() {
         hotLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
     }
 
     @Override
@@ -159,7 +164,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
         Intent result = new Intent(this, SearchResultActivity.class);
-        result.putExtra("type", (int) provideCache().get("type"));
+        result.putExtra("busType", (String) provideCache().get("busType"));
         result.putExtra("keywords", (String) data);
         ArmsUtils.startActivity(result);
     }
@@ -178,7 +183,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
             @Override
             public void onItemClick(View view, int viewType, Object data, int position) {
                 searchTypeV.setText(((Category) data).getName());
-                provideCache().put("type", position);
+                provideCache().put("busType", ((Category) data).getBusType());
                 if (popupWindow != null) {
                     popupWindow.dismiss();
                     popupWindow = null;
@@ -196,7 +201,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         switch (actionId) {
             case EditorInfo.IME_ACTION_SEARCH:
                 Intent result = new Intent(this, SearchResultActivity.class);
-                result.putExtra("type", (int) provideCache().get("type"));
+                result.putExtra("busType", (String) provideCache().get("busType"));
                 result.putExtra("keywords", contentET.getText().toString());
                 ArmsUtils.startActivity(result);
                 return true;

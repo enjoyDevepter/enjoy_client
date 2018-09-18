@@ -41,6 +41,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.presenter.MallPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterSecondAdapter;
@@ -51,6 +52,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -113,6 +115,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
     @Inject
     GoodsFilterSecondAdapter secondAdapter;
     GoodsFilterThirdAdapter thirdAdapter;
+    private List<Category> typeCategories;
 
     private List<Category> thirdCategoryList;
 
@@ -276,6 +279,11 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 mPresenter.goCart();
                 break;
             case R.id.message:
+                Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getActivity()).extras();
+                if (ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
+                    ArmsUtils.startActivity(LoginActivity.class);
+                    return;
+                }
                 ArmsUtils.startActivity(MessageActivity.class);
                 break;
             case R.id.search:
@@ -364,13 +372,13 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
 
     @Override
     public void refreshNaviTitle(List<Category> categories) {
-        List<Category> navi = new ArrayList<>();
+        typeCategories = new ArrayList<>();
         for (Category category : categories) {
             if ("0".equals(category.getParentId())) {
-                navi.add(category);
+                typeCategories.add(category);
             }
         }
-        for (Category category : navi) {
+        for (Category category : typeCategories) {
             TabLayout.Tab tab1 = tabLayout.newTab().setTag(category.getBusType()).setText(category.getName());
             tabLayout.addTab(tab1);
 
@@ -506,14 +514,11 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         provideCache().put("secondCategoryId", "");
         provideCache().put("categoryId", "");
 
-        List<Category> childs = secondAdapter.getInfos();
-        for (int i = 0; i < childs.size(); i++) {
-            childs.get(i).setChoice(i == 0 ? true : false);
-            List<Category> categories = childs.get(i).getCatagories();
-            if (null != categories) {
-                for (int j = 0; j < categories.size(); j++) {
-                    categories.get(j).setChoice(j == 0 ? true : false);
-                }
+        secondAdapter.getInfos().clear();
+        for (Category category : typeCategories) {
+            if (tab.getTag().equals(category.getBusType())) {
+                secondAdapter.getInfos().addAll(category.getCatagories());
+                break;
             }
         }
 
@@ -526,6 +531,16 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         } else if ("3".equals(type)) {
             mRecyclerView.setAdapter(mHAdapter);
             mPresenter.getHGoodsList(true);
+        }
+        List<Category> childs = secondAdapter.getInfos();
+        for (int i = 0; i < childs.size(); i++) {
+            childs.get(i).setChoice(i == 0 ? true : false);
+            List<Category> categories = childs.get(i).getCatagories();
+            if (null != categories) {
+                for (int j = 0; j < categories.size(); j++) {
+                    categories.get(j).setChoice(j == 0 ? true : false);
+                }
+            }
         }
         initPaginate();
     }

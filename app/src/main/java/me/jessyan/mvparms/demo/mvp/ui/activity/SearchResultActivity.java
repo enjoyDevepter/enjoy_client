@@ -140,16 +140,13 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
         secondFilterRV.setAdapter(secondAdapter);
         secondAdapter.setOnItemClickListener(this);
 
-        switch (getIntent().getIntExtra("type", 0)) {
-            case 0:
-                mRecyclerView.setAdapter(mAdapter);
-                break;
-            case 1:
-                mRecyclerView.setAdapter(mAdapter);
-                break;
-            case 2:
-                mRecyclerView.setAdapter(mHAdapter);
-                break;
+        String busType = getIntent().getStringExtra("busType");
+        if ("1".equals(busType)) {
+            mRecyclerView.setAdapter(mAdapter);
+        } else if ("2".equals(busType)) {
+            mRecyclerView.setAdapter(mAdapter);
+        } else if ("3".equals(busType)) {
+            mRecyclerView.setAdapter(mHAdapter);
         }
         initPaginate();
     }

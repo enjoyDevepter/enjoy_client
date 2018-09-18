@@ -50,7 +50,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:gravity="right"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="wrap_content"

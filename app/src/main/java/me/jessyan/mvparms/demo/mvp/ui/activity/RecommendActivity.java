@@ -99,6 +99,7 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
     @Inject
     GoodsFilterSecondAdapter secondAdapter;
     GoodsFilterThirdAdapter thirdAdapter;
+    private List<Category> typeCategories;
 
     private List<Category> thirdCategoryList;
 
@@ -156,6 +157,16 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
     public void showError(boolean hasDate) {
         onDate.setVisibility(hasDate ? INVISIBLE : VISIBLE);
         swipeRefreshLayout.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+    }
+
+    @Override
+    public void refreshNaviTitle(List<Category> categories) {
+        typeCategories = new ArrayList<>();
+        for (Category category : categories) {
+            if ("0".equals(category.getParentId())) {
+                typeCategories.add(category);
+            }
+        }
     }
 
 
