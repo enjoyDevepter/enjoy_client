@@ -61,11 +61,15 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        getDiary();
-        getMyDiaryList();
+        getDiaryForGoodsInfo(true);
     }
 
-    public void getMyDiaryList() {
+    public void getDiaryForGoodsInfo(boolean pullToRefresh) {
+        getDiary();
+        getMyDiaryList(pullToRefresh);
+    }
+
+    public void getMyDiaryList(boolean pullToRefresh) {
         MyDiaryRequest request = new MyDiaryRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         String token = (String) (cache.get(KEY_KEEP + "token"));
@@ -75,19 +79,29 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
             request.setCmd(806);
         }
         request.setToken(token);
-        request.setPageIndex(lastPageIndex);
         request.setMemberId(mRootView.getActivity().getIntent().getStringExtra("memberId"));
         request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
         request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
         mModel.getMyDiaryList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
-                    mRootView.startLoadMore();//显示上拉加载更多的进度条
+                    if (pullToRefresh) {
+                        mRootView.showLoading();
+                    } else {
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                    }
                 })
                 .doFinally(() -> {
-                    mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                    if (pullToRefresh) {
+                        mRootView.hideLoading();
+                    } else {
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                    }
                 })
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
@@ -95,15 +109,19 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
                     @Override
                     public void onNext(DiaryListResponse response) {
                         if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                diaryList.clear();
+                            }
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             diaryList.addAll(response.getDiaryList());
-                            preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = diaryList.size() / 10;
                             if (lastPageIndex == 1) {
+                                mRootView.updateDiaryUI(diaryList.size());
                                 mAdapter.notifyDataSetChanged();
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
                             }
+                            preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = diaryList.size() / 3;
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

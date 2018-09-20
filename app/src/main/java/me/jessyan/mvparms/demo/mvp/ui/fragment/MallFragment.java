@@ -194,11 +194,11 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 public void onLoadMore() {
                     String type = (String) provideCache().get("type");
                     if ("1".equals(type)) {
-                        mPresenter.getGoodsList(true);
+                        mPresenter.getGoodsList(false);
                     } else if ("2".equals(type)) {
-                        mPresenter.getKGoodsList(true);
+                        mPresenter.getKGoodsList(false);
                     } else if ("3".equals(type)) {
-                        mPresenter.getHGoodsList(true);
+                        mPresenter.getHGoodsList(false);
                     }
                 }
 
@@ -472,13 +472,8 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
                 for (int i = 0; i < grands.size(); i++) {
                     grands.get(i).setChoice(i == position ? true : false);
                 }
-                if ("全部".equals(grands.get(position).getName())) {
-                    typeTV.setTextColor(unChoiceColor);
-                    typeStatusV.setBackground(descD);
-                } else {
-                    typeTV.setTextColor(choiceColor);
-                    typeStatusV.setBackground(asceD);
-                }
+                typeTV.setTextColor(choiceColor);
+                typeStatusV.setBackground(asceD);
                 thirdAdapter.notifyDataSetChanged();
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getId());

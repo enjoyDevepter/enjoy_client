@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,18 +37,20 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.utils.NumberToChn;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerDiaryDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.DiaryDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
 import me.jessyan.mvparms.demo.mvp.presenter.DiaryDetailsPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> implements DiaryDetailsContract.View, View.OnClickListener, TextView.OnEditorActionListener {
+public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> implements DiaryDetailsContract.View, View.OnClickListener, TextView.OnEditorActionListener, NestedScrollView.OnScrollChangeListener {
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
@@ -98,9 +102,12 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     TextView praiseTV;
     @BindView(R.id.tab)
     TabLayout tab;
+    @BindView(R.id.tabFloat)
+    TabLayout tabFloatLayout;
     @BindView(R.id.commentRV)
     RecyclerView commentRV;
-
+    @BindView(R.id.nestedScrollView)
+    HiNestedScrollView nestedScrollView;
 
     @BindView(R.id.content)
     EditText commentET;
@@ -179,6 +186,20 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         ArmsUtils.configRecyclerView(commentRV, mLayoutManager);
         commentRV.setAdapter(mAdapter);
         tab.addTab(tab.newTab().setText("全部评论"));
+        tabFloatLayout.addTab(tabFloatLayout.newTab().setText("全部评论"));
+        commentRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
+                if (firstCompletelyVisibleItemPosition == 0) {
+                    nestedScrollView.setNeedScroll(true);
+                }
+            }
+        });
+        nestedScrollView.setOnScrollChangeListener(this);
+        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
     @Override
@@ -249,6 +270,13 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 .setCallback(shareListener)
                 .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
                 .open();
+    }
+
+    @Override
+    public void comment(boolean success) {
+        if (success) {
+            commentET.setText("");
+        }
     }
 
     @Override
@@ -374,5 +402,19 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(commentRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
+    }
+
+    @Override
+    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        int[] location = new int[2];
+        tab.getLocationOnScreen(location);
+        int yPosition = location[1];
+        if (yPosition <= ArmsUtils.getDimens(this.getActivity(), R.dimen.title_height)) {
+            tabFloatLayout.setVisibility(View.VISIBLE);
+            nestedScrollView.setNeedScroll(false);
+        } else {
+            tabFloatLayout.setVisibility(View.GONE);
+            nestedScrollView.setNeedScroll(true);
+        }
     }
 }

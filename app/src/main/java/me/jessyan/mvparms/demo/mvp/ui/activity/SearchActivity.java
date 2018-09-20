@@ -128,6 +128,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         Intent result = new Intent(this, SearchResultActivity.class);
         result.putExtra("busType", (String) provideCache().get("busType"));
         result.putExtra("keywords", (String) adapter.getItem(position));
+        result.putExtra("title", (String) adapter.getItem(position));
         ArmsUtils.startActivity(result);
         return true;
     }
@@ -166,6 +167,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         Intent result = new Intent(this, SearchResultActivity.class);
         result.putExtra("busType", (String) provideCache().get("busType"));
         result.putExtra("keywords", (String) data);
+        result.putExtra("title", (String) data);
         ArmsUtils.startActivity(result);
     }
 
@@ -203,6 +205,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
                 Intent result = new Intent(this, SearchResultActivity.class);
                 result.putExtra("busType", (String) provideCache().get("busType"));
                 result.putExtra("keywords", contentET.getText().toString());
+                result.putExtra("title", contentET.getText().toString());
                 ArmsUtils.startActivity(result);
                 return true;
         }

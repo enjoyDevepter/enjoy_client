@@ -16,6 +16,8 @@
     <dimen name="address_list_item_space_15">15dp</dimen>
     <dimen name="space_10">10dp</dimen>
     <dimen name="space_5">5dp</dimen>
+    <dimen name="home_search_height">40dp</dimen>
+    <dimen name="title_height">50dp</dimen>
 
     <dimen name="dialog_height">100dp</dimen>
     <dimen name="ad_dialog_height">482dp</dimen>

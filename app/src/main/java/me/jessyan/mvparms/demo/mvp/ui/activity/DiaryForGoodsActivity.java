@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.cchao.MoneyView;
@@ -34,13 +38,15 @@ import me.jessyan.mvparms.demo.mvp.model.entity.DiaryAlbum;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.DiaryForGoodsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyDiaryListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
+import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> implements DiaryForGoodsContract.View, View.OnClickListener, MyDiaryListAdapter.OnChildItemClickLinstener {
+public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> implements DiaryForGoodsContract.View, View.OnClickListener, MyDiaryListAdapter.OnChildItemClickLinstener, NestedScrollView.OnScrollChangeListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
@@ -67,8 +73,14 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
     TextView goodsNameTV;
     @BindView(R.id.goods_price)
     MoneyView goodsPriceTV;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.nestedScrollView)
+    HiNestedScrollView nestedScrollView;
     @BindView(R.id.tab)
     TabLayout tabLayout;
+    @BindView(R.id.tabFloat)
+    TabLayout talFloatLayout;
     @BindView(R.id.diaryRV)
     RecyclerView diaryRV;
     @Inject
@@ -109,21 +121,36 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         goodsInfoV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(diaryRV, mLayoutManager);
         diaryRV.setAdapter(mAdapter);
-        diaryRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
+        diaryRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(getContext(), R.dimen.address_list_item_space)));
         mAdapter.setOnChildItemClickLinstener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
         tabLayout.addTab(tabLayout.newTab().setText("我的日记"));
+        talFloatLayout.addTab(talFloatLayout.newTab().setText("我的日记"));
+        diaryRV.setNestedScrollingEnabled(false);
+        diaryRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
+                if (firstCompletelyVisibleItemPosition == 0) {
+                    nestedScrollView.setNeedScroll(true);
+                }
+            }
+        });
+        nestedScrollView.setOnScrollChangeListener(this);
         initPaginate();
     }
 
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -208,6 +235,13 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         this.hasLoadedAllItems = has;
     }
 
+    @Override
+    public void updateDiaryUI(int count) {
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) diaryRV.getLayoutParams();
+        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(getContext(), R.dimen.address_list_item_space) * (count - 1);
+        diaryRV.setLayoutParams(layoutParams);
+    }
+
     /**
      * 初始化Paginate,用于加载更多
      */
@@ -216,7 +250,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.getMyDiaryList();
+                    mPresenter.getMyDiaryList(false);
                 }
 
                 @Override
@@ -356,5 +390,24 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         DefaultAdapter.releaseAllHolder(diaryRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         this.mPaginate = null;
         super.onDestroy();
+    }
+
+    @Override
+    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        int[] location = new int[2];
+        tabLayout.getLocationOnScreen(location);
+        int yPosition = location[1];
+        if (yPosition <= ArmsUtils.getDimens(this.getActivity(), R.dimen.title_height)) {
+            talFloatLayout.setVisibility(View.VISIBLE);
+            nestedScrollView.setNeedScroll(false);
+        } else {
+            talFloatLayout.setVisibility(View.GONE);
+            nestedScrollView.setNeedScroll(true);
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.getDiaryForGoodsInfo(true);
     }
 }

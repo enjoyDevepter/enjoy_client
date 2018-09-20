@@ -10,7 +10,7 @@ public class MyDiaryRequest extends BaseRequest {
     private int cmd;
     private String token;
     private int pageIndex = 1;
-    private int pageSize = 10;
+    private int pageSize = 3;
     private String memberId;
     private String goodsId;
     private String merchId;

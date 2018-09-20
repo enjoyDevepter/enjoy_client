@@ -15,7 +15,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -91,12 +93,21 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     private boolean isDoctorEnd;
     // 第四个页面
     private RecyclerView envList;
+    private Mobile mobile = new Mobile();
+    private WebViewClient mClient = new WebViewClient() {
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            mobile.onGetWebContentHeight();
+        }
+    };
 
     private void initViewPager() {
         // 初始化第一个页面
         hospitalInfo = new WebView(this);
         hospitalInfo.getSettings().setUseWideViewPort(true);
         hospitalInfo.getSettings().setLoadWithOverviewMode(true);
+        hospitalInfo.addJavascriptInterface(mobile, "mobile");
+        hospitalInfo.setWebViewClient(mClient);
         views[0] = hospitalInfo;
 
         // 初始化第二个页面
@@ -371,5 +382,23 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         hGoodsintent.putExtra("merchId", hGoods.getMerchId());
         hGoodsintent.putExtra("advanceDepositId", hGoods.getAdvanceDepositId());
         ArmsUtils.startActivity(hGoodsintent);
+    }
+
+    private class Mobile {
+        @JavascriptInterface
+        public void onGetWebContentHeight() {
+            //重新调整webview高度
+//            detailWV.post(() -> {
+//                detailWV.measure(0, 0);
+//                int measuredHeight = detailWV.getMeasuredHeight();
+//                ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) detailWV.getLayoutParams();
+//                layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
+//                detailWV.setLayoutParams(layoutParams);
+//
+//                LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
+//                layoutParams1.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
+//                viewpager.setLayoutParams(layoutParams1);
+//            });
+        }
     }
 }

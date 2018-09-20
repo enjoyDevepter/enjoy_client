@@ -29,7 +29,6 @@ import org.simple.eventbus.EventBus;
  */
 public interface EventBusTags {
 
-    String CHANGE_MAIN_INDEX = "change_main_index";
     /**
      * 城市切换
      */

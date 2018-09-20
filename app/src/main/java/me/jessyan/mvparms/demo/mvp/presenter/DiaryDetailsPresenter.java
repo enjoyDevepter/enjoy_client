@@ -167,8 +167,9 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                 .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
                     public void onNext(BaseResponse response) {
-                        mRootView.showMessage(response.getRetDesc());
+                        mRootView.comment(response.isSuccess());
                         if (response.isSuccess()) {
+                            mRootView.showMessage("评论成功!");
                             getDiaryComment();
                         }
                     }

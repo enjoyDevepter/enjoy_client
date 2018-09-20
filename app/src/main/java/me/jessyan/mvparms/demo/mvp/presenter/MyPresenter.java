@@ -64,8 +64,10 @@ public class MyPresenter extends BasePresenter<MyContract.Model, MyContract.View
         UserInfoRequest request = new UserInfoRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
+        if (ArmsUtils.isEmpty(token)) {
+            return;
+        }
         request.setToken(token);
-
         mModel.getUserInfo(request)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {

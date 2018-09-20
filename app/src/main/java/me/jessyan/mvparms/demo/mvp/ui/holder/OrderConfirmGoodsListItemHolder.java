@@ -58,6 +58,10 @@ public class OrderConfirmGoodsListItemHolder extends BaseHolder<Goods> {
     View minusV;
     @BindView(R.id.add)
     View addV;
+    @BindView(R.id.type_layout)
+    View typeLayoutV;
+    @BindView(R.id.spce_count)
+    View spce_countV;
     @BindView(R.id.operation)
     View operationV;
     private OrderConfirmGoodsListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
@@ -93,9 +97,15 @@ public class OrderConfirmGoodsListItemHolder extends BaseHolder<Goods> {
     public void setData(Goods data, int position) {
         if (data.getSecKillPrice() != 0) {
             priceTV.setMoneyText(String.valueOf(data.getSecKillPrice()));
+            spce_countV.setVisibility(View.VISIBLE);
+            typeLayoutV.setVisibility(View.GONE);
         } else if (data.getVipPrice() != 0) {
+            spce_countV.setVisibility(View.VISIBLE);
+            typeLayoutV.setVisibility(View.GONE);
             priceTV.setMoneyText(String.valueOf(data.getVipPrice()));
         } else {
+            spce_countV.setVisibility(View.GONE);
+            typeLayoutV.setVisibility(View.VISIBLE);
             priceTV.setMoneyText(String.valueOf(data.getSalePrice()));
         }
         Observable.just(data.getName())
@@ -133,5 +143,7 @@ public class OrderConfirmGoodsListItemHolder extends BaseHolder<Goods> {
         this.countTV = null;
         this.minusV = null;
         this.addV = null;
+        this.spce_countV = null;
+        this.typeLayoutV = null;
     }
 }

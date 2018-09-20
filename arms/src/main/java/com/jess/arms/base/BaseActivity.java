@@ -98,18 +98,23 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             e.printStackTrace();
         }
 
-        ImmersionBar.with(this)
-                .fitsSystemWindows(true)
-                .statusBarDarkFont(true)
-                .statusBarColor(android.R.color.white)
-                .init(); //初始化，默认透明状态栏和黑色导航栏
+        if (useImmersive()) {
+            ImmersionBar.with(this)
+                    .fitsSystemWindows(true)
+                    .statusBarDarkFont(true)
+                    .statusBarColor(android.R.color.white)
+                    .init(); //初始化，默认透明状态栏和黑色导航栏
+        }
+
 
         initData(savedInstanceState);
     }
 
     @Override
     protected void onDestroy() {
-        ImmersionBar.with(this).destroy(); //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
+        if (useImmersive()) {
+            ImmersionBar.with(this).destroy(); //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
+        }
         super.onDestroy();
         if (mUnbinder != null && mUnbinder != Unbinder.EMPTY)
             mUnbinder.unbind();
@@ -117,6 +122,13 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
         if (mPresenter != null)
             mPresenter.onDestroy();//释放资源
         this.mPresenter = null;
+    }
+
+    /**
+     * 是否使用沉浸式状态栏,默认为使用(true)，
+     */
+    public boolean useImmersive() {
+        return true;
     }
 
     /**

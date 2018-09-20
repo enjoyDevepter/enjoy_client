@@ -5,7 +5,6 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
-import com.jess.arms.utils.PermissionUtil;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
@@ -59,24 +58,6 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
     }
 
     public void updateHomeInfo() {
-
-        //请求外部存储权限用于适配android6.0的权限管理机制
-
-        PermissionUtil.readPhoneState(new PermissionUtil.RequestPermission() {
-            @Override
-            public void onRequestPermissionSuccess() {
-            }
-
-            @Override
-            public void onRequestPermissionFailure(List<String> permissions) {
-            }
-
-            @Override
-            public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
-            }
-        }, mRootView.getRxPermissions(), mErrorHandler);
-
-        //request permission success, do something.
         HomeRequest request = new HomeRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         String token = String.valueOf(cache.get(KEY_KEEP + "token"));
@@ -99,19 +80,19 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
             mRootView.hideLoading();//隐藏下拉刷新的进度条
         }).compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<HomeResponse>(mErrorHandler) {
-            @Override
-            public void onNext(HomeResponse response) {
-                if (response.isSuccess()) {
-                    mRootView.refreshUI(response.getFirstNavList(), response.getCarouselList(), response.getModuleList(), response.getSecondNavList());
-                    getRecommenDiaryList();
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
+                    @Override
+                    public void onNext(HomeResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.refreshUI(response.getFirstNavList(), response.getCarouselList(), response.getModuleList(), response.getSecondNavList());
+                            getRecommenDiaryList(true);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
     }
 
-    public void getRecommenDiaryList() {
+    public void getRecommenDiaryList(boolean pullToRefresh) {
 
         DiaryListRequest request = new DiaryListRequest();
 
@@ -124,6 +105,7 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
         }
         request.setToken(token);
 
+        if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
         mModel.getDiaryList(request)
@@ -138,13 +120,13 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
             @Override
             public void onNext(DiaryListResponse response) {
                 if (response.isSuccess()) {
-                    if (lastPageIndex == 1) {
+                    if (pullToRefresh) {
                         diaryList.clear();
                     }
                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                     diaryList.addAll(response.getDiaryList());
                     preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = diaryList.size() / 10 == 0 ? 1 : diaryList.size() / 10;
+                    lastPageIndex = diaryList.size() / 3;
                     if (lastPageIndex == 1) {
                         mRootView.updateDiaryUI(diaryList.size());
                         mAdapter.notifyDataSetChanged();

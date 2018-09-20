@@ -305,6 +305,7 @@ public class DoctorActivity extends BaseActivity<DoctorPresenter> implements Doc
                     provideCache().put("secondCategoryId", "");
                     provideCache().put("categoryId", "");
                     typeTV.setTextColor(choiceColor);
+                    typeStatusV.setBackground(asceD);
                     typeTV.setText(childs.get(position).getName());
                     mPresenter.getDoctorList(true);
                     return;
@@ -323,6 +324,7 @@ public class DoctorActivity extends BaseActivity<DoctorPresenter> implements Doc
                 thirdAdapter.notifyDataSetChanged();
                 typeTV.setTextColor(choiceColor);
                 typeTV.setText(grands.get(position).getName());
+                typeStatusV.setBackground(asceD);
                 provideCache().put("categoryId", grands.get(position).getId());
                 showFilter(false);
                 mPresenter.getDoctorList(true);

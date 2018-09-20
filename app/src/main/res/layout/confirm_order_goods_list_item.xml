@@ -62,9 +62,22 @@
             money:prefix_size="12sp"
             money:yuan_size="17sp" />
 
+        <TextView
+            android:id="@+id/spce_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/price"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:text="x1"
+            android:textColor="#FF666666"
+            android:textSize="12sp" />
+
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/type_layout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/white"

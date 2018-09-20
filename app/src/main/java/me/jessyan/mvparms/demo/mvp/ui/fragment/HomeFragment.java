@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +31,6 @@ import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -73,15 +73,18 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HomeArticleAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HomeGoodsAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
+import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
+import static android.support.v7.widget.RecyclerView.LayoutManager;
+import static android.support.v7.widget.RecyclerView.OnClickListener;
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
 import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_NAME;
 
 
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, DiaryListAdapter.OnChildItemClickLinstener, DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener {
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, OnClickListener, SwipeRefreshLayout.OnRefreshListener, DiaryListAdapter.OnChildItemClickLinstener, DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener, NestedScrollView.OnScrollChangeListener {
 
     @BindView(R.id.message)
     View messageV;
@@ -93,6 +96,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TabLayout tabLayout;
     @BindView(R.id.tabTwo)
     TabLayout tabLayoutTwo;
+    @BindView(R.id.tabTwoFloat)
+    TabLayout tabTwoFloat;
     @BindView(R.id.banner)
     Banner banner;
     @BindView(R.id.module_layout)
@@ -101,12 +106,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     RecyclerView mRecyclerView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.nestedScrollView)
+    HiNestedScrollView nestedScrollView;
     @Inject
     RxPermissions mRxPermissions;
     @Inject
-    RecyclerView.LayoutManager mLayoutManager;
+    LayoutManager mLayoutManager;
     @Inject
     DiaryListAdapter mAdapter;
+
+    private List<NaviInfo> firstNavList;
 
     private Paginate mPaginate;
     private boolean isLoadingMore;
@@ -144,6 +153,24 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         mAdapter.setOnChildItemClickLinstener(this);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
+                if (firstCompletelyVisibleItemPosition == 0) {
+                    nestedScrollView.setNeedScroll(true);
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+        nestedScrollView.setOnScrollChangeListener(this);
         initPaginate();
         mPresenter.updateHomeInfo();
     }
@@ -157,6 +184,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         }
         if (null != tabLayoutTwo.getTabAt(0)) {
             tabLayoutTwo.getTabAt(0).select();
+        }
+        if (null != tabTwoFloat.getTabAt(0)) {
+            tabTwoFloat.getTabAt(0).select();
         }
     }
 
@@ -194,7 +224,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.getRecommenDiaryList();
+                    mPresenter.getRecommenDiaryList(false);
                 }
 
                 @Override
@@ -224,6 +254,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void refreshUI(List<NaviInfo> firstNavList, List<Ad> ads, List<Module> moduleList, List<NaviInfo> secondNavList) {
 
         // 一级导航
+        this.firstNavList = firstNavList;
         tabLayout.removeAllTabs();
         tabLayout.addOnTabSelectedListener(this);
         for (NaviInfo naviInfo : firstNavList) {
@@ -338,9 +369,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
         // 二级导航
         tabLayoutTwo.removeAllTabs();
+        tabTwoFloat.removeAllTabs();
         tabLayoutTwo.addOnTabSelectedListener(this);
+        tabTwoFloat.addOnTabSelectedListener(this);
         for (NaviInfo naviInfo : secondNavList) {
             tabLayoutTwo.addTab(tabLayoutTwo.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
+            tabTwoFloat.addTab(tabTwoFloat.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
         }
     }
 
@@ -393,6 +427,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             }
             if (null != tabLayoutTwo && null != tabLayoutTwo.getTabAt(0)) {
                 tabLayoutTwo.getTabAt(0).select();
+            }
+            if (null != tabTwoFloat && null != tabTwoFloat.getTabAt(0)) {
+                tabTwoFloat.getTabAt(0).select();
             }
         }
     }
@@ -531,11 +568,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             ArmsUtils.startActivity(TaoCanActivity.class);
         } else if ("medicalcosmetology".equals(tag)) {
             Intent result = new Intent(getActivity(), SearchResultActivity.class);
-            result.putExtra("type", 2);
-            result.putExtra("keywords", tab.getText());
+            result.putExtra("busType", "2");
+            result.putExtra("title", firstNavList.get(tab.getPosition()).getTitle());
             ArmsUtils.startActivity(result);
         } else if ("shop".equals(tag)) {
-            EventBus.getDefault().post(0, EventBusTags.CHANGE_MAIN_INDEX);
+            Intent result = new Intent(getActivity(), SearchResultActivity.class);
+            result.putExtra("busType", "1");
+            result.putExtra("title", firstNavList.get(tab.getPosition()).getTitle());
+            ArmsUtils.startActivity(result);
         } else if ("recom_good".equals(tag)) {
             ArmsUtils.startActivity(getActivity(), RecommendActivity.class);
         } else if ("hospital".equals(tag)) {
@@ -553,5 +593,19 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        int[] location = new int[2];
+        tabLayoutTwo.getLocationOnScreen(location);
+        int yPosition = location[1];
+        if (yPosition <= ArmsUtils.getDimens(this.getActivity(), R.dimen.home_search_height)) {
+            tabTwoFloat.setVisibility(View.VISIBLE);
+            nestedScrollView.setNeedScroll(false);
+        } else {
+            tabTwoFloat.setVisibility(View.GONE);
+            nestedScrollView.setNeedScroll(true);
+        }
     }
 }

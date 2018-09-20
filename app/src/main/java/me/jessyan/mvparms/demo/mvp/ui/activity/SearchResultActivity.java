@@ -126,7 +126,7 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        titleTV.setText(getIntent().getStringExtra("keywords"));
+        titleTV.setText(getIntent().getStringExtra("title"));
         backV.setOnClickListener(this);
         typeV.setOnClickListener(this);
         saleV.setOnClickListener(this);
@@ -379,13 +379,8 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
                     grands.get(i).setChoice(i == position ? true : false);
                 }
                 thirdAdapter.notifyDataSetChanged();
-                if ("全部".equals(grands.get(position).getName())) {
-                    typeTV.setTextColor(unChoiceColor);
-                    typeStatusV.setBackground(descD);
-                } else {
-                    typeTV.setTextColor(choiceColor);
-                    typeStatusV.setBackground(asceD);
-                }
+                typeTV.setTextColor(choiceColor);
+                typeStatusV.setBackground(asceD);
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getId());
                 showFilter(false);

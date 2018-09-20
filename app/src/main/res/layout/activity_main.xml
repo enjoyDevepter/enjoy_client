@@ -5,14 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <!--<FrameLayout
-        android:id="@+id/fl_content"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#ffffff"></FrameLayout>-->
-
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
@@ -34,7 +26,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/touch_bg"
             app:iconHeight="17dp"
             app:iconNormal="@mipmap/home_nor"
             app:iconSelected="@mipmap/home_sel"
@@ -50,7 +41,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/touch_bg"
             app:iconHeight="17dp"
             app:iconNormal="@mipmap/mall_nor"
             app:iconSelected="@mipmap/mall_sel"
@@ -66,7 +56,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/touch_bg"
             app:iconHeight="17dp"
             app:iconNormal="@mipmap/find_nor"
             app:iconSelected="@mipmap/find_sel"
@@ -82,7 +71,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/touch_bg"
             app:iconHeight="17dp"
             app:iconNormal="@mipmap/appointment_nor"
             app:iconSelected="@mipmap/appointment_sel"
@@ -98,7 +86,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/touch_bg"
             app:iconHeight="17dp"
             app:iconNormal="@mipmap/my_nor"
             app:iconSelected="@mipmap/my_sel"
