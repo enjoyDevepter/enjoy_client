@@ -7,7 +7,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
 public class DiaryListRequest extends BaseRequest {
     private int cmd;
     private int pageIndex = 1;
-    private int pageSize = 3;
+    private int pageSize = 4;
     private String token;
     private String typeId;
 

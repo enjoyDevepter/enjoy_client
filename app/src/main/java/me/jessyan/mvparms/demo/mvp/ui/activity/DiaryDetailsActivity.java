@@ -194,7 +194,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
                 if (firstCompletelyVisibleItemPosition == 0) {
-                    nestedScrollView.setNeedScroll(true);
+//                    nestedScrollView.setNeedScroll(true);
                 }
             }
         });
@@ -337,7 +337,13 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                             .imageView(leftIV)
                             .build());
         } else {
-            leftIV.setBackgroundResource(R.drawable.place_holder_img);
+            mImageLoader.loadImage(this,
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.drawable.place_holder_img)
+                            .url("")
+                            .imageView(leftIV)
+                            .build());
         }
         if (response.getDiary().getImageList() != null && response.getDiary().getImageList().size() > 1) {
             mImageLoader.loadImage(this,
@@ -348,7 +354,13 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                             .imageView(rightIV)
                             .build());
         } else {
-            rightIV.setBackgroundResource(R.drawable.place_holder_img);
+            mImageLoader.loadImage(this,
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.drawable.place_holder_img)
+                            .url("")
+                            .imageView(rightIV)
+                            .build());
         }
     }
 
@@ -411,10 +423,10 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         int yPosition = location[1];
         if (yPosition <= ArmsUtils.getDimens(this.getActivity(), R.dimen.title_height)) {
             tabFloatLayout.setVisibility(View.VISIBLE);
-            nestedScrollView.setNeedScroll(false);
+//            nestedScrollView.setNeedScroll(false);
         } else {
             tabFloatLayout.setVisibility(View.GONE);
-            nestedScrollView.setNeedScroll(true);
+//            nestedScrollView.setNeedScroll(true);
         }
     }
 }

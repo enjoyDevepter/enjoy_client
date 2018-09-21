@@ -66,7 +66,7 @@ public class HospitalListItemHolder extends BaseHolder<Hospital> {
 
         Observable.just(hospital.getName())
                 .subscribe(s -> nameTV.setText(s));
-        Observable.just(hospital.getDistance())
+        Observable.just(hospital.getDistanceDesc())
                 .subscribe(s -> distanceTV.setText(String.valueOf(s)));
         Observable.just(hospital.getAddress())
                 .subscribe(s -> addressTV.setText(String.valueOf(s)));

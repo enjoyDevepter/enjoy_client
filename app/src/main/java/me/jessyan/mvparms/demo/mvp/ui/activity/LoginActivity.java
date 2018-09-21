@@ -152,11 +152,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.forget:
-                killMyself();
                 ArmsUtils.startActivity(ForgetActivity.class);
                 break;
             case R.id.register:
-                killMyself();
                 ArmsUtils.startActivity(RegisterActivity.class);
                 break;
             case R.id.protocol:

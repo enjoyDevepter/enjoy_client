@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.jessyan.mvparms.demo.mvp.ui.widget.MaterialRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ml="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/title_layout"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@drawable/title_bg"
@@ -35,4 +36,4 @@
         android:text="当前定位"
         android:textColor="#FF333333"
         android:textSize="18sp" />
-</me.jessyan.mvparms.demo.mvp.ui.widget.MaterialRelativeLayout>
+</RelativeLayout>

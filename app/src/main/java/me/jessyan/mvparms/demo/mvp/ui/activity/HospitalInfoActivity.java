@@ -19,6 +19,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -26,6 +27,7 @@ import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
@@ -62,6 +64,8 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     TabLayout tab;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    @BindView(R.id.follow)
+    View followV;
     @Inject
     ImageLoader mImageLoader;
     @Inject
@@ -274,6 +278,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         String titleStr1 = getIntent().getStringExtra(KEY_FOR_HOSPITAL_NAME);
         title.setText(titleStr1);
         back.setOnClickListener(this);
+        followV.setOnClickListener(this);
         initViewPager();
         initTabLayout();
     }
@@ -294,6 +299,16 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     public void hideGoodsLoading() {
         ((SwipeRefreshLayout) views[1]).setRefreshing(false);
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    public void updatefollowStatus(boolean follow) {
+        followV.setSelected(follow);
     }
 
     public void startLoadGoodsMore() {
@@ -343,6 +358,9 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
             case R.id.back:
                 killMyself();
                 break;
+            case R.id.follow:
+                mPresenter.follow(!followV.isSelected());
+                break;
         }
     }
 
@@ -362,6 +380,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
                         .url(hospital.getImage())
                         .imageView(hot_img)
                         .build());
+        followV.setSelected("1".equals(hospital.getIsFollow()) ? true : false);
     }
 
     @Override
@@ -388,17 +407,17 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         @JavascriptInterface
         public void onGetWebContentHeight() {
             //重新调整webview高度
-//            detailWV.post(() -> {
-//                detailWV.measure(0, 0);
-//                int measuredHeight = detailWV.getMeasuredHeight();
-//                ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) detailWV.getLayoutParams();
-//                layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
-//                detailWV.setLayoutParams(layoutParams);
-//
-//                LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
-//                layoutParams1.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
-//                viewpager.setLayoutParams(layoutParams1);
-//            });
+            hospitalInfo.post(() -> {
+                hospitalInfo.measure(0, 0);
+                int measuredHeight = hospitalInfo.getMeasuredHeight();
+                ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) hospitalInfo.getLayoutParams();
+                layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
+                hospitalInfo.setLayoutParams(layoutParams);
+
+                LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
+                layoutParams1.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
+                viewpager.setLayoutParams(layoutParams1);
+            });
         }
     }
 }

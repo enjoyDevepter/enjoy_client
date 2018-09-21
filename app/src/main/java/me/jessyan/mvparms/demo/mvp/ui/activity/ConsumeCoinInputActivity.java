@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -12,6 +14,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -43,15 +46,23 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPresenter> implements ConsumeCoinInputContract.View, PayManager.PayListener {
-
+public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPresenter> implements ConsumeCoinInputContract.View, PayManager.PayListener, NestedScrollView.OnScrollChangeListener {
+    @BindView(R.id.title_layout)
+    View titleLayoutV;
     @BindView(R.id.back)
     View back;
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.pay)
+    TabLayout payLayout;
+    @BindView(R.id.tab)
+    TabLayout tabLayout;
+    @BindView(R.id.tabFloat)
+    TabLayout tabFloatLayout;
 
     @BindView(R.id.consume_count)
     TextView consume_count;  // 消费币
@@ -205,6 +216,9 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
         updateUserAccount((MemberAccount) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT));
         title.setText("消费币");
+        tabLayout.addTab(tabLayout.newTab().setText("充值记录"));
+        tabFloatLayout.addTab(tabFloatLayout.newTab().setText("充值记录"));
+        payLayout.addTab(payLayout.newTab().setText("请选择支付方式"));
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -328,6 +342,15 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     }
 
     @Override
+    public void updateUI(int count) {
+        int[] location = new int[2];
+        titleLayoutV.getLocationInWindow(location);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) contentList.getLayoutParams();
+        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1;
+        contentList.setLayoutParams(layoutParams);
+    }
+
+    @Override
     public void showError(boolean hasDate) {
         onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
         contentList.setVisibility(hasDate ? VISIBLE : INVISIBLE);
@@ -338,6 +361,20 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
         this.mPaginate = null;
+    }
+
+    @Override
+    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        int[] location = new int[2];
+        tabLayout.getLocationOnScreen(location);
+        int[] titleLocation = new int[2];
+        titleLayoutV.getLocationInWindow(titleLocation);
+        int yPosition = location[1];
+        if (yPosition < (titleLayoutV.getHeight() + titleLocation[1])) {
+            tabFloatLayout.setVisibility(View.VISIBLE);
+        } else {
+            tabFloatLayout.setVisibility(View.GONE);
+        }
     }
 
     enum PayType {

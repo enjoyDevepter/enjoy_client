@@ -85,7 +85,8 @@ import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_F
 
 
 public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, OnClickListener, SwipeRefreshLayout.OnRefreshListener, DiaryListAdapter.OnChildItemClickLinstener, DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener, NestedScrollView.OnScrollChangeListener {
-
+    @BindView(R.id.title_layout)
+    View titleV;
     @BindView(R.id.message)
     View messageV;
     @BindView(R.id.city)
@@ -114,9 +115,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LayoutManager mLayoutManager;
     @Inject
     DiaryListAdapter mAdapter;
-
     private List<NaviInfo> firstNavList;
-
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
@@ -153,28 +152,24 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         mAdapter.setOnChildItemClickLinstener(this);
-        mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
-                if (firstCompletelyVisibleItemPosition == 0) {
-                    nestedScrollView.setNeedScroll(true);
-                }
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+                System.out.println("RecyclerView layoutManager.findLastCompletelyVisibleItemPosition() " + layoutManager.findLastCompletelyVisibleItemPosition());
+                System.out.println("RecyclerView layoutManager.findFirstCompletelyVisibleItemPosition() " + layoutManager.findFirstCompletelyVisibleItemPosition());
+//                int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
+//                if (firstCompletelyVisibleItemPosition == 0) {
+//                    nestedScrollView.setNeedScroll(true);
+//                }
             }
         });
+        mRecyclerView.setNestedScrollingEnabled(false);
         nestedScrollView.setOnScrollChangeListener(this);
         initPaginate();
         mPresenter.updateHomeInfo();
     }
-
 
     @Override
     public void onResume() {
@@ -380,8 +375,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void updateDiaryUI(int count) {
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mRecyclerView.getLayoutParams();
-        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mRecyclerView.getLayoutParams();
+        int[] location = new int[2];
+        titleV.getLocationInWindow(location);
+        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * count + 1;
         mRecyclerView.setLayoutParams(layoutParams);
     }
 
@@ -568,7 +565,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             ArmsUtils.startActivity(TaoCanActivity.class);
         } else if ("medicalcosmetology".equals(tag)) {
             Intent result = new Intent(getActivity(), SearchResultActivity.class);
-            result.putExtra("busType", "2");
+            result.putExtra("busType", "3");
             result.putExtra("title", firstNavList.get(tab.getPosition()).getTitle());
             ArmsUtils.startActivity(result);
         } else if ("shop".equals(tag)) {
@@ -597,14 +594,35 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        if (scrollY > oldScrollY) {
+            // 向下滑动
+            System.out.println("yPosition 向下滑动");
+        }
+
+        if (scrollY < oldScrollY) {
+            // 向上滑动
+            System.out.println("yPosition 向上滑动");
+        }
+        if (scrollY == 0) {
+            // 顶部
+            System.out.println("yPosition 顶部");
+        }
+
+        if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+            // 底部
+            System.out.println("yPosition 底部");
+
+        }
         int[] location = new int[2];
         tabLayoutTwo.getLocationOnScreen(location);
         int yPosition = location[1];
-        if (yPosition <= ArmsUtils.getDimens(this.getActivity(), R.dimen.home_search_height)) {
-            tabTwoFloat.setVisibility(View.VISIBLE);
+        int[] titleLocation = new int[2];
+        titleV.getLocationInWindow(titleLocation);
+        if (yPosition < (titleV.getHeight() + titleLocation[1])) {
+            tabTwoFloat.setVisibility(View.INVISIBLE);
             nestedScrollView.setNeedScroll(false);
         } else {
-            tabTwoFloat.setVisibility(View.GONE);
+            tabTwoFloat.setVisibility(View.INVISIBLE);
             nestedScrollView.setNeedScroll(true);
         }
     }

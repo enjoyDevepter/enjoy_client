@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -170,4 +171,15 @@ public class ScreenUtil {
         }
     }
 
+    public static int getScreenHeightPx(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        if (windowManager != null) {
+//            windowManager.getDefaultDisplay().getMetrics(dm);
+            windowManager.getDefaultDisplay().getRealMetrics(dm);
+            return dm.heightPixels;
+        }
+        return 0;
+
+    }
 }

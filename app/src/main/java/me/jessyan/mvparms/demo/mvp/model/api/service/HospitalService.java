@@ -8,6 +8,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoRe
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
@@ -26,5 +28,8 @@ public interface HospitalService {
 
     @POST("gateway")
     Observable<HospitalResponse> getHospitalList(@Body HospitalListRequest request);
+
+    @POST("gateway")
+    Observable<BaseResponse> follow(@Body FollowRequest request);
 
 }

@@ -3,10 +3,9 @@ package me.jessyan.mvparms.demo.mvp.model;
 import android.app.Application;
 
 import com.google.gson.Gson;
+import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
-
-import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
@@ -15,14 +14,16 @@ import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.DoctorService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.HGoodsService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.HospitalService;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 
 
 @ActivityScope
@@ -68,5 +69,11 @@ public class HospitalInfoModel extends BaseModel implements HospitalInfoContract
     public Observable<HGoodsListResponse> getHGoodsList(GoodsListRequest request) {
         return mRepositoryManager.obtainRetrofitService(HGoodsService.class)
                 .getHGoodsList(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> follow(FollowRequest request) {
+        return mRepositoryManager.obtainRetrofitService(HospitalService.class)
+                .follow(request);
     }
 }

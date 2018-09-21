@@ -47,6 +47,8 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> implements DiaryForGoodsContract.View, View.OnClickListener, MyDiaryListAdapter.OnChildItemClickLinstener, NestedScrollView.OnScrollChangeListener, SwipeRefreshLayout.OnRefreshListener {
+    @BindView(R.id.title_layout)
+    View titleLayoutV;
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
@@ -134,7 +136,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
                 if (firstCompletelyVisibleItemPosition == 0) {
-                    nestedScrollView.setNeedScroll(true);
+//                    nestedScrollView.setNeedScroll(true);
                 }
             }
         });
@@ -237,8 +239,10 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
 
     @Override
     public void updateDiaryUI(int count) {
+        int[] location = new int[2];
+        titleLayoutV.getLocationInWindow(location);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) diaryRV.getLayoutParams();
-        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(getContext(), R.dimen.address_list_item_space) * (count - 1);
+        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1;
         diaryRV.setLayoutParams(layoutParams);
     }
 
@@ -396,13 +400,15 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
         int[] location = new int[2];
         tabLayout.getLocationOnScreen(location);
+        int[] titleLocation = new int[2];
+        titleLayoutV.getLocationInWindow(titleLocation);
         int yPosition = location[1];
-        if (yPosition <= ArmsUtils.getDimens(this.getActivity(), R.dimen.title_height)) {
+        if (yPosition < (titleLayoutV.getHeight() + titleLocation[1])) {
             talFloatLayout.setVisibility(View.VISIBLE);
-            nestedScrollView.setNeedScroll(false);
+//            nestedScrollView.setNeedScroll(false);
         } else {
             talFloatLayout.setVisibility(View.GONE);
-            nestedScrollView.setNeedScroll(true);
+//            nestedScrollView.setNeedScroll(true);
         }
     }
 

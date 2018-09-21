@@ -30,8 +30,10 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospit
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
-import me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
+import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalEnvImageAdapter;
@@ -40,6 +42,7 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
 
 
 @ActivityScope
@@ -94,8 +97,35 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         getHGoodsList(true);
     }
 
+    public void follow(boolean follow) {
+        if (checkLoginStatus()) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+        FollowRequest request = new FollowRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(follow ? 604 : 605);
+        request.setMemberId((String) cache.get(KEY_FOR_HOSPITAL_ID));
+        mModel.follow(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.updatefollowStatus(follow);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
     private void initHospital() {
-        String hospitalId = mRootView.getActivity().getIntent().getStringExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID);
+        String hospitalId = mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
         if (TextUtils.isEmpty(token)) {
@@ -163,7 +193,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         DoctorListRequest request = new DoctorListRequest();
         request.setPageIndex(pageIndex);
         request.setPageSize(10);
-        String hospitalId = mRootView.getActivity().getIntent().getStringExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID);
+        String hospitalId = mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID);
         request.setHospitalId(hospitalId);
 
         mModel.requestDoctorPage(request)
@@ -206,7 +236,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         GoodsListRequest request = new GoodsListRequest();
         request.setCmd(449);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID));
+        request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
         request.setCity(String.valueOf(cache.get("city")));
         request.setCounty(String.valueOf(cache.get("county")));
         request.setProvince(String.valueOf(cache.get("province")));
@@ -260,5 +290,11 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                         }
                     }
                 });
+    }
+
+    private boolean checkLoginStatus() {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) (cache.get(KEY_KEEP + "token"));
+        return ArmsUtils.isEmpty(token);
     }
 }

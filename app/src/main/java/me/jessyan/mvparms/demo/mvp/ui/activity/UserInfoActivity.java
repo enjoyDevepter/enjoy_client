@@ -68,6 +68,8 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     View nameV;
     @BindView(R.id.name)
     TextView nameTV;
+    @BindView(R.id.phone)
+    TextView phoneTV;
     @BindView(R.id.male_layout)
     View maleV;
     @BindView(R.id.male)
@@ -150,6 +152,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
         nickNameTV.setText(member.getNickName() + "");
         maleTV.setText("0".equals(member.getSex()) ? "保密" : "1".equals(member.getSex()) ? "男" : "女");
         ageTV.setText(member.getAge() + "");
+        phoneTV.setText(member.getMobile() + "");
         Area city = member.getCity();
         if (city != null) {
             areaTV.setText(city.getName());

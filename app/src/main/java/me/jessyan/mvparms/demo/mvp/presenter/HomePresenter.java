@@ -94,6 +94,7 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
 
     public void getRecommenDiaryList(boolean pullToRefresh) {
 
+        System.out.println("getRecommenDiaryList");
         DiaryListRequest request = new DiaryListRequest();
 
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
@@ -126,8 +127,8 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                     diaryList.addAll(response.getDiaryList());
                     preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = diaryList.size() / 3;
-                    if (lastPageIndex == 1) {
+                    lastPageIndex = diaryList.size() / 4;
+                    if (pullToRefresh) {
                         mRootView.updateDiaryUI(diaryList.size());
                         mAdapter.notifyDataSetChanged();
                     } else {

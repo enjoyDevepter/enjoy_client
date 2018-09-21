@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.contract;
 
 import android.app.Activity;
 
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 
@@ -14,7 +15,9 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospit
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 
 
 public interface HospitalInfoContract {
@@ -39,6 +42,11 @@ public interface HospitalInfoContract {
         void hideDoctorLoading();
 
         void hideGoodsLoading();
+
+        Cache getCache();
+
+        void updatefollowStatus(boolean follow);
+
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -50,5 +58,8 @@ public interface HospitalInfoContract {
         Observable<DoctorListResponse> requestDoctorPage(DoctorListRequest request);
 
         Observable<HGoodsListResponse> getHGoodsList(GoodsListRequest request);
+
+        Observable<BaseResponse> follow(FollowRequest request);
+
     }
 }

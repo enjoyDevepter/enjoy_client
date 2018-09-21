@@ -743,7 +743,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         @JavascriptInterface
         public void onGetWebContentHeight() {
             //重新调整webview高度
-            detailWV.postDelayed(() -> {
+            detailWV.post(() -> {
                 detailWV.measure(0, 0);
                 int measuredHeight = detailWV.getMeasuredHeight();
                 ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) detailWV.getLayoutParams();
@@ -753,7 +753,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                 LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
                 layoutParams1.height = Math.max(layoutParams1.height, layoutParams.height);
                 viewpager.setLayoutParams(layoutParams1);
-            }, 1000);
+            });
         }
     }
 }

@@ -22,6 +22,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -102,6 +103,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
                             Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
                             cache.put(KEY_KEEP + "token", response.getToken());
                             cache.put(KEY_KEEP + "signkey", response.getSignkey());
+                            mAppManager.killActivity(LoginActivity.class);
                             mRootView.killMyself();
                         } else {
                             mRootView.showVerity();

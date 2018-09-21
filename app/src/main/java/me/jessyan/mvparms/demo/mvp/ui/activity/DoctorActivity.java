@@ -32,6 +32,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerDoctorComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterSecondAdapter;
@@ -289,6 +290,9 @@ public class DoctorActivity extends BaseActivity<DoctorPresenter> implements Doc
     public void onItemClick(View view, int viewType, Object data, int position) {
         switch (viewType) {
             case R.layout.hospital_info_doctor_list_item:
+                Intent intent = new Intent(this, DoctorMainActivity.class);
+                intent.putExtra(DoctorMainActivity.KEY_FOR_DOCTOR_ID, ((DoctorBean) data).getDoctorId());
+                ArmsUtils.startActivity(intent);
                 break;
             case R.layout.goods_filter_second_item:
                 List<Category> childs = secondAdapter.getInfos();

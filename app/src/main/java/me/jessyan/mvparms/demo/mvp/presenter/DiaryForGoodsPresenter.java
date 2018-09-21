@@ -121,7 +121,7 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
                                 mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
                             }
                             preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = diaryList.size() / 3;
+                            lastPageIndex = diaryList.size() / 10;
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

@@ -61,16 +61,13 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.convert)
     View convert;
+    @BindView(R.id.no_date)
+    View onDateV;
+    @BindView(R.id.go_to_list)
+    TextView go_to_list;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean isEnd;
-
-    @BindView(R.id.no_date)
-    View onDateV;
-
-
-    @BindView(R.id.go_to_list)
-    TextView go_to_list;
 
     @Override
     public void showError(boolean hasDate) {
@@ -148,8 +145,8 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
             }
         });
 
-        Cache<String,Object> cache= ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        updateUserAccount ((MemberAccount)cache.get(KEY_KEEP+ MyModel.KEY_FOR_USER_ACCOUNT));
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        updateUserAccount((MemberAccount) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT));
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);
@@ -175,7 +172,7 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     }
 
     @Override
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
@@ -191,10 +188,12 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     public void endLoadMore() {
         isLoadingMore = false;
     }
+
     @Override
     public void setEnd(boolean isEnd) {
         this.isEnd = isEnd;
     }
+
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
@@ -221,10 +220,10 @@ public class CashCoinActivity extends BaseActivity<CashCoinPresenter> implements
     }
 
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
-    public void updateUserAccount(MemberAccount account){
-        if(account == null){
+    public void updateUserAccount(MemberAccount account) {
+        if (account == null) {
             return;
         }
-        consume_count.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
+        consume_count.setText(String.format("%.2f", account.getBonus() * 1.0 / 100));
     }
 }

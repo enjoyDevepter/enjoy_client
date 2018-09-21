@@ -98,6 +98,7 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             preEndIndex = orderBeanList.size();//更新之前列表总长度,用于确定加载更多的起始位置
                             lastPageIndex = orderBeanList.size() / 10;
+                            mRootView.updateUI(orderBeanList.size());
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
