@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.di.component.DaggerCityComponent;
 import me.jessyan.mvparms.demo.di.module.CityModule;
 import me.jessyan.mvparms.demo.mvp.contract.CityContract;
@@ -42,6 +44,8 @@ public class CityActivity extends BaseActivity<CityPresenter> implements CityCon
     View backV;
     @BindView(R.id.location_info)
     TextView locationInfoTV;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -63,19 +67,25 @@ public class CityActivity extends BaseActivity<CityPresenter> implements CityCon
     @Override
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
+        swipeRefreshLayout.setEnabled(false);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
-        locationInfoTV.setText((String) cache.get("current_location_info"));
+        String location = (String) cache.get("current_location_info");
+        if (ArmsUtils.isEmpty(location)) {
+            locationInfoTV.setText("正在获取位置...");
+        } else {
+            locationInfoTV.setText((String) cache.get("current_location_info"));
+        }
     }
 
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -116,7 +126,7 @@ public class CityActivity extends BaseActivity<CityPresenter> implements CityCon
                         cache.put("province", area.getId());
                         break;
                     case 3: // city
-                        cache.put("city", area.getCode());
+                        cache.put("city", area.getId());
                         for (ExtendedNode<Area> node : nodeList) {
                             if (area.getParentId().equals(node.data.getId())) {
                                 cache.put("province", node.data.getId());
@@ -126,19 +136,23 @@ public class CityActivity extends BaseActivity<CityPresenter> implements CityCon
                         break;
                     case 4: // county
                         cache.put("county", area.getId());
+                        SPUtils.put("county", area.getId());
                         for (ExtendedNode<Area> node : nodeList) {
                             for (ExtendedNode<Area> child : node.getSons()) {
                                 if (area.getParentId().equals(child.data.getId())) {
                                     cache.put("city", child.data.getId());
+                                    SPUtils.put("city", child.data.getId());
                                     cache.put("province", node.data.getId());
+                                    SPUtils.put("province", node.data.getId());
+                                    SPUtils.put("countyName", node.data.getName());
                                     break;
                                 }
                             }
                         }
                         break;
                 }
-                killMyself();
                 EventBus.getDefault().post(area, EventBusTags.CITY_CHANGE_EVENT);
+                killMyself();
             }
         };
         ExtendedRecyclerViewHelper extendedRecyclerViewHelper = ExtendedRecyclerViewBuilder.build(recyclerView)

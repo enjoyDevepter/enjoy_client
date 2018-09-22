@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.app.EventBusTags;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Area;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeADRequest;
@@ -164,19 +165,39 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                     @Override
                     public void onNext(CityResponse response) {
                         if (response.isSuccess()) {
-                            Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+                            Cache<String, Object> globalCache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+                            Cache cache = mRootView.getCache();
                             ArrayList<Area> areas = response.getAreaList();
+                            String provinceId, cityId, countyId;
                             for (Area provice : areas) {
                                 if ("0".equals(provice.getParentId())) {
-                                    cache.put("province", provice.getCode());
+                                    provinceId = provice.getId();
+                                    cache.put("province", provinceId);
                                     for (Area city : areas) {
                                         if (city.getParentId().equals(provice.getId())) {
-                                            cache.put("city", city.getCode());
+                                            cityId = provice.getId();
+                                            cache.put("city", cityId);
                                             for (Area county : areas) {
                                                 if (county.getParentId().equals(city.getId())) {
-                                                    cache.put("county", county.getCode());
-                                                    cache.put("current_location_info", provice.getName() + "-" + city.getName() + "-" + county.getName());
-                                                    EventBus.getDefault().post(county, EventBusTags.CITY_CHANGE_EVENT);
+                                                    countyId = county.getId();
+                                                    cache.put("county", countyId);
+                                                    globalCache.put("current_location_info", provice.getName() + "-" + city.getName() + "-" + county.getName());
+                                                    if (!ArmsUtils.isEmpty((String) globalCache.get("province"))) {
+                                                        if (!provinceId.equals(globalCache.get("province"))
+                                                                || !cityId.equals(globalCache.get("city"))
+                                                                || !countyId.equals(globalCache.get("county"))) {
+                                                            mRootView.showLocationChange(county);
+                                                        }
+                                                    } else {
+                                                        globalCache.put("province", provinceId);
+                                                        SPUtils.put("province", provinceId);
+                                                        globalCache.put("city", cityId);
+                                                        SPUtils.put("city", cityId);
+                                                        globalCache.put("county", countyId);
+                                                        SPUtils.put("county", countyId);
+                                                        SPUtils.put("countyName", county.getName());
+                                                        EventBus.getDefault().post(county, EventBusTags.CITY_CHANGE_EVENT);
+                                                    }
                                                     break;
                                                 }
                                             }

@@ -16,6 +16,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.mvp.contract.RegisterContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.RegisterRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
@@ -103,6 +104,8 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
                             Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
                             cache.put(KEY_KEEP + "token", response.getToken());
                             cache.put(KEY_KEEP + "signkey", response.getSignkey());
+                            SPUtils.put("token", response.getToken());
+                            SPUtils.put("signkey", response.getSignkey());
                             mAppManager.killActivity(LoginActivity.class);
                             mRootView.killMyself();
                         } else {

@@ -75,6 +75,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.LoginActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.CityActivity"

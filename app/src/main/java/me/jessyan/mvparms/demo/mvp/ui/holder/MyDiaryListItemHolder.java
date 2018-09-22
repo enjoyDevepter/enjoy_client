@@ -30,7 +30,6 @@ import com.jess.arms.utils.ArmsUtils;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.app.utils.NumberToChn;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyDiaryListAdapter;
 
@@ -106,8 +105,8 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
     public void setData(Diary diary, int position) {
         Observable.just(diary.getPublishDate())
                 .subscribe(s -> publishDateTV.setText(s));
-        Observable.just(position)
-                .subscribe(s -> indexTV.setText("第" + NumberToChn.NumberToChn(position + 1) + "篇日记"));
+        Observable.just(diary.getTitle())
+                .subscribe(s -> indexTV.setText(s));
         Observable.just(diary.getIntro())
                 .subscribe(s -> introTV.setText(s));
         Observable.just(diary.getBrowse())

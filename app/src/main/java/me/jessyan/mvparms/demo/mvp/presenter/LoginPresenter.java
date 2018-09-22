@@ -16,6 +16,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginByPhoneRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginByUserRequest;
@@ -147,6 +148,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         cache.put(KEY_KEEP + "token", token);
         cache.put(KEY_KEEP + "signkey", signkey);
+        SPUtils.put("token", token);
+        SPUtils.put("signkey", signkey);
     }
 
     @Override

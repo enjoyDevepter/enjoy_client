@@ -36,6 +36,7 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
 import java.io.File;
@@ -47,9 +48,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.di.component.DaggerMainComponent;
 import me.jessyan.mvparms.demo.di.module.MainModule;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Area;
 import me.jessyan.mvparms.demo.mvp.model.entity.HomeAd;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.MainPresenter;
@@ -277,6 +280,44 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     }
 
     @Override
+    public void showLocationChange(Area county) {
+        dialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
+                        ((TextView) view.findViewById(R.id.content)).setText("是否切换到定位地址: " + cache.get("current_location_info"));
+                        view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                cache.put("province", provideCache().get("province"));
+                                SPUtils.put("province", provideCache().get("province"));
+                                cache.put("city", provideCache().get("city"));
+                                SPUtils.put("city", provideCache().get("city"));
+                                cache.put("county", provideCache().get("county"));
+                                SPUtils.put("county", provideCache().get("county"));
+                                SPUtils.put("countyName", county.getName());
+                                EventBus.getDefault().post(county, EventBusTags.CITY_CHANGE_EVENT);
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.dialog_remove_good_for_cart)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
+                .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
+                .show();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_home:
@@ -313,6 +354,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                     @Override
                     public void bindView(View view) {
                         ((TextView) view.findViewById(R.id.content)).setText(updateResponse.getDescription());
+                        View close = view.findViewById(R.id.close);
+                        close.setVisibility(updateResponse.isForceUpgrade() ? View.GONE : View.VISIBLE);
                         view.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -335,6 +378,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 .setLayoutRes(R.layout.dialog_update)
                 .setDimAmount(0.5f)
                 .isCenter(true)
+                .setCancelOutside(updateResponse.isForceUpgrade() ? false : true)
                 .setWidth(ArmsUtils.getDimens(this, R.dimen.update_dialog_width))
                 .setHeight(ArmsUtils.getDimens(this, R.dimen.update_dialog_height))
                 .show();

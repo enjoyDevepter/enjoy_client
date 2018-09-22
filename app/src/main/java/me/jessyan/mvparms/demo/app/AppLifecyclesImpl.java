@@ -21,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 
 import com.jess.arms.base.delegate.AppLifecycles;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.IntelligentCache;
 import com.jess.arms.utils.ArmsUtils;
 import com.squareup.leakcanary.LeakCanary;
@@ -30,6 +31,7 @@ import com.umeng.socialize.PlatformConfig;
 
 import butterknife.ButterKnife;
 import me.jessyan.mvparms.demo.BuildConfig;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import timber.log.Timber;
 
 /**
@@ -74,10 +76,20 @@ public class AppLifecyclesImpl implements AppLifecycles {
         UMConfigure.init(application, UMConfigure.DEVICE_TYPE_PHONE, "");
         PlatformConfig.setWeixin("wx6a033664a671cd72", "57240413f17564b90084b7635aba924a");
 
+        Cache cache = ArmsUtils.obtainAppComponentFromContext(application).extras();
+        //token初始化
+        cache.put(IntelligentCache.KEY_KEEP + "token", ArmsUtils.isEmpty(SPUtils.get("token", "")) ? null : SPUtils.get("token", ""));
+        cache.put(IntelligentCache.KEY_KEEP + "signkey", ArmsUtils.isEmpty(SPUtils.get("signkey", "")) ? null : SPUtils.get("signkey", ""));
+
+        // 城市信息初始化
+        cache.put("province", SPUtils.get("province", ""));
+        cache.put("city", SPUtils.get("city", ""));
+        cache.put("county", SPUtils.get("county", ""));
+
         //LeakCanary 内存泄露检查
         //使用 IntelligentCache.KEY_KEEP 作为 key 的前缀, 可以使储存的数据永久存储在内存中
         //否则存储在 LRU 算法的存储空间中, 前提是 extras 使用的是 IntelligentCache (框架默认使用)
-        ArmsUtils.obtainAppComponentFromContext(application).extras().put(IntelligentCache.KEY_KEEP + RefWatcher.class.getName(), BuildConfig.USE_CANARY ? LeakCanary.install(application) : RefWatcher.DISABLED);
+        cache.put(IntelligentCache.KEY_KEEP + RefWatcher.class.getName(), BuildConfig.USE_CANARY ? LeakCanary.install(application) : RefWatcher.DISABLED);
         //扩展 AppManager 的远程遥控功能
         ArmsUtils.obtainAppComponentFromContext(application).appManager().setHandleListener((appManager, message) -> {
             switch (message.what) {

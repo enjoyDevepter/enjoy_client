@@ -252,7 +252,7 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
                     provideCache().put("reservationId", appointment.getReservationId());
                     // 取消预约
                     mPresenter.cancelAppointment();
-                } else if (appointment.getStatus().equals("3")) {
+                } else if (appointment.getStatus().equals("4")) {
                     // 写日记
                     Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
                     intent.putExtra("orderId", appointment.getProjectId());

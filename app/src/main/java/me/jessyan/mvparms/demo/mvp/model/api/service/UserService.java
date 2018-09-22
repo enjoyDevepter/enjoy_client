@@ -27,6 +27,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AddressListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.ContactResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PickCouponListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
@@ -227,7 +228,7 @@ public interface UserService {
 
     @POST("gateway")
         // 咨询电话
-    Observable<BaseResponse> getTel(@Body SimpleRequest request);
+    Observable<ContactResponse> getContact(@Body SimpleRequest request);
 
 
     @POST("gateway")

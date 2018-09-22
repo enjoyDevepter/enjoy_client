@@ -443,24 +443,25 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             }
         }
         this.response = response;
+        Goods goods = response.getGoods();
 
         imagesB.setImages(response.getImages());
         //banner设置方法全部调用完毕时最后调用
         imagesB.start();
         imagesB.isAutoPlay(false);
 
-        shareV.setVisibility(ArmsUtils.isEmpty(response.getGoods().getShareUrl()) ? View.INVISIBLE : View.VISIBLE);
+        shareV.setVisibility(ArmsUtils.isEmpty(goods.getShareUrl()) ? View.INVISIBLE : View.VISIBLE);
 
         imageCount.setText("1/" + response.getImages().size());
-        nameTV.setText(response.getGoods().getName());
-        saleCountTV.setText(String.valueOf(response.getGoods().getSales()));
-        goodSpecTV.setText(response.getGoods().getGoodsSpecValue().getSpecValueName());
+        nameTV.setText(goods.getName());
+        saleCountTV.setText(String.valueOf(goods.getSales()));
+        goodSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
 
         initViewPage();
 
-        detailWV.loadUrl(response.getGoods().getMobileDetail());
+        detailWV.loadUrl(goods.getMobileDetail());
 
-        if ("0".equals(response.getGoods().getCanSale())) {
+        if ("0".equals(goods.getCanSale())) {
             buyV.setBackgroundColor(Color.parseColor("#ffc6c6c6"));
         } else {
             buyV.setBackgroundColor(Color.parseColor("#FFFF5656"));
@@ -477,15 +478,19 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             provideCache().put("promotionId", promotions.get(0).getPromotionId());
         }
 
-        if (null == response.getGoods().getGoodsSpecValue()) {
+        if (null == goods.getGoodsSpecValue()) {
             specV.setVisibility(View.GONE);
         }
 
-        collectV.setSelected("1".equals(response.getGoods().getIsFavorite()) ? true : false);
+        collectV.setSelected("1".equals(goods.getIsFavorite()) ? true : false);
+
+
+        spceIDTV.setText(goods.getCode());
+        spceNameTV.setText(goods.getName());
 
         String where = getIntent().getStringExtra("where");
         if ("timelimitdetail".equals(where)) {
-            long count = response.getGoods().getEndDate() - response.getGoods().getSysDate();
+            long count = goods.getEndDate() - goods.getSysDate();
             if (count > 86400) {
                 DynamicConfig.Builder builder = new DynamicConfig.Builder();
                 builder.setShowHour(false)
@@ -499,28 +504,28 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             } else {
                 countdownView.start(count);
             }
-            priceTV.setMoneyText(String.valueOf(response.getGoods().getSecKillPrice()));
-            salePriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
+            priceTV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
+            salePriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
             salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            secKillPriceTV.setMoneyText(String.valueOf(response.getGoods().getSecKillPrice()));
-            spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getSecKillPrice()));
+            secKillPriceTV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
+            spcePriceTV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
             layoutParams.topMargin = 0;
             specV.setLayoutParams(layoutParams);
         } else if ("newpeople".equals(where)) {
-            salePriceTopTV.setText("￥" + String.valueOf(response.getGoods().getSalePrice()));
+            salePriceTopTV.setText("￥" + String.valueOf(goods.getSalePrice()));
             salePriceTopTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            salePriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
+            salePriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
             salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            priceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
-            secKillPriceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
-            spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getVipPrice()));
+            priceTV.setMoneyText(String.valueOf(goods.getVipPrice()));
+            secKillPriceTV.setMoneyText(String.valueOf(goods.getVipPrice()));
+            spcePriceTV.setMoneyText(String.valueOf(goods.getVipPrice()));
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
             layoutParams.topMargin = 0;
             specV.setLayoutParams(layoutParams);
         } else {
-            priceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
-            spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
+            priceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
+            spcePriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
             layoutParams.topMargin = ArmsUtils.getDimens(this, R.dimen.space_5);
             specV.setLayoutParams(layoutParams);
@@ -618,7 +623,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             specLayoutV.setVisibility(View.VISIBLE);
             specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_butom_in));
             Goods goods = ((Goods) provideCache().get("goods"));
-            spceIDTV.setText(goods.getMerchId());
+            spceIDTV.setText(goods.getCode());
             spceNameTV.setText(goods.getName());
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
             mImageLoader.loadImage(spceImageIV.getContext(),

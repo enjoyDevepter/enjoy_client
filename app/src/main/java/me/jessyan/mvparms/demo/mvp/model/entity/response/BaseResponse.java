@@ -15,9 +15,12 @@
  */
 package me.jessyan.mvparms.demo.mvp.model.entity.response;
 
+import com.jess.arms.utils.ArmsUtils;
+
 import java.io.Serializable;
 
 import me.jessyan.mvparms.demo.mvp.model.api.Api;
+import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 
 /**
  * ================================================
@@ -175,6 +178,9 @@ public class BaseResponse implements Serializable {
     public boolean isSuccess() {
         if (retCode == Api.RequestSuccess) {
             return true;
+        } else if (retCode == Api.LoginOvertime) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return false;
         } else {
             return false;
         }

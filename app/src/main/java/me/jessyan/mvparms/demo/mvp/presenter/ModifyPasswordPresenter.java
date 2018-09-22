@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.mvp.contract.ModifyPasswordContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoRequest;
@@ -94,6 +95,8 @@ public class ModifyPasswordPresenter extends BasePresenter<ModifyPasswordContrac
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         cache.put(KEY_KEEP + "token", token);
         cache.put(KEY_KEEP + "signkey", signkey);
+        SPUtils.put("token", token);
+        SPUtils.put("signkey", signkey);
     }
 
     @Override

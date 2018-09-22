@@ -8,6 +8,7 @@ import com.jess.arms.mvp.IView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.Area;
 import me.jessyan.mvparms.demo.mvp.model.entity.HomeAd;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeADRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
@@ -30,6 +31,8 @@ public interface MainContract {
         RxPermissions getRxPermissions();
 
         void showUpdateInfo(UpdateResponse showUpdateInfo);
+
+        void showLocationChange(Area county);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存

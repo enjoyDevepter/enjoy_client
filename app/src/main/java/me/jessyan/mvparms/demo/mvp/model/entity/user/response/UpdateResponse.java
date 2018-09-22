@@ -8,6 +8,7 @@ public class UpdateResponse extends BaseResponse {
     private String url;
     private String upgradeVersion;
     private boolean needUpgrade;
+    private boolean forceUpgrade;
 
     public String getDescription() {
         return description;
@@ -41,6 +42,14 @@ public class UpdateResponse extends BaseResponse {
         this.needUpgrade = needUpgrade;
     }
 
+    public boolean isForceUpgrade() {
+        return forceUpgrade;
+    }
+
+    public void setForceUpgrade(boolean forceUpgrade) {
+        this.forceUpgrade = forceUpgrade;
+    }
+
     @Override
     public String toString() {
         return "UpdateResponse{" +
@@ -48,6 +57,7 @@ public class UpdateResponse extends BaseResponse {
                 ", url='" + url + '\'' +
                 ", upgradeVersion='" + upgradeVersion + '\'' +
                 ", needUpgrade=" + needUpgrade +
+                ", forceUpgrade=" + forceUpgrade +
                 '}';
     }
 }

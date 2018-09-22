@@ -64,6 +64,12 @@ public class CityPresenter extends BasePresenter<CityContract.Model, CityContrac
         mModel.getCity(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();
+                })
+                .doFinally(() -> {
+                    mRootView.hideLoading();
+                })
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<CityResponse>(mErrorHandler) {

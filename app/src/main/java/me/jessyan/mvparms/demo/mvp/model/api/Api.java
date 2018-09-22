@@ -29,5 +29,6 @@ import me.jessyan.mvparms.demo.BuildConfig;
 public interface Api {
     //    String APP_DOMAIN = "http://api.donhonet.net/conson-shop/";
     String APP_DOMAIN = BuildConfig.API_HOST;
-    int RequestSuccess = 0;
+    int RequestSuccess = 0;  // 请求成功
+    int LoginOvertime = 1001; // 登录超时
 }

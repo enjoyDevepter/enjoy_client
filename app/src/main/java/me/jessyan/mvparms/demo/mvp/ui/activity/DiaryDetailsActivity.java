@@ -29,20 +29,17 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.app.utils.NumberToChn;
 import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerDiaryDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.DiaryDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
 import me.jessyan.mvparms.demo.mvp.presenter.DiaryDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
@@ -236,7 +233,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 killMyself();
                 break;
             case R.id.share:
-                mPresenter.share();
+                showWX();
                 break;
             case R.id.follow:
                 provideCache().put("memberId", response.getMember().getMemberId());
@@ -259,12 +256,11 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         }
     }
 
-    @Override
-    public void showWX(Share share) {
-        UMWeb web = new UMWeb(share.getUrl());
-        web.setTitle(share.getTitle());//标题
-        web.setDescription(share.getIntro());
-        web.setThumb(new UMImage(this, share.getImage()));
+    private void showWX() {
+        UMWeb web = new UMWeb(response.getShareUrl());
+        web.setTitle(response.getShareTitle());//标题
+        web.setDescription(response.getShareDesc());
+//        web.setThumb(new UMImage(this, share.getImage()));
         new ShareAction(this)
                 .withMedia(web)
                 .setCallback(shareListener)
@@ -304,8 +300,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         goodsNameTV.setText(response.getGoods().getName());
         goodsPriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
         diaryPublishDateTV.setText(response.getDiary().getPublishDate());
-        int position = getIntent().getIntExtra("position", 0);
-        indexTV.setText("第" + NumberToChn.NumberToChn(position + 1) + "篇日记");
+        indexTV.setText(response.getDiary().getTitle());
         introTV.setText(response.getDiary().getIntro());
         browseTV.setText(String.valueOf(response.getDiary().getBrowse()));
         commentTV.setText(String.valueOf(response.getDiary().getComment()));

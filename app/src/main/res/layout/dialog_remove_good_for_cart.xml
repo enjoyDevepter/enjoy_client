@@ -10,6 +10,8 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_weight="1"
         android:gravity="center"
         android:text="确认将该商品移除购物车?"

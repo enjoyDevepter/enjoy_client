@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.mvp.contract.ForgetContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ForgetRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
@@ -90,6 +91,8 @@ public class ForgetPresenter extends BasePresenter<ForgetContract.Model, ForgetC
                             Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
                             cache.put(KEY_KEEP + "token", response.getToken());
                             cache.put(KEY_KEEP + "signkey", response.getSignkey());
+                            SPUtils.put("token", response.getToken());
+                            SPUtils.put("signkey", response.getSignkey());
                             mAppManager.killActivity(LoginActivity.class);
                             mRootView.killMyself();
                         } else {

@@ -29,15 +29,12 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryCommentListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
-import static com.jess.arms.utils.ArmsUtils.startActivity;
 
 
 @ActivityScope
@@ -196,35 +193,6 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updatefollowStatus(follow);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
-                    }
-                });
-    }
-
-    public void share() {
-        FollowRequest request = new FollowRequest();
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        String token = (String) cache.get(KEY_KEEP + "token");
-
-        if (ArmsUtils.isEmpty(token)) {
-            startActivity(LoginActivity.class);
-            return;
-        }
-        request.setToken(token);
-        request.setCmd(909);
-        mModel.share(request)
-                .subscribeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
-                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<ShareResponse>(mErrorHandler) {
-                    @Override
-                    public void onNext(ShareResponse response) {
-                        if (response.isSuccess()) {
-                            mRootView.showWX(response.getShare());
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

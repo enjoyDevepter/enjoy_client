@@ -15,7 +15,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryCommentListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 
@@ -32,8 +31,6 @@ public interface DiaryDetailsContract {
         void updatefollowStatus(boolean follow);
 
         void updateVoteStatus(boolean vote);
-
-        void showWX(Share share);
 
         void comment(boolean success);
 

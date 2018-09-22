@@ -478,7 +478,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         saleCountTV.setText(String.valueOf(goods.getSales()));
 
         initViewPage();
-        detailWV.loadUrl(response.getGoods().getMobileDetail());
+        detailWV.loadUrl(goods.getMobileDetail());
 
         tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getTailMoney()));
 
@@ -491,6 +491,9 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             promotionNameTV.setText(promotions.get(0).getTitle());
             provideCache().put("promotionId", promotions.get(0).getPromotionId());
         }
+
+        spceIDTV.setText(goods.getCode());
+        spceNameTV.setText(goods.getName());
 
         String where = getIntent().getStringExtra("where");
         if ("timelimitdetail".equals(where)) {
@@ -667,8 +670,8 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
             specLayoutV.setVisibility(View.VISIBLE);
             specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_butom_in));
-            spceIDTV.setText(response.getGoods().getAdvanceDepositId());
             spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getMarketPrice()));
+            spceIDTV.setText(response.getGoods().getCode());
             spceNameTV.setText(response.getGoods().getName());
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
             mImageLoader.loadImage(spceImageIV.getContext(),

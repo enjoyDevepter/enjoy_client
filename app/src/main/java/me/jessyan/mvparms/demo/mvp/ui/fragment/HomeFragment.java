@@ -41,6 +41,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.di.component.DaggerHomeComponent;
 import me.jessyan.mvparms.demo.di.module.HomeModule;
 import me.jessyan.mvparms.demo.mvp.contract.HomeContract;
@@ -146,6 +147,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         messageV.setOnClickListener(this);
         serachV.setOnClickListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
+        if (ArmsUtils.isEmpty(SPUtils.get("countyName", ""))) {
+            cityV.setText("北京");
+        } else {
+            cityV.setText(SPUtils.get("countyName", ""));
+        }
+
         banner.setImageLoader(new GlideImageLoader());
         banner.setIndicatorGravity(BannerConfig.CENTER);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
