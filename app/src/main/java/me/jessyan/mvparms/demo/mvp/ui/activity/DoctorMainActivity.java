@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -42,7 +43,6 @@ import me.jessyan.mvparms.demo.di.module.DoctorMainModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorSkill;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.HospitalBean;
 import me.jessyan.mvparms.demo.mvp.presenter.DoctorMainPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorCommentHolderAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorSkillAdapter;
@@ -77,8 +77,8 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     boolean isLike;
     @BindView(R.id.hosp_info)
     TextView hosp_info;
-    @BindView(R.id.addr_info)
-    TextView addr_info;
+    @BindView(R.id.more)
+    View moreV;
     @BindView(R.id.skill_list)
     TagFlowLayout skill_list;
     @BindView(R.id.doctor_intro)
@@ -113,6 +113,8 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     private boolean isLoadingMore;
     private boolean isEnd;
 
+    private DoctorBean doctorBean;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerDoctorMainComponent //如找不到该类,请编译一下项目
@@ -131,6 +133,14 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         doctorId = getIntent().getStringExtra(KEY_FOR_DOCTOR_ID);
+        moreV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent hosiptals = new Intent(getApplicationContext(), DoctorForHospitalActivity.class);
+                hosiptals.putParcelableArrayListExtra("hospitals", (ArrayList<? extends Parcelable>) doctorBean.getHospitalList());
+                ArmsUtils.startActivity(hosiptals);
+            }
+        });
         all_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,6 +216,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     }
 
     public void updateDoctorInfo(DoctorBean doctorBean) {
+        this.doctorBean = doctorBean;
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
@@ -236,9 +247,8 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         comment_count.setText("" + doctorBean.getComment());
         rating.setStar(doctorBean.getStar());
         updateLikeImage(LIKE.equals(doctorBean.getIsFollow()));
-        HospitalBean hospitalBean = doctorBean.getHospitalBean();
-        if (hospitalBean != null) {
-            hosp_info.setText(hospitalBean.getName());
+        if (null != doctorBean.getHospitalList() && doctorBean.getHospitalList().size() > 0) {
+            hosp_info.setText(doctorBean.getHospitalList().get(0).getName());
         } else {
             hosp_info.setText("");
         }

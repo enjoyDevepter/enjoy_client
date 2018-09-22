@@ -22,7 +22,6 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorSkill;
-import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.HospitalBean;
 import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
 
 public class DoctorListHolder extends BaseHolder<DoctorBean> {
@@ -55,10 +54,9 @@ public class DoctorListHolder extends BaseHolder<DoctorBean> {
     public void setData(DoctorBean data, int position) {
         Observable.just(data.getName())
                 .subscribe(s -> name.setText(String.valueOf(s)));
-        HospitalBean hospitalBean = data.getHospitalBean();
-        if(hospitalBean != null){
-            Observable.just(hospitalBean.getName())
-                .subscribe(s -> hosptial.setText(String.valueOf(s)));
+        if (null != data.getHospitalList() && data.getHospitalList().size() > 0) {
+            Observable.just(data.getHospitalList().get(0).getName())
+                    .subscribe(s -> hosptial.setText(String.valueOf(s)));
         }
         Observable.just(data.getStar())
                 .subscribe(s -> rating.setStar(s));
@@ -67,7 +65,7 @@ public class DoctorListHolder extends BaseHolder<DoctorBean> {
 
         List<DoctorSkill> doctorSkillList = data.getDoctorSkillList();
         List<String> skillList = new ArrayList<>(doctorSkillList.size());
-        for(int i = 0;i<doctorSkillList.size();i++){
+        for (int i = 0; i < doctorSkillList.size(); i++) {
             skillList.add(doctorSkillList.get(i).getProjectName());
         }
         skill.setAdapter(new SkillAdapter(skillList));
@@ -91,7 +89,7 @@ public class DoctorListHolder extends BaseHolder<DoctorBean> {
         skill = null;
     }
 
-    private class SkillAdapter extends TagAdapter<String>{
+    private class SkillAdapter extends TagAdapter<String> {
 
         public SkillAdapter(List<String> datas) {
             super(datas);
@@ -99,7 +97,7 @@ public class DoctorListHolder extends BaseHolder<DoctorBean> {
 
         @Override
         public View getView(FlowLayout parent, int position, String s) {
-            TextView tv = (TextView) LayoutInflater.from(ArmsUtils.getContext()).inflate(R.layout.search_hot_item,null,false);
+            TextView tv = (TextView) LayoutInflater.from(ArmsUtils.getContext()).inflate(R.layout.search_hot_item, null, false);
             tv.setText(s);
             return tv;
         }

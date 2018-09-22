@@ -11,7 +11,7 @@ public class DoctorBean implements Serializable {
     private String followDate;
     private String isFollow;
     private List<DoctorSkill> doctorSkillList;
-    private HospitalBean hospitalBean;
+    private List<HospitalBean> hospitalList;
 
     private int comment;
     private String isPraise;  // 1:是0:否
@@ -26,7 +26,7 @@ public class DoctorBean implements Serializable {
                 ", followDate='" + followDate + '\'' +
                 ", isFollow='" + isFollow + '\'' +
                 ", doctorSkillList=" + doctorSkillList +
-                ", hospitalBean=" + hospitalBean +
+                ", hospitalList=" + hospitalList +
                 ", comment=" + comment +
                 ", isPraise='" + isPraise + '\'' +
                 '}';
@@ -80,12 +80,12 @@ public class DoctorBean implements Serializable {
         this.doctorSkillList = doctorSkillList;
     }
 
-    public HospitalBean getHospitalBean() {
-        return hospitalBean;
+    public List<HospitalBean> getHospitalList() {
+        return hospitalList;
     }
 
-    public void setHospitalBean(HospitalBean hospitalBean) {
-        this.hospitalBean = hospitalBean;
+    public void setHospitalList(List<HospitalBean> hospitalList) {
+        this.hospitalList = hospitalList;
     }
 
     public int getComment() {

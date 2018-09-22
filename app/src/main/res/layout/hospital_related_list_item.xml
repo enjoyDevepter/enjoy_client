@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="15dp">
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:text="创享平台 水立方店"
+        android:textColor="#FF000000"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/address_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/name"
+        android:layout_below="@id/name"
+        android:layout_marginTop="8dp"
+        android:text="地址："
+        android:textColor="#FF666666"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/address_tag"
+        android:layout_below="@id/name"
+        android:layout_toRightOf="@id/address_tag"
+        android:textColor="#FF666666"
+        android:textSize="12sp" />
+
+</RelativeLayout>
+
