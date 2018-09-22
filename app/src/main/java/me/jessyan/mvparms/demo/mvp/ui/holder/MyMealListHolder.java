@@ -119,10 +119,10 @@ public class MyMealListHolder extends BaseHolder<Order> {
             statusTV.setText("待预约");
             leftTV.setVisibility(View.GONE);
             rightTV.setVisibility(View.VISIBLE);
-            rightTV.setText("预约");
+            rightTV.setText("项目列表");
         } else if (appointment.getOrderStatus().equals("5")) {
             statusTV.setText("已完成");
-            rightTV.setText("写日记");
+            rightTV.setText("项目列表");
             rightTV.setVisibility(View.VISIBLE);
             leftTV.setVisibility(View.GONE);
         }

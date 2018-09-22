@@ -235,10 +235,11 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
                     makeIntent.putExtra("mealName", appointment.getSetMealGoodsList().get(0).getName());
                     ArmsUtils.startActivity(makeIntent);
                 } else if ("5".equals(appointment.getOrderStatus())) {
-                    // 写日记
-                    Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
-                    intent.putExtra("orderId", appointment.getOrderId());
-                    ArmsUtils.startActivity(intent);
+                    // 预约
+                    Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
+                    makeIntent.putExtra("orderId", appointment.getOrderId());
+                    makeIntent.putExtra("mealName", appointment.getSetMealGoodsList().get(0).getName());
+                    ArmsUtils.startActivity(makeIntent);
                 }
                 break;
             case ITEM:

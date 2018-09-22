@@ -134,8 +134,8 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         all_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DoctorMainActivity.this,DoctorAllCommentActivity.class);
-                intent.putExtra(DoctorAllCommentActivity.KEY_FOR_DOCTOR_ID,doctorId);
+                Intent intent = new Intent(DoctorMainActivity.this, DoctorAllCommentActivity.class);
+                intent.putExtra(DoctorAllCommentActivity.KEY_FOR_DOCTOR_ID, doctorId);
                 ArmsUtils.startActivity(intent);
             }
         });
@@ -149,9 +149,9 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         hit_good.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isLike){
+                if (isLike) {
                     mPresenter.unlikeDoctor(doctorId);
-                }else{
+                } else {
                     mPresenter.likeDoctor(doctorId);
                 }
             }
@@ -159,16 +159,16 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         doctor_paper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DoctorMainActivity.this,DoctorPaperActivity.class);
-                intent.putExtra(DoctorPaperActivity.KEY_FOR_DOCTOR_ID,doctorId);
+                Intent intent = new Intent(DoctorMainActivity.this, DoctorPaperActivity.class);
+                intent.putExtra(DoctorPaperActivity.KEY_FOR_DOCTOR_ID, doctorId);
                 ArmsUtils.startActivity(intent);
             }
         });
         doctor_honor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DoctorMainActivity.this,DoctorHonorActivity.class);
-                intent.putExtra(DoctorHonorActivity.KEY_FOR_DOCTOR_ID,doctorId);
+                Intent intent = new Intent(DoctorMainActivity.this, DoctorHonorActivity.class);
+                intent.putExtra(DoctorHonorActivity.KEY_FOR_DOCTOR_ID, doctorId);
                 ArmsUtils.startActivity(intent);
             }
         });
@@ -176,6 +176,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
 
         contentList.setAdapter(mAdapter);
+        contentList.setNestedScrollingEnabled(false);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -192,19 +193,19 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
 
     }
 
-    public void updateRecyclerViewHeight(){
+    public void updateRecyclerViewHeight() {
         RecyclerView.Adapter adapter = contentList.getAdapter();
         int height = 0;
-        if(adapter != null && adapter.getItemCount() != 0){
+        if (adapter != null && adapter.getItemCount() != 0) {
             height = adapter.getItemCount() > 5 ? 5 : adapter.getItemCount();
-            height *= ArmsUtils.dip2px(this,140);
+            height *= ArmsUtils.dip2px(this, 140);
         }
         ViewGroup.LayoutParams layoutParams = swipeRefreshLayout.getLayoutParams();
         layoutParams.height = height;
         swipeRefreshLayout.setLayoutParams(layoutParams);
     }
 
-    public void updateDoctorInfo(DoctorBean doctorBean){
+    public void updateDoctorInfo(DoctorBean doctorBean) {
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
@@ -212,33 +213,33 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
                         .url(doctorBean.getHeadImage())
                         .imageView(head_image)
                         .build());
-        ((DoctorCommentHolderAdapter)mAdapter).setOnChildItemClickLinstener(new DoctorCommentHolderAdapter.OnChildItemClickLinstener() {
+        ((DoctorCommentHolderAdapter) mAdapter).setOnChildItemClickLinstener(new DoctorCommentHolderAdapter.OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, DoctorCommentHolderAdapter.ViewName viewname, int position) {
-                switch (viewname){
+                switch (viewname) {
                     case ITEM:
-                        Intent intent = new Intent(DoctorMainActivity.this,DoctorCommentInfoActivity.class);
-                        intent.putExtra(DoctorCommentInfoActivity.KEY_FOR_DOCTOR_COMMENT_BEAN,((DoctorCommentHolderAdapter) mAdapter).getItem(position));
+                        Intent intent = new Intent(DoctorMainActivity.this, DoctorCommentInfoActivity.class);
+                        intent.putExtra(DoctorCommentInfoActivity.KEY_FOR_DOCTOR_COMMENT_BEAN, ((DoctorCommentHolderAdapter) mAdapter).getItem(position));
                         ArmsUtils.startActivity(intent);
                         break;
                     case LIKE:
-                        if("1".equals(((DoctorCommentHolderAdapter) mAdapter).getItem(position).getIsPraise())){
-                            mPresenter.unlikeDoctorComment(doctorId,((DoctorCommentHolderAdapter) mAdapter).getItem(position).getCommentId());
-                        }else{
-                            mPresenter.likeDoctorComment(doctorId,((DoctorCommentHolderAdapter) mAdapter).getItem(position).getCommentId());
+                        if ("1".equals(((DoctorCommentHolderAdapter) mAdapter).getItem(position).getIsPraise())) {
+                            mPresenter.unlikeDoctorComment(doctorId, ((DoctorCommentHolderAdapter) mAdapter).getItem(position).getCommentId());
+                        } else {
+                            mPresenter.likeDoctorComment(doctorId, ((DoctorCommentHolderAdapter) mAdapter).getItem(position).getCommentId());
                         }
                         break;
                 }
             }
         });
         doctor_name.setText(doctorBean.getName());
-        comment_count.setText(""+doctorBean.getComment());
+        comment_count.setText("" + doctorBean.getComment());
         rating.setStar(doctorBean.getStar());
         updateLikeImage(LIKE.equals(doctorBean.getIsFollow()));
         HospitalBean hospitalBean = doctorBean.getHospitalBean();
-        if(hospitalBean != null){
+        if (hospitalBean != null) {
             hosp_info.setText(hospitalBean.getName());
-        }else{
+        } else {
             hosp_info.setText("");
         }
         List<DoctorSkill> doctorSkillList = doctorBean.getDoctorSkillList();
@@ -258,12 +259,12 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         doctor_intro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DoctorMainActivity.this,DoctorIntorActivity.class);
-                intent.putExtra(DoctorIntorActivity.KEY_FOR_DOCTOR_BEAN,doctorBean);
+                Intent intent = new Intent(DoctorMainActivity.this, DoctorIntorActivity.class);
+                intent.putExtra("doctorId", doctorBean.getDoctorId());
                 ArmsUtils.startActivity(intent);
             }
         });
-        if(doctorSkillList != null && doctorSkillList.size() != 0){
+        if (doctorSkillList != null && doctorSkillList.size() != 0) {
             setCurrDoctorSkill(doctorSkillList.get(0));
             project.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -277,19 +278,19 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
             @Override
             public void onClick(View v) {
                 String str = comment_edit.getText().toString();
-                if(TextUtils.isEmpty(str)){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入评论内容");
+                if (TextUtils.isEmpty(str)) {
+                    ArmsUtils.makeText(ArmsUtils.getContext(), "请输入评论内容");
                     return;
                 }
 
-                mPresenter.commentDoctor(doctorId,str,comment_star.getStar(),currDoctorSkill.getProjectId());
+                mPresenter.commentDoctor(doctorId, str, comment_star.getStar(), currDoctorSkill.getProjectId());
 
             }
 
         });
     }
 
-    private void setCurrDoctorSkill(DoctorSkill doctorSkill){
+    private void setCurrDoctorSkill(DoctorSkill doctorSkill) {
         currDoctorSkill = doctorSkill;
         project.setText(currDoctorSkill.getProjectName());
     }
@@ -322,7 +323,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
             return;
         }
 
-        if(doctorSkillAdapter == null){
+        if (doctorSkillAdapter == null) {
             return;
         }
 
@@ -346,9 +347,9 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         popupWindow.showAsDropDown(project, 0, -ArmsUtils.getDimens(this, R.dimen.code_height));
     }
 
-    public void commentOk(){
+    public void commentOk() {
         comment_edit.setText("");
-        ArmsUtils.makeText(this,"提交评论成功");
+        ArmsUtils.makeText(this, "提交评论成功");
     }
 
     private void initPaginate() {
@@ -382,7 +383,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
@@ -398,10 +399,12 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     public void endLoadMore() {
         isLoadingMore = false;
     }
+
     @Override
     public void setEnd(boolean isEnd) {
         this.isEnd = isEnd;
     }
+
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用

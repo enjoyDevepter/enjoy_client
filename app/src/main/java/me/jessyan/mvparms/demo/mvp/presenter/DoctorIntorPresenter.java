@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -36,18 +38,11 @@ public class DoctorIntorPresenter extends BasePresenter<DoctorIntorContract.Mode
         super(model, rootView);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.mErrorHandler = null;
-        this.mAppManager = null;
-        this.mImageLoader = null;
-        this.mApplication = null;
-    }
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    private void getDoctorInfo() {
 
-    public void getDoctorInfo(String doctorId) {
         DoctorIntorRequest request = new DoctorIntorRequest();
-        request.setDoctorId(doctorId);
+        request.setDoctorId(mRootView.getActivity().getIntent().getStringExtra("doctorId"));
 
         mModel.getDoctorIntor(request)
                 .subscribeOn(Schedulers.io())
@@ -64,5 +59,15 @@ public class DoctorIntorPresenter extends BasePresenter<DoctorIntorContract.Mode
                         }
                     }
                 });
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.mErrorHandler = null;
+        this.mAppManager = null;
+        this.mImageLoader = null;
+        this.mApplication = null;
     }
 }

@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MyMealDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MyMealDetailRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
@@ -106,6 +107,36 @@ public class MyMealDetailsPresenter extends BasePresenter<MyMealDetailsContract.
                             mRootView.showMessage(response.getRetDesc());
                         }
 
+                    }
+                });
+    }
+
+    /**
+     * 申请奖励
+     */
+    public void apply() {
+
+        DiaryRequest request = new DiaryRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(824);
+        request.setOrderId(mRootView.getActivity().getIntent().getStringExtra("orderId"));
+        request.setMerchId((String) mRootView.getCache().get("merchId"));
+        request.setGoodsId((String) mRootView.getCache().get("goodsId"));
+        mModel.apply(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showMessage("奖励申请成功");
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
                     }
                 });
     }

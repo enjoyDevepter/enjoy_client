@@ -106,7 +106,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setCmd(follow ? 604 : 605);
-        request.setMemberId((String) cache.get(KEY_FOR_HOSPITAL_ID));
+        request.setHospitalId((String) cache.get(KEY_FOR_HOSPITAL_ID));
         mModel.follow(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

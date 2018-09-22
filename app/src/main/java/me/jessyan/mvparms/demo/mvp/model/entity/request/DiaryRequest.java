@@ -7,10 +7,19 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
 public class DiaryRequest extends BaseRequest {
     private int cmd = 808;
     private String token;
+    private String orderId;
     private String diaryId;
     private String goodsId;
     private String merchId;
 
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     public int getCmd() {
         return cmd;
@@ -57,6 +66,7 @@ public class DiaryRequest extends BaseRequest {
         return "DiaryRequest{" +
                 "cmd=" + cmd +
                 ", token='" + token + '\'' +
+                ", orderId='" + orderId + '\'' +
                 ", diaryId='" + diaryId + '\'' +
                 ", goodsId='" + goodsId + '\'' +
                 ", merchId='" + merchId + '\'' +

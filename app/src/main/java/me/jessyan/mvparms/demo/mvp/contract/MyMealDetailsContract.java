@@ -7,6 +7,7 @@ import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MyMealDetailRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
@@ -35,5 +36,7 @@ public interface MyMealDetailsContract {
         Observable<AppointmentResponse> getAppointment(MyMealDetailRequest request);
 
         Observable<BaseResponse> cancelAppointment(ModifyAppointmentRequest request);
+
+        Observable<BaseResponse> apply(DiaryRequest request);
     }
 }

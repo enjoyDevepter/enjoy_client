@@ -123,6 +123,7 @@ public class DoctorActivity extends BaseActivity<DoctorPresenter> implements Doc
         secondFilterRV.setAdapter(secondAdapter);
         secondAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(doctorListAdapter);
+        doctorListAdapter.setOnItemClickListener(this);
         initPaginate();
     }
 

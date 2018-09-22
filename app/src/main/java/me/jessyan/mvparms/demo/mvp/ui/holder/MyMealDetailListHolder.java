@@ -167,8 +167,10 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
             rightTV.setText("取消");
         } else if (appointment.getStatus().equals("4")) {
             statusTV.setText("已服务");
-            leftTV.setVisibility(View.GONE);
-            rightTV.setVisibility(View.GONE);
+            leftTV.setVisibility(View.VISIBLE);
+            leftTV.setText("申请奖励");
+            rightTV.setVisibility(View.VISIBLE);
+            rightTV.setText("写日记");
         } else if (appointment.getStatus().equals("5")) {
             statusTV.setText("已转赠");
             leftTV.setVisibility(View.GONE);
