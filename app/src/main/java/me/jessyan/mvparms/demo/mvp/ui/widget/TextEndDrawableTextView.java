@@ -18,6 +18,13 @@ import java.lang.ref.WeakReference;
 import static android.text.style.DynamicDrawableSpan.ALIGN_BASELINE;
 
 public class TextEndDrawableTextView extends android.support.v7.widget.AppCompatTextView {
+    private static final String dot = "...  ";
+    private static final String IMAGE = "/img";
+    private SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+    private Drawable drawable;
+    private String str;
+    private int viewWidth = 0;
+
     public TextEndDrawableTextView(Context context) {
         super(context);
     }
@@ -30,67 +37,57 @@ public class TextEndDrawableTextView extends android.support.v7.widget.AppCompat
         super(context, attrs, defStyleAttr);
     }
 
-    private SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-    private Drawable drawable;
-    private String str;
-
-    private int viewWidth = 0;
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         viewWidth = w;
     }
 
-    private static final String dot = "...  ";
-    private static final String IMAGE = "/img";
-
-    public void
-    setDrawable(Drawable drawable){
+    public void setDrawable(Drawable drawable) {
         this.drawable = drawable;
         setContentInner();
     }
 
-    public void setContentStr(String str){
+    public void setContentStr(String str) {
         this.str = str;
         setContentInner();
     }
 
 
-    private void setContentInner(){
-        if(spannableStringBuilder == null || viewWidth == 0){
+    private void setContentInner() {
+        if (spannableStringBuilder == null || viewWidth == 0) {
             return;
         }
         spannableStringBuilder.clear();
-        if(TextUtils.isEmpty(str)){
+        if (TextUtils.isEmpty(str)) {
             str = "";
         }
 
         TextPaint paint = getPaint();
         Rect rect = new Rect();
-        paint.getTextBounds(str,0,str.length(),rect);
+        paint.getTextBounds(str, 0, str.length(), rect);
         boolean hasdot = false;
         int drawableWidth = drawable == null ? 0 : drawable.getIntrinsicWidth();
-        while(rect.width() + drawableWidth + (hasdot ? paint.measureText(dot) : 0) + 20 > viewWidth * 2){
-            str = str.substring(0,str.length() - 1);
-            paint.getTextBounds(str,0,str.length(),rect);
+        while (rect.width() + drawableWidth + (hasdot ? paint.measureText(dot) : 0) + 20 > viewWidth * 2) {
+            str = str.substring(0, str.length() - 1);
+            paint.getTextBounds(str, 0, str.length(), rect);
             hasdot = true;
         }
 
-        if(TextUtils.isEmpty(str)){
+        if (TextUtils.isEmpty(str)) {
             super.setText("");
             return;
         }
 
         spannableStringBuilder.append(str);
 
-        if(hasdot){
+        if (hasdot) {
             spannableStringBuilder.append(dot);
         }
 
-        if(drawable != null){
+        if (drawable != null) {
             Spannable content = new SpannableStringBuilder("占位");
-            CenterImageSpan span = new CenterImageSpan(drawable,ALIGN_BASELINE);
+            CenterImageSpan span = new CenterImageSpan(drawable, ALIGN_BASELINE);
 // 用ImageSpan替换文本
             content.setSpan(span, 0, 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             spannableStringBuilder.append(content);
@@ -107,7 +104,7 @@ public class TextEndDrawableTextView extends android.support.v7.widget.AppCompat
             super(context, resourceId, verticalAlignment);
         }
 
-        public CenterImageSpan(Drawable drawable, int verticalAlignment){
+        public CenterImageSpan(Drawable drawable, int verticalAlignment) {
             super(drawable, verticalAlignment);
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
                     drawable.getIntrinsicHeight());

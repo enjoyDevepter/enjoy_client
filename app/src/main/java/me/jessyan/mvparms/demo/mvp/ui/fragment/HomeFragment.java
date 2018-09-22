@@ -164,12 +164,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                System.out.println("RecyclerView layoutManager.findLastCompletelyVisibleItemPosition() " + layoutManager.findLastCompletelyVisibleItemPosition());
-                System.out.println("RecyclerView layoutManager.findFirstCompletelyVisibleItemPosition() " + layoutManager.findFirstCompletelyVisibleItemPosition());
-//                int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
-//                if (firstCompletelyVisibleItemPosition == 0) {
-//                    nestedScrollView.setNeedScroll(true);
-//                }
+                int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
+                if (firstCompletelyVisibleItemPosition == 0) {
+                    nestedScrollView.setNeedScroll(true);
+                }
             }
         });
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -385,7 +383,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mRecyclerView.getLayoutParams();
         int[] location = new int[2];
         titleV.getLocationInWindow(location);
-        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * count + 1;
+        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) - ArmsUtils.getDimens(getContext(), R.dimen.home_title_height),
+                ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * count + 1);
         mRecyclerView.setLayoutParams(layoutParams);
     }
 
@@ -601,35 +600,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-        if (scrollY > oldScrollY) {
-            // 向下滑动
-            System.out.println("yPosition 向下滑动");
-        }
-
-        if (scrollY < oldScrollY) {
-            // 向上滑动
-            System.out.println("yPosition 向上滑动");
-        }
-        if (scrollY == 0) {
-            // 顶部
-            System.out.println("yPosition 顶部");
-        }
-
-        if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-            // 底部
-            System.out.println("yPosition 底部");
-
-        }
         int[] location = new int[2];
         tabLayoutTwo.getLocationOnScreen(location);
         int yPosition = location[1];
         int[] titleLocation = new int[2];
         titleV.getLocationInWindow(titleLocation);
         if (yPosition < (titleV.getHeight() + titleLocation[1])) {
-            tabTwoFloat.setVisibility(View.INVISIBLE);
+            tabTwoFloat.setVisibility(View.VISIBLE);
             nestedScrollView.setNeedScroll(false);
         } else {
-            tabTwoFloat.setVisibility(View.INVISIBLE);
+            tabTwoFloat.setVisibility(View.GONE);
             nestedScrollView.setNeedScroll(true);
         }
     }

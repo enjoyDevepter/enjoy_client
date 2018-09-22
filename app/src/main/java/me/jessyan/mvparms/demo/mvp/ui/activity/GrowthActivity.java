@@ -24,6 +24,7 @@ import me.jessyan.mvparms.demo.di.module.GrowthModule;
 import me.jessyan.mvparms.demo.mvp.contract.GrowthContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GrowthInfoResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.GrowthPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.GrowthView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -41,6 +42,8 @@ public class GrowthActivity extends BaseActivity<GrowthPresenter> implements Gro
     TabLayout tabTwoLayout;
     @BindView(R.id.how)
     View howV;
+    @BindView(R.id.growth_level)
+    GrowthView growthView;
     @BindView(R.id.contentList)
     RecyclerView mRecyclerView;
     @BindView(R.id.no_date)
@@ -195,5 +198,6 @@ public class GrowthActivity extends BaseActivity<GrowthPresenter> implements Gro
         this.response = response;
         growthTV.setText(String.valueOf(response.getGrowth()));
         infoTV.setText(response.getDesc());
+        growthView.setGrowthInfoList(response.getGrowthInfoList());
     }
 }

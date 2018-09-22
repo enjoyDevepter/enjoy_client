@@ -152,25 +152,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         consume.setOnClickListener(this);
         cash.setOnClickListener(this);
         growthTV.setOnClickListener(this);
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
-                Object o = cache.get(KEY_KEEP + "token");
-                if (o == null) {
-                    ArmsUtils.startActivity(LoginActivity.class);
-                } else {
-                    ArmsUtils.startActivity(UserInfoActivity.class);
-                }
-            }
-        });
-
-        fans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArmsUtils.startActivity(FansActivity.class);
-            }
-        });
+        image.setOnClickListener(this);
+        fans.setOnClickListener(this);
     }
 
     /**
@@ -292,6 +275,18 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 break;
             case R.id.growth:
                 ArmsUtils.startActivity(GrowthActivity.class);
+                break;
+            case R.id.image:
+                Cache<String, Object> gCache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
+                Object o = gCache.get(KEY_KEEP + "token");
+                if (o == null) {
+                    ArmsUtils.startActivity(LoginActivity.class);
+                } else {
+                    ArmsUtils.startActivity(UserInfoActivity.class);
+                }
+                break;
+            case R.id.fans:
+                ArmsUtils.startActivity(FansActivity.class);
                 break;
         }
     }

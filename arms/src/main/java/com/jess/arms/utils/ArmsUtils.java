@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
@@ -475,6 +476,17 @@ public class ArmsUtils {
         BigDecimal bd = new BigDecimal(money);
         bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
         return bd.toString();
+    }
+
+    /**
+     * 计算绘制文字时的基线到中轴线的距离
+     *
+     * @param p
+     * @return 基线和centerY的距离
+     */
+    public static float getBaseline(Paint p) {
+        Paint.FontMetrics fontMetrics = p.getFontMetrics();
+        return (fontMetrics.descent - fontMetrics.ascent) / 2 - fontMetrics.descent;
     }
 
 

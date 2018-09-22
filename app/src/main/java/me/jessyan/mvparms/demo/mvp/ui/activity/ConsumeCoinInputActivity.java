@@ -14,7 +14,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -42,6 +42,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.ConsumeCoinInputPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.ConsumeInputAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
+import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -77,7 +78,8 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     ConsumeInputAdapter mAdapter;
     @BindView(R.id.contentList)
     RecyclerView contentList;
-
+    @BindView(R.id.nestedScrollView)
+    HiNestedScrollView nestedScrollView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.no_date)
@@ -345,8 +347,9 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     public void updateUI(int count) {
         int[] location = new int[2];
         titleLayoutV.getLocationInWindow(location);
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) contentList.getLayoutParams();
-        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1;
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) contentList.getLayoutParams();
+        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height),
+                ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1);
         contentList.setLayoutParams(layoutParams);
     }
 
@@ -372,8 +375,10 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
         int yPosition = location[1];
         if (yPosition < (titleLayoutV.getHeight() + titleLocation[1])) {
             tabFloatLayout.setVisibility(View.VISIBLE);
+            nestedScrollView.setNeedScroll(false);
         } else {
             tabFloatLayout.setVisibility(View.GONE);
+            nestedScrollView.setNeedScroll(true);
         }
     }
 

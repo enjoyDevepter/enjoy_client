@@ -136,7 +136,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
                 if (firstCompletelyVisibleItemPosition == 0) {
-//                    nestedScrollView.setNeedScroll(true);
+                    nestedScrollView.setNeedScroll(true);
                 }
             }
         });
@@ -242,7 +242,8 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         int[] location = new int[2];
         titleLayoutV.getLocationInWindow(location);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) diaryRV.getLayoutParams();
-        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1;
+        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height),
+                ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1);
         diaryRV.setLayoutParams(layoutParams);
     }
 
@@ -405,10 +406,10 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         int yPosition = location[1];
         if (yPosition < (titleLayoutV.getHeight() + titleLocation[1])) {
             talFloatLayout.setVisibility(View.VISIBLE);
-//            nestedScrollView.setNeedScroll(false);
+            nestedScrollView.setNeedScroll(false);
         } else {
             talFloatLayout.setVisibility(View.GONE);
-//            nestedScrollView.setNeedScroll(true);
+            nestedScrollView.setNeedScroll(true);
         }
     }
 

@@ -15,6 +15,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.cchao.MoneyView;
@@ -44,10 +45,13 @@ import me.jessyan.mvparms.demo.mvp.presenter.DiaryDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 
+import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> implements DiaryDetailsContract.View, View.OnClickListener, TextView.OnEditorActionListener, NestedScrollView.OnScrollChangeListener {
+    @BindView(R.id.title_layout)
+    View titleLayoutV;
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
@@ -191,7 +195,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
                 if (firstCompletelyVisibleItemPosition == 0) {
-//                    nestedScrollView.setNeedScroll(true);
+                    nestedScrollView.setNeedScroll(true);
                 }
             }
         });
@@ -273,6 +277,16 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         if (success) {
             commentET.setText("");
         }
+    }
+
+    @Override
+    public void updateCommentUI(int count) {
+        int[] location = new int[2];
+        titleLayoutV.getLocationInWindow(location);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) commentRV.getLayoutParams();
+        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height),
+                ArmsUtils.getDimens(getContext(), R.dimen.diary_comment_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1);
+        commentRV.setLayoutParams(layoutParams);
     }
 
     @Override
@@ -415,13 +429,15 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
         int[] location = new int[2];
         tab.getLocationOnScreen(location);
+        int[] titleLocation = new int[2];
+        titleLayoutV.getLocationInWindow(titleLocation);
         int yPosition = location[1];
-        if (yPosition <= ArmsUtils.getDimens(this.getActivity(), R.dimen.title_height)) {
+        if (yPosition < (titleLayoutV.getHeight() + titleLocation[1])) {
             tabFloatLayout.setVisibility(View.VISIBLE);
-//            nestedScrollView.setNeedScroll(false);
+            nestedScrollView.setNeedScroll(false);
         } else {
             tabFloatLayout.setVisibility(View.GONE);
-//            nestedScrollView.setNeedScroll(true);
+            nestedScrollView.setNeedScroll(true);
         }
     }
 }

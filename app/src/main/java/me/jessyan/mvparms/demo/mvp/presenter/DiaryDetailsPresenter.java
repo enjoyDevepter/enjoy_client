@@ -108,6 +108,7 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                         if (response.isSuccess()) {
                             diaryCommentList.clear();
                             diaryCommentList.addAll(response.getDiaryCommentList());
+                            mRootView.updateCommentUI(response.getDiaryCommentList().size());
                             mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());

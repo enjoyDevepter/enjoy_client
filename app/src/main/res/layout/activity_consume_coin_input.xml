@@ -8,6 +8,7 @@
     <include layout="@layout/title" />
 
     <me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp">

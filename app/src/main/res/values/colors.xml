@@ -14,4 +14,10 @@
     <color name="order_confirm_type_unseleted">#FFD33232</color>
     <color name="user_qiandao_btn_back_normal">#66A4FD</color>
     <color name="user_qiandao_btn_back_enable">#ffd0d0d0</color>
+    <color name="growth_level_color">#ff666666</color>
+    <color name="growth_growth_color">#FFC0C0C0</color>
+    <color name="growth_progress_color">#FF5FBFE3</color>
+    <color name="growth_progress_nor_color">#FFE3E3E3</color>
+
+
 </resources>
