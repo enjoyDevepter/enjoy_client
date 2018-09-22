@@ -14,7 +14,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -347,8 +347,8 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     public void updateUI(int count) {
         int[] location = new int[2];
         titleLayoutV.getLocationInWindow(location);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) contentList.getLayoutParams();
-        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height),
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) contentList.getLayoutParams();
+        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) + 1,
                 ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1);
         contentList.setLayoutParams(layoutParams);
     }

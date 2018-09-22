@@ -284,7 +284,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         int[] location = new int[2];
         titleLayoutV.getLocationInWindow(location);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) commentRV.getLayoutParams();
-        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height),
+        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.diary_comment_input_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) + 1,
                 ArmsUtils.getDimens(getContext(), R.dimen.diary_comment_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1);
         commentRV.setLayoutParams(layoutParams);
     }

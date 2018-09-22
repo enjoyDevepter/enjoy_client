@@ -242,7 +242,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         int[] location = new int[2];
         titleLayoutV.getLocationInWindow(location);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) diaryRV.getLayoutParams();
-        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height),
+        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) + 1,
                 ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1);
         diaryRV.setLayoutParams(layoutParams);
     }

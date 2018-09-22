@@ -383,7 +383,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mRecyclerView.getLayoutParams();
         int[] location = new int[2];
         titleV.getLocationInWindow(location);
-        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) - ArmsUtils.getDimens(getContext(), R.dimen.home_title_height),
+        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) - ArmsUtils.getDimens(getContext(), R.dimen.home_title_height) + 1,
                 ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * count + 1);
         mRecyclerView.setLayoutParams(layoutParams);
     }
