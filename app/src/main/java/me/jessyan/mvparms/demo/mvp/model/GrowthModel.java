@@ -9,7 +9,13 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.GrowthContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.AddressListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GrowthInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GrowthInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GrowthListResponse;
 
 
 @ActivityScope
@@ -31,4 +37,15 @@ public class GrowthModel extends BaseModel implements GrowthContract.Model {
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<GrowthInfoResponse> getGrowthInfo(GrowthInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getGrowthInfo(request);
+    }
+
+    @Override
+    public Observable<GrowthListResponse> getGrowthList(AddressListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getGrowthList(request);
+    }
 }

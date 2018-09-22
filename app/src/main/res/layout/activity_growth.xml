@@ -6,7 +6,64 @@
     android:background="@color/background"
     android:orientation="vertical">
 
-    <include layout="@layout/title" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/title_bg"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:id="@+id/back"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:gravity="center">
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="17dp"
+                android:background="@mipmap/back_black" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="成长值"
+            android:textColor="#FF333333"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/how"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:text="如何获取"
+                android:textColor="#ff666666"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@mipmap/how_to_get_score" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,13 +83,13 @@
             android:textSize="12sp" />
 
         <TextView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:id="@+id/growth"
+            android:layout_width="114dp"
+            android:layout_height="34dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:background="@drawable/growth_count_bg"
             android:gravity="center"
-            android:text="100"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -41,9 +98,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
-            android:text="距离v2还差900成长值"
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>
@@ -131,15 +187,6 @@
 
         </LinearLayout>
 
-
-        <me.jessyan.mvparms.demo.mvp.ui.widget.GrowthValueProgress
-            android:id="@+id/growth"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="5dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -196,25 +243,67 @@
 
     </LinearLayout>
 
-    <LinearLayout
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabTwo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="36dp"
+        android:background="@drawable/list_item_bg"
+        android:paddingLeft="15dp"
+        app:tabIndicatorColor="#FF5FBFE3"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="scrollable"
+        app:tabPaddingEnd="0dp"
+        app:tabPaddingStart="0dp"
+        app:tabSelectedTextColor="#FF5FBFE3"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabTextColor="#FF666666" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabTwo"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white">
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:background="@color/white"
-            android:paddingLeft="15dp"
-            app:tabIndicatorColor="#FF5FBFE3"
-            app:tabIndicatorHeight="2dp"
-            app:tabMode="scrollable"
-            app:tabPaddingEnd="0dp"
-            app:tabPaddingStart="0dp"
-            app:tabSelectedTextColor="#FF5FBFE3"
-            app:tabTextAppearance="@style/TabLayoutTextStyle"
-            app:tabTextColor="#FF666666" />
+            android:layout_height="match_parent">
 
-    </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contentList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:scrollbars="none" />
+
+            <LinearLayout
+                android:id="@+id/no_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="94dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="80dp"
+                    android:background="@mipmap/nodata" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="暂无数据"
+                    android:textColor="#FF666666"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </LinearLayout>

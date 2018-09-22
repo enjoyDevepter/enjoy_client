@@ -407,17 +407,19 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         @JavascriptInterface
         public void onGetWebContentHeight() {
             //重新调整webview高度
-            hospitalInfo.post(() -> {
-                hospitalInfo.measure(0, 0);
-                int measuredHeight = hospitalInfo.getMeasuredHeight();
-                ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) hospitalInfo.getLayoutParams();
-                layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
-                hospitalInfo.setLayoutParams(layoutParams);
+            hospitalInfo.postDelayed(() -> {
+                if (null != hospitalInfo) {
+                    hospitalInfo.measure(0, 0);
+                    int measuredHeight = hospitalInfo.getMeasuredHeight();
+                    ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) hospitalInfo.getLayoutParams();
+                    layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
+                    hospitalInfo.setLayoutParams(layoutParams);
 
-                LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
-                layoutParams1.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
-                viewpager.setLayoutParams(layoutParams1);
-            });
+                    LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
+                    layoutParams1.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
+                    viewpager.setLayoutParams(layoutParams1);
+                }
+            }, 1000);
         }
     }
 }

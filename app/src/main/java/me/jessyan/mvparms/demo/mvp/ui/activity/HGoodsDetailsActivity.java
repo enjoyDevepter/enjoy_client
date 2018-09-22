@@ -746,17 +746,19 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         @JavascriptInterface
         public void onGetWebContentHeight() {
             //重新调整webview高度
-            detailWV.post(() -> {
-                detailWV.measure(0, 0);
-                int measuredHeight = detailWV.getMeasuredHeight();
-                ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) detailWV.getLayoutParams();
-                layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
-                detailWV.setLayoutParams(layoutParams);
+            detailWV.postDelayed(() -> {
+                if (null != detailWV) {
+                    detailWV.measure(0, 0);
+                    int measuredHeight = detailWV.getMeasuredHeight();
+                    ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) detailWV.getLayoutParams();
+                    layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
+                    detailWV.setLayoutParams(layoutParams);
 
-                LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
-                layoutParams1.height = Math.max(layoutParams1.height, layoutParams.height);
-                viewpager.setLayoutParams(layoutParams1);
-            });
+                    LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
+                    layoutParams1.height = Math.max(layoutParams1.height, layoutParams.height);
+                    viewpager.setLayoutParams(layoutParams1);
+                }
+            }, 1000);
         }
     }
 }

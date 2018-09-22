@@ -157,12 +157,14 @@ public class DoctorIntorActivity extends BaseActivity<DoctorIntorPresenter> impl
         @JavascriptInterface
         public void onGetWebContentHeight() {
             //重新调整webview高度
-            doctorInfoWV.post(() -> {
-                doctorInfoWV.measure(0, 0);
-                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) doctorInfoWV.getLayoutParams();
-                layoutParams.height = doctorInfoWV.getMeasuredHeight();
-                doctorInfoWV.setLayoutParams(layoutParams);
-            });
+            doctorInfoWV.postDelayed(() -> {
+                if (null != doctorInfoWV) {
+                    doctorInfoWV.measure(0, 0);
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) doctorInfoWV.getLayoutParams();
+                    layoutParams.height = doctorInfoWV.getMeasuredHeight();
+                    doctorInfoWV.setLayoutParams(layoutParams);
+                }
+            }, 1000);
         }
     }
 }

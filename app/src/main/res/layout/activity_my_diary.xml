@@ -45,7 +45,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:text="申请奖励"
+            android:text="奖励规则"
             android:textColor="#FF333333"
             android:textSize="13dp" />
     </RelativeLayout>

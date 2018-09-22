@@ -113,7 +113,9 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
         titleTV.setText("发表日志");
         addV.setOnClickListener(this);
         backV.setOnClickListener(this);
-        choiceV.setOnClickListener(this);
+        if (getIntent().getBooleanExtra("choice", true)) {
+            choiceV.setOnClickListener(this);
+        }
         submitV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(imagesRV, mLayoutManager);
         imagesRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.plus_width), 0));

@@ -44,6 +44,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetMyMemberListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetRechargeListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GrowthInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MessageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest;
@@ -67,6 +68,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetConsumeInfoPageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetMyMemberListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetRechargeListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GrowthInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GrowthListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MessageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyCouponListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFansResponse;
@@ -234,4 +237,13 @@ public interface UserService {
     @POST("gateway")
         // 获取充值记录
     Observable<GetRechargeListResponse> getRechargeList(@Body GetRechargeListRequest request);
+
+    @POST("gateway")
+        // 获取成长信息
+    Observable<GrowthInfoResponse> getGrowthInfo(@Body GrowthInfoRequest request);
+
+    @POST("gateway")
+        // 获取成长记录
+    Observable<GrowthListResponse> getGrowthList(@Body AddressListRequest request);
+
 }

@@ -17,6 +17,7 @@ import org.simple.eventbus.EventBus;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.di.component.DaggerSettingComponent;
 import me.jessyan.mvparms.demo.di.module.SettingModule;
 import me.jessyan.mvparms.demo.mvp.contract.SettingContract;
@@ -147,6 +148,8 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
                 cache.put(KEY_KEEP + "token", null);
                 cache.put(KEY_KEEP + "signkey", null);
+                SPUtils.remove(this, "token");
+                SPUtils.remove(this, "signkey");
                 EventBus.getDefault().post(0, EventBusTags.USER_LOGOUT);
                 killMyself();
                 break;

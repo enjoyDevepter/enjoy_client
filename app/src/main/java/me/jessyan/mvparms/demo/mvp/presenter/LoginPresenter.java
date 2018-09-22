@@ -90,6 +90,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                         if (response.isSuccess()) {
                             cacheUserInfo(response.getToken(), response.getSignkey());
                             mRootView.killMyself();
+                            mAppManager.getTopActivity().recreate();
                         } else {
                             mRootView.showVerity();
                             mRootView.showMessage(response.getRetDesc());
@@ -116,6 +117,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                         if (response.isSuccess()) {
                             cacheUserInfo(response.getToken(), response.getSignkey());
                             mRootView.killMyself();
+                            mAppManager.getTopActivity().recreate();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

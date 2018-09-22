@@ -293,13 +293,15 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         @JavascriptInterface
         public void onGetWebContentHeight() {
             //重新调整webview高度
-            detailWV.post(() -> {
-                detailWV.measure(0, 0);
-                int measuredHeight = detailWV.getMeasuredHeight();
-                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) detailWV.getLayoutParams();
-                layoutParams.height = measuredHeight;
-                detailWV.setLayoutParams(layoutParams);
-            });
+            detailWV.postDelayed(() -> {
+                if (null != detailRV) {
+                    detailWV.measure(0, 0);
+                    int measuredHeight = detailWV.getMeasuredHeight();
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) detailWV.getLayoutParams();
+                    layoutParams.height = measuredHeight;
+                    detailWV.setLayoutParams(layoutParams);
+                }
+            }, 1000);
         }
     }
 }

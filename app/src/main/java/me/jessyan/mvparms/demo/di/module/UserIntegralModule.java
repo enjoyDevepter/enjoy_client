@@ -10,7 +10,6 @@ import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
-
 import me.jessyan.mvparms.demo.mvp.contract.UserIntegralContract;
 import me.jessyan.mvparms.demo.mvp.model.UserIntegralModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.score.ScorePointBean;
@@ -47,7 +46,6 @@ public class UserIntegralModule {
     RecyclerView.Adapter provideStoreAdapter(List<ScorePointBean> list) {
         return new UserScoreAdapter(list);
     }
-
 
     @ActivityScope
     @Provides

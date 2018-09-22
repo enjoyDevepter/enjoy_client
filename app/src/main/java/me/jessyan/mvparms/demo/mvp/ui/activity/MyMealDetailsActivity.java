@@ -255,6 +255,7 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
                 } else if (appointment.getStatus().equals("4")) {
                     // 写日记
                     Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
+                    intent.putExtra("change", false);
                     intent.putExtra("orderId", appointment.getProjectId());
                     ArmsUtils.startActivity(intent);
                     break;
