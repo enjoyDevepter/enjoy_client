@@ -34,7 +34,6 @@ import butterknife.BindView;
 import cn.ehanmy.pay.PayManager;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
-import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerConsumeCoinInputComponent;
 import me.jessyan.mvparms.demo.di.module.ConsumeCoinInputModule;
 import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinInputContract;
@@ -287,7 +286,6 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
                 mPresenter.recharge(money_num, currType.payType);
             }
         });
-        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
     @Override

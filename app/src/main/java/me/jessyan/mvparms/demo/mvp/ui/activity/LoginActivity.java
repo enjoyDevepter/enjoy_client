@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.gyf.barlibrary.KeyboardPatch;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.AppManager;
@@ -25,7 +24,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerLoginComponent;
 import me.jessyan.mvparms.demo.di.module.LoginModule;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
@@ -35,9 +33,6 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View, View.OnClickListener {
-
-    @BindView(R.id.parent)
-    View parentV;
     @BindView(R.id.forget)
     View forgetV;
     @BindView(R.id.register)
@@ -100,7 +95,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         getValidateV.setOnClickListener(this);
         tabLayout.addTab(tabLayout.newTab().setText("账户登录"));
         tabLayout.addTab(tabLayout.newTab().setText("手机登录"));
-        KeyboardPatch.patch(this, parentV).enable();
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -117,7 +111,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
             }
         });
-        SoftHideKeyBoardUtil.assistActivity(this);
         protocoTV.postDelayed(new Runnable() {
             @Override
             public void run() {

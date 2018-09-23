@@ -28,7 +28,6 @@ import java.util.List;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
-import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerHGoodsOrderConfirmComponent;
 import me.jessyan.mvparms.demo.di.module.HGoodsOrderConfirmModule;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
@@ -155,7 +154,6 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         hospitalV.setOnClickListener(this);
         hospitalTV.setOnClickListener(this);
         moneyET.setOnFocusChangeListener(this);
-        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
 

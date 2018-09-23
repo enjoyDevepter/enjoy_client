@@ -34,7 +34,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorCommentInfoComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorCommentInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorCommentInfoContract;
@@ -147,7 +146,6 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
             }
         });
         title.setText("评论详情");
-        SoftHideKeyBoardUtil.assistActivity(this);
         doctorCommentBean = (DoctorCommentBean) getIntent().getSerializableExtra(KEY_FOR_DOCTOR_COMMENT_BEAN);
         setData(doctorCommentBean);
 

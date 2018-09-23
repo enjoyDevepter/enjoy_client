@@ -30,7 +30,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerRegisterComponent;
 import me.jessyan.mvparms.demo.di.module.RegisterModule;
 import me.jessyan.mvparms.demo.mvp.contract.RegisterContract;
@@ -90,6 +89,11 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     }
 
     @Override
+    public boolean useImmersive() {
+        return false;
+    }
+
+    @Override
     public void initData(Bundle savedInstanceState) {
         protocoTV.setText(Html.fromHtml("<font color='#9A9A9A'>同意</font><font color='#5FBFE3'>《Hi美会员实用协议》</font>"));
         infoTV.setText(Html.fromHtml("<font color='#666666'>已注册过，</font> <font color='#5FBFE3'>登录</font>"));
@@ -99,7 +103,6 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         choiceV.setOnClickListener(this);
         getValidateV.setOnClickListener(this);
         registerTV.setOnClickListener(this);
-        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
     @Override

@@ -36,7 +36,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerDiaryDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.DiaryDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
@@ -205,7 +204,6 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
             }
         });
         nestedScrollView.setOnScrollChangeListener(this);
-        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
     @Override

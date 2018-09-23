@@ -102,6 +102,7 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             ImmersionBar.with(this)
                     .fitsSystemWindows(true)
                     .statusBarDarkFont(true)
+                    .keyboardEnable(true)
                     .statusBarColor(android.R.color.white)
                     .init(); //初始化，默认透明状态栏和黑色导航栏
         }

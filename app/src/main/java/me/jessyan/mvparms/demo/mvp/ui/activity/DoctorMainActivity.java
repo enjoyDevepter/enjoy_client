@@ -42,7 +42,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorMainComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorMainModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
@@ -152,7 +151,6 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         contentList.setNestedScrollingEnabled(false);
         swipeRefreshLayout.setOnRefreshListener(this);
         initPaginate();
-        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
     @Override

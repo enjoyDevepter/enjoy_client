@@ -14,7 +14,6 @@ import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerModifyPasswordComponent;
 import me.jessyan.mvparms.demo.di.module.ModifyPasswordModule;
 import me.jessyan.mvparms.demo.mvp.contract.ModifyPasswordContract;
@@ -54,7 +53,6 @@ public class ModifyPasswordActivity extends BaseActivity<ModifyPasswordPresenter
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
         submitV.setOnClickListener(this);
-        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
 

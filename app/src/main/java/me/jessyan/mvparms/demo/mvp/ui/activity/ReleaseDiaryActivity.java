@@ -36,7 +36,6 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.app.utils.ImageUploadUtils;
-import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerReleaseDiaryComponent;
 import me.jessyan.mvparms.demo.di.module.ReleaseDiaryModule;
 import me.jessyan.mvparms.demo.mvp.contract.ReleaseDiaryContract;
@@ -121,7 +120,6 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
         ArmsUtils.configRecyclerView(imagesRV, mLayoutManager);
         imagesRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.plus_width), 0));
         imagesRV.setAdapter(mAdapter);
-        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
     @Override
