@@ -17,10 +17,15 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.EventBus;
+
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMyDiaryComponent;
 import me.jessyan.mvparms.demo.di.module.MyDiaryModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyDiaryContract;
@@ -49,6 +54,14 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
     RecyclerView mRecyclerView;
     @BindView(R.id.noData)
     View noDataV;
+    @BindView(R.id.diary_info)
+    View diaryInfoV;
+    @BindView(R.id.no_diary)
+    View noDiaryV;
+    @BindView(R.id.rule_info)
+    TextView ruleTV;
+    @BindView(R.id.confirm)
+    View confirmV;
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
@@ -79,13 +92,28 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
         backV.setOnClickListener(this);
         applyV.setOnClickListener(this);
         releaseV.setOnClickListener(this);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        tabLayout.addTab(tabLayout.newTab().setText("我的日记"));
-        ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnChildItemClickLinstener(this);
-        initPaginate();
+        confirmV.setOnClickListener(this);
+        boolean hasData = getIntent().getIntExtra("projectNum", 0) == 0 ? false : true;
+        diaryInfoV.setVisibility(hasData ? View.VISIBLE : View.GONE);
+        noDiaryV.setVisibility(hasData ? View.GONE : View.VISIBLE);
+        if (!hasData) {
+            List<String> rules = getIntent().getStringArrayListExtra("rules");
+            StringBuilder sb = new StringBuilder();
+            if (null != rules) {
+                for (String rule : rules) {
+                    sb.append(rule).append("\n");
+                }
+            }
+            ruleTV.setText(sb.toString());
+        } else {
+            swipeRefreshLayout.setOnRefreshListener(this);
+            tabLayout.addTab(tabLayout.newTab().setText("我的日记"));
+            ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
+            mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
+            mRecyclerView.setAdapter(mAdapter);
+            mAdapter.setOnChildItemClickLinstener(this);
+            initPaginate();
+        }
     }
 
 
@@ -203,10 +231,16 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
                 killMyself();
                 break;
             case R.id.apply:
-                mPresenter.apply(true);
+                Intent articleIntent = new Intent(getApplication(), PlatformActivity.class);
+                articleIntent.putExtra("url", getIntent().getStringExtra("url"));
+                ArmsUtils.startActivity(articleIntent);
                 break;
             case R.id.release:
                 ArmsUtils.startActivity(ReleaseDiaryActivity.class);
+                break;
+            case R.id.confirm:
+                EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
+                killMyself();
                 break;
         }
     }

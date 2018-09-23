@@ -4,49 +4,40 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BalanceBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.ChargeBean;
 
 public class ConsumeInputHolder extends BaseHolder<ChargeBean> {
 
     @BindView(R.id.type)
-    TextView type;
+    TextView typeTV;
     @BindView(R.id.time)
-    TextView time;
-    @BindView(R.id.fuhao)
-    TextView fuhao;
-    @BindView(R.id.score_num)
-    TextView score_num;
-
-    private AppComponent mAppComponent;
-    private ImageLoader mImageLoader;
+    TextView timeTV;
+    @BindView(R.id.order_id)
+    TextView orderTV;
+    @BindView(R.id.status)
+    TextView statusTV;
 
 
     public ConsumeInputHolder(View itemView) {
         super(itemView);
-        mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
-        mImageLoader = mAppComponent.imageLoader();
     }
 
     @Override
     public void setData(ChargeBean data, int position) {
-        time.setText(data.getCreateDate());
-        type.setText(data.getStatusDesc());
-        fuhao.setText("+");
-        score_num.setText(String.format("%.2f",data.getMoney() * 1.0 / 100));
+        typeTV.setText(data.getTypeDesc());
+        timeTV.setText(data.getCreateDate());
+        orderTV.setText("订单号：" + data.getOrderId());
+        statusTV.setText(data.getStatusDesc());
     }
 
     @Override
     protected void onRelease() {
-        this.type = null;
-        this.time = null;
-        this.fuhao = null;
-        this.score_num = null;
+        this.typeTV = null;
+        this.timeTV = null;
+        this.orderTV = null;
+        this.statusTV = null;
     }
 }

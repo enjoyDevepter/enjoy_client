@@ -10,7 +10,7 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.diary.ProjectRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ReleaseDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DirayProjectListResponse;
 import okhttp3.MultipartBody;
 
 
@@ -21,7 +21,7 @@ public interface ReleaseDiaryContract {
 
         Activity getActivity();
 
-        void updateProject(GoodsListResponse response);
+        void updateProject(DirayProjectListResponse response);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -31,7 +31,7 @@ public interface ReleaseDiaryContract {
 
         Observable<BaseResponse> releaseDiary(ReleaseDiaryRequest request);
 
-        Observable<GoodsListResponse> getProjects(ProjectRequest request);
+        Observable<DirayProjectListResponse> getProjects(ProjectRequest request);
 
     }
 }

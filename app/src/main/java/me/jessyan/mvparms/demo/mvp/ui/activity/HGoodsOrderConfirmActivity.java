@@ -28,6 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerHGoodsOrderConfirmComponent;
 import me.jessyan.mvparms.demo.di.module.HGoodsOrderConfirmModule;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsOrderConfirmContract;
@@ -154,6 +155,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         hospitalV.setOnClickListener(this);
         hospitalTV.setOnClickListener(this);
         moneyET.setOnFocusChangeListener(this);
+        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
 
@@ -246,10 +248,19 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         moneyET.setHint(ArmsUtils.formatLong(response.getMoney()));
         couponButtomTV.setText(ArmsUtils.formatLong(response.getCoupon()));
         payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));
+
         List<Coupon> couponList = response.getCouponList();
         if (null == couponList || null != couponList && couponList.size() <= 0) {
-            couponTV.setText("暂无优惠卷");
+            String where = getActivity().getIntent().getStringExtra("where");
+            if ("timelimitdetail".equals(where)) {
+                couponV.setVisibility(View.GONE);
+            } else if ("newpeople".equals(where)) {
+                couponV.setVisibility(View.GONE);
+            } else {
+                couponTV.setText("暂无优惠卷");
+            }
         } else {
+            couponV.setOnClickListener(this);
             for (Coupon coupon : couponList) {
                 if (coupon.getCouponId().equals(response.getCouponId())) {
                     couponTV.setText(coupon.getName());

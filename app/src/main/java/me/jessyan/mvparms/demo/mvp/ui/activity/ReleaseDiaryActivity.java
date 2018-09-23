@@ -36,11 +36,12 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.app.utils.ImageUploadUtils;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerReleaseDiaryComponent;
 import me.jessyan.mvparms.demo.di.module.ReleaseDiaryModule;
 import me.jessyan.mvparms.demo.mvp.contract.ReleaseDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DirayProjectListResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.ReleaseDiaryPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -113,13 +114,14 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
         titleTV.setText("发表日志");
         addV.setOnClickListener(this);
         backV.setOnClickListener(this);
+        submitV.setOnClickListener(this);
         if (getIntent().getBooleanExtra("choice", true)) {
             choiceV.setOnClickListener(this);
         }
-        submitV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(imagesRV, mLayoutManager);
         imagesRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.plus_width), 0));
         imagesRV.setAdapter(mAdapter);
+        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
     @Override
@@ -320,11 +322,12 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
 
     @Override
     @Subscriber(tag = EventBusTags.CHANGE_DIRAY_PROJECT)
-    public void updateProject(GoodsListResponse response) {
+    public void updateProject(DirayProjectListResponse response) {
         if (null != response.getGoodsList() && response.getGoodsList().size() > 0) {
             Goods goods = response.getGoodsList().get(0);
             provideCache().put("goodsId", goods.getGoodsId());
             provideCache().put("merchId", goods.getMerchId());
+            provideCache().put("orderId", goods.getOrderId());
             mImageLoader.loadImage(this,
                     ImageConfigImpl
                             .builder()

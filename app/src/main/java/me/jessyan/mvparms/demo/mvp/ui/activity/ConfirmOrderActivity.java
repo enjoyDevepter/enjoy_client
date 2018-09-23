@@ -250,7 +250,14 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
 
         List<Coupon> couponList = response.getCouponList();
         if (null == couponList || null != couponList && couponList.size() <= 0) {
-            couponTextTV.setText("暂无优惠卷");
+            String where = getActivity().getIntent().getStringExtra("where");
+            if ("timelimitdetail".equals(where)) {
+                couponLayoutV.setVisibility(View.GONE);
+            } else if ("newpeople".equals(where)) {
+                couponLayoutV.setVisibility(View.GONE);
+            } else {
+                couponTextTV.setText("暂无优惠卷");
+            }
         } else {
             couponLayoutV.setOnClickListener(this);
             for (Coupon coupon : couponList) {

@@ -69,14 +69,17 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.ModifyActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".mvp.ui.activity.RegisterActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".mvp.ui.activity.LoginActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".mvp.ui.activity.CityActivity"
             android:screenOrientation="portrait" />
@@ -146,10 +149,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.HGoodsDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".mvp.ui.activity.HGoodsOrderConfirmActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".mvp.ui.activity.ChoiceTimeActivity"
             android:screenOrientation="portrait" />
@@ -197,7 +202,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.ReleaseDiaryActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".mvp.ui.activity.MyDiaryActivity"
             android:screenOrientation="portrait" />
@@ -236,7 +242,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.AuthenticationActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".mvp.ui.activity.UserInfoActivity"
             android:screenOrientation="portrait" />
@@ -245,7 +252,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.ConsumeCoinInputActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".mvp.ui.activity.FeedBackActivity"
             android:screenOrientation="portrait" />

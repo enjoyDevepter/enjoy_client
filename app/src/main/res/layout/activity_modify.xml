@@ -62,6 +62,7 @@
                 android:layout_marginLeft="9dp"
                 android:background="@android:color/transparent"
                 android:hint="您的密码"
+                android:paddingLeft="5dp"
                 android:textSize="13sp" />
 
         </LinearLayout>
@@ -104,6 +105,7 @@
                 android:layout_marginLeft="9dp"
                 android:background="@android:color/transparent"
                 android:hint="重复密码"
+                android:paddingLeft="5dp"
                 android:textSize="13sp" />
 
         </LinearLayout>

@@ -57,6 +57,8 @@ public class Toasty {
     private static int textSize = 16; // in SP
 
     private static boolean tintIcon = true;
+    private static Toast currentToast;
+    private static TextView toastTextView;
 
     private Toasty() {
         // avoiding instantiation
@@ -285,33 +287,36 @@ public class Toasty {
     public static Toast custom(@NonNull Context context, @NonNull CharSequence message, Drawable icon,
                                @ColorInt int tintColor, int duration,
                                boolean withIcon, boolean shouldTint) {
-        final Toast currentToast = Toast.makeText(context, "", duration);
-        currentToast.setGravity(Gravity.CENTER, 0, 0);
-        final View toastLayout = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.toast_layout, null);
-        final ImageView toastIcon = toastLayout.findViewById(R.id.toast_icon);
-        final TextView toastTextView = toastLayout.findViewById(R.id.toast_text);
-        Drawable drawableFrame;
+        if (null == currentToast) {
+            currentToast = Toast.makeText(context, "", duration);
+            currentToast.setGravity(Gravity.CENTER, 0, 0);
+            final View toastLayout = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                    .inflate(R.layout.toast_layout, null);
+            final ImageView toastIcon = toastLayout.findViewById(R.id.toast_icon);
+            toastTextView = toastLayout.findViewById(R.id.toast_text);
+            Drawable drawableFrame;
 
-        drawableFrame = ToastyUtils.getDrawable(context, R.drawable.toast_bg);
-        ToastyUtils.setBackground(toastLayout, drawableFrame);
+            drawableFrame = ToastyUtils.getDrawable(context, R.drawable.toast_bg);
+            ToastyUtils.setBackground(toastLayout, drawableFrame);
 
-        if (withIcon) {
-            if (icon == null)
-                throw new IllegalArgumentException("Avoid passing 'icon' as null if 'withIcon' is ®set to true");
-            if (tintIcon)
-                icon = ToastyUtils.tintIcon(icon, DEFAULT_TEXT_COLOR);
-            ToastyUtils.setBackground(toastIcon, icon);
+            if (withIcon) {
+                if (icon == null)
+                    throw new IllegalArgumentException("Avoid passing 'icon' as null if 'withIcon' is ®set to true");
+                if (tintIcon)
+                    icon = ToastyUtils.tintIcon(icon, DEFAULT_TEXT_COLOR);
+                ToastyUtils.setBackground(toastIcon, icon);
+            } else {
+                toastIcon.setVisibility(View.GONE);
+            }
+
+            toastTextView.setText(message);
+            toastTextView.setTextColor(DEFAULT_TEXT_COLOR);
+            toastTextView.setTypeface(currentTypeface);
+            toastTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+            currentToast.setView(toastLayout);
         } else {
-            toastIcon.setVisibility(View.GONE);
+            toastTextView.setText(message);
         }
-
-        toastTextView.setText(message);
-        toastTextView.setTextColor(DEFAULT_TEXT_COLOR);
-        toastTextView.setTypeface(currentTypeface);
-        toastTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-
-        currentToast.setView(toastLayout);
         return currentToast;
     }
 

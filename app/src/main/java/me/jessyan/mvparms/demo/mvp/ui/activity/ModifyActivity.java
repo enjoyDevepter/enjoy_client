@@ -12,6 +12,7 @@ import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerModifyComponent;
 import me.jessyan.mvparms.demo.di.module.ModifyModule;
 import me.jessyan.mvparms.demo.mvp.contract.ModifyContract;
@@ -49,7 +50,7 @@ public class ModifyActivity extends BaseActivity<ModifyPresenter> implements Mod
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
         modifyV.setOnClickListener(this);
-
+        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
 

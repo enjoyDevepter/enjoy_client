@@ -51,6 +51,7 @@ import butterknife.BindView;
 import cn.iwgang.countdownview.CountdownView;
 import cn.iwgang.countdownview.DynamicConfig;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerHGoodsDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.HGoodsDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsDetailsContract;
@@ -293,6 +294,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             newlyInfoV.setVisibility(View.GONE);
             priceInfoV.setVisibility(View.VISIBLE);
         }
+        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
 

@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceProjectForDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.diary.ProjectRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DirayProjectListResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -83,9 +83,9 @@ public class ChoiceProjectForDiaryPresenter extends BasePresenter<ChoiceProjectF
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
-                .subscribe(new ErrorHandleSubscriber<GoodsListResponse>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<DirayProjectListResponse>(mErrorHandler) {
                     @Override
-                    public void onNext(GoodsListResponse response) {
+                    public void onNext(DirayProjectListResponse response) {
                         if (response.isSuccess()) {
                             if (pullToRefresh) {
                                 mGoods.clear();

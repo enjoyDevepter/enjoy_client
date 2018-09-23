@@ -33,6 +33,7 @@
     <dimen name="diray_apply_height">236dp</dimen>
     <dimen name="diary_comment_height">76dp</dimen>
     <dimen name="diary_comment_input_height">68dp</dimen>
+    <dimen name="consume_input_height">64dp</dimen>
 
 
     <dimen name="price_red_text_size">17sp</dimen>

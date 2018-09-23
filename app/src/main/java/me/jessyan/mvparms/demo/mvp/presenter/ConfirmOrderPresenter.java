@@ -169,7 +169,6 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                     @Override
                     public void onNext(PayOrderResponse response) {
                         if (response.isSuccess()) {
-                            mAppManager.killAllBeforeClass(MainActivity.class);
                             if ("0".equals(response.getPayStatus())) {
                                 Intent intent = new Intent(mRootView.getActivity(), PayActivity.class);
                                 intent.putExtra("orderId", response.getOrderId());
@@ -181,9 +180,10 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                                 intent.putExtra("payMoney", response.getTotalPrice());
                                 intent.putExtra("orderTime", response.getOrderTime());
                                 intent.putExtra("orderType", response.getOrderType());
-                                intent.putExtra("payTypeDesc", response.getPayTypeDesc());
+                                intent.putExtra("payTypeDesc", response.getPayType());
                                 ArmsUtils.startActivity(intent);
                             }
+                            mAppManager.killAllBeforeClass(MainActivity.class);
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

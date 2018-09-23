@@ -62,7 +62,6 @@ public class GrowthPresenter extends BasePresenter<GrowthContract.Model, GrowthC
         getGrowthList(true);
     }
 
-
     private void getGrowthInfo() {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         GrowthInfoRequest request = new GrowthInfoRequest();
@@ -109,13 +108,13 @@ public class GrowthPresenter extends BasePresenter<GrowthContract.Model, GrowthC
                     @Override
                     public void onNext(GrowthListResponse response) {
                         if (response.isSuccess()) {
-                            if (null == response.getGrowthInfoList()) {
+                            if (null == response.getGrowthList()) {
                                 mRootView.showConent(false);
                                 return;
                             }
-                            mRootView.showConent(response.getGrowthInfoList().size() > 0);
+                            mRootView.showConent(response.getGrowthList().size() > 0);
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                            growthInfoList.addAll(response.getGrowthInfoList());
+                            growthInfoList.addAll(response.getGrowthList());
                             preEndIndex = growthInfoList.size();//更新之前列表总长度,用于确定加载更多的起始位置
                             lastPageIndex = growthInfoList.size() / 10;
                             if (pullToRefresh) {

@@ -96,8 +96,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     View serachV;
     @BindView(R.id.tabOne)
     TabLayout tabLayout;
+    @BindView(R.id.tabOneFloat)
+    TabLayout tabOneFloat;
     @BindView(R.id.tabTwo)
-    TabLayout tabLayoutTwo;
+    TabLayout tabTwoLayout;
     @BindView(R.id.tabTwoFloat)
     TabLayout tabTwoFloat;
     @BindView(R.id.banner)
@@ -182,8 +184,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         if (null != tabLayout.getTabAt(0)) {
             tabLayout.getTabAt(0).select();
         }
-        if (null != tabLayoutTwo.getTabAt(0)) {
-            tabLayoutTwo.getTabAt(0).select();
+        if (null != tabOneFloat.getTabAt(0)) {
+            tabOneFloat.getTabAt(0).select();
+        }
+        if (null != tabTwoLayout.getTabAt(0)) {
+            tabTwoLayout.getTabAt(0).select();
         }
         if (null != tabTwoFloat.getTabAt(0)) {
             tabTwoFloat.getTabAt(0).select();
@@ -256,9 +261,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         // 一级导航
         this.firstNavList = firstNavList;
         tabLayout.removeAllTabs();
+        tabOneFloat.removeAllTabs();
         tabLayout.addOnTabSelectedListener(this);
+        tabOneFloat.addOnTabSelectedListener(this);
         for (NaviInfo naviInfo : firstNavList) {
             tabLayout.addTab(tabLayout.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
+        }
+        for (NaviInfo naviInfo : firstNavList) {
+            tabOneFloat.addTab(tabOneFloat.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
         }
 
         // 广告
@@ -368,12 +378,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         }
 
         // 二级导航
-        tabLayoutTwo.removeAllTabs();
+        tabTwoLayout.removeAllTabs();
         tabTwoFloat.removeAllTabs();
-        tabLayoutTwo.addOnTabSelectedListener(this);
+        tabTwoLayout.addOnTabSelectedListener(this);
         tabTwoFloat.addOnTabSelectedListener(this);
         for (NaviInfo naviInfo : secondNavList) {
-            tabLayoutTwo.addTab(tabLayoutTwo.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
+            tabTwoLayout.addTab(tabTwoLayout.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
             tabTwoFloat.addTab(tabTwoFloat.newTab().setTag(naviInfo.getRedirectType()).setText(naviInfo.getTitle()));
         }
     }
@@ -383,7 +393,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mRecyclerView.getLayoutParams();
         int[] location = new int[2];
         titleV.getLocationInWindow(location);
-        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) - ArmsUtils.getDimens(getContext(), R.dimen.home_title_height) + 1,
+        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) - ArmsUtils.getDimens(getContext(), R.dimen.home_title_height) - ArmsUtils.getDimens(getContext(), R.dimen.title_height) + 1,
                 ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * count + 1);
         mRecyclerView.setLayoutParams(layoutParams);
     }
@@ -428,8 +438,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             if (null != tabLayout && null != tabLayout.getTabAt(0)) {
                 tabLayout.getTabAt(0).select();
             }
-            if (null != tabLayoutTwo && null != tabLayoutTwo.getTabAt(0)) {
-                tabLayoutTwo.getTabAt(0).select();
+            if (null != tabOneFloat && null != tabOneFloat.getTabAt(0)) {
+                tabOneFloat.getTabAt(0).select();
+            }
+            if (null != tabTwoLayout && null != tabTwoLayout.getTabAt(0)) {
+                tabTwoLayout.getTabAt(0).select();
             }
             if (null != tabTwoFloat && null != tabTwoFloat.getTabAt(0)) {
                 tabTwoFloat.getTabAt(0).select();
@@ -601,11 +614,19 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
         int[] location = new int[2];
-        tabLayoutTwo.getLocationOnScreen(location);
+        tabLayout.getLocationOnScreen(location);
         int yPosition = location[1];
         int[] titleLocation = new int[2];
         titleV.getLocationInWindow(titleLocation);
         if (yPosition < (titleV.getHeight() + titleLocation[1])) {
+            tabOneFloat.setVisibility(View.VISIBLE);
+        } else {
+            tabOneFloat.setVisibility(View.GONE);
+        }
+        tabTwoLayout.getLocationOnScreen(location);
+        yPosition = location[1];
+        if (yPosition < (titleV.getHeight() + titleLocation[1] + tabOneFloat.getHeight())) {
+            tabOneFloat.setVisibility(View.GONE);
             tabTwoFloat.setVisibility(View.VISIBLE);
             nestedScrollView.setNeedScroll(false);
         } else {

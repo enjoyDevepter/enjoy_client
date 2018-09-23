@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerLoginComponent;
 import me.jessyan.mvparms.demo.di.module.LoginModule;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
@@ -103,6 +104,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
             }
         });
+        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
     private void changeTabToPhone(boolean byPhone) {

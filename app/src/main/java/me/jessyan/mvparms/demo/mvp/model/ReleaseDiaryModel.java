@@ -16,7 +16,7 @@ import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.entity.diary.ProjectRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ReleaseDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DirayProjectListResponse;
 import okhttp3.MultipartBody;
 
 
@@ -52,7 +52,7 @@ public class ReleaseDiaryModel extends BaseModel implements ReleaseDiaryContract
     }
 
     @Override
-    public Observable<GoodsListResponse> getProjects(ProjectRequest request) {
+    public Observable<DirayProjectListResponse> getProjects(ProjectRequest request) {
         return mRepositoryManager.obtainRetrofitService(DiaryService.class)
                 .getProjects(request);
     }

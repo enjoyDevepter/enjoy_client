@@ -123,6 +123,23 @@
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabOneFloat"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:tabIndicatorColor="#FF50C8F5"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="scrollable"
+        app:tabPaddingEnd="0dp"
+        app:tabPaddingStart="0dp"
+        app:tabSelectedTextColor="#FF50C8F5"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabTextColor="#FF666666" />
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabTwoFloat"
         android:layout_width="match_parent"

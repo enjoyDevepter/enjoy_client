@@ -176,7 +176,7 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
                                 intent.putExtra("payMoney", response.getTotalPrice());
                                 intent.putExtra("orderTime", response.getOrderTime());
                                 intent.putExtra("orderType", response.getOrderType());
-                                intent.putExtra("payTypeDesc", response.getPayTypeDesc());
+                                intent.putExtra("payTypeDesc", response.getPayType());
                                 ArmsUtils.startActivity(intent);
                             }
                         } else {

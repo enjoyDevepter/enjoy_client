@@ -13,7 +13,7 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceProjectForDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.DiaryService;
 import me.jessyan.mvparms.demo.mvp.model.entity.diary.ProjectRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DirayProjectListResponse;
 
 
 @ActivityScope
@@ -36,7 +36,7 @@ public class ChoiceProjectForDiaryModel extends BaseModel implements ChoiceProje
     }
 
     @Override
-    public Observable<GoodsListResponse> getProjects(ProjectRequest request) {
+    public Observable<DirayProjectListResponse> getProjects(ProjectRequest request) {
         return mRepositoryManager.obtainRetrofitService(DiaryService.class)
                 .getProjects(request);
     }

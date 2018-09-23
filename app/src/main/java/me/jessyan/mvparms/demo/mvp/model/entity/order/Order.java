@@ -145,6 +145,7 @@ public class Order {
         private double totalPrice;
         private String title;
         private int nums;
+        private String desc;
 
         public String getSetMealId() {
             return setMealId;
@@ -202,6 +203,14 @@ public class Order {
             this.nums = nums;
         }
 
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
         @Override
         public String toString() {
             return "MealGoods{" +
@@ -212,6 +221,7 @@ public class Order {
                     ", totalPrice=" + totalPrice +
                     ", title='" + title + '\'' +
                     ", nums=" + nums +
+                    ", desc='" + desc + '\'' +
                     '}';
         }
     }

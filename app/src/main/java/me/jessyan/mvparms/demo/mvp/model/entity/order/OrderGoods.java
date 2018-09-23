@@ -17,6 +17,7 @@ public class OrderGoods {
     private String title;
     private int nums;
     private String type;
+    private String desc;
     private GoodsSpecValue goodsSpecValue;
 
     public String getGoodsId() {
@@ -107,6 +108,14 @@ public class OrderGoods {
         this.type = type;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
     @Override
     public String toString() {
         return "OrderGoods{" +
@@ -120,6 +129,7 @@ public class OrderGoods {
                 ", title='" + title + '\'' +
                 ", nums=" + nums +
                 ", type='" + type + '\'' +
+                ", desc='" + desc + '\'' +
                 ", goodsSpecValue=" + goodsSpecValue +
                 '}';
     }

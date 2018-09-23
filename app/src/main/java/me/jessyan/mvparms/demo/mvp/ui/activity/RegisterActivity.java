@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerRegisterComponent;
 import me.jessyan.mvparms.demo.di.module.RegisterModule;
 import me.jessyan.mvparms.demo.mvp.contract.RegisterContract;
@@ -95,6 +96,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         choiceV.setOnClickListener(this);
         getValidateV.setOnClickListener(this);
         registerTV.setOnClickListener(this);
+        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
 

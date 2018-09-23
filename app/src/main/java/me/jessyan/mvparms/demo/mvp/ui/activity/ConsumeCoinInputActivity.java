@@ -34,6 +34,7 @@ import butterknife.BindView;
 import cn.ehanmy.pay.PayManager;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerConsumeCoinInputComponent;
 import me.jessyan.mvparms.demo.di.module.ConsumeCoinInputModule;
 import me.jessyan.mvparms.demo.mvp.contract.ConsumeCoinInputContract;
@@ -286,6 +287,7 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
                 mPresenter.recharge(money_num, currType.payType);
             }
         });
+        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
     @Override
@@ -348,8 +350,8 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
         int[] location = new int[2];
         titleLayoutV.getLocationInWindow(location);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) contentList.getLayoutParams();
-        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) + 1,
-                ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1);
+        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.consume_input_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) + 1,
+                ArmsUtils.getDimens(getContext(), R.dimen.consumer_coin_height) * count + 1);
         contentList.setLayoutParams(layoutParams);
     }
 

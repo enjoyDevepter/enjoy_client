@@ -50,79 +50,152 @@
             android:textSize="13dp" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:background="@drawable/title_bg"
-        android:orientation="horizontal">
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:tabIndicatorColor="#FF50C8F5"
-            app:tabIndicatorHeight="2dp"
-            app:tabMode="scrollable"
-            app:tabPaddingEnd="0dp"
-            app:tabPaddingStart="0dp"
-            app:tabSelectedTextColor="#FF50C8F5"
-            app:tabTextAppearance="@style/TabLayoutTextStyle"
-            app:tabTextColor="#FF666666" />
-
-        <TextView
-            android:id="@+id/release"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="15dp"
-            android:text="发布日志"
-            android:textColor="#FF333333"
-            android:textSize="13sp" />
-
-    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/diaryRV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none" />
-
-        </android.support.v4.widget.SwipeRefreshLayout>
-
         <LinearLayout
-            android:id="@+id/noData"
+            android:id="@+id/diary_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
-            <View
-                android:layout_width="94dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="80dp"
-                android:background="@mipmap/nodata" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:background="@drawable/title_bg"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:tabIndicatorColor="#FF50C8F5"
+                    app:tabIndicatorHeight="2dp"
+                    app:tabMode="scrollable"
+                    app:tabPaddingEnd="0dp"
+                    app:tabPaddingStart="0dp"
+                    app:tabSelectedTextColor="#FF50C8F5"
+                    app:tabTextAppearance="@style/TabLayoutTextStyle"
+                    app:tabTextColor="#FF666666" />
+
+                <TextView
+                    android:id="@+id/release"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="15dp"
+                    android:text="发布日志"
+                    android:textColor="#FF333333"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/swipeRefreshLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/diaryRV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="none" />
+
+                </android.support.v4.widget.SwipeRefreshLayout>
+
+                <LinearLayout
+                    android:id="@+id/noData"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="94dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="80dp"
+                        android:background="@mipmap/nodata" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="暂无数据"
+                        android:textColor="#FF666666"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/no_diary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="49dp"
+                    android:layout_height="54dp"
+                    android:background="@mipmap/no_dairy" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="您还没有预约"
+                    android:textColor="#FF333333"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/rule_info"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="30dp"
-                android:text="暂无数据"
                 android:textColor="#FF666666"
                 android:textSize="13sp" />
 
+            <TextView
+                android:id="@+id/confirm"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="18dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/order_confirm_btn_bg"
+                android:gravity="center"
+                android:text="去预约"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+
         </LinearLayout>
+
     </FrameLayout>
 
 </LinearLayout>

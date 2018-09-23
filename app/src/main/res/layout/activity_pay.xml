@@ -116,8 +116,7 @@
                         android:id="@+id/pay_one_img"
                         android:layout_width="23dp"
                         android:layout_height="23dp"
-                        android:layout_marginLeft="15dp"
-                        android:background="@mipmap/pay_zfb" />
+                        android:layout_marginLeft="15dp" />
 
                     <TextView
                         android:id="@+id/pay_one_text"
@@ -149,8 +148,7 @@
                         android:id="@+id/pay_two_img"
                         android:layout_width="23dp"
                         android:layout_height="23dp"
-                        android:layout_marginLeft="15dp"
-                        android:background="@mipmap/pay_wx" />
+                        android:layout_marginLeft="15dp" />
 
                     <TextView
                         android:id="@+id/pay_two_text"

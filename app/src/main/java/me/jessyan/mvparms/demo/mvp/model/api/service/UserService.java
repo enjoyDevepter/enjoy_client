@@ -72,6 +72,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GrowthInfoResponse
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GrowthListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MessageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyCouponListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyDiaryInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFansResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFollowListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.QiandaoInfoResponse;
@@ -185,6 +186,10 @@ public interface UserService {
     @POST("gateway")
         // 获取用户详情
     Observable<UserInfoResponse> getUserInfo(@Body UserInfoRequest request);
+
+    @POST("gateway")
+        // 获取用户日记信息
+    Observable<MyDiaryInfoResponse> getMyDiaryInfo(@Body UserInfoRequest request);
 
     @POST("gateway")
         // 现金币转消费币

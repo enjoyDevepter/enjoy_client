@@ -8,7 +8,7 @@ import com.jess.arms.mvp.IView;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.diary.ProjectRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DirayProjectListResponse;
 
 
 public interface ChoiceProjectForDiaryContract {
@@ -29,7 +29,7 @@ public interface ChoiceProjectForDiaryContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-        Observable<GoodsListResponse> getProjects(ProjectRequest request);
+        Observable<DirayProjectListResponse> getProjects(ProjectRequest request);
 
     }
 }

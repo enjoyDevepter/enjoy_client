@@ -350,7 +350,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                             Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
                             makeIntent.putExtra("orderId", order.getOrderId());
                             makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
-                            makeIntent.putExtra("desc", order.getDesc());
+                            makeIntent.putExtra("desc", order.getGoodsList().get(0).getDesc());
                             ArmsUtils.startActivity(makeIntent);
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记

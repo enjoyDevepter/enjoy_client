@@ -106,6 +106,7 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/diary_input_bg"
                     android:lines="1"
+                    android:paddingLeft="5dp"
                     android:textColor="#FF333333"
                     android:textSize="13sp" />
 
@@ -152,6 +153,7 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/diary_input_bg"
                     android:gravity="top"
+                    android:padding="5dp"
                     android:textColor="#FF333333"
                     android:textSize="13sp" />
 

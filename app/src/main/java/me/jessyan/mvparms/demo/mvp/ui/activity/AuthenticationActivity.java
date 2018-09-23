@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.utils.ImageUploadUtils;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerAuthenticationComponent;
 import me.jessyan.mvparms.demo.di.module.AuthenticationModule;
 import me.jessyan.mvparms.demo.mvp.contract.AuthenticationContract;
@@ -83,6 +84,7 @@ public class AuthenticationActivity extends BaseActivity<AuthenticationPresenter
         submitV.setOnClickListener(this);
         oppositeV.setOnClickListener(this);
         frontV.setOnClickListener(this);
+        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
 

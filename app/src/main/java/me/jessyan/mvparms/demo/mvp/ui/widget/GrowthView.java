@@ -64,8 +64,6 @@ public class GrowthView extends View {
 
     public void setGrowthInfoList(List<GrowthInfo> growthInfoList) {
         this.growthInfoList = growthInfoList;
-        this.growthInfoList.addAll(growthInfoList);
-        this.growthInfoList.addAll(growthInfoList);
         contentWidth = 4 * padding + growthInfoList.size() * item_width + (growthInfoList.size() - 1) * item_split;
         this.invalidate();
     }
@@ -74,27 +72,33 @@ public class GrowthView extends View {
     protected void onDraw(Canvas canvas) {
         int height = getHeight();
         if (null != growthInfoList) {
+            int start = 0;
+            if (contentWidth > getWidth()) {
+                start = 2 * padding;
+            } else {
+                start = (getWidth() - contentWidth) / 2;
+            }
             for (int i = 0; i < growthInfoList.size(); i++) {
                 // 绘制进度
                 GrowthInfo growthInfo = growthInfoList.get(i);
                 paint.setColor(progress);
-                int start = 2 * padding + i * item_split + i * item_width;
-                canvas.drawRect(start, (height - item_height) / 2, 2 * padding + i * item_split + (i + 1) * item_width, (height - item_height) / 2 + item_height, paint);
+                int begin = start + i * item_split + i * item_width;
+                canvas.drawRect(begin, (height - item_height) / 2, begin + item_width, (height - item_height) / 2 + item_height, paint);
                 paint.setColor(current_progress);
-                canvas.drawRect(start, (height - item_height) / 2, 2 * padding + i * item_split + i * item_width + item_width * 40 / 100, (height - item_height) / 2 + item_height, paint);
+                canvas.drawRect(begin, (height - item_height) / 2, begin + item_width * growthInfo.getPercent() / 100, (height - item_height) / 2 + item_height, paint);
 
                 // 绘制level
                 paint.setColor(level_color);
                 String name = growthInfo.getName();
                 Rect rect = new Rect();
                 paint.getTextBounds(name, 0, name.length(), rect);
-                canvas.drawText(growthInfo.getName(), start - item_split - rect.width() / 2, height / 2 - top_divider - ArmsUtils.getBaseline(paint), paint);
+                canvas.drawText(growthInfo.getName(), begin - item_split - rect.width() / 2, height / 2 - top_divider - ArmsUtils.getBaseline(paint), paint);
 
                 // 绘制growth
                 paint.setColor(growth_color);
                 String growth = growthInfo.getGrowth() + "";
                 paint.getTextBounds(growth, 0, growth.length(), rect);
-                canvas.drawText(growth, start - item_split - rect.width() / 2, height / 2 + item_height / 2 + buttom_divider + rect.height() - ArmsUtils.getBaseline(paint), paint);
+                canvas.drawText(growth, begin - item_split - rect.width() / 2, height / 2 + item_height / 2 + buttom_divider + rect.height() - ArmsUtils.getBaseline(paint), paint);
 
             }
         }
@@ -120,7 +124,7 @@ public class GrowthView extends View {
                 //计算偏移量
                 float offsetX = x - lastX;
                 System.out.println("getScrollX " + getScrollX() + "    offsetX   " + offsetX + "    getWidth()  " + getWidth() + "   contentWidth() " + contentWidth);
-                if (contentWidth > getWidth() && getScrollX() >= 0) {
+                if (contentWidth > getWidth() && getScrollX() >= 0 && getScrollX() <= contentWidth - getWidth()) {
                     if (getScrollX() <= contentWidth - getWidth() && getScrollX() >= getWidth() - contentWidth) {
                         scrollTo((int) -offsetX, 0);
                     } else {
@@ -131,6 +135,18 @@ public class GrowthView extends View {
                         }
                     }
                 }
+                break;
+            case MotionEvent.ACTION_UP:
+                if (getScrollX() < 0) {
+                    setScrollX(0);
+                }
+                if (contentWidth > getWidth() && getScrollY() >= contentWidth - getWidth()) {
+                    setScrollX(contentWidth - getWidth());
+                }
+                System.out.println("mScroller.getCurrX() " + mScroller.getCurrX());
+
+//                scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+//                postInvalidate();
                 break;
         }
         return true;

@@ -57,7 +57,10 @@ public class MyDiaryPresenter extends BasePresenter<MyDiaryContract.Model, MyDia
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
-        getMyDiaryList(true);
+        int projectNum = mRootView.getActivity().getIntent().getIntExtra("projectNum", 0);
+        if (projectNum != 0) {
+            getMyDiaryList(true);
+        }
     }
 
 

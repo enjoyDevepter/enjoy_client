@@ -38,7 +38,6 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.GrowthActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.InviteMainActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
-import me.jessyan.mvparms.demo.mvp.ui.activity.MyDiaryActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyFarvirateActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyFollowActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyMealActivity;
@@ -236,7 +235,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 ArmsUtils.startActivity(InviteMainActivity.class);
                 break;
             case R.id.diary:
-                ArmsUtils.startActivity(MyDiaryActivity.class);
+                mPresenter.getMyDiaryInfo();
                 break;
             case R.id.collect:
                 ArmsUtils.startActivity(MyFarvirateActivity.class);

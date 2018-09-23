@@ -101,4 +101,9 @@ public interface EventBusTags {
      * 添加地址成功
      */
     String ADD_ADDRESS_SUCCESS = "add_address_success";
+    /**
+     * 更改首页
+     */
+    String CHANGE_MAIN_ITEM = "change_main_item";
+
 }

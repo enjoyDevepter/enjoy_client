@@ -46,6 +46,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -64,6 +66,7 @@
                 android:hint="请输入手机号"
                 android:inputType="number"
                 android:maxLength="11"
+                android:paddingLeft="5dp"
                 android:textSize="13sp" />
 
         </LinearLayout>
@@ -90,6 +93,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -109,6 +114,7 @@
                 android:hint="请输入验证码"
                 android:inputType="number"
                 android:maxLength="4"
+                android:paddingLeft="5dp"
                 android:textSize="13sp" />
 
             <TextView
@@ -145,6 +151,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -161,6 +169,7 @@
                 android:layout_marginLeft="9dp"
                 android:background="@android:color/transparent"
                 android:hint="请输入密码"
+                android:paddingLeft="5dp"
                 android:textSize="13sp" />
 
         </LinearLayout>
@@ -187,6 +196,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -212,6 +223,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="9dp"
                 android:background="@android:color/transparent"
+                android:paddingLeft="5dp"
                 android:textSize="13sp" />
 
         </LinearLayout>

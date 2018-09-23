@@ -194,6 +194,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         viewPager.setCurrentItem(0, false);
     }
 
+    @Subscriber(tag = EventBusTags.CHANGE_MAIN_ITEM)
+    public void changeItem(int item) {
+        viewPager.setCurrentItem(item, false);
+    }
+
     @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);

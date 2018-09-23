@@ -221,24 +221,23 @@ public class MyMealActivity extends BaseActivity<MyMealPresenter> implements MyM
                 break;
             case RIGHT:
                 if ("1".equals(appointment.getOrderStatus())) {
-                    // 支付
-                    Intent intent = new Intent(getActivity(), MealOrderConfirmActivity.class);
-                    intent.putExtra("setMealId", appointment.getSetMealGoodsList().get(0).getSetMealId());
-                    intent.putExtra("nums", appointment.getSetMealGoodsList().get(0).getNums());
-                    intent.putExtra("totalPrice", appointment.getSetMealGoodsList().get(0).getTotalPrice());
-                    intent.putExtra("salePrice", appointment.getSetMealGoodsList().get(0).getSalePrice());
+                    // 去支付
+                    Intent intent = new Intent(this, PayActivity.class);
+                    intent.putExtra("orderId", appointment.getOrderId());
                     ArmsUtils.startActivity(intent);
                 } else if ("31".equals(appointment.getOrderStatus())) {
                     // 预约
                     Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
                     makeIntent.putExtra("orderId", appointment.getOrderId());
                     makeIntent.putExtra("mealName", appointment.getSetMealGoodsList().get(0).getName());
+                    makeIntent.putExtra("desc", appointment.getSetMealGoodsList().get(0).getDesc());
                     ArmsUtils.startActivity(makeIntent);
                 } else if ("5".equals(appointment.getOrderStatus())) {
                     // 预约
                     Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
                     makeIntent.putExtra("orderId", appointment.getOrderId());
                     makeIntent.putExtra("mealName", appointment.getSetMealGoodsList().get(0).getName());
+                    makeIntent.putExtra("desc", appointment.getSetMealGoodsList().get(0).getDesc());
                     ArmsUtils.startActivity(makeIntent);
                 }
                 break;
