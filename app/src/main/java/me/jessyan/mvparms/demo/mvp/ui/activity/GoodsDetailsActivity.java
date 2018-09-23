@@ -723,7 +723,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         public void onGetWebContentHeight() {
             //重新调整webview高度
             detailWV.postDelayed(() -> {
-                if (null != detailWV) {
+                if (null != detailWV && null != viewpager) {
                     detailWV.measure(0, 0);
                     int measuredHeight = detailWV.getMeasuredHeight();
                     System.out.println("detailWV.getMeasuredHeight()  " + detailWV.getMeasuredHeight());

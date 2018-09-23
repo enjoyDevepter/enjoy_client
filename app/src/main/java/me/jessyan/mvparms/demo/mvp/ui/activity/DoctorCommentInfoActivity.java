@@ -1,6 +1,7 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,6 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,6 +34,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorCommentInfoComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorCommentInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorCommentInfoContract;
@@ -41,7 +46,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPresenter> implements DoctorCommentInfoContract.View {
+public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPresenter> implements DoctorCommentInfoContract.View, OnClickListener {
 
     public static final String KEY_FOR_DOCTOR_COMMENT_BEAN = "KEY_FOR_DOCTOR_COMMENT_BEAN";
 
@@ -82,8 +87,11 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.comment)
     EditText comment;
-    @BindView(R.id.good)
-    View good;
+    @BindView(R.id.vote)
+    View voteV;
+    @BindView(R.id.vote_layout)
+    View voteLayoutV;
+    DoctorCommentBean doctorCommentBean;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean isEnd;
@@ -132,15 +140,15 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        back.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 killMyself();
             }
         });
         title.setText("评论详情");
-
-        DoctorCommentBean doctorCommentBean = (DoctorCommentBean) getIntent().getSerializableExtra(KEY_FOR_DOCTOR_COMMENT_BEAN);
+        SoftHideKeyBoardUtil.assistActivity(this);
+        doctorCommentBean = (DoctorCommentBean) getIntent().getSerializableExtra(KEY_FOR_DOCTOR_COMMENT_BEAN);
         setData(doctorCommentBean);
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
@@ -156,21 +164,38 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
         comment.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_UP){
-                    String s = comment.getText().toString();
-                    if(TextUtils.isEmpty(s)){
-                        ArmsUtils.makeText(ArmsUtils.getContext(),"请输入评论内容");
-                        return true;
-                    }
-
-                    mPresenter.replyDoctorComment(s);
+                switch (actionId) {
+                    case EditorInfo.IME_ACTION_SEND:
+                        String s = comment.getText().toString();
+                        if (TextUtils.isEmpty(s)) {
+                            ArmsUtils.makeText(ArmsUtils.getContext(), "请输入评论内容");
+                            return true;
+                        }
+                        hintKeyBoard();
+                        mPresenter.replyDoctorComment(s);
+                        break;
                 }
-                return true;
+                return false;
             }
         });
+        voteLayoutV.setOnClickListener(this);
+    }
+
+    public void hintKeyBoard() {
+        //拿到InputMethodManager
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //如果window上view获取焦点 && view不为空
+        if (imm.isActive() && getCurrentFocus() != null) {
+            //拿到view的token 不为空
+            if (getCurrentFocus().getWindowToken() != null) {
+                //表示软键盘窗口总是隐藏，除非开始时以SHOW_FORCED显示。
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
     }
 
     private void setData(DoctorCommentBean data) {
+        doctorCommentBean = data;
         CommentMemberBean member = data.getMember();
         mImageLoader.loadImage(this,
                 ImageConfigImpl
@@ -183,50 +208,32 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
         time.setText(simpleDateFormat.format(new Date(data.getCreateDate())));
         rating.setStar(data.getStar());
         content.setText(data.getContent());
-        view_count.setText(""+data.getViews());
-        comment_count.setText(""+data.getComment());
-        good_count.setText(""+data.getPraise());
-        good_count.setText(""+data.getPraise());
+        view_count.setText("" + data.getViews());
+        comment_count.setText("" + data.getComment());
+        good_count.setText("" + data.getPraise());
+        good_count.setText("" + data.getPraise());
         Drawable drawable = ArmsUtils.getContext().getResources().getDrawable("1".equals(data.getIsPraise()) ? R.mipmap.small_good_icon : R.mipmap.small_no_good_icon);
-        drawable.setBounds(0,0,ArmsUtils.dip2px(this,8),ArmsUtils.dip2px(this,8));
-        good_count.setCompoundDrawables(drawable,null,null,null);
-        good_count.setText(""+data.getPraise());
-        View.OnClickListener l = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ("1".equals(data.getIsPraise())) {
-                    // 取消评论
-                    mPresenter.unlikeDoctorComment(data.getDoctorId(), data.getCommentId());
-                } else {
-                    // 增加评论
-                    mPresenter.likeDoctorComment(data.getDoctorId(), data.getCommentId());
-                }
-            }
-        };
-        good_count.setOnClickListener(l);
-        good.setOnClickListener(l);
-
-        Drawable drawable2 = ArmsUtils.getContext().getResources().getDrawable("1".equals(data.getIsPraise()) ? R.mipmap.small_good_icon : R.mipmap.small_no_good_icon);
-        good.setBackground(drawable2);
+        drawable.setBounds(0, 0, ArmsUtils.dip2px(this, 8), ArmsUtils.dip2px(this, 8));
+        good_count.setCompoundDrawables(drawable, null, null, null);
+        good_count.setText("" + data.getPraise());
+        good_count.setOnClickListener(this);
+        voteV.setSelected("1".equals(data.getIsPraise()) ? true : false);
     }
 
-    public void updateGoodView(boolean isGood){
+    public void updateGoodView(boolean isGood) {
         DoctorCommentBean data = (DoctorCommentBean) getIntent().getSerializableExtra(KEY_FOR_DOCTOR_COMMENT_BEAN);
-        if(isGood){
+        if (isGood) {
             data.setPraise(data.getPraise() + 1);
             data.setIsPraise("1");
-        }else{
+        } else {
             data.setPraise(data.getPraise() - 1);
             data.setIsPraise("0");
         }
-        good_count.setText(""+data.getPraise());
+        voteV.setSelected(isGood);
+        good_count.setText("" + data.getPraise());
         Drawable drawable = ArmsUtils.getContext().getResources().getDrawable("1".equals(data.getIsPraise()) ? R.mipmap.small_good_icon : R.mipmap.small_no_good_icon);
-        drawable.setBounds(0,0,ArmsUtils.dip2px(this,8),ArmsUtils.dip2px(this,8));
-        good_count.setCompoundDrawables(drawable,null,null,null);
-
-
-        Drawable drawable2 = ArmsUtils.getContext().getResources().getDrawable("1".equals(data.getIsPraise()) ? R.mipmap.small_good_icon : R.mipmap.small_no_good_icon);
-        good.setBackground(drawable2);
+        drawable.setBounds(0, 0, ArmsUtils.dip2px(this, 8), ArmsUtils.dip2px(this, 8));
+        good_count.setCompoundDrawables(drawable, null, null, null);
     }
 
     @Override
@@ -246,9 +253,10 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
         ArmsUtils.startActivity(intent);
     }
 
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
+
     @Override
     public void killMyself() {
         finish();
@@ -271,10 +279,12 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
     public void endLoadMore() {
         isLoadingMore = false;
     }
+
     @Override
     public void setEnd(boolean isEnd) {
         this.isEnd = isEnd;
     }
+
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
@@ -282,8 +292,26 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
         super.onDestroy();
     }
 
-    public void clear(){
+    public void clear() {
         comment.setText("");
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+            case R.id.vote_layout:
+            case R.id.good_count:
+                if (voteV.isSelected()) {
+                    // 取消评论
+                    mPresenter.unlikeDoctorComment(doctorCommentBean.getDoctorId(), doctorCommentBean.getCommentId());
+                } else {
+                    // 增加评论
+                    mPresenter.likeDoctorComment(doctorCommentBean.getDoctorId(), doctorCommentBean.getCommentId());
+                }
+                break;
+        }
+    }
 }

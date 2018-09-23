@@ -195,7 +195,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.DoctorCommentInfoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+
         <activity
             android:name=".mvp.ui.activity.AddBankCardActivity"
             android:screenOrientation="portrait" />

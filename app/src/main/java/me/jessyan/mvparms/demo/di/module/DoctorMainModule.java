@@ -10,7 +10,6 @@ import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
-
 import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
 import me.jessyan.mvparms.demo.mvp.model.DoctorMainModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorCommentBean;
@@ -44,9 +43,8 @@ public class DoctorMainModule {
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideStoreAdapter(List<DoctorCommentBean> list) {
-        DoctorCommentHolderAdapter doctorCommentHolderAdapter = new DoctorCommentHolderAdapter(list);
-        return doctorCommentHolderAdapter;
+    DoctorCommentHolderAdapter provideStoreAdapter(List<DoctorCommentBean> list) {
+        return new DoctorCommentHolderAdapter(list);
     }
 
 

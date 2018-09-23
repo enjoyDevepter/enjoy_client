@@ -50,11 +50,15 @@ public class MealGoodsDetailsItemHolder extends BaseHolder<MealGoods.Goods> {
     TextView countTV;
     @BindView(R.id.totalPrice)
     TextView totalPriceTV;
+    @BindView(R.id.plus)
+    View plusV;
+    int size;
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
 
-    public MealGoodsDetailsItemHolder(View itemView) {
+    public MealGoodsDetailsItemHolder(View itemView, int size) {
         super(itemView);
+        this.size = size;
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
@@ -62,6 +66,9 @@ public class MealGoodsDetailsItemHolder extends BaseHolder<MealGoods.Goods> {
 
     @Override
     public void setData(MealGoods.Goods data, int position) {
+        if (position == size) {
+            plusV.setVisibility(View.GONE);
+        }
         Observable.just(data.getName())
                 .subscribe(s -> nameTV.setText(String.valueOf(s)));
         Observable.just(data.getMarketPrice())
@@ -94,5 +101,6 @@ public class MealGoodsDetailsItemHolder extends BaseHolder<MealGoods.Goods> {
         this.nameTV = null;
         this.countTV = null;
         this.totalPriceTV = null;
+        this.plusV = null;
     }
 }

@@ -33,6 +33,7 @@ import me.jessyan.mvparms.demo.mvp.contract.DiscoverContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.DiaryNavi;
 import me.jessyan.mvparms.demo.mvp.presenter.DiscoverPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.activity.DiaryDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DiaryForGoodsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ImageShowActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
@@ -269,6 +270,11 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
                     intent.putExtra("images", new String[]{diary.getImageList().get(1)});
                     ArmsUtils.startActivity(intent);
                 }
+                break;
+            case COMMENT:
+                Intent diaryIntent = new Intent(getActivity().getApplication(), DiaryDetailsActivity.class);
+                diaryIntent.putExtra("diaryId", diary.getDiaryId());
+                ArmsUtils.startActivity(diaryIntent);
                 break;
             case ITEM:
                 Intent intent = new Intent(getActivity().getApplication(), DiaryForGoodsActivity.class);

@@ -198,6 +198,7 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
                     @Override
                     public void onNext(ReplyDoctorCommentResponse response) {
                         if (response.isSuccess()) {
+                            requestOrderList();
                             ArmsUtils.makeText(ArmsUtils.getContext(), "评论成功");
                             mRootView.clear();
                         } else {

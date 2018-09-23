@@ -18,6 +18,7 @@ public class Diary {
     private Goods goods;
     private int browse;
     private String intro;
+    private String content;
 
     public int getBrowse() {
         return browse;
@@ -107,20 +108,29 @@ public class Diary {
         this.title = title;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     @Override
     public String toString() {
         return "Diary{" +
-                "browse=" + browse +
-                ", comment=" + comment +
-                ", praise=" + praise +
-                ", publishDate='" + publishDate + '\'' +
-                ", intro='" + intro + '\'' +
-                ", diaryId='" + diaryId + '\'' +
+                "praise=" + praise +
                 ", isPraise='" + isPraise + '\'' +
-                ", title='" + title + '\'' +
+                ", publishDate='" + publishDate + '\'' +
+                ", comment=" + comment +
+                ", diaryId='" + diaryId + '\'' +
                 ", imageList=" + imageList +
+                ", title='" + title + '\'' +
                 ", member=" + member +
                 ", goods=" + goods +
+                ", browse=" + browse +
+                ", intro='" + intro + '\'' +
+                ", content='" + content + '\'' +
                 '}';
     }
 }

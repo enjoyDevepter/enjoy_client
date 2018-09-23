@@ -482,7 +482,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         initViewPage();
         detailWV.loadUrl(goods.getMobileDetail());
 
-        tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getTailMoney()));
+        tailMoneyButtomTV.setMoneyText(String.valueOf(goods.getSalePrice()));
 
         List<Promotion> promotions = response.getPromotionList();
         if (promotions == null || promotions.size() <= 0) {
@@ -549,7 +549,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                 depositTV.setMoneyText(String.valueOf(goods.getSalePrice()));
             } else {
                 depositButtomTV.setMoneyText(String.valueOf(goods.getDeposit()));
-                tailMoneyTV.setMoneyText(String.valueOf(goods.getTailMoney()));
+                tailMoneyTV.setMoneyText(String.valueOf(goods.getSalePrice()));
                 depositTV.setMoneyText(String.valueOf(goods.getDeposit()));
             }
         }
@@ -749,7 +749,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         public void onGetWebContentHeight() {
             //重新调整webview高度
             detailWV.postDelayed(() -> {
-                if (null != detailWV) {
+                if (null != detailWV && null != viewpager) {
                     detailWV.measure(0, 0);
                     int measuredHeight = detailWV.getMeasuredHeight();
                     ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) detailWV.getLayoutParams();

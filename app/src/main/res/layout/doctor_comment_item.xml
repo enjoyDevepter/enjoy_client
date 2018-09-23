@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/doctor_parent"
     android:layout_width="match_parent"
-    android:layout_height="140dp">
+    android:layout_height="124dp"
+    android:background="@drawable/list_item_bg">
 
     <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
         android:id="@+id/head"
@@ -23,7 +24,6 @@
         android:layout_alignTop="@id/head"
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@id/head"
-        android:text="网友178251"
         android:textColor="#ff000000"
         android:textSize="12sp" />
 
@@ -34,7 +34,6 @@
         android:layout_alignBottom="@id/name"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
-        android:text="2017-01-12"
         android:textColor="#ffb3b3b3"
         android:textSize="10sp" />
 
@@ -53,8 +52,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/name"
         android:layout_below="@id/rating"
-        android:text="设计师寻找灵感的天堂!图片素材领导者,帮你采集,
-发现网络上你喜欢的事物.你可以用它收集灵感"
         android:textColor="#ff666666"
         android:textSize="12sp" />
 
@@ -66,7 +63,6 @@
         android:layout_below="@id/content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="19dp"
-        android:text="1252"
         android:textColor="#ffb3b3b3"
         android:textSize="11sp" />
 
@@ -75,7 +71,6 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/view_count"
         android:layout_toRightOf="@id/view_count"
-        android:text="人已看"
         android:textColor="#ffb3b3b3"
         android:textSize="11sp" />
 
@@ -88,7 +83,6 @@
         android:layout_marginRight="16dp"
         android:drawableLeft="@mipmap/small_no_good_icon"
         android:drawablePadding="4dp"
-        android:text="500"
         android:textColor="#ffb3b3b3"
         android:textSize="11sp" />
 
@@ -101,7 +95,6 @@
         android:layout_toLeftOf="@id/good_count"
         android:drawableLeft="@mipmap/comment_icon"
         android:drawablePadding="4dp"
-        android:text="200"
         android:textColor="#ffb3b3b3"
         android:textSize="11sp" />
 

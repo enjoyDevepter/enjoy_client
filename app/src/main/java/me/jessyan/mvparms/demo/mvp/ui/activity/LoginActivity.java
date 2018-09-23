@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.KeyboardPatch;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.AppManager;
@@ -34,6 +35,9 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View, View.OnClickListener {
+
+    @BindView(R.id.parent)
+    View parentV;
     @BindView(R.id.forget)
     View forgetV;
     @BindView(R.id.register)
@@ -82,6 +86,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     @Override
+    public boolean useImmersive() {
+        return false;
+    }
+
+    @Override
     public void initData(Bundle savedInstanceState) {
         protocoTV.setText(Html.fromHtml("<font color='#9A9A9A'>同意</font><font color='#5FBFE3'>《创享会员实用协议》</font>"));
         forgetV.setOnClickListener(this);
@@ -91,6 +100,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         getValidateV.setOnClickListener(this);
         tabLayout.addTab(tabLayout.newTab().setText("账户登录"));
         tabLayout.addTab(tabLayout.newTab().setText("手机登录"));
+        KeyboardPatch.patch(this, parentV).enable();
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

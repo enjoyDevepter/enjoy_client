@@ -54,6 +54,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Module;
 import me.jessyan.mvparms.demo.mvp.model.entity.NaviInfo;
 import me.jessyan.mvparms.demo.mvp.presenter.HomePresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CityActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.DiaryDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DiaryForGoodsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
@@ -513,6 +514,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 ArmsUtils.startActivity(intent);
                 break;
             case COMMENT:
+                Intent diaryIntent = new Intent(getActivity().getApplication(), DiaryDetailsActivity.class);
+                diaryIntent.putExtra("diaryId", diary.getDiaryId());
+                ArmsUtils.startActivity(diaryIntent);
                 break;
         }
     }

@@ -2,29 +2,26 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.mvp.contract.CashPasswordContract;
 import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Member;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FeedbackRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.SetCashPasswordRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.response.FeedbackResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.SetCashPasswordResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import me.jessyan.mvparms.demo.mvp.contract.CashPasswordContract;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
@@ -56,7 +53,7 @@ public class CashPasswordPresenter extends BasePresenter<CashPasswordContract.Mo
         this.mApplication = null;
     }
 
-    public void setCashPassword(String confirmPayPwd,String payPwd,String verifycode){
+    public void setCashPassword(String confirmPayPwd, String payPwd, String verifycode) {
         SetCashPasswordRequest setCashPasswordRequest = new SetCashPasswordRequest();
         setCashPasswordRequest.setConfirmPayPwd(confirmPayPwd);
         setCashPasswordRequest.setPayPwd(payPwd);
@@ -88,7 +85,7 @@ public class CashPasswordPresenter extends BasePresenter<CashPasswordContract.Mo
 
     public void getVerifyForFind() {
         VeritfyRequest request = new VeritfyRequest();
-        request.setCmd(107);
+        request.setCmd(110);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
         Member member = (Member) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_INFO);
         request.setMobile(member.getMobile());

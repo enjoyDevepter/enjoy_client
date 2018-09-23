@@ -16,7 +16,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
             <View
                 android:id="@+id/blue_back"
                 android:layout_width="match_parent"
@@ -52,7 +51,6 @@
                 android:layout_below="@id/head_image"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="13dp"
-                android:text="蔡国庆"
                 android:textColor="#333333"
                 android:textSize="15sp" />
 
@@ -72,7 +70,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="1234"
                     android:textColor="#666666"
                     android:textSize="12sp" />
 
@@ -152,6 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="69dp"
                 android:layout_below="@id/divide1"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -233,6 +231,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divide1_5"
+                android:background="@drawable/list_item_bg"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -255,8 +254,6 @@
                         android:layout_marginTop="10dp"
                         android:background="#5FBFE3" />
                 </LinearLayout>
-
-                <View style="@style/divider_1" />
             </LinearLayout>
 
             <RelativeLayout
@@ -265,6 +262,7 @@
                 android:layout_height="56dp"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/title1"
+                android:background="@color/white"
                 android:gravity="left|center"
                 android:paddingLeft="16dp">
 
@@ -287,6 +285,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divide2"
+                android:background="@drawable/list_item_bg"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -310,7 +309,6 @@
                         android:background="#5FBFE3" />
                 </LinearLayout>
 
-                <View style="@style/divider_1" />
             </LinearLayout>
 
             <TextView
@@ -321,7 +319,7 @@
                 android:layout_alignTop="@id/title2"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="12dp"
-                android:text="全部评论>"
+                android:text="全部评论 >"
                 android:textColor="#666666"
                 android:textSize="12sp" />
 
@@ -338,103 +336,103 @@
 
             </android.support.v4.widget.SwipeRefreshLayout>
 
-            <View
-                android:id="@+id/divide3"
-                style="@style/divider_3"
-                android:layout_below="@id/swipeRefreshLayout" />
 
-            <TextView
-                android:id="@+id/rating_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@id/divide3"
-                android:layout_marginLeft="14dp"
-                android:layout_marginTop="21dp"
-                android:text="评星："
-                android:textColor="#666666"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/project_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/rating_title"
-                android:layout_below="@id/rating_title"
-                android:layout_marginTop="16dp"
-                android:text="项目："
-                android:textColor="#666666"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/comment_edit_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/rating_title"
-                android:layout_below="@id/project_title"
-                android:layout_marginTop="21dp"
-                android:text="内容："
-                android:textColor="#666666"
-                android:textSize="12sp" />
-
-            <me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:a_zhon="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/comment_star"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/rating_title"
-                android:layout_toRightOf="@id/rating_title"
-                a_zhon:clickable="true"
-                a_zhon:image_height="17dp"
-                a_zhon:image_padding="1dp"
-                a_zhon:image_width="17dp"
-                a_zhon:star="3"
-                a_zhon:star_count="5"
-                a_zhon:star_img="@mipmap/doctor_star"
-                a_zhon:unstar_img="@mipmap/doctor_no_star" />
-
-            <TextView
-                android:id="@+id/project"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/project_title"
-                android:layout_toRightOf="@id/project_title"
-                android:drawablePadding="4dp"
-                android:drawableRight="@mipmap/drop_down_icon"
-                android:text="微整形" />
-
-            <EditText
-                android:id="@+id/comment_edit"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_alignTop="@id/comment_edit_title"
-                android:layout_marginBottom="13dp"
-                android:layout_marginRight="17dp"
-                android:layout_toRightOf="@id/comment_edit_title"
-                android:background="@drawable/doctor_main_comment_edit_back"
-                android:gravity="left|top"
-                android:hint="请输入评论内容："
-                android:textColor="#333333"
-                android:textColorHint="#333333"
-                android:textSize="12sp" />
+                android:layout_height="wrap_content"
+                android:layout_below="@id/swipeRefreshLayout"
+                android:layout_marginTop="3dp"
+                android:background="@color/white">
 
-            <TextView
-                android:id="@+id/comment_commit_btn"
-                android:layout_width="match_parent"
-                android:layout_height="33dp"
-                android:layout_alignLeft="@id/comment_edit"
-                android:layout_below="@id/comment_edit"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="17dp"
-                android:background="@drawable/order_confirm_btn_bg"
-                android:gravity="center"
-                android:text="提交评论"
-                android:textColor="#ffffff"
-                android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/rating_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginTop="21dp"
+                    android:text="评星："
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
 
-            <View
-                style="@style/divider_3"
-                android:layout_below="@id/comment_commit_btn" />
+                <TextView
+                    android:id="@+id/project_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/rating_title"
+                    android:layout_below="@id/rating_title"
+                    android:layout_marginTop="16dp"
+                    android:text="项目："
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/comment_edit_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/rating_title"
+                    android:layout_below="@id/project_title"
+                    android:layout_marginTop="21dp"
+                    android:text="内容："
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
+
+                <me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar
+                    android:id="@+id/comment_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/rating_title"
+                    android:layout_toRightOf="@id/rating_title"
+                    app:clickable="true"
+                    app:image_height="17dp"
+                    app:image_padding="1dp"
+                    app:image_width="17dp"
+                    app:star="3"
+                    app:star_count="5"
+                    app:star_img="@mipmap/doctor_star"
+                    app:unstar_img="@mipmap/doctor_no_star" />
+
+                <TextView
+                    android:id="@+id/project"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/project_title"
+                    android:layout_toRightOf="@id/project_title"
+                    android:drawablePadding="4dp"
+                    android:drawableRight="@mipmap/drop_down_icon" />
+
+                <EditText
+                    android:id="@+id/comment_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:layout_alignTop="@id/comment_edit_title"
+                    android:layout_marginBottom="13dp"
+                    android:layout_marginRight="17dp"
+                    android:layout_toRightOf="@id/comment_edit_title"
+                    android:background="@drawable/doctor_main_comment_edit_back"
+                    android:gravity="left|top"
+                    android:hint="请输入评论内容："
+                    android:imeOptions="actionSend"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:textColor="#333333"
+                    android:textColorHint="#333333"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/comment_commit_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="33dp"
+                    android:layout_alignLeft="@id/comment_edit"
+                    android:layout_below="@id/comment_edit"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="17dp"
+                    android:background="@drawable/order_confirm_btn_bg"
+                    android:gravity="center"
+                    android:text="提交评论"
+                    android:textColor="#ffffff"
+                    android:textSize="13sp" />
+            </RelativeLayout>
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

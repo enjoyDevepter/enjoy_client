@@ -384,7 +384,6 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
             case ITEM:
                 Intent intent = new Intent(getActivity().getApplication(), DiaryDetailsActivity.class);
                 intent.putExtra("diaryId", diary.getDiaryId());
-                intent.putExtra("position", position);
                 ArmsUtils.startActivity(intent);
                 break;
         }

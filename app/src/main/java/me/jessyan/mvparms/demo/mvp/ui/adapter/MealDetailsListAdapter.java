@@ -43,7 +43,7 @@ public class MealDetailsListAdapter extends DefaultAdapter<MealGoods.Goods> {
 
     @Override
     public BaseHolder<MealGoods.Goods> getHolder(View v, int viewType) {
-        return new MealGoodsDetailsItemHolder(v);
+        return new MealGoodsDetailsItemHolder(v, getInfos().size() - 1);
     }
 
     @Override

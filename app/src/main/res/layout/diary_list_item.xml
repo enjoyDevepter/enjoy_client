@@ -75,19 +75,21 @@
         android:id="@+id/intro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:lines="2" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/browse_layout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingRight="10dp">
@@ -115,46 +117,47 @@
         <LinearLayout
             android:id="@+id/comment_layout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_vertical|right"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp">
+            android:orientation="horizontal">
 
             <View
                 android:layout_width="8dp"
                 android:layout_height="7dp"
+                android:layout_marginLeft="10dp"
                 android:background="@mipmap/comment" />
 
             <TextView
                 android:id="@+id/comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="10dp"
                 android:textColor="#FFB3B3B3"
                 android:textSize="11sp" />
 
         </LinearLayout>
 
-
         <LinearLayout
             android:id="@+id/praise_layout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp">
+            android:orientation="horizontal">
 
             <View
                 android:id="@+id/isPraise"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/vote_bg" />
 
             <TextView
                 android:id="@+id/praise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="10dp"
                 android:textColor="#FFB3B3B3"
                 android:textSize="11sp" />
 

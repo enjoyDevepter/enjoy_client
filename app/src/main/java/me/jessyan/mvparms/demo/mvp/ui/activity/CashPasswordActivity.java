@@ -25,8 +25,10 @@ import me.jessyan.mvparms.demo.mvp.presenter.CashPasswordPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-/**设置提现密码*/
-public class CashPasswordActivity extends BaseActivity<CashPasswordPresenter> implements CashPasswordContract.View {
+/**
+ * 设置提现密码
+ */
+public class CashPasswordActivity extends BaseActivity<CashPasswordPresenter> implements CashPasswordContract.View, View.OnClickListener {
 
     @BindView(R.id.title)
     TextView title;
@@ -66,36 +68,9 @@ public class CashPasswordActivity extends BaseActivity<CashPasswordPresenter> im
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         title.setText("设置提现密码");
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                killMyself();
-            }
-        });
-        get_code.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getVerify();
-            }
-        });
-        commit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(old.getText() == null || TextUtils.isEmpty(old.getText().toString())){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入密码");
-                    return;
-                }
-                if(newly.getText() == null || TextUtils.isEmpty(newly.getText().toString())){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请重复密码");
-                    return;
-                }
-                if(confirm.getText() == null || TextUtils.isEmpty(confirm.getText().toString())){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入验证码");
-                    return;
-                }
-                mPresenter.setCashPassword(newly.getText().toString(),old.getText().toString(),confirm.getText().toString());
-            }
-        });
+        back.setOnClickListener(this);
+        get_code.setOnClickListener(this);
+        commit.setOnClickListener(this);
     }
 
     @Override
@@ -125,8 +100,8 @@ public class CashPasswordActivity extends BaseActivity<CashPasswordPresenter> im
         finish();
     }
 
-    public void showOk(){
-        ArmsUtils.makeText(this,"设置成功");
+    public void showOk() {
+        ArmsUtils.makeText(this, "设置成功");
         newly.setText("");
         old.setText("");
         confirm.setText("");
@@ -183,5 +158,32 @@ public class CashPasswordActivity extends BaseActivity<CashPasswordPresenter> im
     @Override
     public void showVerity() {
         time = 0;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+            case R.id.get_code:
+                getVerify();
+                break;
+            case R.id.confirm:
+                if (old.getText() == null || TextUtils.isEmpty(old.getText().toString())) {
+                    ArmsUtils.makeText(ArmsUtils.getContext(), "请输入密码");
+                    return;
+                }
+                if (newly.getText() == null || TextUtils.isEmpty(newly.getText().toString())) {
+                    ArmsUtils.makeText(ArmsUtils.getContext(), "请重复密码");
+                    return;
+                }
+                if (confirm.getText() == null || TextUtils.isEmpty(confirm.getText().toString())) {
+                    ArmsUtils.makeText(ArmsUtils.getContext(), "请输入验证码");
+                    return;
+                }
+                mPresenter.setCashPassword(newly.getText().toString(), old.getText().toString(), confirm.getText().toString());
+                break;
+        }
     }
 }

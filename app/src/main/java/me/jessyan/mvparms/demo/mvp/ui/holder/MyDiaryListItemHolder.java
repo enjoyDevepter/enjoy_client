@@ -56,6 +56,8 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
     TextView introTV;
     @BindView(R.id.browse)
     TextView browseTV;
+    @BindView(R.id.comment_layout)
+    View commentLayoutV;
     @BindView(R.id.comment)
     TextView commentTV;
     @BindView(R.id.isPraise)
@@ -77,6 +79,7 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
         praiseLayoutV.setOnClickListener(this);
+        commentLayoutV.setOnClickListener(this);
         leftIV.setOnClickListener(this);
         rightIV.setOnClickListener(this);
         this.onChildItemClickLinstener = onChildItemClickLinstener;
@@ -95,6 +98,9 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
                 case R.id.praise_layout:
                     onChildItemClickLinstener.onChildItemClick(view, MyDiaryListAdapter.ViewName.VOTE, getAdapterPosition());
                     return;
+                case R.id.comment_layout:
+                    onChildItemClickLinstener.onChildItemClick(view, MyDiaryListAdapter.ViewName.COMMENT, getAdapterPosition());
+                    break;
             }
         }
         onChildItemClickLinstener.onChildItemClick(view, MyDiaryListAdapter.ViewName.ITEM, getAdapterPosition());

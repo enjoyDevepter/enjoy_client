@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerAddAddressComponent;
 import me.jessyan.mvparms.demo.di.module.AddAddressModule;
 import me.jessyan.mvparms.demo.mvp.contract.AddAddressContract;
@@ -79,7 +80,7 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
         confirmV.setOnClickListener(this);
         backV.setOnClickListener(this);
         choiceV.setOnClickListener(this);
-
+        SoftHideKeyBoardUtil.assistActivity(this);
         Address address = getIntent().getParcelableExtra("address");
         if (null != address) {
             nameET.setText(address.getReceiverName());

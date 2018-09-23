@@ -3,7 +3,6 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
 import com.jess.arms.di.scope.ActivityScope;
@@ -41,6 +40,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.LoginUserDoctorI
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.UnLikeDoctorCommentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.UnLikeDoctorResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.DoctorMainActivity;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorCommentHolderAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -59,7 +59,7 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
     @Inject
     AppManager mAppManager;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    DoctorCommentHolderAdapter mAdapter;
     @Inject
     List<DoctorCommentBean> orderBeanList;
     private int nextDoctorHotCommentPageIndex = 1;
@@ -197,6 +197,7 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                     @Override
                     public void onNext(CommentDoctorResponse response) {
                         if (response.isSuccess()) {
+                            requestDoctorHotComment();
                             mRootView.commentOk();
                         } else {
                             mRootView.showMessage(response.getRetDesc());

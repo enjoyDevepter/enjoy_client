@@ -8,7 +8,7 @@ public class GrowthInfo {
 
     private String name;
     private long growth;
-    private long percent;
+    private double percent;
     private String createDate;
     private long inGrowth;
     private String type;
@@ -30,11 +30,11 @@ public class GrowthInfo {
         this.growth = growth;
     }
 
-    public long getPercent() {
+    public double getPercent() {
         return percent;
     }
 
-    public void setPercent(long percent) {
+    public void setPercent(double percent) {
         this.percent = percent;
     }
 

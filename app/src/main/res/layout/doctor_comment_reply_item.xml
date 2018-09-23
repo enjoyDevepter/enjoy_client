@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/list_item_bg"
     android:orientation="vertical">
 
     <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
@@ -11,9 +12,9 @@
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="19dp"
         android:layout_marginLeft="13dp"
         android:layout_marginTop="19dp"
-        android:layout_marginBottom="19dp"
         android:background="@mipmap/place_holder_user"
         app:shape_type="circle" />
 
@@ -26,8 +27,7 @@
         android:layout_toRightOf="@id/image"
         android:text="网友178251"
         android:textColor="#ff000000"
-        android:textSize="12sp"
-        />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/content"
@@ -38,8 +38,7 @@
         android:layout_marginTop="9dp"
         android:text="看起来还不错"
         android:textColor="#ff666666"
-        android:textSize="12sp"
-        />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/time"
@@ -50,6 +49,5 @@
         android:layout_marginRight="16dp"
         android:text="2017-01-12"
         android:textColor="#ffb3b3b3"
-        android:textSize="10sp"
-        />
+        android:textSize="10sp" />
 </RelativeLayout>

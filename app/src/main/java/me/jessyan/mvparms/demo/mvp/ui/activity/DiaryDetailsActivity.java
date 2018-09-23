@@ -93,6 +93,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
 
     @BindView(R.id.browse)
     TextView browseTV;
+    @BindView(R.id.comment_layout)
+    View commentV;
     @BindView(R.id.comment)
     TextView commentTV;
     @BindView(R.id.praise_layout)
@@ -112,6 +114,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
 
     @BindView(R.id.content)
     EditText commentET;
+    @BindView(R.id.vote_layout)
+    View voteLayout;
     @BindView(R.id.vote)
     View voteV;
     @Inject
@@ -182,7 +186,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         followV.setOnClickListener(this);
         goodsInfoV.setOnClickListener(this);
         praiseV.setOnClickListener(this);
-        voteV.setOnClickListener(this);
+        commentV.setOnClickListener(this);
+        voteLayout.setOnClickListener(this);
         commentET.setOnEditorActionListener(this);
         ArmsUtils.configRecyclerView(commentRV, mLayoutManager);
         commentRV.setAdapter(mAdapter);
@@ -253,7 +258,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 intent.putExtra("merchId", response.getGoods().getMerchId());
                 ArmsUtils.startActivity(intent);
                 break;
-            case R.id.vote:
+            case R.id.vote_layout:
                 provideCache().put("diaryId", response.getDiary().getDiaryId());
                 mPresenter.vote(voteV.isSelected() ? false : true);
                 break;
@@ -281,6 +286,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
 
     @Override
     public void updateCommentUI(int count) {
+        tab.setVisibility(count >= 0 ? View.VISIBLE : View.GONE);
         int[] location = new int[2];
         titleLayoutV.getLocationInWindow(location);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) commentRV.getLayoutParams();
@@ -315,10 +321,11 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         goodsPriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
         diaryPublishDateTV.setText(response.getDiary().getPublishDate());
         indexTV.setText(response.getDiary().getTitle());
-        introTV.setText(response.getDiary().getIntro());
+        introTV.setText(response.getDiary().getContent());
         browseTV.setText(String.valueOf(response.getDiary().getBrowse()));
         commentTV.setText(String.valueOf(response.getDiary().getComment()));
         isPraiseTV.setSelected("1".equals(response.getDiary().getIsPraise()) ? true : false);
+        voteV.setSelected("1".equals(response.getDiary().getIsPraise()) ? true : false);
         praiseTV.setText(String.valueOf(response.getDiary().getPraise()));
 
         mImageLoader.loadImage(this,
@@ -381,6 +388,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     @Override
     public void updateVoteStatus(boolean vote) {
         voteV.setSelected(vote);
+        isPraiseTV.setSelected(vote);
     }
 
     @Override

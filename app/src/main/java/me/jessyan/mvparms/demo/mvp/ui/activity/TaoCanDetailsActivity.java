@@ -161,7 +161,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         imagesB.setIndicatorGravity(BannerConfig.CENTER);
         tabLayout.addTab(tabLayout.newTab().setText("套餐项目"));
         ArmsUtils.configRecyclerView(detailRV, layoutManager);
-        detailRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(this, R.dimen.divice_width), 0));
+        detailRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(this, R.dimen.space_10), 0));
         detailRV.setAdapter(mAdapter);
         telV.setOnClickListener(this);
 

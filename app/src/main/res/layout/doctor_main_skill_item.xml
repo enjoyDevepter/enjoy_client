@@ -8,8 +8,8 @@
     android:background="@drawable/doctor_main_skill_list_item"
     android:gravity="center"
     android:paddingBottom="3dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     android:paddingTop="3dp"
     android:text="清洁补水"
     android:textSize="13sp" />

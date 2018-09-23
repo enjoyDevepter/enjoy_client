@@ -85,7 +85,7 @@ public class GrowthView extends View {
                 int begin = start + i * item_split + i * item_width;
                 canvas.drawRect(begin, (height - item_height) / 2, begin + item_width, (height - item_height) / 2 + item_height, paint);
                 paint.setColor(current_progress);
-                canvas.drawRect(begin, (height - item_height) / 2, begin + item_width * growthInfo.getPercent() / 100, (height - item_height) / 2 + item_height, paint);
+                canvas.drawRect(begin, (height - item_height) / 2, begin + item_width * (float) growthInfo.getPercent() / 100, (height - item_height) / 2 + item_height, paint);
 
                 // 绘制level
                 paint.setColor(level_color);

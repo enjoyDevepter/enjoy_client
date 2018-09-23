@@ -1,6 +1,7 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,9 +13,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -38,6 +42,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.utils.SoftHideKeyBoardUtil;
 import me.jessyan.mvparms.demo.di.component.DaggerDoctorMainComponent;
 import me.jessyan.mvparms.demo.di.module.DoctorMainModule;
 import me.jessyan.mvparms.demo.mvp.contract.DoctorMainContract;
@@ -52,12 +57,11 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implements DoctorMainContract.View {
+public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implements DoctorMainContract.View, TextView.OnEditorActionListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, DoctorCommentHolderAdapter.OnChildItemClickLinstener {
 
     public static final String KEY_FOR_DOCTOR_ID = "key_for_doctor_id";
 
     public static final String LIKE = "1";
-    public static final String UNLIKE = "0";
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.back)
@@ -100,7 +104,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    DoctorCommentHolderAdapter mAdapter;
     @BindView(R.id.contentList)
     RecyclerView contentList;
     @BindView(R.id.swipeRefreshLayout)
@@ -133,69 +137,22 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         doctorId = getIntent().getStringExtra(KEY_FOR_DOCTOR_ID);
-        moreV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent hosiptals = new Intent(getApplicationContext(), DoctorForHospitalActivity.class);
-                hosiptals.putParcelableArrayListExtra("hospitals", (ArrayList<? extends Parcelable>) doctorBean.getHospitalList());
-                ArmsUtils.startActivity(hosiptals);
-            }
-        });
-        all_comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DoctorMainActivity.this, DoctorAllCommentActivity.class);
-                intent.putExtra(DoctorAllCommentActivity.KEY_FOR_DOCTOR_ID, doctorId);
-                ArmsUtils.startActivity(intent);
-            }
-        });
         title.setText("医生主页");
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                killMyself();
-            }
-        });
-        hit_good.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isLike) {
-                    mPresenter.unlikeDoctor(doctorId);
-                } else {
-                    mPresenter.likeDoctor(doctorId);
-                }
-            }
-        });
-        doctor_paper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DoctorMainActivity.this, DoctorPaperActivity.class);
-                intent.putExtra(DoctorPaperActivity.KEY_FOR_DOCTOR_ID, doctorId);
-                ArmsUtils.startActivity(intent);
-            }
-        });
-        doctor_honor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DoctorMainActivity.this, DoctorHonorActivity.class);
-                intent.putExtra(DoctorHonorActivity.KEY_FOR_DOCTOR_ID, doctorId);
-                ArmsUtils.startActivity(intent);
-            }
-        });
-
+        moreV.setOnClickListener(this);
+        all_comment.setOnClickListener(this);
+        back.setOnClickListener(this);
+        hit_good.setOnClickListener(this);
+        doctor_paper.setOnClickListener(this);
+        doctor_honor.setOnClickListener(this);
+        comment_commit_btn.setOnClickListener(this);
+        comment_edit.setOnEditorActionListener(this);
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
-
         contentList.setAdapter(mAdapter);
+        mAdapter.setOnChildItemClickLinstener(this);
         contentList.setNestedScrollingEnabled(false);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPresenter.requestDoctorHotComment();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(this);
         initPaginate();
-
+        SoftHideKeyBoardUtil.assistActivity(this);
     }
 
     @Override
@@ -224,25 +181,6 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
                         .url(doctorBean.getHeadImage())
                         .imageView(head_image)
                         .build());
-        ((DoctorCommentHolderAdapter) mAdapter).setOnChildItemClickLinstener(new DoctorCommentHolderAdapter.OnChildItemClickLinstener() {
-            @Override
-            public void onChildItemClick(View v, DoctorCommentHolderAdapter.ViewName viewname, int position) {
-                switch (viewname) {
-                    case ITEM:
-                        Intent intent = new Intent(DoctorMainActivity.this, DoctorCommentInfoActivity.class);
-                        intent.putExtra(DoctorCommentInfoActivity.KEY_FOR_DOCTOR_COMMENT_BEAN, ((DoctorCommentHolderAdapter) mAdapter).getItem(position));
-                        ArmsUtils.startActivity(intent);
-                        break;
-                    case LIKE:
-                        if ("1".equals(((DoctorCommentHolderAdapter) mAdapter).getItem(position).getIsPraise())) {
-                            mPresenter.unlikeDoctorComment(doctorId, ((DoctorCommentHolderAdapter) mAdapter).getItem(position).getCommentId());
-                        } else {
-                            mPresenter.likeDoctorComment(doctorId, ((DoctorCommentHolderAdapter) mAdapter).getItem(position).getCommentId());
-                        }
-                        break;
-                }
-            }
-        });
         doctor_name.setText(doctorBean.getName());
         comment_count.setText("" + doctorBean.getComment());
         rating.setStar(doctorBean.getStar());
@@ -283,21 +221,6 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
                 }
             });
         }
-
-        comment_commit_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String str = comment_edit.getText().toString();
-                if (TextUtils.isEmpty(str)) {
-                    ArmsUtils.makeText(ArmsUtils.getContext(), "请输入评论内容");
-                    return;
-                }
-
-                mPresenter.commentDoctor(doctorId, str, comment_star.getStar(), currDoctorSkill.getProjectId());
-
-            }
-
-        });
     }
 
     private void setCurrDoctorSkill(DoctorSkill doctorSkill) {
@@ -422,4 +345,99 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
         this.mPaginate = null;
     }
 
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        switch (actionId) {
+            case EditorInfo.IME_ACTION_SEND:
+                String comment = comment_edit.getText().toString();
+                if (ArmsUtils.isEmpty(comment)) {
+                    showMessage("请输入评论内容");
+                    return true;
+                }
+                hintKeyBoard();
+                mPresenter.commentDoctor(doctorId, comment, comment_star.getStar(), currDoctorSkill.getProjectId());
+                return true;
+        }
+        return false;
+    }
+
+    public void hintKeyBoard() {
+        //拿到InputMethodManager
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //如果window上view获取焦点 && view不为空
+        if (imm.isActive() && getCurrentFocus() != null) {
+            //拿到view的token 不为空
+            if (getCurrentFocus().getWindowToken() != null) {
+                //表示软键盘窗口总是隐藏，除非开始时以SHOW_FORCED显示。
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+            case R.id.more:
+                Intent hosiptals = new Intent(getApplicationContext(), DoctorForHospitalActivity.class);
+                hosiptals.putParcelableArrayListExtra("hospitals", (ArrayList<? extends Parcelable>) doctorBean.getHospitalList());
+                ArmsUtils.startActivity(hosiptals);
+                break;
+            case R.id.all_comment:
+                Intent intent = new Intent(DoctorMainActivity.this, DoctorAllCommentActivity.class);
+                intent.putExtra(DoctorAllCommentActivity.KEY_FOR_DOCTOR_ID, doctorId);
+                ArmsUtils.startActivity(intent);
+                break;
+            case R.id.hit_good:
+                if (isLike) {
+                    mPresenter.unlikeDoctor(doctorId);
+                } else {
+                    mPresenter.likeDoctor(doctorId);
+                }
+                break;
+            case R.id.doctor_paper:
+                Intent doctorIntent = new Intent(DoctorMainActivity.this, DoctorPaperActivity.class);
+                doctorIntent.putExtra(DoctorPaperActivity.KEY_FOR_DOCTOR_ID, doctorId);
+                ArmsUtils.startActivity(doctorIntent);
+                break;
+            case R.id.doctor_honor:
+                Intent honorIntent = new Intent(DoctorMainActivity.this, DoctorHonorActivity.class);
+                honorIntent.putExtra(DoctorHonorActivity.KEY_FOR_DOCTOR_ID, doctorId);
+                ArmsUtils.startActivity(honorIntent);
+                break;
+            case R.id.comment_commit_btn:
+                String str = comment_edit.getText().toString();
+                if (TextUtils.isEmpty(str)) {
+                    ArmsUtils.makeText(ArmsUtils.getContext(), "请输入评论内容");
+                    return;
+                }
+                mPresenter.commentDoctor(doctorId, str, comment_star.getStar(), currDoctorSkill.getProjectId());
+                break;
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.requestDoctorHotComment();
+    }
+
+    @Override
+    public void onChildItemClick(View v, DoctorCommentHolderAdapter.ViewName viewname, int position) {
+        switch (viewname) {
+            case ITEM:
+                Intent intent = new Intent(DoctorMainActivity.this, DoctorCommentInfoActivity.class);
+                intent.putExtra(DoctorCommentInfoActivity.KEY_FOR_DOCTOR_COMMENT_BEAN, mAdapter.getItem(position));
+                ArmsUtils.startActivity(intent);
+                break;
+            case LIKE:
+                if ("1".equals(mAdapter.getItem(position).getIsPraise())) {
+                    mPresenter.unlikeDoctorComment(doctorId, mAdapter.getItem(position).getCommentId());
+                } else {
+                    mPresenter.likeDoctorComment(doctorId, mAdapter.getItem(position).getCommentId());
+                }
+                break;
+        }
+    }
 }

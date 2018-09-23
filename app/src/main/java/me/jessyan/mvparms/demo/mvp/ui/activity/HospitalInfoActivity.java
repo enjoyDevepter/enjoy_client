@@ -64,6 +64,8 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     TabLayout tab;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    @BindView(R.id.follow_layout)
+    View followLayout;
     @BindView(R.id.follow)
     View followV;
     @Inject
@@ -278,7 +280,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         String titleStr1 = getIntent().getStringExtra(KEY_FOR_HOSPITAL_NAME);
         title.setText(titleStr1);
         back.setOnClickListener(this);
-        followV.setOnClickListener(this);
+        followLayout.setOnClickListener(this);
         initViewPager();
         initTabLayout();
     }
@@ -358,7 +360,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
             case R.id.back:
                 killMyself();
                 break;
-            case R.id.follow:
+            case R.id.follow_layout:
                 mPresenter.follow(!followV.isSelected());
                 break;
         }
@@ -408,7 +410,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         public void onGetWebContentHeight() {
             //重新调整webview高度
             hospitalInfo.postDelayed(() -> {
-                if (null != hospitalInfo) {
+                if (null != hospitalInfo && null != viewpager) {
                     hospitalInfo.measure(0, 0);
                     int measuredHeight = hospitalInfo.getMeasuredHeight();
                     ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) hospitalInfo.getLayoutParams();
