@@ -172,7 +172,7 @@ public final class AppManager {
 //        toast.setView(view);
 //        toast.show();
 
-        Toasty.normal(getCurrentActivity(), message).show();
+        Toasty.normal(getTopActivity().getApplication(), message).show();
     }
 
 

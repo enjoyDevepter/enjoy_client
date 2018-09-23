@@ -52,6 +52,8 @@ public class CouponListItemHolder extends BaseHolder<Coupon> {
     TextView endDateTV;
     @BindView(R.id.status)
     TextView statusTV;
+    @BindView(R.id.tag)
+    TextView tagTV;
 
 
     public CouponListItemHolder(View itemView) {
@@ -63,6 +65,8 @@ public class CouponListItemHolder extends BaseHolder<Coupon> {
         Observable.just(coupon.getMoney())
                 .subscribe(s -> moneyTV.setText(String.valueOf(s)));
         Observable.just(coupon.getName())
+                .subscribe(s -> tagTV.setText(String.valueOf(s)));
+        Observable.just(coupon.getIntro())
                 .subscribe(s -> nameTV.setText(s));
         Observable.just(coupon.getRemark())
                 .subscribe(s -> remarkTV.setText(s));
@@ -84,5 +88,6 @@ public class CouponListItemHolder extends BaseHolder<Coupon> {
         this.remarkTV = null;
         this.endDateTV = null;
         this.statusTV = null;
+        this.tagTV = null;
     }
 }

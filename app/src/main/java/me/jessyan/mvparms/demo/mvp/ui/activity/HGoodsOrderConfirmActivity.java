@@ -263,6 +263,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
             couponV.setOnClickListener(this);
             for (Coupon coupon : couponList) {
                 if (coupon.getCouponId().equals(response.getCouponId())) {
+                    provideCache().put("couponId", response.getCouponId());
                     couponTV.setText(coupon.getName());
                     break;
                 }

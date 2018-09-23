@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -57,6 +58,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     View loginV;
     @BindView(R.id.close)
     View closeV;
+    @Inject
+    AppManager mAppManager;
     @Inject
     RxPermissions mRxPermissions;
     private int time = 60;
@@ -105,6 +108,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             }
         });
         SoftHideKeyBoardUtil.assistActivity(this);
+        protocoTV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAppManager.killActivity(RegisterActivity.class);
+            }
+        }, 500);
     }
 
     private void changeTabToPhone(boolean byPhone) {

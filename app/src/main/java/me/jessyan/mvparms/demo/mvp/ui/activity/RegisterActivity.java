@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -65,6 +66,8 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     RecyclerView.Adapter mAdapter;
     @Inject
     RxPermissions mRxPermissions;
+    @Inject
+    AppManager mAppManager;
     private int time = time_limit;
     private Timer timer;
     private TimerTask timerTask;
@@ -99,6 +102,16 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         SoftHideKeyBoardUtil.assistActivity(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        infoTV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAppManager.killActivity(LoginActivity.class);
+            }
+        }, 500);
+    }
 
     @Override
     public void showLoading() {
@@ -152,7 +165,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
                 showType();
                 break;
             case R.id.info:
-                killMyself();
+                ArmsUtils.startActivity(LoginActivity.class);
                 break;
             case R.id.protocol:
                 Intent intent = new Intent(this, PlatformActivity.class);

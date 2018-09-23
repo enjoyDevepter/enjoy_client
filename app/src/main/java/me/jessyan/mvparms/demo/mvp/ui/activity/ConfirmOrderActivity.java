@@ -262,6 +262,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
             couponLayoutV.setOnClickListener(this);
             for (Coupon coupon : couponList) {
                 if (coupon.getCouponId().equals(response.getCouponId())) {
+                    provideCache().put("couponId", response.getCouponId());
                     couponTextTV.setText(coupon.getName());
                     break;
                 }
