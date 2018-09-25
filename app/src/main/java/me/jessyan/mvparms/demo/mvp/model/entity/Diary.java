@@ -4,7 +4,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity;
 import java.util.List;
 
 /**
- * 日志
+ * 日记
  */
 public class Diary {
     private int praise;

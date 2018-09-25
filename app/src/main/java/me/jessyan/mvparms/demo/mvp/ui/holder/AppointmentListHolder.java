@@ -115,19 +115,18 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
             leftTV.setText("取消");
             rightTV.setVisibility(View.VISIBLE);
             rightTV.setText("改约");
-
-            if (ArmsUtils.isEmpty(appointment.getReservationDate()) || ArmsUtils.isEmpty(appointment.getReservationTime())) {
-                timeTV.setVisibility(View.INVISIBLE);
-                tiemV.setVisibility(View.INVISIBLE);
-            } else {
-                tiemV.setVisibility(View.VISIBLE);
-                timeTV.setVisibility(View.VISIBLE);
-                timeTV.setText(appointment.getReservationDate() + "\n" + appointment.getReservationTime());
-            }
         } else { // 3.4.5
             leftTV.setVisibility(View.GONE);
             rightTV.setVisibility(View.GONE);
             timeTV.setVisibility(View.GONE);
+        }
+        if (ArmsUtils.isEmpty(appointment.getReservationDate()) || ArmsUtils.isEmpty(appointment.getReservationTime())) {
+            timeTV.setVisibility(View.INVISIBLE);
+            tiemV.setVisibility(View.INVISIBLE);
+        } else {
+            tiemV.setVisibility(View.VISIBLE);
+            timeTV.setVisibility(View.VISIBLE);
+            timeTV.setText(appointment.getReservationDate() + "\n" + appointment.getReservationTime());
         }
         statusTV.setText(appointment.getStatusDesc());
         nameTV.setText(appointment.getGoods().getName());

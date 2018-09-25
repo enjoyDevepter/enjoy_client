@@ -387,6 +387,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     public void updateVoteStatus(boolean vote) {
         voteV.setSelected(vote);
         isPraiseTV.setSelected(vote);
+        praiseTV.setText(vote ? String.valueOf(Integer.valueOf(praiseTV.getText().toString()) + 1) : String.valueOf(Integer.valueOf(praiseTV.getText().toString()) - 1));
     }
 
     @Override

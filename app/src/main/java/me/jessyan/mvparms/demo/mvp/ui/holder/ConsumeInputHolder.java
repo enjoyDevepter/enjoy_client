@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
+import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
@@ -27,7 +28,7 @@ public class ConsumeInputHolder extends BaseHolder<ChargeBean> {
 
     @Override
     public void setData(ChargeBean data, int position) {
-        typeTV.setText(data.getTypeDesc());
+        typeTV.setText(data.getTypeDesc() + " " + ArmsUtils.formatLong(data.getMoney()));
         timeTV.setText(data.getCreateDate());
         orderTV.setText("订单号：" + data.getOrderId());
         statusTV.setText(data.getStatusDesc());

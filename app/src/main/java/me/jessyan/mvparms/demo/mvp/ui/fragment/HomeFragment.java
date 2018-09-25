@@ -279,8 +279,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         }
         banner.setImages(urls);
         //banner设置方法全部调用完毕时最后调用
-        banner.start();
-        banner.isAutoPlay(false);
+        banner.isAutoPlay(true);
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(int position) {
@@ -323,6 +322,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 }
             }
         });
+        banner.start();
 
         moduleLayout.removeAllViews();
         // 模块

@@ -540,6 +540,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             diraySRL = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview, null);
             dirayRV = diraySRL.findViewById(R.id.list);
             dirayRV.setAdapter(mAdapter);
+            dirayRV.setNestedScrollingEnabled(false);
             ArmsUtils.configRecyclerView(dirayRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             initPaginate();
             views.add(diraySRL);

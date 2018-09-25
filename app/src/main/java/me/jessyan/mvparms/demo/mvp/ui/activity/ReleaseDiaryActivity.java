@@ -110,7 +110,7 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        titleTV.setText("发表日志");
+        titleTV.setText("发表日记");
         addV.setOnClickListener(this);
         backV.setOnClickListener(this);
         submitV.setOnClickListener(this);

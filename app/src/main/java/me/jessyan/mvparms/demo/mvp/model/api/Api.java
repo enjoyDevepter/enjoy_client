@@ -31,4 +31,5 @@ public interface Api {
     String APP_DOMAIN = BuildConfig.API_HOST;
     int RequestSuccess = 0;  // 请求成功
     int LoginOvertime = 1001; // 登录超时
+    int RECOMMEND_NO_EXIST = 1016; // 推荐人不存在
 }

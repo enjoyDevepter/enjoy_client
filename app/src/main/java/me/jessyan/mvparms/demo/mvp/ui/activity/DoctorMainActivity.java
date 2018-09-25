@@ -160,13 +160,12 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
 
     public void updateRecyclerViewHeight() {
         RecyclerView.Adapter adapter = contentList.getAdapter();
-        int height = 0;
-        if (adapter != null && adapter.getItemCount() != 0) {
-            height = adapter.getItemCount() > 5 ? 5 : adapter.getItemCount();
-            height *= ArmsUtils.dip2px(this, 140);
+        if (adapter.getItemCount() == 0) {
+
+            return;
         }
         ViewGroup.LayoutParams layoutParams = swipeRefreshLayout.getLayoutParams();
-        layoutParams.height = height;
+        layoutParams.height = ArmsUtils.getDimens(this, R.dimen.doctor_tab_height) * (adapter.getItemCount() < 10 ? adapter.getItemCount() : 10);
         swipeRefreshLayout.setLayoutParams(layoutParams);
     }
 

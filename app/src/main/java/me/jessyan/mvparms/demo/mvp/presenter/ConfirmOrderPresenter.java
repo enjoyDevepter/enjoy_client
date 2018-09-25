@@ -180,7 +180,7 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                                 intent.putExtra("payMoney", response.getTotalPrice());
                                 intent.putExtra("orderTime", response.getOrderTime());
                                 intent.putExtra("orderType", response.getOrderType());
-                                intent.putExtra("payTypeDesc", response.getPayType());
+                                intent.putExtra("payTypeDesc", response.getPayTypeDesc());
                                 ArmsUtils.startActivity(intent);
                             }
                             mAppManager.killAllBeforeClass(MainActivity.class);

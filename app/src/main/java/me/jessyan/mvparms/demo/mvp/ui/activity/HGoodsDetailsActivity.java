@@ -560,6 +560,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             diraySRL = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview, null);
             dirayRV = diraySRL.findViewById(R.id.list);
             dirayRV.setAdapter(mAdapter);
+            dirayRV.setNestedScrollingEnabled(false);
             ArmsUtils.configRecyclerView(dirayRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             initPaginate();
             views.add(diraySRL);
@@ -670,7 +671,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
             specLayoutV.setVisibility(View.VISIBLE);
             specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_butom_in));
-            spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getMarketPrice()));
+            spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
             spceIDTV.setText(response.getGoods().getCode());
             spceNameTV.setText(response.getGoods().getName());
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定

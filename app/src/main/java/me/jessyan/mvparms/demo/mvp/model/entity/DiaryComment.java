@@ -2,7 +2,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity;
 
 
 /**
- * 日志
+ * 日记
  */
 public class DiaryComment {
 

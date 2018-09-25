@@ -110,7 +110,6 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
                             mRootView.killMyself();
                         } else {
                             mRootView.showVerity();
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
