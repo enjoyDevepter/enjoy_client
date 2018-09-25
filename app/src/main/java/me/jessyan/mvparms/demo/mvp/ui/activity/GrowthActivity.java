@@ -8,6 +8,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -42,8 +45,8 @@ public class GrowthActivity extends BaseActivity<GrowthPresenter> implements Gro
     TabLayout tabTwoLayout;
     @BindView(R.id.how)
     View howV;
-    @BindView(R.id.growth_level)
-    GrowthView growthView;
+    @BindView(R.id.growth_layout)
+    HorizontalScrollView horizontalScrollView;
     @BindView(R.id.contentList)
     RecyclerView mRecyclerView;
     @BindView(R.id.no_date)
@@ -198,6 +201,13 @@ public class GrowthActivity extends BaseActivity<GrowthPresenter> implements Gro
         this.response = response;
         growthTV.setText(String.valueOf(response.getGrowth()));
         infoTV.setText(response.getDesc());
+        GrowthView growthView = (GrowthView) ArmsUtils.inflate(this, R.layout.growth_layout);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(3 * ArmsUtils.getDimens(this, R.dimen.growth_padding)
+                + response.getGrowthInfoList().size() * ArmsUtils.getDimens(this, R.dimen.growth_width)
+                + (response.getGrowthInfoList().size() - 1) * ArmsUtils.getDimens(this, R.dimen.growth_height), ViewGroup.LayoutParams.WRAP_CONTENT);
+        growthView.setLayoutParams(layoutParams);
         growthView.setGrowthInfoList(response.getGrowthInfoList());
+        horizontalScrollView.addView(growthView);
+
     }
 }

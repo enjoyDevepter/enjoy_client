@@ -2,13 +2,14 @@ package me.jessyan.mvparms.demo.mvp.ui.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Scroller;
 
 import com.jess.arms.utils.ArmsUtils;
 
@@ -23,8 +24,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.GrowthInfo;
 
 public class GrowthView extends View {
 
-    float lastX = 0;
-    private Scroller mScroller;
+    GrowthDrawable growthDrawable = new GrowthDrawable();
     private List<GrowthInfo> growthInfoList;
     private int padding = ArmsUtils.getDimens(getContext(), R.dimen.growth_padding);
     private int top_divider = ArmsUtils.getDimens(getContext(), R.dimen.growth_top_divider);
@@ -58,97 +58,81 @@ public class GrowthView extends View {
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setTextSize(textSize);
-        mScroller = new Scroller(getContext());
-
+        setBackground(growthDrawable);
     }
 
     public void setGrowthInfoList(List<GrowthInfo> growthInfoList) {
         this.growthInfoList = growthInfoList;
-        contentWidth = 4 * padding + growthInfoList.size() * item_width + (growthInfoList.size() - 1) * item_split;
-        this.invalidate();
+        contentWidth = 3 * padding + growthInfoList.size() * item_width + (growthInfoList.size() - 1) * item_split;
+        growthDrawable.invalidateSelf();
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        int height = getHeight();
-        if (null != growthInfoList) {
-            int start = 0;
-            if (contentWidth > getWidth()) {
-                start = 2 * padding;
-            } else {
-                start = (getWidth() - contentWidth) / 2;
+    private class GrowthDrawable extends Drawable {
+
+        @Override
+        public void draw(@NonNull Canvas canvas) {
+            int height = getHeight();
+            if (null != growthInfoList) {
+                int start = 0;
+                if (contentWidth >= getWidth()) {
+                    start = 2 * padding;
+                } else {
+                    start = (getWidth() - contentWidth) / 2;
+                }
+                for (int i = 0; i < growthInfoList.size(); i++) {
+                    // 绘制进度
+                    GrowthInfo growthInfo = growthInfoList.get(i);
+                    paint.setColor(progress);
+                    int begin = start + i * item_split + i * item_width;
+                    canvas.drawRect(begin, (height - item_height) / 2, begin + item_width, (height - item_height) / 2 + item_height, paint);
+                    paint.setColor(current_progress);
+                    canvas.drawRect(begin, (height - item_height) / 2, begin + item_width * (float) growthInfo.getPercent() / 100, (height - item_height) / 2 + item_height, paint);
+
+                    // 绘制level
+                    paint.setColor(level_color);
+                    String name = growthInfo.getName();
+                    Rect rect = new Rect();
+                    paint.getTextBounds(name, 0, name.length(), rect);
+                    canvas.drawText(growthInfo.getName(), begin - item_split - rect.width() / 2, height / 2 - top_divider - ArmsUtils.getBaseline(paint), paint);
+
+                    // 绘制growth
+                    paint.setColor(growth_color);
+                    String growth = growthInfo.getGrowth() + "";
+                    paint.getTextBounds(growth, 0, growth.length(), rect);
+                    canvas.drawText(growth, begin - item_split - rect.width() / 2, height / 2 + item_height / 2 + buttom_divider + rect.height() - ArmsUtils.getBaseline(paint), paint);
+
+                }
             }
-            for (int i = 0; i < growthInfoList.size(); i++) {
-                // 绘制进度
-                GrowthInfo growthInfo = growthInfoList.get(i);
-                paint.setColor(progress);
-                int begin = start + i * item_split + i * item_width;
-                canvas.drawRect(begin, (height - item_height) / 2, begin + item_width, (height - item_height) / 2 + item_height, paint);
-                paint.setColor(current_progress);
-                canvas.drawRect(begin, (height - item_height) / 2, begin + item_width * (float) growthInfo.getPercent() / 100, (height - item_height) / 2 + item_height, paint);
+        }
 
-                // 绘制level
-                paint.setColor(level_color);
-                String name = growthInfo.getName();
-                Rect rect = new Rect();
-                paint.getTextBounds(name, 0, name.length(), rect);
-                canvas.drawText(growthInfo.getName(), begin - item_split - rect.width() / 2, height / 2 - top_divider - ArmsUtils.getBaseline(paint), paint);
+        @Override
+        public void setAlpha(int alpha) {
 
-                // 绘制growth
-                paint.setColor(growth_color);
-                String growth = growthInfo.getGrowth() + "";
-                paint.getTextBounds(growth, 0, growth.length(), rect);
-                canvas.drawText(growth, begin - item_split - rect.width() / 2, height / 2 + item_height / 2 + buttom_divider + rect.height() - ArmsUtils.getBaseline(paint), paint);
+        }
 
+        @Override
+        public int getIntrinsicWidth() {
+            if (growthInfoList == null) {
+                return 0;
             }
+            return 3 * padding + growthInfoList.size() * item_width + (growthInfoList.size() - 1) * item_split;
         }
-    }
 
-    @Override
-    public void computeScroll() {
-        super.computeScroll();
-        if (mScroller.computeScrollOffset()) {//判断Scroller是否执行完毕
-            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
-            postInvalidate();
+        @Override
+        public int getIntrinsicHeight() {
+            Rect rect = new Rect();
+            paint.getTextBounds("v1", 0, "v1".length(), rect);
+            return padding + rect.height() + top_divider + item_height + buttom_divider + rect.height() + padding;
         }
-    }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                lastX = x;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                //计算偏移量
-                float offsetX = x - lastX;
-                System.out.println("getScrollX " + getScrollX() + "    offsetX   " + offsetX + "    getWidth()  " + getWidth() + "   contentWidth() " + contentWidth);
-                if (contentWidth > getWidth() && getScrollX() >= 0 && getScrollX() <= contentWidth - getWidth()) {
-                    if (getScrollX() <= contentWidth - getWidth() && getScrollX() >= getWidth() - contentWidth) {
-                        scrollTo((int) -offsetX, 0);
-                    } else {
-                        if (getScrollX() > 0) {
-                            scrollTo(contentWidth - getWidth(), 0);
-                        } else {
-                            scrollTo(getWidth() - contentWidth, 0);
-                        }
-                    }
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                if (getScrollX() < 0) {
-                    setScrollX(0);
-                }
-                if (contentWidth > getWidth() && getScrollY() >= contentWidth - getWidth()) {
-                    setScrollX(contentWidth - getWidth());
-                }
-                System.out.println("mScroller.getCurrX() " + mScroller.getCurrX());
+        @Override
+        public void setColorFilter(@Nullable ColorFilter colorFilter) {
 
-//                scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
-//                postInvalidate();
-                break;
         }
-        return true;
+
+        @Override
+        public int getOpacity() {
+            return 0;
+        }
     }
 }
