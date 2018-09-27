@@ -20,6 +20,7 @@ import com.paginate.Paginate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.Subscriber;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerDiscoverComponent;
 import me.jessyan.mvparms.demo.di.module.DiscoverModule;
 import me.jessyan.mvparms.demo.mvp.contract.DiscoverContract;
@@ -285,6 +287,11 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
                 ArmsUtils.startActivity(intent);
                 break;
         }
+    }
+
+    @Subscriber(tag = EventBusTags.DIARY_COMMENT_SUCCESS)
+    private void updateDirayComment(boolean success) {
+        mPresenter.getDiaryList(true);
     }
 
     @Override

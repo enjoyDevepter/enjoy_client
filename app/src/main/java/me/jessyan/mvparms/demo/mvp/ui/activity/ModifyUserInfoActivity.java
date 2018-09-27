@@ -74,6 +74,7 @@ public class ModifyUserInfoActivity extends BaseActivity<ModifyUserInfoPresenter
             if ("age".equals(type)) {
                 contentET.setInputType(InputType.TYPE_CLASS_NUMBER);
             }
+            contentET.setText(getIntent().getStringExtra("content"));
             contentET.setVisibility(View.VISIBLE);
             contentRV.setVisibility(View.INVISIBLE);
         } else {

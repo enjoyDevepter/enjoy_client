@@ -14,8 +14,10 @@ import me.jessyan.mvparms.demo.mvp.contract.RecommendContract;
 import me.jessyan.mvparms.demo.mvp.model.RecommendModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 
 
 @Module
@@ -72,6 +74,18 @@ public class RecommendModule {
     @Provides
     GoodsFilterSecondAdapter provideFilterSecondAdapter(List<Category> categories) {
         return new GoodsFilterSecondAdapter(categories);
+    }
+
+    @ActivityScope
+    @Provides
+    List<HGoods> provideHGoodsList() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    HGoodsListAdapter provideHGoodsListAdapter(List<HGoods> goods) {
+        return new HGoodsListAdapter(goods);
     }
 
 }

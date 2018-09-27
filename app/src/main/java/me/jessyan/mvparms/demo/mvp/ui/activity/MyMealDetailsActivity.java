@@ -1,9 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +14,12 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 import javax.inject.Inject;
 
@@ -26,6 +29,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerMyMealDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.MyMealDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyMealDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
 import me.jessyan.mvparms.demo.mvp.presenter.MyMealDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealDetailListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -61,6 +65,40 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
 
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+        }
+    };
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -208,6 +246,27 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
         }
     }
 
+    public void share(Share share) {
+        if (null == share) {
+            return;
+        }
+        UMWeb web = new UMWeb(share.getUrl());
+        web.setTitle(share.getTitle());//标题
+        web.setDescription(share.getIntro());
+        web.setThumb(new UMImage(this, share.getImage()));
+        new ShareAction(this)
+                .withMedia(web)
+                .setCallback(shareListener)
+                .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                .open();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
     @Override
     public void onChildItemClick(View v, MyMealDetailListAdapter.ViewName viewname, int position) {
         Appointment appointment = mAdapter.getInfos().get(position);
@@ -216,12 +275,15 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
                 if (appointment.getStatus().equals("1")) {
                     // 复制
                     //获取剪贴板管理器：
-                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    // 创建普通字符型ClipData
-                    ClipData mClipData = ClipData.newPlainText("Label", appointment.getProjectId());
-                    // 将ClipData内容放到系统剪贴板里。
-                    cm.setPrimaryClip(mClipData);
-                    showMessage("已复制到剪贴板");
+//                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+//                    // 创建普通字符型ClipData
+//                    ClipData mClipData = ClipData.newPlainText("Label", appointment.getProjectId());
+//                    // 将ClipData内容放到系统剪贴板里。
+//                    cm.setPrimaryClip(mClipData);
+//                    showMessage("已复制到剪贴板");
+                    provideCache().put("projectId", appointment.getProjectId());
+                    // 分享
+                    mPresenter.share();
                 } else if (appointment.getStatus().equals("2")) {
                     // 取消预约
                     provideCache().put("reservationId", appointment.getReservationId());

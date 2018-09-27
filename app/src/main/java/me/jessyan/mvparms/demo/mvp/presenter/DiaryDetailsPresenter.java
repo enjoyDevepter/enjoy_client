@@ -13,12 +13,15 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import org.simple.eventbus.EventBus;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.DiaryComment;
 import me.jessyan.mvparms.demo.mvp.model.entity.diary.DiaryCommentRequest;
@@ -52,6 +55,10 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
     @Inject
     RecyclerView.Adapter mAdapter;
 
+    private int preEndIndex;
+    private int lastPageIndex = 1;
+
+
     @Inject
     public DiaryDetailsPresenter(DiaryDetailsContract.Model model, DiaryDetailsContract.View rootView) {
         super(model, rootView);
@@ -60,7 +67,7 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
         getDiaryDetails();
-        getDiaryComment();
+        getDiaryComment(true);
     }
 
     private void getDiaryDetails() {
@@ -92,26 +99,44 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                 });
     }
 
-    private void getDiaryComment() {
+    public void getDiaryComment(boolean pullToRefresh) {
 
         DiaryCommentListRequest request = new DiaryCommentListRequest();
         request.setDiaryId(mRootView.getActivity().getIntent().getStringExtra("diaryId"));
 
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
         mModel.getDiaryComment(request)
                 .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh) {
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    } else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<DiaryCommentListResponse>(mErrorHandler) {
                     @Override
                     public void onNext(DiaryCommentListResponse response) {
-                        if (response.isSuccess()) {
+                        if (pullToRefresh) {
                             diaryCommentList.clear();
-                            diaryCommentList.addAll(response.getDiaryCommentList());
-                            mRootView.updateCommentUI(response.getDiaryCommentList().size());
+                        }
+                        diaryCommentList.addAll(response.getDiaryCommentList());
+                        mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                        preEndIndex = diaryCommentList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                        lastPageIndex = diaryCommentList.size() / 10;
+                        mRootView.updateCommentUI(response.getDiaryCommentList().size());
+                        if (pullToRefresh) {
                             mAdapter.notifyDataSetChanged();
                         } else {
-                            mRootView.showMessage(response.getRetDesc());
+                            mAdapter.notifyItemRangeInserted(preEndIndex, diaryCommentList.size());
                         }
                     }
                 });
@@ -168,7 +193,9 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                         mRootView.comment(response.isSuccess());
                         if (response.isSuccess()) {
                             mRootView.showMessage("评论成功!");
-                            getDiaryComment();
+                            getDiaryDetails();
+                            getDiaryComment(true);
+                            EventBus.getDefault().post(true, EventBusTags.DIARY_COMMENT_SUCCESS);
                         }
                     }
                 });

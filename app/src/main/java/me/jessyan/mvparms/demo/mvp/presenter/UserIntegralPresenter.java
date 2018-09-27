@@ -81,7 +81,7 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
         mModel.getQiandaoInfo(request)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                 })
@@ -110,7 +110,7 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
         mModel.qiandao(request)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                 })
@@ -147,7 +147,7 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                         mRootView.showLoading();//显示下拉刷新的进度条
                     } else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (pullToRefresh)

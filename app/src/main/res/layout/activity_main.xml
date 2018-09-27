@@ -46,7 +46,7 @@
             app:iconSelected="@mipmap/mall_sel"
             app:iconWidth="17dp"
             app:itemMarginTop="5dp"
-            app:itemText="商城"
+            app:itemText="项目"
             app:itemTextSize="11sp"
             app:textColorNormal="#FF333333"
             app:textColorSelected="#FF5FBFE3" />

@@ -16,13 +16,11 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerFeedBackComponent;
 import me.jessyan.mvparms.demo.di.module.FeedBackModule;
 import me.jessyan.mvparms.demo.mvp.contract.FeedBackContract;
 import me.jessyan.mvparms.demo.mvp.presenter.FeedBackPresenter;
-
-import me.jessyan.mvparms.demo.R;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -74,7 +72,7 @@ public class FeedBackActivity extends BaseActivity<FeedBackPresenter> implements
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                text_count.setText(""+s.length());
+                text_count.setText("" + s.length());
             }
 
             @Override
@@ -87,8 +85,8 @@ public class FeedBackActivity extends BaseActivity<FeedBackPresenter> implements
             @Override
             public void onClick(View v) {
                 String s = et_name.getText() + "";
-                if(TextUtils.isEmpty(s)){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入内容后提交");
+                if (TextUtils.isEmpty(s)) {
+                    ArmsUtils.makeText(ArmsUtils.getContext(), "请输入内容后提交");
                     return;
                 }
                 mPresenter.feedback(s);
@@ -123,8 +121,8 @@ public class FeedBackActivity extends BaseActivity<FeedBackPresenter> implements
         finish();
     }
 
-    public void showOk(){
-        ArmsUtils.makeText(this,"提交成功");
-        et_name.setText("");
+    public void showOk() {
+        ArmsUtils.makeText(this, "提交成功");
+        killMyself();
     }
 }

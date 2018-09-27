@@ -172,13 +172,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     }
 
-    @Subscriber(tag = EventBusTags.LOGIN_STATUS_CHANGE_EVENT)
-    private void updateLoginStatus() {
-        mPresenter.getUserInfo();
-    }
-
     @Subscriber(tag = EventBusTags.USER_BASE_INFO_CHANGE)
-    private void updateUserInfo() {
+    private void updateUserInfo(int cmd) {
         mPresenter.getUserInfo();
     }
 

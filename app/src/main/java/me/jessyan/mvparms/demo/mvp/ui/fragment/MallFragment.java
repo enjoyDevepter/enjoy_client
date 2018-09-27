@@ -160,7 +160,7 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         secondFilterRV.setAdapter(secondAdapter);
         secondAdapter.setOnItemClickListener(this);
         mPresenter.getCategory();
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mHAdapter);
     }
 
     /**
@@ -383,9 +383,14 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
             tabLayout.addTab(tab1);
 
         }
-        String type = (String) tabLayout.getTabAt(0).getTag();
+        String type = "1";
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            if ("3".equals(tabLayout.getTabAt(i).getTag())) {
+                type = "3";
+                tabLayout.getTabAt(i).select();
+            }
+        }
         provideCache().put("type", type);
-        tabLayout.getTabAt(0).select();
         if ("1".equals(type)) {
             mRecyclerView.setAdapter(mAdapter);
             mPresenter.getGoodsList(true);

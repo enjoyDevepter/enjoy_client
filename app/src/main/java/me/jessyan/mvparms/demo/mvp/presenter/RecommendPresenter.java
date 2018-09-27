@@ -22,11 +22,14 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.RecommendContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -45,7 +48,11 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
     @Inject
     List<Goods> mGoods;
     @Inject
+    List<HGoods> mHGoods;
+    @Inject
     GoodsListAdapter mAdapter;
+    @Inject
+    HGoodsListAdapter mHAdapter;
     @Inject
     List<Category> categories;
     private int preEndIndex;
@@ -56,11 +63,16 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
         super(model, rootView);
     }
 
-
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
         getCategory();
-        getRecommendGoodsList(true);
+        boolean isGoods = mRootView.getActivity().getIntent().getBooleanExtra("isGoods", true);
+        mRootView.getCache().put("isGoods", isGoods);
+        if (isGoods) {
+            getRecommendGoodsList(true);
+        } else {
+            getHGoodsList(true);
+        }
     }
 
     public void getCategory() {
@@ -86,7 +98,11 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
     public void getRecommendGoodsList(boolean pullToRefresh) {
         GoodsListRequest request = new GoodsListRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setCmd(404);
+        if ((boolean) mRootView.getCache().get("isGoods")) {
+            request.setCmd(404);
+        } else {
+            request.setCmd(480);
+        }
         request.setProvince(String.valueOf(cache.get("province")));
         request.setCity(String.valueOf(cache.get("city")));
         request.setCounty(String.valueOf(cache.get("county")));
@@ -144,6 +160,69 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
                 });
     }
 
+    public void getHGoodsList(final boolean pullToRefresh) {
+        GoodsListRequest request = new GoodsListRequest();
+        request.setCmd(480);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setProvince(String.valueOf(cache.get("province")));
+        request.setCity(String.valueOf(cache.get("city")));
+        request.setCounty(String.valueOf(cache.get("county")));
+        request.setCategoryId((String) mRootView.getCache().get("categoryId"));
+        request.setSecondCategoryId((String) (mRootView.getCache().get("secondCategoryId")));
+
+        if (!ArmsUtils.isEmpty(String.valueOf(mRootView.getCache().get("orderByField")))) {
+            GoodsListRequest.OrderBy orderBy = new GoodsListRequest.OrderBy();
+            orderBy.setField((String) mRootView.getCache().get("orderByField"));
+            orderBy.setAsc((Boolean) mRootView.getCache().get("orderByAsc"));
+            request.setOrderBy(orderBy);
+        }
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
+        mModel.getHGoodsList(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HGoodsListResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(HGoodsListResponse response) {
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                mHGoods.clear();
+                            }
+                            mRootView.showError(response.getGoodsList().size() > 0);
+                            if (response.getGoodsList().size() <= 0) {
+                                return;
+                            }
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            mHGoods.addAll(response.getGoodsList());
+                            preEndIndex = mHGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = mHGoods.size() / 10;
+                            if (pullToRefresh) {
+                                mHAdapter.notifyDataSetChanged();
+                            } else {
+                                mHAdapter.notifyItemRangeInserted(preEndIndex, mHGoods.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
 
     private List<Category> sortCategory(List<Category> categoryList) {
         List<Category> categories = new ArrayList<>();

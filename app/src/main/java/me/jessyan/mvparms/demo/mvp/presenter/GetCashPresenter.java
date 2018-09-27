@@ -65,7 +65,7 @@ public class GetCashPresenter extends BasePresenter<GetCashContract.Model, GetCa
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();//隐藏下拉刷新的进度条
@@ -99,7 +99,7 @@ public class GetCashPresenter extends BasePresenter<GetCashContract.Model, GetCa
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();//隐藏下拉刷新的进度条

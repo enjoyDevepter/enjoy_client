@@ -20,12 +20,9 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.ChooseBankContract;
-import me.jessyan.mvparms.demo.mvp.model.ChooseBankModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankCardBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.DelBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetAllBankCardListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.response.BankListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.DelBankCardResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetAllBankCardListResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -75,7 +72,7 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();
@@ -120,7 +117,7 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
                         //                        mRootView.showLoading();//显示下拉刷新的进度条
                     } else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (clear)

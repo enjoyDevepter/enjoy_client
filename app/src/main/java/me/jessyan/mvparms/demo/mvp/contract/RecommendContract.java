@@ -14,11 +14,13 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 
 
 public interface RecommendContract {
     //对于经常使用的关于UI的方法可以定义到IView中,如显示隐藏进度条,和显示文字消息
     interface View extends IView {
+
         void startLoadMore();
 
         void endLoadMore();
@@ -41,5 +43,8 @@ public interface RecommendContract {
         Observable<CategoryResponse> getCategory(SimpleRequest request);
 
         Observable<GoodsListResponse> getRecommendGoodsList(GoodsListRequest request);
+
+        Observable<HGoodsListResponse> getHGoodsList(GoodsListRequest request);
+
     }
 }

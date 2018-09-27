@@ -409,6 +409,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mPresenter.updateHomeInfo();
     }
 
+
+    @Subscriber(tag = EventBusTags.DIARY_COMMENT_SUCCESS)
+    private void updateDirayComment(boolean success) {
+        mPresenter.getRecommenDiaryList(true);
+    }
+
+
     @Override
     public void showLoading() {
         swipeRefreshLayout.setRefreshing(true);
@@ -596,8 +603,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             result.putExtra("busType", "1");
             result.putExtra("title", firstNavList.get(tab.getPosition()).getTitle());
             ArmsUtils.startActivity(result);
+        } else if ("recom_project".equals(tag)) {
+            Intent result = new Intent(getActivity(), RecommendActivity.class);
+            result.putExtra("isGoods", false);
+            ArmsUtils.startActivity(result);
         } else if ("recom_good".equals(tag)) {
-            ArmsUtils.startActivity(getActivity(), RecommendActivity.class);
+            Intent result = new Intent(getActivity(), RecommendActivity.class);
+            result.putExtra("isGoods", true);
+            ArmsUtils.startActivity(result);
         } else if ("hospital".equals(tag)) {
             ArmsUtils.startActivity(getActivity(), HospitalActivity.class);
         } else if ("doctor".equals(tag)) {

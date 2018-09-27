@@ -105,5 +105,10 @@ public interface EventBusTags {
      * 更改首页
      */
     String CHANGE_MAIN_ITEM = "change_main_item";
+    /**
+     * 评论日记
+     */
+    String DIARY_COMMENT_SUCCESS = "change_main_item";
+
 
 }

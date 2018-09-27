@@ -24,12 +24,15 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerDiaryForGoodsComponent;
 import me.jessyan.mvparms.demo.di.module.DiaryForGoodsModule;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryForGoodsContract;
@@ -172,6 +175,11 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         finish();
     }
 
+
+    @Subscriber(tag = EventBusTags.DIARY_COMMENT_SUCCESS)
+    private void updateDirayComment(boolean success) {
+        mPresenter.getMyDiaryList(true);
+    }
 
     @Override
     public void onClick(View v) {

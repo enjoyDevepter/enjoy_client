@@ -33,7 +33,7 @@
                 android:layout_width="70dp"
                 android:layout_height="54dp"
                 android:layout_gravity="center"
-                android:background="@mipmap/logo_title"
+                android:background="@mipmap/logo"
                 app:layout_auto_baseheight="width" />
 
         </FrameLayout>
@@ -66,6 +66,7 @@
                     android:layout_marginLeft="9dp"
                     android:background="@android:color/transparent"
                     android:hint="您的密码"
+                    android:inputType="textPassword"
                     android:paddingLeft="5dp"
                     android:textSize="13sp" />
 
@@ -109,6 +110,7 @@
                     android:layout_marginLeft="9dp"
                     android:background="@android:color/transparent"
                     android:hint="重复密码"
+                    android:inputType="textPassword"
                     android:paddingLeft="5dp"
                     android:textSize="13sp" />
 

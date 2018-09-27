@@ -10,8 +10,11 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MyMealDetailRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ShareRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 
 
 public interface MyMealDetailsContract {
@@ -28,6 +31,8 @@ public interface MyMealDetailsContract {
         Cache getCache();
 
         void showError(boolean hasDate);
+
+        void share(Share share);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -36,6 +41,8 @@ public interface MyMealDetailsContract {
         Observable<AppointmentResponse> getAppointment(MyMealDetailRequest request);
 
         Observable<BaseResponse> cancelAppointment(ModifyAppointmentRequest request);
+
+        Observable<ShareResponse> share(ShareRequest request);
 
         Observable<BaseResponse> apply(DiaryRequest request);
     }

@@ -26,6 +26,7 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -124,6 +125,10 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     @Inject
     RecyclerView.Adapter mAdapter;
 
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
+
 
     private DiaryDetailsResponse response;
 
@@ -192,6 +197,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         commentRV.setAdapter(mAdapter);
         tab.addTab(tab.newTab().setText("全部评论"));
         tabFloatLayout.addTab(tabFloatLayout.newTab().setText("全部评论"));
+        commentRV.setNestedScrollingEnabled(false);
         commentRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -204,6 +210,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
             }
         });
         nestedScrollView.setOnScrollChangeListener(this);
+        initPaginate();
     }
 
     @Override
@@ -214,6 +221,50 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     @Override
     public void hideLoading() {
 
+    }
+
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    @Override
+    public void setLoadedAllItems(boolean has) {
+        hasLoadedAllItems = has;
+    }
+
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.getDiaryComment(false);
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return hasLoadedAllItems;
+                }
+            };
+
+            mPaginate = Paginate.with(commentRV, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
     }
 
     @Override
@@ -267,7 +318,6 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         UMWeb web = new UMWeb(response.getShareUrl());
         web.setTitle(response.getShareTitle());//标题
         web.setDescription(response.getShareDesc());
-//        web.setThumb(new UMImage(this, share.getImage()));
         new ShareAction(this)
                 .withMedia(web)
                 .setCallback(shareListener)

@@ -11,11 +11,13 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.RecommendContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.HGoodsService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 
 
 @ActivityScope
@@ -47,5 +49,11 @@ public class RecommendModel extends BaseModel implements RecommendContract.Model
     public Observable<GoodsListResponse> getRecommendGoodsList(GoodsListRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getGoodsList(request);
+    }
+
+    @Override
+    public Observable<HGoodsListResponse> getHGoodsList(GoodsListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(HGoodsService.class)
+                .getHGoodsList(request);
     }
 }

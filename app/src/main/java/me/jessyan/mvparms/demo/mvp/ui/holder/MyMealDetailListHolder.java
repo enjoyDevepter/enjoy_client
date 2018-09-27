@@ -148,7 +148,7 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
             statusTV.setText("可预约");
             if (!"1".equals(appointment.getIsExperience())) {
                 leftTV.setVisibility(View.VISIBLE);
-                leftTV.setText("复制");
+                leftTV.setText("转赠");
             } else {
                 leftTV.setVisibility(View.GONE);
             }

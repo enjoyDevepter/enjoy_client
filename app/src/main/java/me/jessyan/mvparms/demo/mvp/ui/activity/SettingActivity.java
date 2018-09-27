@@ -143,6 +143,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                 showDailog("确认清除应用缓存吗?");
                 break;
             case R.id.version:
+                ArmsUtils.startActivity(VersionActivity.class);
                 break;
             case R.id.submit:
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();

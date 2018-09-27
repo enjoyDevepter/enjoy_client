@@ -229,6 +229,8 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
 
     @Override
     public void onClick(View v) {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
+        Member member = (Member) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_INFO);
         switch (v.getId()) {
             case R.id.back:
                 killMyself();
@@ -241,12 +243,14 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                 Intent nickIntent = new Intent(getActivity(), ModifyUserInfoActivity.class);
                 nickIntent.putExtra("type", "nick");
                 nickIntent.putExtra("title", "更改昵称");
+                nickIntent.putExtra("content", member.getNickName());
                 ArmsUtils.startActivity(nickIntent);
                 break;
             case R.id.name_layout:
                 Intent nameIntent = new Intent(getActivity(), ModifyUserInfoActivity.class);
                 nameIntent.putExtra("type", "name");
                 nameIntent.putExtra("title", "更改姓名");
+                nameIntent.putExtra("content", member.getRealName());
                 ArmsUtils.startActivity(nameIntent);
                 break;
             case R.id.male_layout:
@@ -259,6 +263,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                 Intent ageIntent = new Intent(getActivity(), ModifyUserInfoActivity.class);
                 ageIntent.putExtra("type", "age");
                 ageIntent.putExtra("title", "更改年龄");
+                ageIntent.putExtra("content", member.getAge() + "");
                 ArmsUtils.startActivity(ageIntent);
                 break;
             case R.id.area_layout:

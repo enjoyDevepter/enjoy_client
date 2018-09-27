@@ -23,8 +23,10 @@ import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MyMealDetailRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ShareRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealDetailListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -172,6 +174,39 @@ public class MyMealDetailsPresenter extends BasePresenter<MyMealDetailsContract.
                     }
                 });
     }
+
+
+    /**
+     * 分享
+     */
+    public void share() {
+        ShareRequest request = new ShareRequest();
+        request.setCmd(921);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setProjectId((String) (cache.get("projectId")));
+        mModel.share(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).doFinally(() -> {
+            mRootView.hideLoading();//隐藏下拉刷新的进度条
+        })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<ShareResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(ShareResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.share(response.getShare());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
 
     @Override
     public void onDestroy() {

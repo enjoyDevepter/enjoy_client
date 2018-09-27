@@ -5,27 +5,25 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.DrawCashBean;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.response.FeedbackResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashListResponse;
-import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.GetCashListContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.DrawCashBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetCashListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetCashListResponse;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
@@ -41,7 +39,11 @@ public class GetCashListPresenter extends BasePresenter<GetCashListContract.Mode
     ImageLoader mImageLoader;
     @Inject
     AppManager mAppManager;
-
+    @Inject
+    RecyclerView.Adapter mAdapter;
+    @Inject
+    List<DrawCashBean> orderBeanList;
+    private int nextPageIndex = 1;
     @Inject
     public GetCashListPresenter(GetCashListContract.Model model, GetCashListContract.View rootView) {
         super(model, rootView);
@@ -56,11 +58,6 @@ public class GetCashListPresenter extends BasePresenter<GetCashListContract.Mode
         this.mApplication = null;
     }
 
-    @Inject
-    RecyclerView.Adapter mAdapter;
-    @Inject
-    List<DrawCashBean> orderBeanList;
-
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void requestOrderList(){
         requestOrderList(1,true);
@@ -69,8 +66,6 @@ public class GetCashListPresenter extends BasePresenter<GetCashListContract.Mode
     public void nextPage(){
         requestOrderList(nextPageIndex,false);
     }
-
-    private int nextPageIndex = 1;
 
     private void requestOrderList(int pageIndex,final boolean clear) {
         GetCashListRequest request = new GetCashListRequest();
@@ -88,7 +83,7 @@ public class GetCashListPresenter extends BasePresenter<GetCashListContract.Mode
                         //                        mRootView.showLoading();//显示下拉刷新的进度条
                     }else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (clear)

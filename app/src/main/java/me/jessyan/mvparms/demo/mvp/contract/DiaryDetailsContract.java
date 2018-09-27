@@ -36,6 +36,11 @@ public interface DiaryDetailsContract {
 
         void updateCommentUI(int count);
 
+        void startLoadMore();
+
+        void endLoadMore();
+
+        void setLoadedAllItems(boolean has);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存

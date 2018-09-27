@@ -33,10 +33,12 @@ import me.jessyan.mvparms.demo.di.module.RecommendModule;
 import me.jessyan.mvparms.demo.mvp.contract.RecommendContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Category;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.presenter.RecommendPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsFilterThirdAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -97,6 +99,8 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
     @Inject
     GoodsListAdapter mAdapter;
     @Inject
+    HGoodsListAdapter mHAdapter;
+    @Inject
     GoodsFilterSecondAdapter secondAdapter;
     GoodsFilterThirdAdapter thirdAdapter;
     private List<Category> typeCategories;
@@ -126,14 +130,20 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
     @Override
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
-        titleTV.setText("推荐商品");
+        if (getIntent().getBooleanExtra("isGoods", true)) {
+            titleTV.setText("推荐商品");
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            titleTV.setText("推荐项目");
+            mRecyclerView.setAdapter(mHAdapter);
+        }
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
         initPaginate();
         typeV.setOnClickListener(this);
         saleV.setOnClickListener(this);
         priceV.setOnClickListener(this);
         mAdapter.setOnItemClickListener(this);
+        mHAdapter.setOnItemClickListener(this);
         maskV.setOnClickListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
@@ -223,7 +233,11 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.getRecommendGoodsList(false);
+                    if ((boolean) provideCache().get("isGoods")) {
+                        mPresenter.getRecommendGoodsList(false);
+                    } else {
+                        mPresenter.getHGoodsList(false);
+                    }
                 }
 
                 @Override
@@ -247,7 +261,11 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
 
     @Override
     public void onRefresh() {
-        mPresenter.getRecommendGoodsList(true);
+        if ((boolean) provideCache().get("isGoods")) {
+            mPresenter.getRecommendGoodsList(true);
+        } else {
+            mPresenter.getHGoodsList(true);
+        }
     }
 
     @Override
@@ -280,7 +298,11 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
                 priceV.setSelected(false);
                 priceStautsV.setBackground(descD);
 
-                mPresenter.getRecommendGoodsList(true);
+                if ((boolean) provideCache().get("isGoods")) {
+                    mPresenter.getRecommendGoodsList(false);
+                } else {
+                    mPresenter.getHGoodsList(false);
+                }
                 break;
             case R.id.price_layout:
                 provideCache().put("orderByField", "salesPrice");
@@ -295,7 +317,11 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
                 saleStatusV.setBackground(descD);
 
                 showFilter(false);
-                mPresenter.getRecommendGoodsList(true);
+                if ((boolean) provideCache().get("isGoods")) {
+                    mPresenter.getRecommendGoodsList(false);
+                } else {
+                    mPresenter.getHGoodsList(false);
+                }
                 break;
         }
     }
@@ -335,11 +361,6 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
     }
 
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-
-    @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
         // 如何区分
         switch (viewType) {
@@ -351,6 +372,14 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
                 intent.putExtra("goodsId", goods.getGoodsId());
                 intent.putExtra("merchId", goods.getMerchId());
                 ArmsUtils.startActivity(intent);
+                break;
+            case R.layout.h_goods_list_item:
+                HGoods hGoods = mHAdapter.getInfos().get(position);
+                Intent hGoodsintent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
+                hGoodsintent.putExtra("goodsId", hGoods.getGoodsId());
+                hGoodsintent.putExtra("merchId", hGoods.getMerchId());
+                hGoodsintent.putExtra("advanceDepositId", hGoods.getAdvanceDepositId());
+                ArmsUtils.startActivity(hGoodsintent);
                 break;
             case R.layout.goods_filter_second_item:
                 List<Category> childs = secondAdapter.getInfos();
@@ -374,7 +403,11 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
                         typeStatusV.setBackground(descD);
                     }
                     typeTV.setText(childs.get(position).getName());
-                    mPresenter.getRecommendGoodsList(true);
+                    if ((boolean) provideCache().get("isGoods")) {
+                        mPresenter.getRecommendGoodsList(true);
+                    } else {
+                        mPresenter.getHGoodsList(true);
+                    }
                     return;
                 }
                 secondAdapter.notifyDataSetChanged();
@@ -394,7 +427,11 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getId());
                 showFilter(false);
-                mPresenter.getRecommendGoodsList(true);
+                if ((boolean) provideCache().get("isGoods")) {
+                    mPresenter.getRecommendGoodsList(true);
+                } else {
+                    mPresenter.getHGoodsList(true);
+                }
                 break;
         }
     }

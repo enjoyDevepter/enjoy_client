@@ -37,6 +37,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayMealOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ReleaseDiaryRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.ShareRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -68,6 +69,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AuthenticationReque
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -217,5 +219,8 @@ public interface MainService {
 
     @POST("gateway")
     Observable<LogisticsResponse> getLogistics(@Body OrderOperationRequest request);
+
+    @POST("gateway")
+    Observable<ShareResponse> share(@Body ShareRequest request);
 
 }
