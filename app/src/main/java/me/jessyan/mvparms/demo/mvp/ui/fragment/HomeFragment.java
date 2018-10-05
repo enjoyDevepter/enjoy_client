@@ -23,7 +23,6 @@ import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
-import com.paginate.Paginate;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -120,8 +119,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Inject
     DiaryListAdapter mAdapter;
     private List<NaviInfo> firstNavList;
-    private Paginate mPaginate;
-    private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
 
     public static HomeFragment newInstance() {
@@ -165,7 +162,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
                 if (firstCompletelyVisibleItemPosition == 0) {
@@ -175,7 +171,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         });
         mRecyclerView.setNestedScrollingEnabled(false);
         nestedScrollView.setOnScrollChangeListener(this);
-        initPaginate();
         mPresenter.updateHomeInfo();
     }
 
@@ -196,22 +191,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         }
     }
 
-    /**
-     * 开始加载更多
-     */
-    @Override
-    public void startLoadMore() {
-        isLoadingMore = true;
-    }
-
-    /**
-     * 结束加载更多
-     */
-    @Override
-    public void endLoadMore() {
-        isLoadingMore = false;
-    }
-
     @Override
     public void setLoadedAllItems(boolean has) {
         this.hasLoadedAllItems = has;
@@ -222,34 +201,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         return provideCache();
     }
 
-    /**
-     * 初始化Paginate,用于加载更多
-     */
-    private void initPaginate() {
-        if (mPaginate == null) {
-            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
-                @Override
-                public void onLoadMore() {
-                    mPresenter.getRecommenDiaryList(false);
-                }
-
-                @Override
-                public boolean isLoading() {
-                    return isLoadingMore;
-                }
-
-                @Override
-                public boolean hasLoadedAllItems() {
-                    return hasLoadedAllItems;
-                }
-            };
-
-            mPaginate = Paginate.with(mRecyclerView, callbacks)
-                    .setLoadingTriggerThreshold(0)
-                    .build();
-            mPaginate.setHasMoreDataToLoad(false);
-        }
-    }
 
     @Override
     public RxPermissions getRxPermissions() {
@@ -394,8 +345,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mRecyclerView.getLayoutParams();
         int[] location = new int[2];
         titleV.getLocationInWindow(location);
-        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) - ArmsUtils.getDimens(getContext(), R.dimen.home_title_height) - ArmsUtils.getDimens(getContext(), R.dimen.title_height) + 1,
-                ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * count + 1);
+        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * count + 1;
         mRecyclerView.setLayoutParams(layoutParams);
     }
 
@@ -630,6 +580,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
         int[] location = new int[2];
         tabLayout.getLocationOnScreen(location);
         int yPosition = location[1];
@@ -642,13 +593,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         }
         tabTwoLayout.getLocationOnScreen(location);
         yPosition = location[1];
-        if (yPosition < (titleV.getHeight() + titleLocation[1] + tabOneFloat.getHeight())) {
+        if (yPosition < (titleV.getHeight() + titleLocation[1])) {
             tabOneFloat.setVisibility(View.GONE);
             tabTwoFloat.setVisibility(View.VISIBLE);
-            nestedScrollView.setNeedScroll(false);
         } else {
             tabTwoFloat.setVisibility(View.GONE);
-            nestedScrollView.setNeedScroll(true);
+        }
+        if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+            if (!hasLoadedAllItems) {
+                mPresenter.getRecommenDiaryList(false);
+            }
         }
     }
 }

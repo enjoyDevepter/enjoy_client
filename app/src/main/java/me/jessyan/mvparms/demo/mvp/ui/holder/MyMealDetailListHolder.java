@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -36,6 +35,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealDetailListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 /**
  * ================================================
@@ -111,6 +111,7 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
                         .placeholder(R.drawable.place_holder_img)
                         .url(mealGoods.getImage())
                         .imageView(imageIV)
+                        .isCenterCrop(true)
                         .build());
         timeTV.setText(sdf.format(appointment.getCreateDate()));
         statusTV.setText(appointment.getStatusDesc());

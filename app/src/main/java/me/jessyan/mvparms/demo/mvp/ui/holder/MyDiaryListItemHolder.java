@@ -131,6 +131,7 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
                             .placeholder(R.drawable.place_holder_img)
                             .url(diary.getImageList().get(0))
                             .imageView(leftIV)
+                            .isCenterCrop(true)
                             .build());
         } else {
             mImageLoader.loadImage(itemView.getContext(),
@@ -139,6 +140,7 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
                             .placeholder(R.drawable.place_holder_img)
                             .url("")
                             .imageView(leftIV)
+                            .isCenterCrop(true)
                             .build());
         }
         if (diary.getImageList() != null && diary.getImageList().size() > 1) {
@@ -148,6 +150,7 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
                             .placeholder(R.drawable.place_holder_img)
                             .url(diary.getImageList().get(1))
                             .imageView(rightIV)
+                            .isCenterCrop(true)
                             .build());
         } else {
             mImageLoader.loadImage(itemView.getContext(),
@@ -156,6 +159,7 @@ public class MyDiaryListItemHolder extends BaseHolder<Diary> {
                             .placeholder(R.drawable.place_holder_img)
                             .url("")
                             .imageView(rightIV)
+                            .isCenterCrop(true)
                             .build());
         }
 

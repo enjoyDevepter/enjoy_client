@@ -15,10 +15,8 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.CashPasswordContract;
-import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Member;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.SetCashPasswordRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.SetCashPasswordResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -86,9 +84,9 @@ public class CashPasswordPresenter extends BasePresenter<CashPasswordContract.Mo
     public void getVerifyForFind() {
         VeritfyRequest request = new VeritfyRequest();
         request.setCmd(110);
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-        Member member = (Member) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_INFO);
-        request.setMobile(member.getMobile());
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = String.valueOf(cache.get(KEY_KEEP + "token"));
+        request.setToken(token);
 
         mModel.getVerifyForFind(request)
                 .subscribeOn(Schedulers.io())

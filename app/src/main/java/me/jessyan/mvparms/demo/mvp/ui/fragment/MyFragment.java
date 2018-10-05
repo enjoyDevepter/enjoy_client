@@ -252,7 +252,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
                 Member member = (Member) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_INFO);
                 Intent recommenderIntent = new Intent(getContext(), RecommenderActivity.class);
-                recommenderIntent.putExtra("recommender", member.getRecomMember().getUserName());
+                recommenderIntent.putExtra("recommender", member.getRecomMember());
                 ArmsUtils.startActivity(recommenderIntent);
                 break;
             case R.id.bouns_parent:
@@ -325,9 +325,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         }
         level_icon.setBackground(getResources().getDrawable(levelIcon));
 
-        if (null == member.getRecomMember()) {
-            recommenderV.setVisibility(View.INVISIBLE);
-        }
+        recommenderV.setVisibility(null == member.getRecomMember() ? View.INVISIBLE : View.VISIBLE);
         if (null != member.getDistributionRank()) {
             chenghao.setText(member.getDistributionRank().getDistributionLevelName());
         }

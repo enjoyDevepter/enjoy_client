@@ -176,6 +176,7 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
                 .loadImage(this,
                         ImageConfigImpl
                                 .builder()
+                                .isCenterCrop(true)
                                 .url(response.getSetMealGoods().getImage())
                                 .imageView(imageIV)
                                 .build());

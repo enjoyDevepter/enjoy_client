@@ -41,7 +41,7 @@
         android:orientation="horizontal">
 
 
-        <com.github.cchao.MoneyView
+        <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
             android:id="@+id/salesPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
         android:orientation="horizontal">
 
 
-        <com.github.cchao.MoneyView
+        <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
             android:id="@+id/totalPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

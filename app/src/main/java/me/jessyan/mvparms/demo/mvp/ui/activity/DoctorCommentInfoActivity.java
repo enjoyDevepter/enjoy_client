@@ -200,6 +200,7 @@ public class DoctorCommentInfoActivity extends BaseActivity<DoctorCommentInfoPre
                         .builder()
                         .placeholder(R.mipmap.place_holder_user)
                         .url(member.getHeadImage())
+                        .isCenterCrop(true)
                         .imageView(head)
                         .build());
         name.setText(member.getNickName());

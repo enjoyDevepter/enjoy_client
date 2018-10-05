@@ -177,6 +177,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
                         .placeholder(R.mipmap.place_holder_user)
                         .url(doctorBean.getHeadImage())
                         .imageView(head_image)
+                        .isCenterCrop(true)
                         .build());
         doctor_name.setText(doctorBean.getName());
         comment_count.setText("" + doctorBean.getComment());

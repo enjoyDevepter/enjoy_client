@@ -65,6 +65,7 @@ public class DoctorPaperHolder extends BaseHolder<DoctorIdentificationBean> {
                         .placeholder(R.drawable.place_holder_img)
                         .url(doctorIdentificationBean.getImage())
                         .imageView(image)
+                        .isCenterCrop(true)
                         .build());
         title.setText(doctorIdentificationBean.getTitle());
     }

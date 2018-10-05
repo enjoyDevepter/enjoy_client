@@ -25,7 +25,7 @@
             android:textColor="#FF333333"
             android:textSize="12sp" />
 
-        <com.github.cchao.MoneyView
+        <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="20dp"

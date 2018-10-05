@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -22,7 +21,6 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
-import com.paginate.Paginate;
 
 import org.simple.eventbus.Subscriber;
 
@@ -42,6 +40,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.DiaryForGoodsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyDiaryListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
@@ -97,8 +96,6 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
 
     private DiaryResponse response;
 
-    private Paginate mPaginate;
-    private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
 
     @Override
@@ -144,7 +141,6 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
             }
         });
         nestedScrollView.setOnScrollChangeListener(this);
-        initPaginate();
     }
 
 
@@ -224,22 +220,6 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         }
     }
 
-    /**
-     * 开始加载更多
-     */
-    @Override
-    public void startLoadMore() {
-        isLoadingMore = true;
-    }
-
-    /**
-     * 结束加载更多
-     */
-    @Override
-    public void endLoadMore() {
-        isLoadingMore = false;
-    }
-
     @Override
     public void setLoadedAllItems(boolean has) {
         this.hasLoadedAllItems = has;
@@ -250,39 +230,10 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         int[] location = new int[2];
         titleLayoutV.getLocationInWindow(location);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) diaryRV.getLayoutParams();
-        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) + 1,
-                ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1);
+        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.home_diary_item_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1);
         diaryRV.setLayoutParams(layoutParams);
     }
 
-    /**
-     * 初始化Paginate,用于加载更多
-     */
-    private void initPaginate() {
-        if (mPaginate == null) {
-            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
-                @Override
-                public void onLoadMore() {
-                    mPresenter.getMyDiaryList(false);
-                }
-
-                @Override
-                public boolean isLoading() {
-                    return isLoadingMore;
-                }
-
-                @Override
-                public boolean hasLoadedAllItems() {
-                    return hasLoadedAllItems;
-                }
-            };
-
-            mPaginate = Paginate.with(diaryRV, callbacks)
-                    .setLoadingTriggerThreshold(0)
-                    .build();
-            mPaginate.setHasMoreDataToLoad(false);
-        }
-    }
 
     @Override
     public Activity getActivity() {
@@ -322,6 +273,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                             .placeholder(R.drawable.place_holder_img)
                             .url(response.getDiaryAlbumList().get(0).getImage())
                             .imageView(leftIV)
+                            .isCenterCrop(true)
                             .build());
             leftCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(0).getNum()));
         } else {
@@ -331,6 +283,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                             .placeholder(R.drawable.place_holder_img)
                             .url("")
                             .imageView(leftIV)
+                            .isCenterCrop(true)
                             .build());
             leftCountTV.setVisibility(View.GONE);
         }
@@ -342,6 +295,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                             .placeholder(R.drawable.place_holder_img)
                             .url(response.getDiaryAlbumList().get(1).getImage())
                             .imageView(rightIV)
+                            .isCenterCrop(true)
                             .build());
             rightCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(1).getNum()));
         } else {
@@ -351,6 +305,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                             .placeholder(R.drawable.place_holder_img)
                             .url("")
                             .imageView(rightIV)
+                            .isCenterCrop(true)
                             .build());
             rightCountTV.setVisibility(View.INVISIBLE);
         }
@@ -361,6 +316,7 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                         .placeholder(R.drawable.place_holder_img)
                         .url(response.getGoods().getImage())
                         .imageView(goodsImageIV)
+                        .isCenterCrop(true)
                         .build());
         goodsNameTV.setText(response.getGoods().getName());
         goodsPriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
@@ -400,7 +356,6 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(diaryRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
-        this.mPaginate = null;
         super.onDestroy();
     }
 
@@ -413,10 +368,13 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
         int yPosition = location[1];
         if (yPosition < (titleLayoutV.getHeight() + titleLocation[1])) {
             talFloatLayout.setVisibility(View.VISIBLE);
-            nestedScrollView.setNeedScroll(false);
         } else {
             talFloatLayout.setVisibility(View.GONE);
-            nestedScrollView.setNeedScroll(true);
+        }
+        if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+            if (!hasLoadedAllItems) {
+                mPresenter.getMyDiaryList(false);
+            }
         }
     }
 

@@ -127,7 +127,7 @@ public class ModifyUserInfoActivity extends BaseActivity<ModifyUserInfoPresenter
                     provideCache().put("label", Integer.valueOf(contentET.getText().toString()));
                     provideCache().put("value", Integer.valueOf(contentET.getText().toString()));
                 } else if ("nick".equals(type)) {
-                    provideCache().put("lable", contentET.getText().toString());
+                    provideCache().put("label", contentET.getText().toString());
                     provideCache().put("value", contentET.getText().toString());
                 } else if ("name".equals(type)) {
                     provideCache().put("lable", contentET.getText().toString());

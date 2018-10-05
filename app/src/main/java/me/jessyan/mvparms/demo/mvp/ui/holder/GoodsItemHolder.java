@@ -84,6 +84,7 @@ public class GoodsItemHolder extends BaseHolder<GoodSummary> {
                         .placeholder(R.drawable.place_holder_img)
                         .url(goodSummary.getImage())
                         .imageView(imageIV)
+                        .isCenterCrop(true)
                         .build());
     }
 

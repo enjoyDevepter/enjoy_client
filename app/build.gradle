@@ -51,6 +51,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
+
 //        prerelease {
 //            buildConfigField "boolean", "LOG_DEBUG", "false"
 //            buildConfigField "boolean", "USE_CANARY", "false"
@@ -94,7 +95,6 @@ dependencies {
     implementation rootProject.ext.dependencies["flowlayout"]
     implementation rootProject.ext.dependencies['pickerview']
     implementation rootProject.ext.dependencies['countdownview']
-    implementation rootProject.ext.dependencies['moneyview']
     implementation rootProject.ext.dependencies['actionsheet']
     implementation rootProject.ext.dependencies['multidex']
     implementation rootProject.ext.dependencies['photoview']

@@ -71,6 +71,7 @@ public class PayGoodsListItemHolder extends BaseHolder<PayGoods> {
                         .placeholder(R.drawable.place_holder_img)
                         .url(data.getImage())
                         .imageView(imageIV)
+                        .isCenterCrop(true)
                         .build());
 
     }

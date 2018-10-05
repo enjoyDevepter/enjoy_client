@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -64,6 +63,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsPromotionAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.SpecLabelTextProvider;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
 import me.jessyan.mvparms.demo.mvp.ui.widget.LabelsView;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 import static android.graphics.Paint.STRIKE_THRU_TEXT_FLAG;
 import static com.jess.arms.utils.ArmsUtils.getContext;
@@ -747,7 +747,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         @JavascriptInterface
         public void onGetWebContentHeight() {
             //重新调整webview高度
-            detailWV.postDelayed(() -> {
+            detailWV.post(() -> {
                 if (null != detailWV && null != viewpager) {
                     detailWV.measure(0, 0);
                     int measuredHeight = detailWV.getMeasuredHeight();
@@ -759,7 +759,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                     layoutParams1.height = Math.max(layoutParams1.height, layoutParams.height);
                     viewpager.setLayoutParams(layoutParams1);
                 }
-            }, 1000);
+            });
         }
     }
 }

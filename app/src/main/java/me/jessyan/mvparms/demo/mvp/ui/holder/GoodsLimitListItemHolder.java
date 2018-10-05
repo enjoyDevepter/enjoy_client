@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -35,6 +34,7 @@ import cn.iwgang.countdownview.DynamicConfig;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 /**
  * ================================================
@@ -56,7 +56,7 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
     @BindView(R.id.sale)
     TextView saleTV;
     @BindView(R.id.salePrice)
-    TextView salePriceTV;
+    MoneyView salePriceTV;
     @BindView(R.id.count_down_view)
     CountdownView countdownView;
     private AppComponent mAppComponent;
@@ -77,7 +77,7 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
                 .subscribe(s -> saleTV.setText(String.valueOf(s)));
         Observable.just(goods.getSecKillPrice())
                 .subscribe(s -> priceTV.setMoneyText(String.valueOf(s)));
-        salePriceTV.setText("￥" + String.valueOf(goods.getSalePrice()));
+        salePriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
         salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),
@@ -85,6 +85,7 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
                         .builder()
                         .placeholder(R.drawable.place_holder_img)
                         .url(goods.getImage())
+                        .isCenterCrop(true)
                         .imageView(imageIV)
                         .build());
         long count = goods.getEndDate() - goods.getSysDate();

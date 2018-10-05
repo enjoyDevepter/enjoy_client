@@ -112,7 +112,7 @@ public class DoctorActivity extends BaseActivity<DoctorPresenter> implements Doc
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        titleTV.setText("医生");
+        titleTV.setText("专家");
         backV.setOnClickListener(this);
         typeV.setOnClickListener(this);
         priceV.setOnClickListener(this);
@@ -237,7 +237,7 @@ public class DoctorActivity extends BaseActivity<DoctorPresenter> implements Doc
                 showFilter(typeV.isSelected());
                 break;
             case R.id.price_layout:
-                provideCache().put("orderByField", "salesPrice");
+                provideCache().put("orderByField", "star");
                 provideCache().put("orderByAsc", priceV.isSelected());
                 priceV.setSelected(!priceV.isSelected());
                 priceTV.setTextColor(choiceColor);

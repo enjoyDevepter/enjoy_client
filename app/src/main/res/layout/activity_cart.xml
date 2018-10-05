@@ -117,7 +117,7 @@
                     android:textColor="#FF565656"
                     android:textSize="13sp" />
 
-                <com.github.cchao.MoneyView
+                <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                     android:id="@+id/payPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
                     android:textColor="#FF666666"
                     android:textSize="10sp" />
 
-                <com.github.cchao.MoneyView
+                <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                     android:id="@+id/totalPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                     android:textColor="#FF666666"
                     android:textSize="10sp" />
 
-                <com.github.cchao.MoneyView
+                <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                     android:id="@+id/deductionMoney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

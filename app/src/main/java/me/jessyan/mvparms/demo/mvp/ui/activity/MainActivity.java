@@ -17,12 +17,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -69,6 +72,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, ViewPager.OnPageChangeListener, LocationListener, View.OnClickListener {
 
+    private static boolean isExit = false;
     @BindView(R.id.ll_home)
     View homeV;
     @BindView(R.id.ll_mall)
@@ -88,11 +92,16 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Inject
     ImageLoader mImageLoader;
     CustomDialog dialog = null;
-
     DownloadManager downloadManager;
     DownLoadBroadCastReceiver downLoadBroadCastReceiver;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit = false;
+        }
+    };
     private long downloadId;
-
     private List<Fragment> mFragmentList = new ArrayList<>();
 
     /**
@@ -241,7 +250,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         mPresenter.getAreaForLoaction();
     }
 
-
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
@@ -281,6 +289,25 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     public void showUpdateInfo(UpdateResponse updateResponse) {
         if (updateResponse.isNeedUpgrade()) {
             showUpdateDailog(updateResponse);
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if (!isExit) {
+            isExit = true;
+            showMessage("再按一次退出程序");
+            mHandler.sendEmptyMessageDelayed(0, 2000);
+        } else {
+            ArmsUtils.exitApp();
         }
     }
 

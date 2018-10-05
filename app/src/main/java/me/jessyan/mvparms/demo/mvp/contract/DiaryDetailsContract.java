@@ -36,10 +36,6 @@ public interface DiaryDetailsContract {
 
         void updateCommentUI(int count);
 
-        void startLoadMore();
-
-        void endLoadMore();
-
         void setLoadedAllItems(boolean has);
     }
 

@@ -182,8 +182,6 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

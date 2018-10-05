@@ -87,7 +87,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        protocoTV.setText(Html.fromHtml("<font color='#9A9A9A'>同意</font><font color='#5FBFE3'>《创享会员实用协议》</font>"));
+        protocoTV.setText(Html.fromHtml("<font color='#9A9A9A'>同意</font><font color='#5FBFE3'>《Hi美会员注册协议》</font>"));
         forgetV.setOnClickListener(this);
         registerV.setOnClickListener(this);
         loginV.setOnClickListener(this);

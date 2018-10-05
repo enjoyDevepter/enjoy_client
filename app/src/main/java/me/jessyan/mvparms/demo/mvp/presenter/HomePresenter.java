@@ -94,7 +94,6 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
 
     public void getRecommenDiaryList(boolean pullToRefresh) {
 
-        System.out.println("getRecommenDiaryList");
         DiaryListRequest request = new DiaryListRequest();
 
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
@@ -112,12 +111,7 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
         mModel.getDiaryList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> {
-                    mRootView.startLoadMore();//显示上拉加载更多的进度条
-                })
-                .doFinally(() -> {
-                    mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new ErrorHandleSubscriber<DiaryListResponse>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<DiaryListResponse>(mErrorHandler) {
             @Override
             public void onNext(DiaryListResponse response) {
                 if (response.isSuccess()) {
@@ -127,13 +121,9 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                     diaryList.addAll(response.getDiaryList());
                     preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = diaryList.size() / 10;
-                    if (pullToRefresh) {
-                        mRootView.updateDiaryUI(diaryList.size());
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
-                    }
+                    lastPageIndex = diaryList.size() / 10 + 1;
+                    mRootView.updateDiaryUI(diaryList.size());
+                    mAdapter.notifyDataSetChanged();
                 } else {
                     mRootView.showMessage(response.getRetDesc());
                 }

@@ -23,7 +23,6 @@ import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
-import com.paginate.Paginate;
 
 import org.simple.eventbus.Subscriber;
 
@@ -99,8 +98,6 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     private MemberAccount account;
     private PayType currType = PayType.WX;
     private long money_num = 0;
-    private Paginate mPaginate;
-    private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
 
     @Override
@@ -171,33 +168,6 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
         this.account = account;
         consume_count.setText(String.format("%.2f", account.getAmount() * 1.0 / 100));
     }
-
-    private void initPaginate() {
-        if (mPaginate == null) {
-            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
-                @Override
-                public void onLoadMore() {
-                    mPresenter.requestOrderList(false);
-                }
-
-                @Override
-                public boolean isLoading() {
-                    return isLoadingMore;
-                }
-
-                @Override
-                public boolean hasLoadedAllItems() {
-                    return hasLoadedAllItems;
-                }
-            };
-
-            mPaginate = Paginate.with(contentList, callbacks)
-                    .setLoadingTriggerThreshold(0)
-                    .build();
-            mPaginate.setHasMoreDataToLoad(false);
-        }
-    }
-
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -286,8 +256,6 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
                 mPresenter.requestOrderList();
             }
         });
-        initPaginate();
-
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -333,19 +301,6 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     }
 
     @Override
-    public void startLoadMore() {
-        isLoadingMore = true;
-    }
-
-    /**
-     * 结束加载更多
-     */
-    @Override
-    public void endLoadMore() {
-        isLoadingMore = false;
-    }
-
-    @Override
     public void setLoadedAllItems(boolean has) {
         hasLoadedAllItems = has;
     }
@@ -360,8 +315,7 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
         int[] location = new int[2];
         titleLayoutV.getLocationInWindow(location);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) contentList.getLayoutParams();
-        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.consume_input_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) + 1,
-                ArmsUtils.getDimens(getContext(), R.dimen.consumer_coin_height) * count + 1);
+        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.consumer_coin_height) * count;
         contentList.setLayoutParams(layoutParams);
     }
 
@@ -375,7 +329,6 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
-        this.mPaginate = null;
     }
 
     @Override
@@ -387,11 +340,16 @@ public class ConsumeCoinInputActivity extends BaseActivity<ConsumeCoinInputPrese
         int yPosition = location[1];
         if (yPosition < (titleLayoutV.getHeight() + titleLocation[1])) {
             tabFloatLayout.setVisibility(View.VISIBLE);
-            nestedScrollView.setNeedScroll(false);
         } else {
             tabFloatLayout.setVisibility(View.GONE);
-            nestedScrollView.setNeedScroll(true);
         }
+        if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+            if (!hasLoadedAllItems) {
+                mPresenter.requestOrderList(false);
+            }
+        }
+
+
     }
 
     enum PayType {

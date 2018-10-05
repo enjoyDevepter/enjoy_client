@@ -19,11 +19,7 @@ public interface ConsumeCoinInputContract {
 
         Activity getActivity();
 
-        void startLoadMore();
-
         void showError(boolean hasDate);
-
-        void endLoadMore();
 
         void setLoadedAllItems(boolean has);
 

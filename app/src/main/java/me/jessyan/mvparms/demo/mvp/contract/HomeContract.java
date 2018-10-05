@@ -27,10 +27,6 @@ public interface HomeContract {
     interface View extends IView {
         Activity getActivity();
 
-        void startLoadMore();
-
-        void endLoadMore();
-
         void setLoadedAllItems(boolean has);
 
         Cache getCache();

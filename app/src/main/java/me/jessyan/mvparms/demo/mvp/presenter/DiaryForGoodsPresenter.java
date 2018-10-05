@@ -92,15 +92,11 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh) {
                         mRootView.showLoading();
-                    } else {
-                        mRootView.startLoadMore();//显示上拉加载更多的进度条
                     }
                 })
                 .doFinally(() -> {
                     if (pullToRefresh) {
                         mRootView.hideLoading();
-                    } else {
-                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                     }
                 })
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
@@ -114,14 +110,10 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
                             }
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             diaryList.addAll(response.getDiaryList());
-                            if (lastPageIndex == 1) {
-                                mRootView.updateDiaryUI(diaryList.size());
-                                mAdapter.notifyDataSetChanged();
-                            } else {
-                                mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
-                            }
                             preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
                             lastPageIndex = diaryList.size() / 10;
+                            mRootView.updateDiaryUI(diaryList.size());
+                            mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

@@ -109,6 +109,7 @@ public class CartGoodsListItemHolder extends BaseHolder<Goods> {
                         .builder()
                         .placeholder(R.drawable.place_holder_img)
                         .url(data.getImage())
+                        .isCenterCrop(true)
                         .imageView(imageIV)
                         .build());
 

@@ -97,6 +97,7 @@ public class DoctorIntorActivity extends BaseActivity<DoctorIntorPresenter> impl
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .isCenterCrop(true)
                         .placeholder(R.mipmap.place_holder_user)
                         .url(doctorIntorBean.getHeadImage())
                         .imageView(head_image)
@@ -157,14 +158,14 @@ public class DoctorIntorActivity extends BaseActivity<DoctorIntorPresenter> impl
         @JavascriptInterface
         public void onGetWebContentHeight() {
             //重新调整webview高度
-            doctorInfoWV.postDelayed(() -> {
+            doctorInfoWV.post(() -> {
                 if (null != doctorInfoWV) {
                     doctorInfoWV.measure(0, 0);
                     LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) doctorInfoWV.getLayoutParams();
                     layoutParams.height = doctorInfoWV.getMeasuredHeight();
                     doctorInfoWV.setLayoutParams(layoutParams);
                 }
-            }, 1000);
+            });
         }
     }
 }

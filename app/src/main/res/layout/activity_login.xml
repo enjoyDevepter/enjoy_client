@@ -28,10 +28,10 @@
             </LinearLayout>
 
             <View
-                android:layout_width="70dp"
-                android:layout_height="54dp"
+                android:layout_width="89dp"
+                android:layout_height="89dp"
                 android:layout_gravity="center"
-                android:background="@mipmap/logo"
+                android:background="@mipmap/login_logo"
                 app:layout_auto_baseheight="width" />
 
         </FrameLayout>

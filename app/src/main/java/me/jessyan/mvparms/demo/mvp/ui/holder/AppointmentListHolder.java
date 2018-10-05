@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -32,6 +31,7 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 /**
  * ================================================
@@ -103,6 +103,7 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
                         .placeholder(R.drawable.place_holder_img)
                         .url(appointment.getGoods().getImage())
                         .imageView(imageIV)
+                        .isCenterCrop(true)
                         .build());
         noTV.setText(appointment.getProjectId());
         if ("1".equals(appointment.getStatus())) {

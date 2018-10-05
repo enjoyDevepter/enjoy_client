@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 
+import java.text.SimpleDateFormat;
+
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.GrowthInfo;
@@ -37,12 +39,14 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.GrowthInfo;
  */
 public class UserGrowthHolder extends BaseHolder<GrowthInfo> {
 
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @BindView(R.id.type)
     TextView type;
     @BindView(R.id.time)
     TextView time;
     @BindView(R.id.score_num)
     TextView score_num;
+
 
     public UserGrowthHolder(View itemView) {
         super(itemView);
@@ -51,7 +55,7 @@ public class UserGrowthHolder extends BaseHolder<GrowthInfo> {
     @Override
     public void setData(GrowthInfo growthInfo, int position) {
         type.setText(growthInfo.getTypeDesc());
-        time.setText(growthInfo.getCreateDate());
+        time.setText(sdf.format(growthInfo.getCreateDate()));
         score_num.setText(String.valueOf(growthInfo.getInGrowth()));
     }
 

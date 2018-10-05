@@ -9,7 +9,7 @@ public class GrowthInfo {
     private String name;
     private long growth;
     private double percent;
-    private String createDate;
+    private long createDate;
     private long inGrowth;
     private String type;
     private String typeDesc;
@@ -38,11 +38,11 @@ public class GrowthInfo {
         this.percent = percent;
     }
 
-    public String getCreateDate() {
+    public long getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(long createDate) {
         this.createDate = createDate;
     }
 

@@ -62,6 +62,7 @@ public class DoctorHonorHolder extends BaseHolder<DoctorHonorBean> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .isCenterCrop(true)
                         .placeholder(R.drawable.place_holder_img)
                         .url(doctorHonorBean.getImage())
                         .imageView(image)

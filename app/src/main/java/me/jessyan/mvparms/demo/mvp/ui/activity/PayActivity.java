@@ -173,6 +173,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .isCenterCrop(true)
                         .placeholder(R.drawable.place_holder_img)
                         .url(response.getPayEntryList().get(0).getImage())
                         .imageView(payOneIV)
@@ -183,6 +184,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .isCenterCrop(true)
                         .placeholder(R.drawable.place_holder_img)
                         .url(response.getPayEntryList().get(1).getImage())
                         .imageView(payTwoIV)

@@ -58,6 +58,7 @@ public class DiaryCommentListItemHolder extends BaseHolder<DiaryComment> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .isCenterCrop(true)
                         .placeholder(R.mipmap.place_holder_user)
                         .url(comment.getMember().getHeadImage())
                         .imageView(headImageIV)

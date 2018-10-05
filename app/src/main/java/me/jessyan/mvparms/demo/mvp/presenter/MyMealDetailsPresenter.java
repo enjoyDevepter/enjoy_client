@@ -184,7 +184,7 @@ public class MyMealDetailsPresenter extends BasePresenter<MyMealDetailsContract.
         request.setCmd(921);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
-        request.setProjectId((String) (cache.get("projectId")));
+        request.setProjectId((String) (mRootView.getCache().get("projectId")));
         mModel.share(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

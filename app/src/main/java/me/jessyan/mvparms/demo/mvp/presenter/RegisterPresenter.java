@@ -83,13 +83,13 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
         this.mApplication = null;
     }
 
-    public void register(String mobile, String password, String verify, String type, String code) {
+    public void register(String mobile, String password, String verify, String code) {
 
         RegisterRequest request = new RegisterRequest();
         request.setMobile(mobile);
         request.setPassword(password);
         request.setVerifyCode(verify);
-        request.setType(type);
+        request.setType((String) mRootView.getCache().get("type"));
         request.setCode(code);
 
         mModel.register(request)

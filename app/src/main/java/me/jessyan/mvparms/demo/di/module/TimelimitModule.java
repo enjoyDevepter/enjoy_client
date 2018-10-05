@@ -15,7 +15,6 @@ import me.jessyan.mvparms.demo.mvp.model.TimelimitModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.GoodsLimitListAdapter;
 
-
 @Module
 public class TimelimitModule {
     private TimelimitContract.View view;

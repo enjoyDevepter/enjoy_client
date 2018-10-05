@@ -236,7 +236,26 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     }
 
     private void register() {
-        mPresenter.register(mobileET.getText().toString(), passwordET.getText().toString(), validateET.getText().toString(), String.valueOf(1), contentET.getText().toString());
+        if (ArmsUtils.isEmpty(mobileET.getText().toString())) {
+            showMessage("请输入手机号码");
+            return;
+        }
+
+        if (!ArmsUtils.isPhoneNum(mobileET.getText().toString())) {
+            showMessage("手机号码格式不正确");
+            return;
+        }
+
+        if (ArmsUtils.isEmpty(validateET.getText().toString())) {
+            showMessage("请输入验证码");
+            return;
+        }
+
+        if (ArmsUtils.isEmpty(passwordET.getText().toString())) {
+            showMessage("请输入密码");
+            return;
+        }
+        mPresenter.register(mobileET.getText().toString(), passwordET.getText().toString(), validateET.getText().toString(), contentET.getText().toString());
     }
 
 
@@ -253,6 +272,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
             @Override
             public void onItemClick(View view, int viewType, Object data, int position) {
                 choiceV.setText(String.valueOf(data));
+                provideCache().put("type", position == 0 ? "1" : "2");
                 if (popupWindow != null) {
                     popupWindow.dismiss();
                     popupWindow = null;

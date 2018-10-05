@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -26,7 +25,6 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
-import com.paginate.Paginate;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -43,6 +41,7 @@ import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.DiaryDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 
 import static com.jess.arms.utils.ArmsUtils.getContext;
@@ -125,8 +124,6 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     @Inject
     RecyclerView.Adapter mAdapter;
 
-    private Paginate mPaginate;
-    private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
 
 
@@ -210,7 +207,6 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
             }
         });
         nestedScrollView.setOnScrollChangeListener(this);
-        initPaginate();
     }
 
     @Override
@@ -224,47 +220,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     }
 
     @Override
-    public void startLoadMore() {
-        isLoadingMore = true;
-    }
-
-    /**
-     * 结束加载更多
-     */
-    @Override
-    public void endLoadMore() {
-        isLoadingMore = false;
-    }
-
-    @Override
     public void setLoadedAllItems(boolean has) {
         hasLoadedAllItems = has;
-    }
-
-    private void initPaginate() {
-        if (mPaginate == null) {
-            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
-                @Override
-                public void onLoadMore() {
-                    mPresenter.getDiaryComment(false);
-                }
-
-                @Override
-                public boolean isLoading() {
-                    return isLoadingMore;
-                }
-
-                @Override
-                public boolean hasLoadedAllItems() {
-                    return hasLoadedAllItems;
-                }
-            };
-
-            mPaginate = Paginate.with(commentRV, callbacks)
-                    .setLoadingTriggerThreshold(0)
-                    .build();
-            mPaginate.setHasMoreDataToLoad(false);
-        }
     }
 
     @Override
@@ -335,11 +292,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     @Override
     public void updateCommentUI(int count) {
         tab.setVisibility(count >= 0 ? View.VISIBLE : View.GONE);
-        int[] location = new int[2];
-        titleLayoutV.getLocationInWindow(location);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) commentRV.getLayoutParams();
-        layoutParams.height = Math.min(ArmsUtils.getScreenHeidth(getContext()) - location[1] - ArmsUtils.getDimens(getContext(), R.dimen.title_height) - ArmsUtils.getDimens(getContext(), R.dimen.diary_comment_input_height) - ArmsUtils.getDimens(getContext(), R.dimen.tab_height) + 1,
-                ArmsUtils.getDimens(getContext(), R.dimen.diary_comment_height) * count + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space) * (count - 1) + 1);
+        layoutParams.height = ArmsUtils.getDimens(getContext(), R.dimen.diary_comment_height) * count;
         commentRV.setLayoutParams(layoutParams);
     }
 
@@ -382,6 +336,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                         .placeholder(R.mipmap.place_holder_user)
                         .url(response.getMember().getHeadImage())
                         .imageView(headImageIV)
+                        .isCenterCrop(true)
                         .build());
 
         mImageLoader.loadImage(this,
@@ -390,6 +345,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                         .placeholder(R.drawable.place_holder_img)
                         .url(response.getGoods().getImage())
                         .imageView(goodsImageIV)
+                        .isCenterCrop(true)
                         .build());
 
         if (response.getDiary().getImageList() != null && response.getDiary().getImageList().size() > 0) {
@@ -399,6 +355,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                             .placeholder(R.drawable.place_holder_img)
                             .url(response.getDiary().getImageList().get(0))
                             .imageView(leftIV)
+                            .isCenterCrop(true)
                             .build());
         } else {
             mImageLoader.loadImage(this,
@@ -406,6 +363,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                             .builder()
                             .placeholder(R.drawable.place_holder_img)
                             .url("")
+                            .isCenterCrop(true)
                             .imageView(leftIV)
                             .build());
         }
@@ -413,6 +371,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
             mImageLoader.loadImage(this,
                     ImageConfigImpl
                             .builder()
+                            .isCenterCrop(true)
                             .placeholder(R.drawable.place_holder_img)
                             .url(response.getDiary().getImageList().get(1))
                             .imageView(rightIV)
@@ -423,6 +382,7 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                             .builder()
                             .placeholder(R.drawable.place_holder_img)
                             .url("")
+                            .isCenterCrop(true)
                             .imageView(rightIV)
                             .build());
         }
@@ -491,10 +451,13 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         int yPosition = location[1];
         if (yPosition < (titleLayoutV.getHeight() + titleLocation[1])) {
             tabFloatLayout.setVisibility(View.VISIBLE);
-            nestedScrollView.setNeedScroll(false);
         } else {
             tabFloatLayout.setVisibility(View.GONE);
-            nestedScrollView.setNeedScroll(true);
+        }
+        if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+            if (!hasLoadedAllItems) {
+                mPresenter.getDiaryComment(false);
+            }
         }
     }
 }

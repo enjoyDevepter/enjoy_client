@@ -146,6 +146,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                         .builder()
                         .placeholder(R.mipmap.place_holder_user)
                         .url(member.getHeadImage())
+                        .isCenterCrop(true)
                         .imageView(imageTV)
                         .build());
         nameTV.setText(member.getRealName());

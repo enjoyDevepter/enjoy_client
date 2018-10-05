@@ -62,6 +62,7 @@ public class DiaryImageItemHolder extends BaseHolder<DiaryAlbum> {
                         .placeholder(R.drawable.place_holder_img)
                         .url(album.getImage())
                         .imageView(imageIV)
+                        .isCenterCrop(true)
                         .build());
     }
 

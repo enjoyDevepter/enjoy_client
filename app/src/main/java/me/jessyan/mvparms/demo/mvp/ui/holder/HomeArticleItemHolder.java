@@ -73,6 +73,7 @@ public class HomeArticleItemHolder extends BaseHolder<Article> {
                         .placeholder(R.drawable.place_holder_img)
                         .url(article.getImage())
                         .imageView(imageIV)
+                        .isCenterCrop(true)
                         .build());
     }
 

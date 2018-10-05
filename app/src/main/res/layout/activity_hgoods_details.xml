@@ -74,7 +74,7 @@
                                 android:textColor="#666666"
                                 android:textSize="13sp" />
 
-                            <com.github.cchao.MoneyView
+                            <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                                 android:id="@+id/deposit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                                 android:textColor="#666666"
                                 android:textSize="13sp" />
 
-                            <com.github.cchao.MoneyView
+                            <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                                 android:id="@+id/tailMoney"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
                             android:orientation="horizontal"
                             android:visibility="invisible">
 
-                            <com.github.cchao.MoneyView
+                            <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                                 android:id="@+id/price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
                             android:orientation="horizontal"
                             android:visibility="invisible">
 
-                            <com.github.cchao.MoneyView
+                            <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                                 android:id="@+id/time_limit_vip_price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -483,7 +483,7 @@
                 android:orientation="horizontal">
 
 
-                <com.github.cchao.MoneyView
+                <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                     android:id="@+id/spec_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -701,7 +701,7 @@
                         android:textColor="#666666"
                         android:textSize="12sp" />
 
-                    <com.github.cchao.MoneyView
+                    <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                         android:id="@+id/tailMoney_buttom"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -738,7 +738,7 @@
                         android:textColor="#666666"
                         android:textSize="13sp" />
 
-                    <com.github.cchao.MoneyView
+                    <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                         android:id="@+id/deposit_buttom"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

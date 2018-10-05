@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -32,6 +31,7 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 /**
  * ================================================
@@ -76,6 +76,7 @@ public class MyFarvirateGoodsListItemHolder extends BaseHolder<Goods> {
                         .placeholder(R.drawable.place_holder_img)
                         .url(data.getImage())
                         .imageView(imageIV)
+                        .isCenterCrop(true)
                         .build());
 
     }

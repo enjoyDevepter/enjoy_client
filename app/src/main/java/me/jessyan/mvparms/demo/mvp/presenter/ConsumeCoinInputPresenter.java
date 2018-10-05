@@ -74,15 +74,12 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh) {
                         mRootView.showLoading();//显示下拉刷新的进度条
-                    } else
-                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                    }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (pullToRefresh)
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
-                    else
-                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<GetRechargeListResponse>(mErrorHandler) {
@@ -99,11 +96,7 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                             preEndIndex = orderBeanList.size();//更新之前列表总长度,用于确定加载更多的起始位置
                             lastPageIndex = orderBeanList.size() / 10;
                             mRootView.updateUI(orderBeanList.size());
-                            if (pullToRefresh) {
-                                mAdapter.notifyDataSetChanged();
-                            } else {
-                                mAdapter.notifyItemRangeInserted(preEndIndex, orderBeanList.size());
-                            }
+                            mAdapter.notifyDataSetChanged();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

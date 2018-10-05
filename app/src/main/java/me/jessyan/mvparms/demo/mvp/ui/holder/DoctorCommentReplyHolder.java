@@ -51,6 +51,7 @@ public class DoctorCommentReplyHolder extends BaseHolder<DoctorCommentReplyBean>
                             .placeholder(R.mipmap.place_holder_user)
                             .url(member.getHeadImage())
                             .imageView(image)
+                            .isCenterCrop(true)
                             .build());
             name.setText(member.getNickName());
         }

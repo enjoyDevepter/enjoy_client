@@ -110,6 +110,7 @@ public class OrderDetailsItemHolder extends BaseHolder<OrderGoods> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .isCenterCrop(true)
                         .placeholder(R.drawable.place_holder_img)
                         .url(goods.getImage())
                         .imageView(imageIV)

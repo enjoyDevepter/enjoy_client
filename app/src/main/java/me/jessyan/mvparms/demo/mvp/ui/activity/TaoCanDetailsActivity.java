@@ -15,7 +15,6 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -41,6 +40,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.TaoCanDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -293,7 +293,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         @JavascriptInterface
         public void onGetWebContentHeight() {
             //重新调整webview高度
-            detailWV.postDelayed(() -> {
+            detailWV.post(() -> {
                 if (null != detailRV) {
                     detailWV.measure(0, 0);
                     int measuredHeight = detailWV.getMeasuredHeight();
@@ -301,7 +301,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
                     layoutParams.height = measuredHeight;
                     detailWV.setLayoutParams(layoutParams);
                 }
-            }, 1000);
+            });
         }
     }
 }

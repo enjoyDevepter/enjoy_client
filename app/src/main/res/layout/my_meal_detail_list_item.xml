@@ -147,7 +147,7 @@
             android:textColor="#FF666666"
             android:textSize="13sp" />
 
-        <com.github.cchao.MoneyView
+        <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

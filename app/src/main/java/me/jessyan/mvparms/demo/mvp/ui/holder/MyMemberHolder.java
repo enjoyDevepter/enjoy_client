@@ -41,6 +41,7 @@ public class MyMemberHolder extends BaseHolder<MyMemberBean> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.mipmap.place_holder_user)
                         .url(data.getHeadImage())
                         .imageView(image)
                         .build());

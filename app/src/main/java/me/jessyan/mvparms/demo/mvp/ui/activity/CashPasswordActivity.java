@@ -1,5 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -105,6 +106,11 @@ public class CashPasswordActivity extends BaseActivity<CashPasswordPresenter> im
         newly.setText("");
         old.setText("");
         confirm.setText("");
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 
     private void getVerify() {

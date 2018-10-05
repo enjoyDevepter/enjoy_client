@@ -17,23 +17,20 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.DrawCashBean;
 public class GetCaseListHolder extends BaseHolder<DrawCashBean> {
 
 
-    private AppComponent mAppComponent;
-    private ImageLoader mImageLoader;
-
-
     @BindView(R.id.image)
     ImageView image;
     @BindView(R.id.name)
     TextView name;
     @BindView(R.id.card_num)
     TextView card_num;  // 尾号
-
     @BindView(R.id.money)
     TextView money;
     @BindView(R.id.time)
     TextView time;  // 2018-02-12
     @BindView(R.id.state)
     TextView state;
+    private AppComponent mAppComponent;
+    private ImageLoader mImageLoader;
 
 
 
@@ -51,6 +48,7 @@ public class GetCaseListHolder extends BaseHolder<DrawCashBean> {
                         .builder()
                         .url(data.getImage())
                         .imageView(image)
+                        .isCenterCrop(true)
                         .build());
         name.setText(data.getBankName());
         String cardNo = data.getCardNo();

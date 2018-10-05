@@ -252,12 +252,12 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
         }
         UMWeb web = new UMWeb(share.getUrl());
         web.setTitle(share.getTitle());//标题
-        web.setDescription(share.getIntro());
+        web.setDescription(share.getIntro().replace("si.ehanmy.cn", ""));
         web.setThumb(new UMImage(this, share.getImage()));
         new ShareAction(this)
                 .withMedia(web)
                 .setCallback(shareListener)
-                .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                .setDisplayList(SHARE_MEDIA.WEIXIN)
                 .open();
     }
 

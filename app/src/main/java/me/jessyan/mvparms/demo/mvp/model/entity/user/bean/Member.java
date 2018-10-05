@@ -36,7 +36,9 @@ public class Member implements Serializable {
     private String isModifyNickName;
     private GrowthRankBean growthRank; // 成长等级
     private DistributionRankBean distributionRank;// 分销等级
-
+    private String regDate;
+    private String origin;
+    private String originDesc;
 
     @Override
     public String toString() {
@@ -71,6 +73,9 @@ public class Member implements Serializable {
                 ", isModifyNickName='" + isModifyNickName + '\'' +
                 ", growthRank=" + growthRank +
                 ", distributionRank=" + distributionRank +
+                ", regDate='" + regDate + '\'' +
+                ", origin='" + origin + '\'' +
+                ", originDesc='" + originDesc + '\'' +
                 '}';
     }
 
@@ -312,6 +317,30 @@ public class Member implements Serializable {
 
     public void setDistributionRank(DistributionRankBean distributionRank) {
         this.distributionRank = distributionRank;
+    }
+
+    public String getRegDate() {
+        return regDate;
+    }
+
+    public void setRegDate(String regDate) {
+        this.regDate = regDate;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getOriginDesc() {
+        return originDesc;
+    }
+
+    public void setOriginDesc(String originDesc) {
+        this.originDesc = originDesc;
     }
 
     public class GrowthRankBean {

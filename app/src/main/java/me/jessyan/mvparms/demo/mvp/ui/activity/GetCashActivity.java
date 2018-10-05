@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,25 +19,18 @@ import com.jess.arms.utils.ArmsUtils;
 
 import org.simple.eventbus.Subscriber;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerGetCashComponent;
 import me.jessyan.mvparms.demo.di.module.GetCashModule;
 import me.jessyan.mvparms.demo.mvp.contract.GetCashContract;
-import me.jessyan.mvparms.demo.mvp.model.ChooseBankModel;
 import me.jessyan.mvparms.demo.mvp.model.MyModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.BankCardBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.GetCashPresenter;
-
-import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.ChooseBankAdapter;
-
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -85,7 +77,11 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
     View commit;
     @BindView(R.id.et_password)
     EditText et_password;
-
+    @Inject
+    ImageLoader mImageLoader;
+    private long money = 0;
+    private MemberAccount account;
+    private BankCardBean bankCardBean;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -190,8 +186,6 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
         });
     }
 
-    private long money = 0;
-
     @Override
     public void showLoading() {
 
@@ -219,17 +213,11 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
         finish();
     }
 
-    private MemberAccount account;
-
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
     public void updateUserAccount(MemberAccount account){
         this.account = account;
         yue.setText(String.format("%.2f",account.getBonus() * 1.0 / 100));
     }
-
-    private BankCardBean bankCardBean;
-    @Inject
-    ImageLoader mImageLoader;
 
     @Override
     protected void onResume() {
@@ -245,6 +233,7 @@ public class GetCashActivity extends BaseActivity<GetCashPresenter> implements G
                         .builder()
                         .url(bankCardBean.getImage())
                         .imageView(bank_card_icon)
+                        .isCenterCrop(true)
                         .build());
         bank_title.setText(bankCardBean.getBankName());
         String cardNo = bankCardBean.getCardNo();

@@ -56,7 +56,6 @@ ext {
             "extendedRecyclerView"     : "com.github.liyuzero:extendedRecyclerView:1.1.0",
             "flowlayout"               : "com.hyman:flowlayout-lib:1.1.2",
             "countdownview"            : "com.github.iwgang:countdownview:2.1.6",
-            "moneyview"                : "com.github.cchao:moneyview:1.0.1",
             "actionsheet"              : "com.guoqi.widget:actionsheet:1.0",
             "barlibrary"               : "com.gyf.barlibrary:barlibrary:2.3.0",
             "photoview"                : "com.bm.photoview:library:1.4.1",

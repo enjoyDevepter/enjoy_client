@@ -111,15 +111,12 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh) {
                         mRootView.showLoading();//显示下拉刷新的进度条
-                    } else
-                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                    }
                 }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (pullToRefresh)
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
-                    else
-                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<DiaryCommentListResponse>(mErrorHandler) {
@@ -131,13 +128,9 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                         diaryCommentList.addAll(response.getDiaryCommentList());
                         mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                         preEndIndex = diaryCommentList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                        lastPageIndex = diaryCommentList.size() / 10;
-                        mRootView.updateCommentUI(response.getDiaryCommentList().size());
-                        if (pullToRefresh) {
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            mAdapter.notifyItemRangeInserted(preEndIndex, diaryCommentList.size());
-                        }
+                        lastPageIndex = diaryCommentList.size() / 10 + 1;
+                        mRootView.updateCommentUI(diaryCommentList.size());
+                        mAdapter.notifyDataSetChanged();
                     }
                 });
     }

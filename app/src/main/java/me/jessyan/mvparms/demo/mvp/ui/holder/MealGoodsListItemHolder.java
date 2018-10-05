@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -34,6 +33,7 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.TaoCanListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 /**
  * ================================================
@@ -88,6 +88,7 @@ public class MealGoodsListItemHolder extends BaseHolder<MealGoods> {
                         .builder()
                         .placeholder(R.drawable.place_holder_img)
                         .url(goods.getImage())
+                        .isCenterCrop(true)
                         .imageView(imageIV)
                         .build());
     }

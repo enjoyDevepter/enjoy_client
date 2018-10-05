@@ -76,6 +76,7 @@ public class TaoCanListItemHolder extends BaseHolder<Goods> {
                         .builder()
                         .placeholder(R.drawable.place_holder_img)
                         .url(goods.getImage())
+                        .isCenterCrop(true)
                         .imageView(imageIV)
                         .build());
     }

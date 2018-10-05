@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -34,6 +33,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.presenter.CartPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.CartListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;

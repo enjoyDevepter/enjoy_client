@@ -52,7 +52,7 @@ public class HiNestedScrollView extends NestedScrollView {
     }
 
     /*
-    该方法用来处理NestedScrollView是否拦截滑动事件
+     *  该方法用来处理NestedScrollView是否拦截滑动事件
      */
     public void setNeedScroll(boolean isNeedScroll) {
         this.isNeedScroll = isNeedScroll;

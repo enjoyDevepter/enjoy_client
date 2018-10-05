@@ -27,10 +27,6 @@ public interface DiaryForGoodsContract {
 
         void updateFollow(boolean follow);
 
-        void startLoadMore();
-
-        void endLoadMore();
-
         void setLoadedAllItems(boolean has);
 
         void updateDiaryUI(int count);

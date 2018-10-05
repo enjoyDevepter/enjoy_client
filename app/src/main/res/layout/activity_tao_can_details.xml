@@ -53,7 +53,7 @@
                     android:orientation="horizontal">
 
 
-                    <com.github.cchao.MoneyView
+                    <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                         android:id="@+id/salesPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                         money:prefix_size="12sp"
                         money:yuan_size="20sp" />
 
-                    <com.github.cchao.MoneyView
+                    <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                         android:id="@+id/totalPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -279,7 +279,7 @@
                         android:textColor="#666666"
                         android:textSize="12sp" />
 
-                    <com.github.cchao.MoneyView
+                    <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                         android:id="@+id/tailMoney"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -310,7 +310,7 @@
                         android:textSize="13sp" />
 
 
-                    <com.github.cchao.MoneyView
+                    <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                         android:id="@+id/deposit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

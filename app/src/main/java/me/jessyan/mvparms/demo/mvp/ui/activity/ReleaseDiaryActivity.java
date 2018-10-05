@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.guoqi.actionsheet.ActionSheet;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
@@ -42,6 +41,7 @@ import me.jessyan.mvparms.demo.mvp.contract.ReleaseDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DirayProjectListResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.ReleaseDiaryPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 

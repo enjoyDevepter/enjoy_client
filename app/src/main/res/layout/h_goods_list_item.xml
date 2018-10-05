@@ -61,7 +61,7 @@
             android:textColor="#666666"
             android:textSize="13sp" />
 
-        <com.github.cchao.MoneyView
+        <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
             android:id="@+id/deposit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <com.github.cchao.MoneyView
+            <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                 android:id="@+id/tailMoney_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                 money:prefix_size="12sp"
                 money:yuan_size="17sp" />
 
-            <com.github.cchao.MoneyView
+            <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
                 android:id="@+id/tailMoney_two"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

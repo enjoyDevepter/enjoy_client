@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
@@ -28,6 +27,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderDetails;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.OrderDeatilsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
@@ -171,7 +171,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     @Override
     public void onClick(View v) {
         OrderDetails order = response.getOrder();
-        int orderType = getIntent().getIntExtra("type", 0);
+        String orderType = getIntent().getStringExtra("orderType");
         provideCache().put("orderId", order.getOrderId());
         switch (v.getId()) {
             case R.id.back:
@@ -184,76 +184,71 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                 ArmsUtils.startActivity(hospitalIntent);
                 break;
             case R.id.left:
-                switch (orderType) {
-                    case 0:
-                        if ("1".equals(order.getOrderStatus())) {
-                            // 取消订单
-                            showCancelDailog();
-                        } else if ("4".equals(order.getOrderStatus())) {
-                            // 查看物流
-                            Intent intent = new Intent(getActivity(), LogisticsActivity.class);
-                            intent.putExtra("orderId", order.getOrderId());
-                            ArmsUtils.startActivity(intent);
-                        }
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        if ("1".equals(order.getOrderStatus())) {
-                            // 取消订单
-                            showCancelDailog();
-                        }
-                        break;
+                if ("1".equals(orderType)) {
+                    if ("1".equals(order.getOrderStatus())) {
+                        // 取消订单
+                        showCancelDailog();
+                    } else if ("4".equals(order.getOrderStatus())) {
+                        // 查看物流
+                        Intent intent = new Intent(getActivity(), LogisticsActivity.class);
+                        intent.putExtra("orderId", order.getOrderId());
+                        ArmsUtils.startActivity(intent);
+                    }
+                } else if ("2".equals(orderType)) {
+
+                } else if ("3".equals(orderType)) {
+                    if ("1".equals(order.getOrderStatus())) {
+                        // 取消订单
+                        showCancelDailog();
+                    }
                 }
                 break;
             case R.id.right:
-                switch (orderType) {
-                    case 0:
-                        if ("1".equals(order.getOrderStatus())) {
-                            // 去支付
-                            Intent intent = new Intent(this, PayActivity.class);
-                            intent.putExtra("orderId", order.getOrderId());
-                            ArmsUtils.startActivity(intent);
-                        } else if ("3".equals(order.getOrderStatus())) {
-                            // 提醒发货
-                            mPresenter.reminding();
-                        } else if ("4".equals(order.getOrderStatus())) {
-                            // 确认收货
-                            mPresenter.confirmReceipt();
-                        } else if ("5".equals(order.getOrderStatus())) {
-                            // 写日记
-                            Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
-                            intent.putExtra("orderId", order.getOrderId());
-                            ArmsUtils.startActivity(intent);
-                        }
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        if ("1".equals(order.getOrderStatus())) {
-                            // 去支付
-                            Intent intent = new Intent(this, PayActivity.class);
-                            intent.putExtra("orderId", order.getOrderId());
-                            ArmsUtils.startActivity(intent);
-                        } else if ("2".equals(order.getOrderStatus())) {
-                            // 付尾款
-                            Intent intent = new Intent(this, PayActivity.class);
-                            intent.putExtra("orderId", order.getOrderId());
-                            ArmsUtils.startActivity(intent);
-                        } else if ("31".equals(order.getOrderStatus())) {
-                            // 预约
-                            Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
-                            makeIntent.putExtra("orderId", order.getOrderId());
-                            makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
-                            makeIntent.putExtra("desc", order.getGoodsList().get(0).getDesc());
-                            ArmsUtils.startActivity(makeIntent);
-                        } else if ("5".equals(order.getOrderStatus())) {
-                            // 写日记
-                            Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
-                            intent.putExtra("orderId", order.getOrderId());
-                            ArmsUtils.startActivity(intent);
-                        }
-                        break;
+
+                if ("1".equals(orderType)) {
+                    if ("1".equals(order.getOrderStatus())) {
+                        // 去支付
+                        Intent intent = new Intent(this, PayActivity.class);
+                        intent.putExtra("orderId", order.getOrderId());
+                        ArmsUtils.startActivity(intent);
+                    } else if ("3".equals(order.getOrderStatus())) {
+                        // 提醒发货
+                        mPresenter.reminding();
+                    } else if ("4".equals(order.getOrderStatus())) {
+                        // 确认收货
+                        mPresenter.confirmReceipt();
+                    } else if ("5".equals(order.getOrderStatus())) {
+                        // 写日记
+                        Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
+                        intent.putExtra("orderId", order.getOrderId());
+                        ArmsUtils.startActivity(intent);
+                    }
+                } else if ("2".equals(orderType)) {
+
+                } else if ("3".equals(orderType)) {
+                    if ("1".equals(order.getOrderStatus())) {
+                        // 去支付
+                        Intent intent = new Intent(this, PayActivity.class);
+                        intent.putExtra("orderId", order.getOrderId());
+                        ArmsUtils.startActivity(intent);
+                    } else if ("2".equals(order.getOrderStatus())) {
+                        // 付尾款
+                        Intent intent = new Intent(this, PayActivity.class);
+                        intent.putExtra("orderId", order.getOrderId());
+                        ArmsUtils.startActivity(intent);
+                    } else if ("31".equals(order.getOrderStatus())) {
+                        // 预约
+                        Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
+                        makeIntent.putExtra("orderId", order.getOrderId());
+                        makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
+                        makeIntent.putExtra("desc", order.getGoodsList().get(0).getDesc());
+                        ArmsUtils.startActivity(makeIntent);
+                    } else if ("5".equals(order.getOrderStatus())) {
+                        // 写日记
+                        Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
+                        intent.putExtra("orderId", order.getOrderId());
+                        ArmsUtils.startActivity(intent);
+                    }
                 }
                 break;
         }
@@ -274,75 +269,72 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
         this.response = response;
         OrderDetails orderDetails = response.getOrder();
 
-        int orderType = getIntent().getIntExtra("type", 0);
+        String orderType = getIntent().getStringExtra("orderType");
         String status = response.getOrder().getOrderStatus();
-        switch (orderType) {
-            case 0:
-                if ("1".equals(status)) {
-                    leftTV.setVisibility(View.VISIBLE);
-                    leftTV.setText("取消订单");
-                    rightTV.setVisibility(View.VISIBLE);
-                    rightTV.setText("去支付");
-                } else if ("3".equals(status)) {
-                    rightTV.setVisibility(View.VISIBLE);
-                    rightTV.setText("提醒发货");
-                    leftTV.setVisibility(View.GONE);
-                } else if ("4".equals(status)) {
-                    leftTV.setVisibility(View.VISIBLE);
-                    leftTV.setText("查看物流");
-                    rightTV.setVisibility(View.VISIBLE);
-                    rightTV.setText("确认收货");
-                } else if ("5".equals(status)) {
-                    rightTV.setText("写日记");
-                    rightTV.setVisibility(View.VISIBLE);
-                    leftTV.setVisibility(View.GONE);
-                }
-                orderV.setVisibility(View.VISIBLE);
-                hOrderV.setVisibility(View.GONE);
-                orderPayV.setVisibility(View.VISIBLE);
-                hOrderPayV.setVisibility(View.GONE);
-                mealOrderV.setVisibility(View.GONE);
-                payTypeDescTV.setText(orderDetails.getPayTypeDesc());
-                deliveryMethodDescTV.setText(orderDetails.getDeliveryMethodDesc());
-                break;
-            case 1:
-                break;
-            case 2:
-                if (status.equals("1")) {
-                    leftTV.setVisibility(View.VISIBLE);
-                    leftTV.setText("取消订单");
-                    rightTV.setVisibility(View.VISIBLE);
-                    rightTV.setText("去支付");
-                } else if (status.equals("2")) {
-                    rightTV.setVisibility(View.VISIBLE);
-                    rightTV.setText("付尾款");
-                    leftTV.setVisibility(View.GONE);
-                } else if (status.equals("31")) {
-                    leftTV.setVisibility(View.GONE);
-                    rightTV.setVisibility(View.VISIBLE);
-                    rightTV.setText("预约");
-                } else if (status.equals("5")) {
-                    rightTV.setText("写日记");
-                    rightTV.setVisibility(View.VISIBLE);
-                    leftTV.setVisibility(View.GONE);
-                }
-                hOrderV.setVisibility(View.VISIBLE);
-                orderPayV.setVisibility(View.GONE);
-                hospitalAddressTV.setText(orderDetails.getHospital().getName());
-                appointmentsTimeTV.setText(orderDetails.getReservationDate() + " " + orderDetails.getReservationTime());
-                orderV.setVisibility(View.GONE);
-                if ("7".equals(response.getOrder().getOrderType())) {
-                    hOrderPayV.setVisibility(View.VISIBLE);
-                    mealOrderV.setVisibility(View.GONE);
-                } else {
-                    hOrderPayV.setVisibility(View.GONE);
-                    mealOrderV.setVisibility(View.VISIBLE);
-                    mealPriceTV.setText(ArmsUtils.formatLong(response.getOrder().getPayMoney()));
-                    mealMoneyTV.setText(ArmsUtils.formatLong(orderDetails.getMoney()));
-                }
-                break;
-        }
 
+        if ("1".equals(orderType)) {
+            if ("1".equals(status)) {
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("取消订单");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("去支付");
+            } else if ("3".equals(status)) {
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("提醒发货");
+                leftTV.setVisibility(View.GONE);
+            } else if ("4".equals(status)) {
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("查看物流");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("确认收货");
+            } else if ("5".equals(status)) {
+                rightTV.setText("写日记");
+                rightTV.setVisibility(View.VISIBLE);
+                leftTV.setVisibility(View.GONE);
+            }
+            orderV.setVisibility(View.VISIBLE);
+            hOrderV.setVisibility(View.GONE);
+            orderPayV.setVisibility(View.VISIBLE);
+            hOrderPayV.setVisibility(View.GONE);
+            mealOrderV.setVisibility(View.GONE);
+            payTypeDescTV.setText(orderDetails.getPayTypeDesc());
+            deliveryMethodDescTV.setText(orderDetails.getDeliveryMethodDesc());
+        } else if ("2".equals(orderType)) {
+
+        } else if ("3".equals(orderType)) {
+            if (status.equals("1")) {
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("取消订单");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("去支付");
+            } else if (status.equals("2")) {
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("付尾款");
+                leftTV.setVisibility(View.GONE);
+            } else if (status.equals("31")) {
+                leftTV.setVisibility(View.GONE);
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("预约");
+            } else if (status.equals("5")) {
+                rightTV.setText("写日记");
+                rightTV.setVisibility(View.VISIBLE);
+                leftTV.setVisibility(View.GONE);
+            }
+            hOrderV.setVisibility(View.VISIBLE);
+            orderPayV.setVisibility(View.GONE);
+            hospitalAddressTV.setText(orderDetails.getHospital().getName());
+            appointmentsTimeTV.setText(orderDetails.getReservationDate() + " " + orderDetails.getReservationTime());
+            orderV.setVisibility(View.GONE);
+            if ("7".equals(response.getOrder().getOrderType())) {
+                hOrderPayV.setVisibility(View.VISIBLE);
+                mealOrderV.setVisibility(View.GONE);
+            } else {
+                hOrderPayV.setVisibility(View.GONE);
+                mealOrderV.setVisibility(View.VISIBLE);
+                mealPriceTV.setText(ArmsUtils.formatLong(response.getOrder().getPayMoney()));
+                mealMoneyTV.setText(ArmsUtils.formatLong(orderDetails.getMoney()));
+            }
+        }
         payTimeTV.setText(sdf.format(orderDetails.getOrderTime()));
         orderStatusDescTV.setText(orderDetails.getOrderStatusDesc());
         orderIdTV.setText(orderDetails.getOrderId());

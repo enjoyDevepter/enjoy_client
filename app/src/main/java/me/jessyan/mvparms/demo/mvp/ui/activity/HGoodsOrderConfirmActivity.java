@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
@@ -39,6 +38,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.HAppointmentsTime;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsOrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.HGoodsOrderConfirmPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;

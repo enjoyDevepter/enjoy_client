@@ -47,6 +47,7 @@ public class VersionActivity extends BaseActivity<VersionPresenter> implements V
     @Override
     public void initData(Bundle savedInstanceState) {
         titleTV.setText("版本信息");
+        backV.setOnClickListener(this);
         versionTV.setText(DeviceUtils.getVersionName(this));
     }
 

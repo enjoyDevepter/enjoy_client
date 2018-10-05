@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,11 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -99,21 +97,12 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     private boolean isDoctorEnd;
     // 第四个页面
     private RecyclerView envList;
-    private Mobile mobile = new Mobile();
-    private WebViewClient mClient = new WebViewClient() {
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            mobile.onGetWebContentHeight();
-        }
-    };
 
     private void initViewPager() {
         // 初始化第一个页面
         hospitalInfo = new WebView(this);
         hospitalInfo.getSettings().setUseWideViewPort(true);
         hospitalInfo.getSettings().setLoadWithOverviewMode(true);
-        hospitalInfo.addJavascriptInterface(mobile, "mobile");
-        hospitalInfo.setWebViewClient(mClient);
         views[0] = hospitalInfo;
 
         // 初始化第二个页面
@@ -200,6 +189,18 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         GridLayoutManager envLayoutManager = new GridLayoutManager(this, 2);
         ArmsUtils.configRecyclerView(envList, envLayoutManager);
         envList.setAdapter(hospitalEnvImageAdapter);
+        envList.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                int margin = ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.space_10);
+                if (parent.getChildLayoutPosition(view) % 2 == 0) {
+                    outRect.set(0, 0, margin, margin);
+                } else {
+                    outRect.set(0, 0, 0, margin);
+                }
+            }
+        });
         views[3] = envList;
 
 
@@ -380,6 +381,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
                         .builder()
                         .placeholder(R.drawable.place_holder_img)
                         .url(hospital.getImage())
+                        .isCenterCrop(true)
                         .imageView(hot_img)
                         .build());
         followV.setSelected("1".equals(hospital.getIsFollow()) ? true : false);
@@ -403,25 +405,5 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         hGoodsintent.putExtra("merchId", hGoods.getMerchId());
         hGoodsintent.putExtra("advanceDepositId", hGoods.getAdvanceDepositId());
         ArmsUtils.startActivity(hGoodsintent);
-    }
-
-    private class Mobile {
-        @JavascriptInterface
-        public void onGetWebContentHeight() {
-            //重新调整webview高度
-            hospitalInfo.postDelayed(() -> {
-                if (null != hospitalInfo && null != viewpager) {
-                    hospitalInfo.measure(0, 0);
-                    int measuredHeight = hospitalInfo.getMeasuredHeight();
-                    ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) hospitalInfo.getLayoutParams();
-                    layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
-                    hospitalInfo.setLayoutParams(layoutParams);
-
-                    LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
-                    layoutParams1.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
-                    viewpager.setLayoutParams(layoutParams1);
-                }
-            }, 1000);
-        }
     }
 }
