@@ -86,7 +86,6 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                     @Override
                     public void onNext(GetRechargeListResponse response) {
                         if (response.isSuccess()) {
-
                             if (pullToRefresh) {
                                 orderBeanList.clear();
                             }
@@ -94,7 +93,7 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                             mRootView.showError(response.getChargeList().size() > 0);
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             preEndIndex = orderBeanList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = orderBeanList.size() / 10;
+                            lastPageIndex = orderBeanList.size() / 10 + 1;
                             mRootView.updateUI(orderBeanList.size());
                             mAdapter.notifyDataSetChanged();
                         } else {
