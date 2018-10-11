@@ -65,15 +65,20 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        if (time == 0) {
-                            timer.cancel();
-                            this.cancel();
-                            ArmsUtils.startActivity(MainActivity.class);
-                            killMyself();
-                        } else {
-                            timeTV.setText("跳过 " + time);
-                            time--;
-                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (time == 0) {
+                                    timer.cancel();
+                                    ArmsUtils.startActivity(MainActivity.class);
+                                    killMyself();
+                                } else {
+                                    timeTV.setText("跳过 " + time);
+                                    time--;
+                                }
+
+                            }
+                        });
                     }
                 }, 0, 1000);
             }
