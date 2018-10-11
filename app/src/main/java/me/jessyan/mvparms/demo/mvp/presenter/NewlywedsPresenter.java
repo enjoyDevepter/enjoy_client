@@ -110,8 +110,6 @@ public class NewlywedsPresenter extends BasePresenter<NewlywedsContract.Model, N
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

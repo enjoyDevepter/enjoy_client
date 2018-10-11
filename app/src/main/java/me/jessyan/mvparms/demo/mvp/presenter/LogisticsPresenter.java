@@ -58,8 +58,6 @@ public class LogisticsPresenter extends BasePresenter<LogisticsContract.Model, L
                     public void onNext(LogisticsResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateUI(response);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

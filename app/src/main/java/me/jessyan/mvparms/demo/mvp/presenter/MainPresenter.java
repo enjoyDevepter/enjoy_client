@@ -97,13 +97,16 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                 .subscribe(new ErrorHandleSubscriber<HomeAdResponse>(mErrorHandler) {
                     @Override
                     public void onNext(HomeAdResponse response) {
+                        if (response.isNeedLogin()) {
+                            cache.remove(KEY_KEEP + "token");
+                            getOrCancelAd(cancel);
+                            return;
+                        }
                         if (response.isSuccess()) {
                             if (!cancel && null != response.getAd()) {
                                 mRootView.getCache().put("adId", response.getAd().getAdId());
                                 mRootView.showAD(response.getAd());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -145,8 +148,6 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                     public void onNext(UpdateResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showUpdateInfo(response);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

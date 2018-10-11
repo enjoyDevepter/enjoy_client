@@ -64,8 +64,6 @@ public class SelfPickupAddrListPresenter extends BasePresenter<SelfPickupAddrLis
                         if (response.isSuccess()) {
                             addressList.clear();
                             addressList.addAll(response.getAreaList());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

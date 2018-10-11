@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".mvp.ui.activity.MainActivity"
+            android:name=".mvp.ui.activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,7 +61,7 @@
         </provider>
 
         <activity
-            android:name=".mvp.ui.activity.SplashActivity"
+            android:name=".mvp.ui.activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.ForgetActivity"

@@ -112,8 +112,6 @@ public class InviteMainPresenter extends BasePresenter<InviteMainContract.Model,
                             orderBeanList.addAll(response.getMemberList());
                             mAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -135,8 +133,6 @@ public class InviteMainPresenter extends BasePresenter<InviteMainContract.Model,
                     public void onNext(ShareResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showWX(response.getShare());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

@@ -44,6 +44,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -272,6 +273,11 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     }
 
     private void showWX() {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        if (cache.get(KEY_KEEP + "token") == null) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
         UMWeb web = new UMWeb(response.getShareUrl());
         web.setTitle(response.getShareTitle());//标题
         web.setDescription(response.getShareDesc());

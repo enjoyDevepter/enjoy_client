@@ -92,8 +92,6 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                     public void onNext(DiaryDetailsResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateUI(response);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -155,8 +153,6 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateVoteStatus(vote);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -214,8 +210,6 @@ public class DiaryDetailsPresenter extends BasePresenter<DiaryDetailsContract.Mo
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updatefollowStatus(follow);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

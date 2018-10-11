@@ -79,8 +79,6 @@ public class CashConvertPresenter extends BasePresenter<CashConvertContract.Mode
                         if (response.isSuccess()) {
                             mRootView.showConvertOk();
                             initUser();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -111,8 +109,6 @@ public class CashConvertPresenter extends BasePresenter<CashConvertContract.Mode
                             cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT, response.getMemberAccount());
                             EventBus.getDefault().post(response.getMember(), EventBusTags.USER_INFO_CHANGE);
                             EventBus.getDefault().post(response.getMemberAccount(), EventBusTags.USER_ACCOUNT_CHANGE);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

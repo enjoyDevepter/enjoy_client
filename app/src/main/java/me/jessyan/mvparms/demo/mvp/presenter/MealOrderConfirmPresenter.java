@@ -89,8 +89,6 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                         if (response.isSuccess()) {
                             orderConfirmInfoResponse = response;
                             mRootView.updateUI(response);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -146,8 +144,6 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                                 intent.putExtra("payTypeDesc", response.getPayTypeDesc());
                                 ArmsUtils.startActivity(intent);
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

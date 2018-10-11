@@ -66,6 +66,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.LabelsView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 import static android.graphics.Paint.STRIKE_THRU_TEXT_FLAG;
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -606,6 +607,11 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     }
 
     private void share() {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        if (cache.get(KEY_KEEP + "token") == null) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
         Goods goods = response.getGoods();
         UMWeb web = new UMWeb(goods.getShareUrl());
         web.setTitle(goods.getName());//标题

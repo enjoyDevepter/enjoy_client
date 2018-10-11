@@ -143,8 +143,6 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -211,8 +209,6 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
                             } else {
                                 mHAdapter.notifyItemRangeInserted(preEndIndex, mHGoods.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -248,8 +244,6 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
                     public void onNext(CategoryResponse response) {
                         if (response.isSuccess()) {
                             sortCategory(response.getGoodsCategoryList());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

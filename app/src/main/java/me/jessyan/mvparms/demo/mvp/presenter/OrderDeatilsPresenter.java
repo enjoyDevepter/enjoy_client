@@ -113,8 +113,6 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
                             }
                             mRootView.updateUI(response);
                             mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -137,8 +135,6 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             mRootView.killMyself();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

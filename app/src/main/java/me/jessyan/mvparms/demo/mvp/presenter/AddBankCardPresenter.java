@@ -75,8 +75,6 @@ public class AddBankCardPresenter extends BasePresenter<AddBankCardContract.Mode
                     public void accept(BankListResponse response) throws Exception {
                         if (response.isSuccess()) {
                             mRootView.updateBankList(response.getBankList());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -112,8 +110,6 @@ public class AddBankCardPresenter extends BasePresenter<AddBankCardContract.Mode
                         if (response.isSuccess()) {
                             ArmsUtils.makeText(ArmsUtils.getContext(), "添加成功");
                             mRootView.killMyself();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

@@ -91,7 +91,6 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                             mRootView.getCache().put("type", "recom");
                             getDiaryList(true);
                         } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -150,6 +149,12 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                 .subscribe(new ErrorHandleSubscriber<DiaryListResponse>(mErrorHandler) {
                     @Override
                     public void onNext(DiaryListResponse response) {
+                        if (response.isNeedLogin()) {
+                            cache.remove(KEY_KEEP + "token");
+                            getDiaryList(pullToRefresh);
+                            return;
+                        }
+
                         if (response.isSuccess()) {
                             if (pullToRefresh) {
                                 diaryList.clear();
@@ -164,8 +169,6 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -181,10 +184,6 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                 .subscribe(new Consumer<DiaryTypeListResponse>() {
                     @Override
                     public void accept(DiaryTypeListResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
                     }
                 });
     }
@@ -212,8 +211,6 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                             int num = diaryList.get(position).getPraise();
                             diaryList.get(position).setPraise(vote ? num + 1 : num <= 0 ? 0 : num - 1);
                             mAdapter.notifyItemChanged(position);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -240,8 +237,6 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                         if (response.isSuccess()) {
                             diaryList.get(position).getMember().setIsFollow(follow ? "1" : "0");
                             mAdapter.notifyItemChanged(position);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

@@ -98,8 +98,6 @@ public class DiaryImagePresenter extends BasePresenter<DiaryImageContract.Model,
                                 mAdapter.notifyItemRangeInserted(preEndIndex, diaryAlbumList.size());
                             }
                             mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

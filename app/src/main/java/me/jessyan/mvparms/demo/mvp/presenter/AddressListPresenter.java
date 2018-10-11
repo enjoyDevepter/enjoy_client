@@ -92,8 +92,6 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                                 return;
                             }
                             addressEditListAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -141,8 +139,6 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                             } else {
                                 addressListAdapter.notifyItemRangeInserted(preEndIndex, addressList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -165,8 +161,6 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             addressEditListAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

@@ -372,7 +372,7 @@ public class Member implements Serializable {
         }
     }
 
-    public class DistributionRankBean {
+    public class DistributionRankBean implements Serializable {
         private String distributionLevelId;
         private String distributionLevelName;
 

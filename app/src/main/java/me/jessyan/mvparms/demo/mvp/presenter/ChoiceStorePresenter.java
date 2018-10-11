@@ -134,8 +134,6 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, commonStoreDateTypeList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -189,8 +187,6 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, commonStoreDateTypeList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

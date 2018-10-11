@@ -70,8 +70,6 @@ public class PayPresenter extends BasePresenter<PayContract.Model, PayContract.V
                     public void onNext(PayInfoResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateUI(response);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -97,8 +95,6 @@ public class PayPresenter extends BasePresenter<PayContract.Model, PayContract.V
                         if (response.isSuccess()) {
                             // 正式支付
                             PayManager.getInstace(mRootView.getActivity()).toPay("ALIPAY_APP".equals(request.getPayId()) ? PayManager.PayMode.ALIPAY : PayManager.PayMode.WXPAY, response.getParams(), (PayManager.PayListener) mRootView.getActivity());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

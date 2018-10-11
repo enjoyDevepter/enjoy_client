@@ -36,6 +36,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -247,6 +248,11 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
     }
 
     public void share(Share share) {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        if (cache.get(KEY_KEEP + "token") == null) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
         if (null == share) {
             return;
         }

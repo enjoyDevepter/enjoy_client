@@ -151,6 +151,7 @@ public class BaseResponse implements Serializable {
         this.content = content;
     }
 
+
     @Override
     public String toString() {
         return "BaseResponse{" +
@@ -184,6 +185,13 @@ public class BaseResponse implements Serializable {
         } else {
             return false;
         }
+    }
+
+    public boolean isNeedLogin() {
+        if (retCode == Api.LoginOvertime) {
+            return true;
+        }
+        return false;
     }
 
     public class ImageUrl {

@@ -104,8 +104,6 @@ public class SearchPresenter extends BasePresenter<SearchContract.Model, SearchC
                         if (response.isSuccess()) {
                             categoryList.addAll(sortCategory(response.getGoodsCategoryList()));
                             typeAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

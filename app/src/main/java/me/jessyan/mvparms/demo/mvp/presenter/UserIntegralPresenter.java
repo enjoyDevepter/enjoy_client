@@ -92,8 +92,6 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                     public void onNext(QiandaoInfoResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateQiandaoInfo("1".equals(response.getIsSign()), response.getPoint(), response.getUrl());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -125,7 +123,6 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                             requestOrderList(true);
                         } else {
                             getQiandaoInfo();
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -173,8 +170,6 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, orderBeanList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

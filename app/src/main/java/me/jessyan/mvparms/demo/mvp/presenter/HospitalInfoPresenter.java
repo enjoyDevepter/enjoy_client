@@ -117,8 +117,6 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updatefollowStatus(follow);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -147,8 +145,6 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                                     imageList.add(env.getImage());
                                 }
                                 hospitalEnvImageAdapter.notifyDataSetChanged();
-                            } else {
-                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     });
@@ -173,8 +169,6 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                                     imageList.add(env.getImage());
                                 }
                                 hospitalEnvImageAdapter.notifyDataSetChanged();
-                            } else {
-                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     });
@@ -225,8 +219,6 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                             doctorBeans.addAll(response.getDoctorList());
                             doctorListAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -285,8 +277,6 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                             } else {
                                 hospitalGoodsListAdapter.notifyItemRangeInserted(preEndIndex, hospitalList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

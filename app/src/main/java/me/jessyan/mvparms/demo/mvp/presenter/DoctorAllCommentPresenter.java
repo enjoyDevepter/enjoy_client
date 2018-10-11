@@ -117,8 +117,6 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
                                 orderBeanList.addAll(orderList);
                                 mAdapter.notifyDataSetChanged();
                                 mRootView.hideLoading();
-                            } else {
-                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     });
@@ -159,8 +157,6 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
                                 orderBeanList.addAll(orderList);
                                 mAdapter.notifyDataSetChanged();
                                 mRootView.hideLoading();
-                            } else {
-                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     });
@@ -185,9 +181,7 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
                 .subscribe(new ErrorHandleSubscriber<UnLikeDoctorCommentResponse>(mErrorHandler) {
                     @Override
                     public void onNext(UnLikeDoctorCommentResponse response) {
-                        if (response.isSuccess()) {
-                        } else {
-                        }
+
                     }
                 });
     }
@@ -209,9 +203,6 @@ public class DoctorAllCommentPresenter extends BasePresenter<DoctorAllCommentCon
                 .subscribe(new ErrorHandleSubscriber<LikeDoctorCommentResponse>(mErrorHandler) {
                     @Override
                     public void onNext(LikeDoctorCommentResponse response) {
-                        if (response.isSuccess()) {
-                        } else {
-                        }
                     }
                 });
     }

@@ -75,8 +75,6 @@ public class UserInfoPresenter extends BasePresenter<UserInfoContract.Model, Use
                         if (response.isSuccess()) {
                             addressList.clear();
                             addressList.addAll(response.getAreaList());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -132,8 +130,6 @@ public class UserInfoPresenter extends BasePresenter<UserInfoContract.Model, Use
                         if (response.isSuccess()) {
                             mRootView.getCache().put("headImage", response.getResult().getUrl());
                             modifyUserInfo();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

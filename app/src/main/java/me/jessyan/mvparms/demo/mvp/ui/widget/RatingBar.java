@@ -82,16 +82,16 @@ public class RatingBar extends LinearLayout implements View.OnClickListener {
         for (int i = 0; i < starCount; i++) {
             ImageView view = getImageView(context, width, height);
             //设置ImageView的下标
-            view.setTag(i);
+            view.setTag(i + 1);
             addView(view);
             //可以点击评分
             if (clickable)
                 view.setOnClickListener(this);
         }
-        if (star != 0) {
+        if (star >= 0) {
             if (star <= starCount) {
                 //填充图片
-                fillingImage(star - 1);
+                fillingImage(star);
             } else {
                 throw new RuntimeException("star填充数量不能大于总数star_count!");
             }
@@ -127,11 +127,10 @@ public class RatingBar extends LinearLayout implements View.OnClickListener {
         Integer index = (Integer) v.getTag();
         star = index;
         fillingImage(index);
-
-        System.out.println("star = "+star);
     }
 
     /**
+     * †
      * 填充图片
      *
      * @param i 点击的图片下标
@@ -146,9 +145,17 @@ public class RatingBar extends LinearLayout implements View.OnClickListener {
                 view.setImageDrawable(unStarDrawable);
             }
         }
+        if (i == 0) {
+            return;
+        }
         //填充选中的等级
-        for (int j = 0; j <= i; j++) {
+        for (int j = 0; j <= i - 1; j++) {
             ImageView view = (ImageView) getChildAt(j);
+            if (i == 1) {
+                view.setSelected(!view.isSelected());
+                view.setImageDrawable(view.isSelected() ? starDrawable : unStarDrawable);
+                return;
+            }
             if (starDrawable == null) {
                 throw new NullPointerException("请先设置填充的图片资源!");
             } else {
@@ -168,6 +175,15 @@ public class RatingBar extends LinearLayout implements View.OnClickListener {
     }
 
     /**
+     * 获得当前评分数
+     *
+     * @return 当前星级
+     */
+    public int getStar() {
+        return star + 1;
+    }
+
+    /**
      * 设置当前填充数量
      *
      * @param star 数量
@@ -176,28 +192,14 @@ public class RatingBar extends LinearLayout implements View.OnClickListener {
         if (star > starCount) {
             throw new RuntimeException("star填充数量不能大于总数starCount");
         }
-        if(star <= 0){
-            star = 1;
-        }
         this.star = star;
 
-        if (star != 0) {
-            if (star <= starCount) {
-                //填充图片
-                fillingImage(star - 1);
-            } else {
-                throw new RuntimeException("star填充数量不能大于总数starCount!");
-            }
+        if (star <= starCount) {
+            //填充图片
+            fillingImage(star);
+        } else {
+            throw new RuntimeException("star填充数量不能大于总数starCount!");
         }
-    }
-
-    /**
-     * 获得当前评分数
-     *
-     * @return 当前星级
-     */
-    public int getStar() {
-        return star + 1;
     }
 
     /**

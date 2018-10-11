@@ -123,8 +123,6 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, appointments.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -153,8 +151,6 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             getMyMealAppointment(false);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -177,8 +173,6 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             getMyMealAppointment(true);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

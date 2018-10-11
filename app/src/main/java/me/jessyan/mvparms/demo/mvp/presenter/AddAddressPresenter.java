@@ -82,8 +82,6 @@ public class AddAddressPresenter extends BasePresenter<AddAddressContract.Model,
                         if (response.isSuccess()) {
                             addressList.clear();
                             addressList.addAll(response.getAreaList());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -130,8 +128,6 @@ public class AddAddressPresenter extends BasePresenter<AddAddressContract.Model,
                         if (response.isSuccess()) {
                             mRootView.killMyself();
                             EventBus.getDefault().post(address, EventBusTags.ADD_ADDRESS_SUCCESS);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

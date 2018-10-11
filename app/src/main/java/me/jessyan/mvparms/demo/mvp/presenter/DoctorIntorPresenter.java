@@ -54,8 +54,6 @@ public class DoctorIntorPresenter extends BasePresenter<DoctorIntorContract.Mode
                     public void onNext(DoctorIntorResponse response) {
                         if (response.isSuccess()) {
                             mRootView.update(response.getDoctor());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

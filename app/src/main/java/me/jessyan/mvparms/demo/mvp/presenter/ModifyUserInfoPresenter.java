@@ -146,8 +146,6 @@ public class ModifyUserInfoPresenter extends BasePresenter<ModifyUserInfoContrac
                             }
                             commonUserInfoList.addAll(commonUserInfos);
                             mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

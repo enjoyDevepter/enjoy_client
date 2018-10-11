@@ -81,8 +81,6 @@ public class DoctorHonorPresenter extends BasePresenter<DoctorHonorContract.Mode
                             GoodsList.addAll(response.getHonorList());
                             mRootView.setEmpty(response.getHonorList().size() == 0);
                             mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

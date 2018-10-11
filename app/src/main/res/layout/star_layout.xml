@@ -2,6 +2,7 @@
 <me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:a_zhon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rating"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     a_zhon:clickable="false"
@@ -11,6 +12,4 @@
     a_zhon:star="3"
     a_zhon:star_count="5"
     a_zhon:star_img="@mipmap/doctor_star"
-    android:id="@+id/rating"
-    a_zhon:unstar_img="@mipmap/doctor_no_star"
-    />
+    a_zhon:unstar_img="@mipmap/doctor_no_star" />

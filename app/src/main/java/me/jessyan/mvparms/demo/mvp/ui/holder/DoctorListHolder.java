@@ -60,8 +60,6 @@ public class DoctorListHolder extends BaseHolder<DoctorBean> {
         }
         Observable.just(data.getStar())
                 .subscribe(s -> rating.setStar(s));
-        Observable.just(data.getStar())
-                .subscribe(s -> rating.setStar(s));
 
         List<DoctorSkill> doctorSkillList = data.getDoctorSkillList();
         List<String> skillList = new ArrayList<>(doctorSkillList.size());

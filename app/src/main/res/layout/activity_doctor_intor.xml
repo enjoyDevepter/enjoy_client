@@ -7,134 +7,148 @@
 
     <include layout="@layout/title" />
 
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-
-        <View
-            android:id="@+id/blue_back"
-            android:layout_width="match_parent"
-            android:layout_height="214dp"
-            android:layout_below="@id/title_layout"
-            android:background="#5FBFE3" />
-
-        <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
-            android:id="@+id/write_back"
-            android:layout_width="322dp"
-            android:layout_height="150dp"
-            android:layout_alignTop="@id/blue_back"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="46dp"
-            android:background="@color/white"
-            app:radius="17dp"
-            app:shape_type="round" />
-
-        <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
-            android:id="@+id/head_image"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_alignTop="@id/blue_back"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="14dp"
-            android:background="@mipmap/place_holder_user"
-            app:shape_type="circle" />
-
-        <TextView
-            android:id="@+id/doctor_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/head_image"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="13dp"
-            android:textColor="#333333"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/addr_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/write_back"
-            android:layout_alignLeft="@id/write_back"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="15dp"
-            android:text="擅长项目："
-            android:textColor="#666666"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/addr_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/addr_title"
-            android:layout_toRightOf="@id/addr_title"
-            android:maxLines="1"
-            android:textColor="#666666"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/hosp_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/addr_title"
-            android:layout_alignLeft="@id/addr_title"
-            android:layout_marginBottom="6dp"
-            android:text="担任职务："
-            android:textColor="#666666"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/hosp_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/hosp_title"
-            android:layout_toRightOf="@id/hosp_title"
-            android:maxLines="1"
-            android:textColor="#666666"
-            android:textSize="12sp" />
-
-        <View
-            style="@style/divider_1"
-            android:layout_above="@id/hosp_title"
-            android:layout_alignLeft="@id/write_back"
-            android:layout_alignRight="@id/write_back"
-            android:layout_marginBottom="12dp"></View>
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/title1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/divide1_5"
-        android:background="@drawable/list_item_bg"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="16dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="医生介绍"
-                android:textColor="#333333"
-                android:textSize="13sp" />
-
-            <View
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="10dp"
-                android:background="#5FBFE3" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <View
+                    android:id="@+id/blue_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="214dp"
+                    android:layout_below="@id/title_layout"
+                    android:background="#5FBFE3" />
+
+                <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
+                    android:id="@+id/write_back"
+                    android:layout_width="322dp"
+                    android:layout_height="150dp"
+                    android:layout_alignTop="@id/blue_back"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="46dp"
+                    android:background="@color/white"
+                    app:radius="17dp"
+                    app:shape_type="round" />
+
+                <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
+                    android:id="@+id/head_image"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_alignTop="@id/blue_back"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="14dp"
+                    android:background="@mipmap/place_holder_user"
+                    app:shape_type="circle" />
+
+                <TextView
+                    android:id="@+id/doctor_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/head_image"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="13dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/addr_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/write_back"
+                    android:layout_alignLeft="@id/write_back"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="15dp"
+                    android:text="擅长项目："
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/addr_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/addr_title"
+                    android:layout_toRightOf="@id/addr_title"
+                    android:maxLines="1"
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/hosp_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/addr_title"
+                    android:layout_alignLeft="@id/addr_title"
+                    android:layout_marginBottom="6dp"
+                    android:text="担任职务："
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/hosp_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/hosp_title"
+                    android:layout_toRightOf="@id/hosp_title"
+                    android:maxLines="1"
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
+
+                <View
+                    style="@style/divider_1"
+                    android:layout_above="@id/hosp_title"
+                    android:layout_alignLeft="@id/write_back"
+                    android:layout_alignRight="@id/write_back"
+                    android:layout_marginBottom="12dp"></View>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/title1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divide1_5"
+                android:background="@drawable/list_item_bg"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="医生介绍"
+                        android:textColor="#333333"
+                        android:textSize="13sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="10dp"
+                        android:background="#5FBFE3" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <WebView
+                android:id="@+id/intro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-    </LinearLayout>
 
-    <WebView
-        android:id="@+id/intro"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 </LinearLayout>

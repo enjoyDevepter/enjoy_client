@@ -94,7 +94,6 @@ public class MyPresenter extends BasePresenter<MyContract.Model, MyContract.View
                             EventBus.getDefault().post(response.getMember(), EventBusTags.USER_INFO_CHANGE);
                             EventBus.getDefault().post(response.getMemberAccount(), EventBusTags.USER_ACCOUNT_CHANGE);
                         } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -132,7 +131,6 @@ public class MyPresenter extends BasePresenter<MyContract.Model, MyContract.View
                             intent.putExtra("url", response.getUrl());
                             ArmsUtils.startActivity(intent);
                         } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

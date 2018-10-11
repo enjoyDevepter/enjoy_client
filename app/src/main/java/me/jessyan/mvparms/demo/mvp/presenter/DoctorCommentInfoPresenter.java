@@ -118,8 +118,6 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
                             orderBeanList.addAll(response.getDoctorCommentReplyList());
                             mAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -145,8 +143,6 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
                     public void onNext(UnLikeDoctorCommentResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateGoodView(false);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -171,8 +167,6 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
                     public void onNext(LikeDoctorCommentResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateGoodView(true);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -201,8 +195,6 @@ public class DoctorCommentInfoPresenter extends BasePresenter<DoctorCommentInfoC
                             requestOrderList();
                             ArmsUtils.makeText(ArmsUtils.getContext(), "评论成功");
                             mRootView.clear();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

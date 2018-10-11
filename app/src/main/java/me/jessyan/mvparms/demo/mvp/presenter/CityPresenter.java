@@ -77,8 +77,6 @@ public class CityPresenter extends BasePresenter<CityContract.Model, CityContrac
                     public void onNext(CityResponse response) {
                         if (response.isSuccess()) {
                             dealData(response.getAreaList());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

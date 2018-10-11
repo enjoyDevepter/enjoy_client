@@ -81,8 +81,6 @@ public class AuthenticationPresenter extends BasePresenter<AuthenticationContrac
                         if (response.isSuccess()) {
                             mRootView.showMessage("认证成功");
                             mRootView.killMyself();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -107,8 +105,6 @@ public class AuthenticationPresenter extends BasePresenter<AuthenticationContrac
                             } else {
                                 backImage = response.getResult().getUrl();
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

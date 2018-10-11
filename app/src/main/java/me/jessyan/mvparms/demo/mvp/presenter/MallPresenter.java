@@ -110,8 +110,6 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                     public void onNext(CategoryResponse response) {
                         if (response.isSuccess()) {
                             mRootView.refreshNaviTitle(sortCategory(response.getGoodsCategoryList()));
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -249,8 +247,6 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                             } else {
                                 mHAdapter.notifyItemRangeInserted(preEndIndex, mHGoods.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

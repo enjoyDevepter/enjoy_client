@@ -76,8 +76,6 @@ public class ReleaseDiaryPresenter extends BasePresenter<ReleaseDiaryContract.Mo
                     public void onNext(DirayProjectListResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateProject(response);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -123,8 +121,6 @@ public class ReleaseDiaryPresenter extends BasePresenter<ReleaseDiaryContract.Mo
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showMessage("发表成功");
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -147,8 +143,6 @@ public class ReleaseDiaryPresenter extends BasePresenter<ReleaseDiaryContract.Mo
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             images.add(response.getResult().getUrl());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

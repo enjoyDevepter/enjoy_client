@@ -96,8 +96,6 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                             lastPageIndex = orderBeanList.size() / 10 + 1;
                             mRootView.updateUI(orderBeanList.size());
                             mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -128,8 +126,6 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                         if (response.isSuccess()) {
                             mRootView.getCache().put("orderId", response.getOrderId());
                             PayManager.getInstace(mRootView.getActivity()).toPay("ALIPAY_APP".equals(payType) ? PayManager.PayMode.ALIPAY : PayManager.PayMode.WXPAY, response.getParams(), (PayManager.PayListener) mRootView.getActivity());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -165,8 +161,6 @@ public class ConsumeCoinInputPresenter extends BasePresenter<ConsumeCoinInputCon
                                 intent.putExtra("money", response.getMoney());
                             }
                             ArmsUtils.startActivity(intent);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

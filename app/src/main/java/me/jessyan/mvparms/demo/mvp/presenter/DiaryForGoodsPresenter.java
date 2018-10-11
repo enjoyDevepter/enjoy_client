@@ -114,8 +114,6 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
                             lastPageIndex = diaryList.size() / 10 + 1;
                             mRootView.updateDiaryUI(diaryList.size());
                             mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -146,8 +144,6 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
                     public void onNext(DiaryResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateUI(response);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -176,8 +172,6 @@ public class DiaryForGoodsPresenter extends BasePresenter<DiaryForGoodsContract.
                             int num = diaryList.get(position).getPraise();
                             diaryList.get(position).setPraise(vote ? num + 1 : num <= 0 ? 0 : num - 1);
                             mAdapter.notifyItemChanged(position);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

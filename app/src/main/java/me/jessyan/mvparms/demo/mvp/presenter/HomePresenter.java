@@ -82,11 +82,14 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                 .subscribe(new ErrorHandleSubscriber<HomeResponse>(mErrorHandler) {
                     @Override
                     public void onNext(HomeResponse response) {
+                        if (response.isNeedLogin()) {
+                            cache.remove(KEY_KEEP + "token");
+                            updateHomeInfo();
+                            return;
+                        }
                         if (response.isSuccess()) {
                             mRootView.refreshUI(response.getFirstNavList(), response.getCarouselList(), response.getModuleList(), response.getSecondNavList());
                             getRecommenDiaryList(true);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -112,27 +115,30 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ErrorHandleSubscriber<DiaryListResponse>(mErrorHandler) {
-            @Override
-            public void onNext(DiaryListResponse response) {
-                if (response.isSuccess()) {
-                    if (pullToRefresh) {
-                        diaryList.clear();
+                    @Override
+                    public void onNext(DiaryListResponse response) {
+                        if (response.isNeedLogin()) {
+                            cache.remove(KEY_KEEP + "token");
+                            getRecommenDiaryList(pullToRefresh);
+                            return;
+                        }
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                diaryList.clear();
+                            }
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            diaryList.addAll(response.getDiaryList());
+                            preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = diaryList.size() / 10 + 1;
+                            mRootView.updateDiaryUI(diaryList.size());
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
-                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    diaryList.addAll(response.getDiaryList());
-                    preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = diaryList.size() / 10 + 1;
-                    mRootView.updateDiaryUI(diaryList.size());
-                    mAdapter.notifyDataSetChanged();
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
 
-            @Override
-            public void onError(Throwable t) {
-            }
-        });
+                    @Override
+                    public void onError(Throwable t) {
+                    }
+                });
     }
 
     public void vote(boolean vote, int position) {

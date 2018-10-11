@@ -69,11 +69,13 @@ public class HospitalPresenter extends BasePresenter<HospitalContract.Model, Hos
         if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
         List<OrderBy> orderByList = new ArrayList<>();
-        OrderBy orderBy = new OrderBy();
-        orderBy.setField("distance");
-        orderBy.setAsc((boolean) mRootView.getCache().get("distance"));
-        orderByList.add(orderBy);
-        request.setOrderBys(orderByList);
+        if (null != mRootView.getCache().get("distance")) {
+            OrderBy orderBy = new OrderBy();
+            orderBy.setField("distance");
+            orderBy.setAsc((Boolean) mRootView.getCache().get("distance"));
+            orderByList.add(orderBy);
+            request.setOrderBys(orderByList);
+        }
         mModel.getHospitalList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

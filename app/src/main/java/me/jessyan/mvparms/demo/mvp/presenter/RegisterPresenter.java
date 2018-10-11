@@ -109,6 +109,7 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.Model, Reg
                             mAppManager.killActivity(LoginActivity.class);
                             mRootView.killMyself();
                         } else {
+                            mRootView.showMessage(response.getRetDesc());
                             mRootView.showVerity();
                         }
                     }

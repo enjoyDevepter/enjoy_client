@@ -117,8 +117,6 @@ public class CashCoinPresenter extends BasePresenter<CashCoinContract.Model, Cas
                             orderBeanList.addAll(cashList);
                             mAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -153,8 +151,6 @@ public class CashCoinPresenter extends BasePresenter<CashCoinContract.Model, Cas
                             cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT, response.getMemberAccount());
                             EventBus.getDefault().post(response.getMember(), EventBusTags.USER_INFO_CHANGE);
                             EventBus.getDefault().post(response.getMemberAccount(), EventBusTags.USER_ACCOUNT_CHANGE);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

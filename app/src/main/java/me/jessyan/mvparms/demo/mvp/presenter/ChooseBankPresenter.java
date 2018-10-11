@@ -85,8 +85,6 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
                         if (response.isSuccess()) {
                             ArmsUtils.makeText(ArmsUtils.getContext(), "删除成功");
                             requestOrderList();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
 
                     }
@@ -140,8 +138,6 @@ public class ChooseBankPresenter extends BasePresenter<ChooseBankContract.Model,
                             orderBeanList.addAll(response.getBankCardList());
                             mAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

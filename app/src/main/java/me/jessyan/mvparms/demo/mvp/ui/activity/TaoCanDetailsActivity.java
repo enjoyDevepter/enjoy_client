@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.umeng.socialize.ShareAction;
@@ -43,6 +44,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
 import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -270,6 +272,11 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     }
 
     private void share() {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        if (cache.get(KEY_KEEP + "token") == null) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
         MealGoods goods = response.getSetMealGoods();
         UMWeb web = new UMWeb(response.getShareUrl());
         web.setTitle(goods.getName());//标题

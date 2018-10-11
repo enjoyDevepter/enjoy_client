@@ -95,8 +95,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             getOrder(true);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -118,8 +116,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             getOrder(true);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -142,8 +138,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             getOrder(true);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -219,8 +213,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, orderList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -293,8 +285,6 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                     } else {
                         mAdapter.notifyItemRangeInserted(preEndIndex, orderList.size());
                     }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
                 }
             }
         });

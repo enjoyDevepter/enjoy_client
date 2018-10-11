@@ -65,6 +65,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
 import me.jessyan.mvparms.demo.mvp.ui.widget.LabelsView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -585,6 +586,11 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     }
 
     private void share() {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+        if (cache.get(KEY_KEEP + "token") == null) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
         Goods goods = response.getGoods();
         UMWeb web = new UMWeb(goods.getShareUrl());
         web.setTitle(goods.getName());//标题
@@ -728,7 +734,6 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 if (null != detailWV && null != viewpager) {
                     detailWV.measure(0, 0);
                     int measuredHeight = detailWV.getMeasuredHeight();
-                    System.out.println("detailWV.getMeasuredHeight()  " + detailWV.getMeasuredHeight());
                     ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) detailWV.getLayoutParams();
                     layoutParams.height = measuredHeight + ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space_15);
                     detailWV.setLayoutParams(layoutParams);

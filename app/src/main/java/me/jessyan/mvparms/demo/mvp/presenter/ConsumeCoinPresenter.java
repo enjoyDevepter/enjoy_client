@@ -108,8 +108,6 @@ public class ConsumeCoinPresenter extends BasePresenter<ConsumeCoinContract.Mode
                             orderBeanList.addAll(response.getBalanceList());
                             mAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

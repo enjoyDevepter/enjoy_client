@@ -80,8 +80,6 @@ public class GetCashPresenter extends BasePresenter<GetCashContract.Model, GetCa
                             cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT, response.getMemberAccount());
                             EventBus.getDefault().post(response.getMember(), EventBusTags.USER_INFO_CHANGE);
                             EventBus.getDefault().post(response.getMemberAccount(), EventBusTags.USER_ACCOUNT_CHANGE);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -111,8 +109,6 @@ public class GetCashPresenter extends BasePresenter<GetCashContract.Model, GetCa
                         if (response.isSuccess()) {
                             mRootView.showOk();
                             getUserInfo();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

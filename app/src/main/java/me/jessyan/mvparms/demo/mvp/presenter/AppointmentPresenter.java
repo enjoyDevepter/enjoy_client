@@ -118,6 +118,11 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                 .subscribe(new ErrorHandleSubscriber<AppointmentResponse>(mErrorHandler) {
                     @Override
                     public void onNext(AppointmentResponse response) {
+                        if (response.isNeedLogin()) {
+                            cache.remove(KEY_KEEP + "token");
+                            getAppointment(pullToRefresh);
+                            return;
+                        }
                         if (response.isSuccess()) {
                             mRootView.showError(response.getOrderProjectDetailList().size() > 0);
                             if (pullToRefresh) {
@@ -133,7 +138,6 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                                 mAdapter.notifyItemRangeInserted(preEndIndex, appointments.size());
                             }
                         } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

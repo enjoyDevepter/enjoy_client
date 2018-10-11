@@ -2,7 +2,28 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFFFF"
     android:orientation="vertical">
+
+    <View
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:layout_gravity="right|top"
+        android:background="@mipmap/splash_top" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="150dp"
+        android:layout_height="145dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="130dp"
+        android:src="@mipmap/splash" />
+
+    <View
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:layout_gravity="left|bottom"
+        android:background="@mipmap/splash_buttom" />
 
     <TextView
         android:id="@+id/time"
@@ -16,13 +37,4 @@
         android:text="跳过 1"
         android:textColor="@color/white"
         android:textSize="12sp" />
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="150dp"
-        android:layout_height="145dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="130dp"
-        android:src="@mipmap/splash" />
-
 </FrameLayout>

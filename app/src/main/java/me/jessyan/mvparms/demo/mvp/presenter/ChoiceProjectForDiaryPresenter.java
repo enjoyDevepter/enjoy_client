@@ -100,8 +100,6 @@ public class ChoiceProjectForDiaryPresenter extends BasePresenter<ChoiceProjectF
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

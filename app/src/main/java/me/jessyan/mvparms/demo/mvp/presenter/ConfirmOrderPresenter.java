@@ -113,8 +113,6 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                             orderConfirmInfoResponse = response;
                             mRootView.updateUI(response);
                             mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -184,8 +182,6 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                                 ArmsUtils.startActivity(intent);
                             }
                             mAppManager.killAllBeforeClass(MainActivity.class);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

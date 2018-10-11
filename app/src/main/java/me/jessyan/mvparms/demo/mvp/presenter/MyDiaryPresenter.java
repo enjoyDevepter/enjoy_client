@@ -110,8 +110,6 @@ public class MyDiaryPresenter extends BasePresenter<MyDiaryContract.Model, MyDia
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -138,8 +136,6 @@ public class MyDiaryPresenter extends BasePresenter<MyDiaryContract.Model, MyDia
                             } else {
                                 mRootView.showMessage(response.getRetDesc());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

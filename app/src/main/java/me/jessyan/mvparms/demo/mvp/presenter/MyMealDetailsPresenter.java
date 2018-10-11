@@ -136,8 +136,6 @@ public class MyMealDetailsPresenter extends BasePresenter<MyMealDetailsContract.
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showMessage("奖励申请成功");
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -168,8 +166,6 @@ public class MyMealDetailsPresenter extends BasePresenter<MyMealDetailsContract.
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             getAppointment(true);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -200,8 +196,6 @@ public class MyMealDetailsPresenter extends BasePresenter<MyMealDetailsContract.
                     public void onNext(ShareResponse response) {
                         if (response.isSuccess()) {
                             mRootView.share(response.getShare());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

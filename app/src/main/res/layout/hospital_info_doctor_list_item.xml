@@ -37,14 +37,21 @@
         android:textColor="#666666"
         android:textSize="12sp" />
 
-    <include
-        layout="@layout/star_layout"
+    <me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar
+        android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/name"
         android:layout_below="@id/hosptial"
         android:layout_marginTop="6dp"
-        android:layout_toRightOf="@id/image" />
+        android:layout_toRightOf="@id/image"
+        app:clickable="false"
+        app:image_height="20dp"
+        app:image_padding="1dp"
+        app:image_width="20dp"
+        app:star_count="5"
+        app:star_img="@mipmap/doctor_star"
+        app:unstar_img="@mipmap/doctor_no_star" />
 
     <com.zhy.view.flowlayout.TagFlowLayout
         android:id="@+id/skill"

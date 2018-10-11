@@ -88,8 +88,6 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
                     public void onNext(CategoryResponse response) {
                         if (response.isSuccess()) {
                             mRootView.refreshNaviTitle(sortCategory(response.getGoodsCategoryList()));
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -153,8 +151,6 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -217,8 +213,6 @@ public class RecommendPresenter extends BasePresenter<RecommendContract.Model, R
                             } else {
                                 mHAdapter.notifyItemRangeInserted(preEndIndex, mHGoods.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

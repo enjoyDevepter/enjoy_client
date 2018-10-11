@@ -203,7 +203,7 @@ public class HospitalActivity extends BaseActivity<HospitalPresenter> implements
                 distanceV.setSelected(!distanceV.isSelected());
                 distanceTV.setTextColor(distanceV.isSelected() ? choiceColor : unChoiceColor);
                 distanceStatusV.setBackground(distanceV.isSelected() ? asceD : descD);
-                provideCache().put("distance", true);
+                provideCache().put("distance", distanceV.isSelected());
                 mPresenter.getHospitalList(true);
                 break;
         }

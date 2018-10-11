@@ -105,8 +105,6 @@ public class GetCashListPresenter extends BasePresenter<GetCashListContract.Mode
                             orderBeanList.addAll(response.getDrawCashList());
                             mAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
