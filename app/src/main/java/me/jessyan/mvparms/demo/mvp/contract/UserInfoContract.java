@@ -7,6 +7,8 @@ import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -31,5 +33,6 @@ public interface UserInfoContract {
         Observable<BaseResponse> modifyUserInfo(ModifyUserInfoRequest request);
 
         Observable<AllAddressResponse> getAllAddressList(SimpleRequest request);
+        Observable<QiniuResponse> getQiniuInfo(QiniuRequest request);
     }
 }

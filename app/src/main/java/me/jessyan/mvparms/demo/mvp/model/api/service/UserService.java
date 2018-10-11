@@ -18,6 +18,8 @@ package me.jessyan.mvparms.demo.mvp.model.api.service;
 import java.util.List;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.User;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddressListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DelAddressRequest;
@@ -250,5 +252,9 @@ public interface UserService {
     @POST("gateway")
         // 获取成长记录
     Observable<GrowthListResponse> getGrowthList(@Body AddressListRequest request);
+
+    @POST("gateway")
+        // 获取七牛上传信息
+    Observable<QiniuResponse> getQiniuInfo(@Body QiniuRequest request);
 
 }

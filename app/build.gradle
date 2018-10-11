@@ -106,6 +106,7 @@ dependencies {
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
     implementation rootProject.ext.dependencies["lifecyclemodel"]
     implementation rootProject.ext.dependencies["bottomBarLayout"]
+    implementation 'com.qiniu:qiniu-android-sdk:7.3.+'
 
     //view
     annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {

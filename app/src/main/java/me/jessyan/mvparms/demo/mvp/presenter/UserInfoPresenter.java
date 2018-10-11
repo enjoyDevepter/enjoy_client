@@ -19,8 +19,11 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.utils.ImageUploadManager;
 import me.jessyan.mvparms.demo.mvp.contract.UserInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -114,26 +117,60 @@ public class UserInfoPresenter extends BasePresenter<UserInfoContract.Model, Use
                 });
     }
 
-    public void uploadImage() {
-        File file = new File((String) mRootView.getCache().get("imagePath"));
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/otcet-stream"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+    public void uploadImage(){
+        final File file = new File((String) mRootView.getCache().get("imagePath"));
 
-        mModel.uploadImage("1", body)
+        QiniuRequest request = new QiniuRequest();
+        Cache<String,Object> cache=ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token=(String)cache.get(KEY_KEEP+"token");
+        request.setToken(token);
+        mModel.getQiniuInfo(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<QiniuResponse>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseResponse response) {
+                    public void onNext(QiniuResponse response) {
                         if (response.isSuccess()) {
-                            mRootView.getCache().put("headImage", response.getResult().getUrl());
-                            modifyUserInfo();
+                            ImageUploadManager.getInstance().updateImage(file, response.getUploadToken(), response.getUrlPrefix(), new ImageUploadManager.ImageUploadResponse() {
+                                @Override
+                                public void onImageUploadOk(String url) {
+                                    mRootView.getCache().put("headImage", url);
+                                    modifyUserInfo();
+                                }
+
+                                @Override
+                                public void onImageUploadError(String errorInfo) {
+                                    mRootView.showMessage(errorInfo);
+                                }
+                            });
+                        }else{
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
     }
+//
+//    public void uploadImage111() {
+//        RequestBody requestBody = RequestBody.create(MediaType.parse("application/otcet-stream"), file);
+//        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+//
+//        mModel.uploadImage("1", body)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+//                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+//                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+//                    @Override
+//                    public void onNext(BaseResponse response) {
+//                        if (response.isSuccess()) {
+//                            mRootView.getCache().put("headImage", response.getResult().getUrl());
+//                            modifyUserInfo();
+//                        }
+//                    }
+//                });
+//    }
 
     @Override
     public void onDestroy() {

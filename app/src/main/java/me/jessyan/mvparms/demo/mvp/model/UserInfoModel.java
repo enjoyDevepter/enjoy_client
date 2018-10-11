@@ -13,6 +13,8 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.UserInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -55,5 +57,10 @@ public class UserInfoModel extends BaseModel implements UserInfoContract.Model {
     public Observable<AllAddressResponse> getAllAddressList(SimpleRequest request) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
                 .getAllAddressList(request);
+    }
+    @Override
+    public Observable<QiniuResponse> getQiniuInfo(QiniuRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getQiniuInfo(request);
     }
 }
