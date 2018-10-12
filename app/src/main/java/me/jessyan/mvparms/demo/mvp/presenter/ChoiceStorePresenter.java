@@ -93,6 +93,8 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
         request.setCountyId(mRootView.getActivity().getIntent().getStringExtra("county"));
         request.setCityId(mRootView.getActivity().getIntent().getStringExtra("city"));
         request.setProvinceId(mRootView.getActivity().getIntent().getStringExtra("province"));
+        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
+        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
 
         if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
@@ -150,6 +152,8 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
         request.setCityId(mRootView.getActivity().getIntent().getStringExtra("city"));
         request.setProvinceId(mRootView.getActivity().getIntent().getStringExtra("province"));
         request.setSpecValueId(mRootView.getActivity().getIntent().getStringExtra("specValueId"));
+        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
+        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
         if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
         List<OrderBy> orderByList = new ArrayList<>();

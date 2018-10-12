@@ -16,11 +16,14 @@ public class HospitalListRequest extends BaseRequest {
     private String lat;
     private String specValueId;
     private List<OrderBy> orderBys;
+    private String goodsId;
+    private String merchId;
 
     @Override
     public String toString() {
         return "HospitalListRequest{" +
-                "pageIndex=" + pageIndex +
+                "cmd=" + cmd +
+                ", pageIndex=" + pageIndex +
                 ", pageSize=" + pageSize +
                 ", provinceId='" + provinceId + '\'' +
                 ", cityId='" + cityId + '\'' +
@@ -29,6 +32,8 @@ public class HospitalListRequest extends BaseRequest {
                 ", lat='" + lat + '\'' +
                 ", specValueId='" + specValueId + '\'' +
                 ", orderBys=" + orderBys +
+                ", goodsId='" + goodsId + '\'' +
+                ", merchId='" + merchId + '\'' +
                 '}';
     }
 
@@ -110,5 +115,21 @@ public class HospitalListRequest extends BaseRequest {
 
     public void setOrderBys(List<OrderBy> orderBys) {
         this.orderBys = orderBys;
+    }
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public String getMerchId() {
+        return merchId;
+    }
+
+    public void setMerchId(String merchId) {
+        this.merchId = merchId;
     }
 }

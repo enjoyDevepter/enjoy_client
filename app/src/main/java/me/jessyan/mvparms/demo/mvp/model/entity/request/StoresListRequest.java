@@ -15,6 +15,8 @@ public class StoresListRequest extends BaseRequest {
     private String countyId;
     private String lon;
     private String lat;
+    private String goodsId;
+    private String merchId;
     private List<OrderBy> orderBys;
 
     public int getCmd() {
@@ -89,6 +91,22 @@ public class StoresListRequest extends BaseRequest {
         this.orderBys = orderBys;
     }
 
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public String getMerchId() {
+        return merchId;
+    }
+
+    public void setMerchId(String merchId) {
+        this.merchId = merchId;
+    }
+
     @Override
     public String toString() {
         return "StoresListRequest{" +
@@ -100,6 +118,8 @@ public class StoresListRequest extends BaseRequest {
                 ", countyId='" + countyId + '\'' +
                 ", lon='" + lon + '\'' +
                 ", lat='" + lat + '\'' +
+                ", goodsId='" + goodsId + '\'' +
+                ", merchId='" + merchId + '\'' +
                 ", orderBys=" + orderBys +
                 '}';
     }

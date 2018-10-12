@@ -29,6 +29,8 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -38,11 +40,13 @@ import me.jessyan.mvparms.demo.di.module.HospitalInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.ActivityInfo;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.HospitalInfoPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DoctorListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HGoodsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.HospitalEnvImageAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CarouselView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -66,6 +70,8 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     View followLayout;
     @BindView(R.id.follow)
     View followV;
+    @BindView(R.id.infos)
+    CarouselView carouselView;
     @Inject
     ImageLoader mImageLoader;
     @Inject
@@ -237,30 +243,6 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         });
     }
 
-    private void initTabLayout() {
-        tab.setupWithViewPager(viewpager);
-//        Class tablayout = tab.getClass();
-//        Field tabStrip = null;
-//        try {
-//            tabStrip = tablayout.getDeclaredField("mTabStrip");
-//            tabStrip.setAccessible(true);
-//            LinearLayout ll_tab = (LinearLayout) tabStrip.get(tab);
-//            for (int i = 0; i < ll_tab.getChildCount(); i++) {
-//                View child = ll_tab.getChildAt(i);
-//                child.setPadding(0, 0, 0, 0);
-//                LinearLayout.LayoutParams params = newlyweds LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-//                params.leftMargin = 60;
-//                params.rightMargin = 45;
-//                child.setLayoutParams(params);
-//                child.invalidate(); // 这个方法是重画
-//            }
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-    }
-
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerHospitalInfoComponent //如找不到该类,请编译一下项目
@@ -283,7 +265,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         back.setOnClickListener(this);
         followLayout.setOnClickListener(this);
         initViewPager();
-        initTabLayout();
+        tab.setupWithViewPager(viewpager);
     }
 
     @Override
@@ -369,6 +351,21 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public void updateActivityInfo(List<ActivityInfo> activityInfoList) {
+        carouselView.addView(R.layout.carouse_view);
+        carouselView.upDataListAndView(activityInfoList, 2000);
+        carouselView.setOnClickListener(new CarouselView.OnClickItemListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getApplication(), ActivityInfoActivity.class);
+                intent.putExtra("activityId", activityInfoList.get(position).getActivityId());
+                intent.putExtra("title", activityInfoList.get(position).getTitle());
+                ArmsUtils.startActivity(intent);
+            }
+        });
     }
 
     public void updateHosptialInfo(HospitalInfoBean hospital) {

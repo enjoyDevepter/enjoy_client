@@ -18,9 +18,11 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorListRequest
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.ActivityInfoListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
@@ -75,5 +77,11 @@ public class HospitalInfoModel extends BaseModel implements HospitalInfoContract
     public Observable<BaseResponse> follow(FollowRequest request) {
         return mRepositoryManager.obtainRetrofitService(HospitalService.class)
                 .follow(request);
+    }
+
+    @Override
+    public Observable<ActivityInfoListResponse> getActivityList(SimpleRequest request) {
+        return mRepositoryManager.obtainRetrofitService(HospitalService.class)
+                .getActivityList(request);
     }
 }

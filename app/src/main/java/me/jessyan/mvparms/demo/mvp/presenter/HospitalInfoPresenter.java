@@ -27,9 +27,11 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorListRespon
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalEnvBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.ActivityInfoListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
@@ -95,6 +97,25 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         initHospital();
         nextDoctorPage();
         getHGoodsList(true);
+        getActivityList();
+    }
+
+    private void getActivityList() {
+        SimpleRequest request = new SimpleRequest();
+        request.setCmd(923);
+        mModel.getActivityList(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<ActivityInfoListResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(ActivityInfoListResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.updateActivityInfo(response.getActivityInfoList());
+                        }
+                    }
+                });
     }
 
     public void follow(boolean follow) {

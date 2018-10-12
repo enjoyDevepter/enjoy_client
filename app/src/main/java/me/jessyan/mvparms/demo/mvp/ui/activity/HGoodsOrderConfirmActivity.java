@@ -325,6 +325,10 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                     listType.setProvince(hospitalBaseInfoBean.getProvince());
                     listType.setDistrict(hospitalBaseInfoBean.getProvinceName() + " " + hospitalBaseInfoBean.getCityName() + " " + hospitalBaseInfoBean.getCountyName());
                 }
+                if (null != response) {
+                    listType.setMerchId(response.getGoodsList().get(0).getMerchId());
+                    listType.setGoodsId(response.getGoodsList().get(0).getGoodsId());
+                }
                 intent2.putExtra("specValueId", response.getGoodsList().get(0).getGoodsSpecValue().getSpecValueId());
                 ArmsUtils.startActivity(intent2);
                 break;

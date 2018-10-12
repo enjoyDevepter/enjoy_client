@@ -6,15 +6,20 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.ActivityInfo;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.ActivityInfoListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
@@ -24,6 +29,8 @@ public interface HospitalInfoContract {
     //对于经常使用的关于UI的方法可以定义到IView中,如显示隐藏进度条,和显示文字消息
     interface View extends IView {
         Activity getActivity();
+
+        void updateActivityInfo(List<ActivityInfo> activityInfoList);
 
         void updateHosptialInfo(HospitalInfoBean hospital);
 
@@ -60,6 +67,8 @@ public interface HospitalInfoContract {
         Observable<HGoodsListResponse> getHGoodsList(GoodsListRequest request);
 
         Observable<BaseResponse> follow(FollowRequest request);
+
+        Observable<ActivityInfoListResponse> getActivityList(SimpleRequest request);
 
     }
 }

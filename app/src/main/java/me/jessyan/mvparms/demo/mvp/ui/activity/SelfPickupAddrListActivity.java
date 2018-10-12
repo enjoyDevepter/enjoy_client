@@ -95,6 +95,8 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
         provideCache().put("province", listType.getProvince());
         provideCache().put("city", listType.getCity());
         provideCache().put("county", listType.getCity());
+        provideCache().put("goodsId", listType.getGoodsId());
+        provideCache().put("merchId", listType.getMerchId());
     }
 
     @Subscriber(tag = EventBusTags.HOSPITAL_CHANGE_EVENT)
@@ -151,6 +153,8 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                 intent.putExtra("province", (String) provideCache().get("province"));
                 intent.putExtra("city", (String) provideCache().get("city"));
                 intent.putExtra("county", (String) provideCache().get("county"));
+                intent.putExtra("goodsId", (String) provideCache().get("goodsId"));
+                intent.putExtra("merchId", (String) provideCache().get("merchId"));
                 intent.putExtra("specValueId", getIntent().getStringExtra("specValueId"));
                 intent.putExtra(KEY_FOR_ACTIVITY_LIST_TYPE, listType);
                 ArmsUtils.startActivity(intent);
@@ -252,6 +256,8 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
         private String city;
         private String county;
         private String storeName;
+        private String merchId;
+        private String goodsId;
 
         ListType(String title, String secendListTitle, String infoText, String dataKey) {
             this.title = title;
@@ -330,6 +336,22 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
 
         public void setCounty(String county) {
             this.county = county;
+        }
+
+        public String getMerchId() {
+            return merchId;
+        }
+
+        public void setMerchId(String merchId) {
+            this.merchId = merchId;
+        }
+
+        public String getGoodsId() {
+            return goodsId;
+        }
+
+        public void setGoodsId(String goodsId) {
+            this.goodsId = goodsId;
         }
     }
 }
