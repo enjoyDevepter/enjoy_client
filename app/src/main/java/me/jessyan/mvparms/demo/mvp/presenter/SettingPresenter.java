@@ -57,8 +57,6 @@ public class SettingPresenter extends BasePresenter<SettingContract.Model, Setti
                             Intent articleIntent = new Intent(mRootView.getActivity(), PlatformActivity.class);
                             articleIntent.putExtra("url", response.getUrl());
                             ArmsUtils.startActivity(articleIntent);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

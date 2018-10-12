@@ -16,15 +16,15 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.utils.ImageUploadManager;
 import me.jessyan.mvparms.demo.mvp.contract.AuthenticationContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AuthenticationRequest;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
@@ -87,24 +87,34 @@ public class AuthenticationPresenter extends BasePresenter<AuthenticationContrac
     }
 
     public void uploadImage() {
-        File file = new File((String) mRootView.getCache().get("imagePath"));
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/otcet-stream"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-
-        mModel.uploadImage("3", body)
+        final File file = new File((String) mRootView.getCache().get("imagePath"));
+        QiniuRequest request = new QiniuRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+        request.setToken(token);
+        mModel.getQiniuInfo(request)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<QiniuResponse>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseResponse response) {
+                    public void onNext(QiniuResponse response) {
                         if (response.isSuccess()) {
-                            if (((boolean) mRootView.getCache().get("isFront"))) {
-                                frontImage = response.getResult().getUrl();
-                            } else {
-                                backImage = response.getResult().getUrl();
-                            }
+                            ImageUploadManager.getInstance().updateImage(file, response.getUploadToken(), response.getUrlPrefix(), new ImageUploadManager.ImageUploadResponse() {
+                                @Override
+                                public void onImageUploadOk(String url) {
+                                    if (((boolean) mRootView.getCache().get("isFront"))) {
+                                        frontImage = response.getResult().getUrl();
+                                    } else {
+                                        backImage = response.getResult().getUrl();
+                                    }
+                                }
+
+                                @Override
+                                public void onImageUploadError(String errorInfo) {
+                                }
+                            });
                         }
                     }
                 });

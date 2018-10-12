@@ -123,7 +123,7 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                                     memberList.addAll(response.getMemberList());
                                     preEndIndex = memberList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                                    lastPageIndex = memberList.size() / 10;
+                                    lastPageIndex = memberList.size() / 10 + 1;
                                     if (pullToRefresh) {
                                         memberAdapter.notifyDataSetChanged();
                                     } else {
@@ -138,7 +138,7 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                                     doctorList.addAll(response.getDoctorList());
                                     preEndIndex = doctorList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                                    lastPageIndex = doctorList.size() / 10;
+                                    lastPageIndex = doctorList.size() / 10 + 1;
                                     if (pullToRefresh) {
                                         doctorAdapter.notifyDataSetChanged();
                                     } else {
@@ -153,7 +153,7 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                                     hospitalList.addAll(response.getHospitalList());
                                     preEndIndex = hospitalList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                                    lastPageIndex = hospitalList.size() / 10;
+                                    lastPageIndex = hospitalList.size() / 10 + 1;
                                     if (pullToRefresh) {
                                         hospitalAdapter.notifyDataSetChanged();
                                     } else {
@@ -161,8 +161,6 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                                     }
                                     break;
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -205,8 +203,6 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             getMyFollow(true);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

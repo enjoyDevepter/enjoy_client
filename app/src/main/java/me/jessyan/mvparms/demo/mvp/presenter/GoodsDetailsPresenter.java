@@ -143,8 +143,6 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                             cache.put("goods", response.getGoods());
                             mRootView.updateUI(response);
 //                            getGoodsForDiary(); // 临时去掉
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -177,8 +175,6 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                                 mRootView.showMessage("取消收藏");
                             }
                             mRootView.updateCollect(collect);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -219,8 +215,6 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                             Cache<String, Object> cache = mRootView.getCache();
                             cache.put("goods", response.getGoods());
                             mRootView.updateUI(response);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -250,8 +244,6 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                     @Override
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
-                            mRootView.showMessage(response.getRetDesc());
-                        } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }
@@ -303,8 +295,6 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

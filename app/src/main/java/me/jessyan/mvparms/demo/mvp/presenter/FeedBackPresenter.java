@@ -69,8 +69,6 @@ public class FeedBackPresenter extends BasePresenter<FeedBackContract.Model, Fee
             public void onNext(FeedbackResponse response) {
                 if (response.isSuccess()) {
                     mRootView.showOk();
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
                 }
             }
         });

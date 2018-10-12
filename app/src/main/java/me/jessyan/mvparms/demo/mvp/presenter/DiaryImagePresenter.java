@@ -91,7 +91,7 @@ public class DiaryImagePresenter extends BasePresenter<DiaryImageContract.Model,
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             diaryAlbumList.addAll(response.getDiaryAlbumList());
                             preEndIndex = diaryAlbumList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = diaryAlbumList.size() / 10;
+                            lastPageIndex = diaryAlbumList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {

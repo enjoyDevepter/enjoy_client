@@ -97,8 +97,6 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
                             mRootView.updateUI(response);
                             mealDetailsResponse = response;
                             mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -131,8 +129,6 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
                                 mRootView.showMessage("取消收藏");
                             }
                             mRootView.updateCollect(collect);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

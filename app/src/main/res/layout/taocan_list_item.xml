@@ -63,7 +63,8 @@
             android:gravity="right"
             android:text="已售:"
             android:textColor="#FF666666"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/sale"
@@ -71,7 +72,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:textColor="#FF666666"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout

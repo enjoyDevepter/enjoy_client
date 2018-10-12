@@ -271,7 +271,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                             mRootView.endGoods(response.getNextPageIndex() == -1);
                             hospitalList.addAll(response.getGoodsList());
                             preEndIndex = hospitalList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = hospitalList.size() / 10;
+                            lastPageIndex = hospitalList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 hospitalGoodsListAdapter.notifyDataSetChanged();
                             } else {

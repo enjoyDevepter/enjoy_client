@@ -10,12 +10,10 @@ import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
-
 import me.jessyan.mvparms.demo.mvp.contract.FansContract;
 import me.jessyan.mvparms.demo.mvp.model.FansModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.Member;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowDoctorAdapter;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowMemberAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.FollowMemberAdapter;
 
 
 @Module
@@ -45,8 +43,8 @@ public class FansModule {
 
     @ActivityScope
     @Provides
-    MyFollowMemberAdapter provideStoreAdapter(List<Member> list) {
-        return new MyFollowMemberAdapter(list);
+    FollowMemberAdapter provideStoreAdapter(List<Member> list) {
+        return new FollowMemberAdapter(list);
     }
 
 

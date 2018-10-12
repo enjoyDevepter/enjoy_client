@@ -112,8 +112,6 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
                             }
                             timeAdapter.notifyDataSetChanged();
                             dateAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -149,8 +147,6 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
                         if (response.isSuccess()) {
                             EventBus.getDefault().post(mRootView.getActivity().getIntent().getIntExtra("index", 0), EventBusTags.CHANGE_APPOINTMENT_TIME);
                             mRootView.killMyself();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

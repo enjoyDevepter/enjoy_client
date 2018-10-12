@@ -110,14 +110,12 @@ public class CouponPresenter extends BasePresenter<CouponContract.Model, CouponC
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             couponList.addAll(response.getCouponList());
                             preEndIndex = couponList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = couponList.size() / 10;
+                            lastPageIndex = couponList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, couponList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

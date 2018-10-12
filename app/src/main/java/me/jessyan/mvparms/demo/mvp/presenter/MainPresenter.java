@@ -154,9 +154,12 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     }
 
     public void getAreaForLoaction() {
+        Cache<String, Object> globalCache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         LocationRequest request = new LocationRequest();
         request.setLon((String) mRootView.getCache().get("lon"));
         request.setLat((String) mRootView.getCache().get("lat"));
+        globalCache.put("lon", mRootView.getCache().get("lon"));
+        globalCache.put("lat", mRootView.getCache().get("lat"));
         mModel.getAreaForLoaction(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -166,7 +169,6 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                     @Override
                     public void onNext(CityResponse response) {
                         if (response.isSuccess()) {
-                            Cache<String, Object> globalCache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
                             Cache cache = mRootView.getCache();
                             ArrayList<Area> areas = response.getAreaList();
                             String provinceId, cityId, countyId;
@@ -208,8 +210,6 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                                     break;
                                 }
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

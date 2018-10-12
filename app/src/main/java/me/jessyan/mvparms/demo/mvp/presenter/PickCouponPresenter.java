@@ -73,8 +73,6 @@ public class PickCouponPresenter extends BasePresenter<PickCouponContract.Model,
                             couponList.clear();
                             couponList.addAll(response.getCouponList());
                             mAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -97,8 +95,6 @@ public class PickCouponPresenter extends BasePresenter<PickCouponContract.Model,
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
                             getPickCouponList();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

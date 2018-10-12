@@ -133,7 +133,7 @@ public class AddressListPresenter extends BasePresenter<AddressListContract.Mode
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             addressList.addAll(response.getMemberAddressList());
                             preEndIndex = addressList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = addressList.size() / 10;
+                            lastPageIndex = addressList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 addressListAdapter.notifyDataSetChanged();
                             } else {

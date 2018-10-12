@@ -74,8 +74,6 @@ public class CashPasswordPresenter extends BasePresenter<CashPasswordContract.Mo
                     public void onNext(SetCashPasswordResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showOk();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

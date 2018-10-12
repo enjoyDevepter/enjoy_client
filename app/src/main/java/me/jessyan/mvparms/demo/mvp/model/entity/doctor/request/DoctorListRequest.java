@@ -1,5 +1,7 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.doctor.request;
 
+import java.util.List;
+
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.OrderBy;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.BaseRequest;
 
@@ -14,7 +16,7 @@ public class DoctorListRequest extends BaseRequest {
     private String categoryId;
     private int pageIndex = 1;
     private int pageSize = 10;
-    private OrderBy orderBy;
+    private List<OrderBy> orderBys;
 
     @Override
     public String toString() {
@@ -29,7 +31,7 @@ public class DoctorListRequest extends BaseRequest {
                 ", categoryId='" + categoryId + '\'' +
                 ", pageIndex=" + pageIndex +
                 ", pageSize=" + pageSize +
-                ", orderBy=" + orderBy +
+                ", orderBys=" + orderBys +
                 '}';
     }
 
@@ -82,12 +84,12 @@ public class DoctorListRequest extends BaseRequest {
         this.categoryId = categoryId;
     }
 
-    public OrderBy getOrderBy() {
-        return orderBy;
+    public List<OrderBy> getOrderBys() {
+        return orderBys;
     }
 
-    public void setOrderBy(OrderBy orderBy) {
-        this.orderBy = orderBy;
+    public void setOrderBys(List<OrderBy> orderBys) {
+        this.orderBys = orderBys;
     }
 
     public int getCmd() {

@@ -13,11 +13,13 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.ReleaseDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.DiaryService;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.diary.ProjectRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ReleaseDiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DirayProjectListResponse;
-import okhttp3.MultipartBody;
 
 
 @ActivityScope
@@ -39,11 +41,6 @@ public class ReleaseDiaryModel extends BaseModel implements ReleaseDiaryContract
         this.mApplication = null;
     }
 
-    @Override
-    public Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs) {
-        return mRepositoryManager.obtainRetrofitService(MainService.class)
-                .uploadImage(type, imgs);
-    }
 
     @Override
     public Observable<BaseResponse> releaseDiary(ReleaseDiaryRequest request) {
@@ -55,5 +52,11 @@ public class ReleaseDiaryModel extends BaseModel implements ReleaseDiaryContract
     public Observable<DirayProjectListResponse> getProjects(ProjectRequest request) {
         return mRepositoryManager.obtainRetrofitService(DiaryService.class)
                 .getProjects(request);
+    }
+
+    @Override
+    public Observable<QiniuResponse> getQiniuInfo(QiniuRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getQiniuInfo(request);
     }
 }

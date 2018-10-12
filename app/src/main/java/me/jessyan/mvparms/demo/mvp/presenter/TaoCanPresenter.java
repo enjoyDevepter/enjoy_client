@@ -107,14 +107,12 @@ public class TaoCanPresenter extends BasePresenter<TaoCanContract.Model, TaoCanC
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             mGoods.addAll(response.getSetMealGoodsList());
                             preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = mGoods.size() / 10;
+                            lastPageIndex = mGoods.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

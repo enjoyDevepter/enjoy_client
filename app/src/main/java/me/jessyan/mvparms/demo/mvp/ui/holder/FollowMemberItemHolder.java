@@ -29,7 +29,8 @@ import com.jess.arms.utils.ArmsUtils;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
+import me.jessyan.mvparms.demo.mvp.model.entity.Member;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.FollowMemberAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 
 /**
@@ -41,51 +42,62 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class HospitalListItemHolder extends BaseHolder<Hospital> {
-    @BindView(R.id.image)
-    ShapeImageView iamgeV;
-    @BindView(R.id.name)
-    TextView nameTV;
-    @BindView(R.id.distance_tag)
-    View distanceTagV;
-    @BindView(R.id.distance)
-    TextView distanceTV;
-    @BindView(R.id.address)
-    TextView addressTV;
+public class FollowMemberItemHolder extends BaseHolder<Member> {
+
+    @BindView(R.id.headImage)
+    ShapeImageView headImageIV;
+    @BindView(R.id.nickName)
+    TextView nickNameTV;
+    @BindView(R.id.fllow)
+    View fllowV;
+    @BindView(R.id.publishDate)
+    TextView publishDateTV;
 
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
 
-    public HospitalListItemHolder(View itemView) {
+
+    private FollowMemberAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
+
+    public FollowMemberItemHolder(View itemView, FollowMemberAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
+        fllowV.setOnClickListener(this);
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
     }
 
     @Override
-    public void setData(Hospital hospital, int position) {
-
-        Observable.just(hospital.getProvinceName() + "" + hospital.getCityName() + "" + hospital.getCountyName() + "" + hospital.getName())
-                .subscribe(s -> nameTV.setText(s));
-        if (ArmsUtils.isEmpty(hospital.getDistanceDesc())) {
-            distanceTagV.setVisibility(View.INVISIBLE);
-            distanceTV.setVisibility(View.INVISIBLE);
-        } else {
-            Observable.just(hospital.getDistanceDesc())
-                    .subscribe(s -> distanceTV.setText(String.valueOf(s)));
+    public void onClick(View view) {
+        if (null != onChildItemClickLinstener) {
+            switch (view.getId()) {
+                case R.id.fllow:
+                    onChildItemClickLinstener.onChildItemClick(view, fllowV.isSelected() ? FollowMemberAdapter.ViewName.UNFLLOW : FollowMemberAdapter.ViewName.FLLOW, getAdapterPosition());
+                    return;
+            }
         }
-        Observable.just(hospital.getAddress())
-                .subscribe(s -> addressTV.setText(String.valueOf(s)));
-        //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
+        onChildItemClickLinstener.onChildItemClick(view, FollowMemberAdapter.ViewName.ITEM, getAdapterPosition());
+
+    }
+
+    @Override
+    public void setData(Member member, int position) {
+        Observable.just(member.getNickName())
+                .subscribe(s -> nickNameTV.setText(s));
+        fllowV.setSelected("1".equals(member.getIsFollow()) ? true : false);
+        Observable.just(member.getFollowDate())
+                .subscribe(s -> publishDateTV.setText(s));
+
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
-                        .placeholder(R.drawable.place_holder_img)
-                        .url(hospital.getImage())
-                        .imageView(iamgeV)
+                        .placeholder(R.mipmap.place_holder_user)
+                        .url(member.getHeadImage())
+                        .imageView(headImageIV)
                         .build());
     }
+
 
     /**
      * 在 Activity 的 onDestroy 中使用 {@link DefaultAdapter#releaseAllHolder(RecyclerView)} 方法 (super.onDestroy() 之前)
@@ -93,9 +105,9 @@ public class HospitalListItemHolder extends BaseHolder<Hospital> {
      */
     @Override
     protected void onRelease() {
-        this.nameTV = null;
-        this.distanceTV = null;
-        this.addressTV = null;
-        this.iamgeV = null;
+        this.headImageIV = null;
+        this.nickNameTV = null;
+        this.fllowV = null;
+        this.publishDateTV = null;
     }
 }

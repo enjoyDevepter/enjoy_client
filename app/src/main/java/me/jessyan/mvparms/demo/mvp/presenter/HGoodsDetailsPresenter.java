@@ -233,14 +233,12 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
                             diaryList.addAll(response.getDiaryList());
                             mRootView.updateDiaryUI(response.getDiaryList().size() > 0);
                             preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = diaryList.size() / 10 == 0 ? 1 : diaryList.size() / 10;
+                            lastPageIndex = diaryList.size() / 10 == 0 ? 1 : diaryList.size() / 10 + 1;
                             if (lastPageIndex == 1) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -302,8 +300,6 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
                                 mRootView.showMessage("取消收藏");
                             }
                             mRootView.updateCollect(collect);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

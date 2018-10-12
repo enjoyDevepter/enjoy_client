@@ -180,7 +180,7 @@ public class RatingBar extends LinearLayout implements View.OnClickListener {
      * @return 当前星级
      */
     public int getStar() {
-        return star + 1;
+        return star;
     }
 
     /**
@@ -190,15 +190,13 @@ public class RatingBar extends LinearLayout implements View.OnClickListener {
      */
     public void setStar(int star) {
         if (star > starCount) {
-            throw new RuntimeException("star填充数量不能大于总数starCount");
+            star = starCount;
         }
         this.star = star;
 
         if (star <= starCount) {
             //填充图片
             fillingImage(star);
-        } else {
-            throw new RuntimeException("star填充数量不能大于总数starCount!");
         }
     }
 

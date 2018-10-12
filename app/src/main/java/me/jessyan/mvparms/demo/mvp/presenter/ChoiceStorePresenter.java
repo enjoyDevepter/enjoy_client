@@ -7,7 +7,9 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.ArrayList;
@@ -85,6 +87,7 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
     }
 
     private void getStores(boolean pullToRefresh) {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
 
         StoresListRequest request = new StoresListRequest();
         request.setCountyId(mRootView.getActivity().getIntent().getStringExtra("county"));
@@ -100,6 +103,8 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
         orderBy.setAsc(false);
         orderByList.add(orderBy);
         request.setOrderBys(orderByList);
+        request.setLon(String.valueOf(cache.get("lon")));
+        request.setLat(String.valueOf(cache.get("lat")));
         mModel.getStores(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -128,7 +133,7 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             commonStoreDateTypeList.addAll(response.getStoreList());
                             preEndIndex = commonStoreDateTypeList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = commonStoreDateTypeList.size() / 10;
+                            lastPageIndex = commonStoreDateTypeList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
@@ -181,7 +186,7 @@ public class ChoiceStorePresenter extends BasePresenter<ChoiceStoreContract.Mode
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             commonStoreDateTypeList.addAll(response.getHospitalList());
                             preEndIndex = commonStoreDateTypeList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = commonStoreDateTypeList.size() / 10;
+                            lastPageIndex = commonStoreDateTypeList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {

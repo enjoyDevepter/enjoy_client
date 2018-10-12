@@ -97,8 +97,6 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
                         if (response.isSuccess()) {
                             hGoodsOrderConfirmInfoResponse = response;
                             mRootView.updateUI(response);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -179,8 +177,6 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
                                 intent.putExtra("payTypeDesc", response.getPayTypeDesc());
                                 ArmsUtils.startActivity(intent);
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

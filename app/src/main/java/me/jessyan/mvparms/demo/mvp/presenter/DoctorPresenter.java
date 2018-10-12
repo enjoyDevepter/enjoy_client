@@ -78,8 +78,6 @@ public class DoctorPresenter extends BasePresenter<DoctorContract.Model, DoctorC
                     public void onNext(CategoryResponse response) {
                         if (response.isSuccess()) {
                             sortCategory(response.getGoodsCategoryList());
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -98,10 +96,12 @@ public class DoctorPresenter extends BasePresenter<DoctorContract.Model, DoctorC
         request.setSecondCategoryId((String) (mRootView.getCache().get("secondCategoryId")));
 
         if (!ArmsUtils.isEmpty(String.valueOf(mRootView.getCache().get("orderByField")))) {
+            List<OrderBy> orderBies = new ArrayList<>();
             OrderBy orderBy = new OrderBy();
             orderBy.setField((String) mRootView.getCache().get("orderByField"));
             orderBy.setAsc((Boolean) mRootView.getCache().get("orderByAsc"));
-            request.setOrderBy(orderBy);
+            orderBies.add(orderBy);
+            request.setOrderBys(orderBies);
         }
 
         if (pullToRefresh) lastPageIndex = 1;
@@ -136,14 +136,12 @@ public class DoctorPresenter extends BasePresenter<DoctorContract.Model, DoctorC
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             doctorBeans.addAll(response.getDoctorList());
                             preEndIndex = doctorBeans.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = doctorBeans.size() / 10;
+                            lastPageIndex = doctorBeans.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, doctorBeans.size());
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

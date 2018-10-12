@@ -137,7 +137,7 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             mGoods.addAll(response.getGoodsList());
                             preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = mGoods.size() / 10;
+                            lastPageIndex = mGoods.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
@@ -171,6 +171,9 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
             request.setOrderBy(orderBy);
         }
 
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
         mModel.getHGoodsList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -203,7 +206,7 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             mHGoods.addAll(response.getGoodsList());
                             preEndIndex = mHGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = mHGoods.size() / 10;
+                            lastPageIndex = mHGoods.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mHAdapter.notifyDataSetChanged();
                             } else {

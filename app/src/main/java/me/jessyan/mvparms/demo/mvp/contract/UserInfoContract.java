@@ -33,6 +33,7 @@ public interface UserInfoContract {
         Observable<BaseResponse> modifyUserInfo(ModifyUserInfoRequest request);
 
         Observable<AllAddressResponse> getAllAddressList(SimpleRequest request);
+
         Observable<QiniuResponse> getQiniuInfo(QiniuRequest request);
     }
 }

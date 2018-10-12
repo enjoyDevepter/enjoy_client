@@ -7,9 +7,10 @@ import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.QiniuResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AuthenticationRequest;
-import okhttp3.MultipartBody;
 
 
 public interface AuthenticationContract {
@@ -22,8 +23,10 @@ public interface AuthenticationContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-        Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs);
 
         Observable<BaseResponse> auth(AuthenticationRequest request);
+
+        Observable<QiniuResponse> getQiniuInfo(QiniuRequest request);
+
     }
 }

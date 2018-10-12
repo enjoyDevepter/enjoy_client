@@ -19,23 +19,20 @@ import com.paginate.Paginate;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerFansComponent;
 import me.jessyan.mvparms.demo.di.module.FansModule;
 import me.jessyan.mvparms.demo.mvp.contract.FansContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Member;
 import me.jessyan.mvparms.demo.mvp.presenter.FansPresenter;
-
-import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowDoctorAdapter;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowMemberAdapter;
-
+import me.jessyan.mvparms.demo.mvp.ui.adapter.FollowMemberAdapter;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class FansActivity extends BaseActivity<FansPresenter> implements MyFollowMemberAdapter.OnChildItemClickLinstener,FansContract.View {
+public class FansActivity extends BaseActivity<FansPresenter> implements FollowMemberAdapter.OnChildItemClickLinstener, FansContract.View {
 
     @BindView(R.id.back)
     View back;
@@ -45,31 +42,32 @@ public class FansActivity extends BaseActivity<FansPresenter> implements MyFollo
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
-    MyFollowMemberAdapter mAdapter;
+    FollowMemberAdapter mAdapter;
     @BindView(R.id.contentList)
     RecyclerView contentList;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.no_date)
+    View onDateV;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean isEnd;
-    @BindView(R.id.no_date)
-    View onDateV;
+
     @Override
-    public void onChildItemClick(View v, MyFollowMemberAdapter.ViewName viewname, int position) {
+    public void onChildItemClick(View v, FollowMemberAdapter.ViewName viewname, int position) {
         Member member = mAdapter.getInfos().get(position);
-        String isFollow = member.getIsFollow();
-        boolean isFollowed = "1".equals(isFollow);
         switch (viewname) {
+            case UNFLLOW:
+                mPresenter.follow(false, member.getMemberId());
+                break;
             case FLLOW:
-                mPresenter.follow(!isFollowed,member.getMemberId());
+                mPresenter.follow(true, member.getMemberId());
                 break;
             case ITEM:
                 break;
         }
     }
-
 
 
     @Override
@@ -164,7 +162,7 @@ public class FansActivity extends BaseActivity<FansPresenter> implements MyFollo
     }
 
     @Override
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
@@ -180,6 +178,7 @@ public class FansActivity extends BaseActivity<FansPresenter> implements MyFollo
     public void endLoadMore() {
         isLoadingMore = false;
     }
+
     @Override
     public void showError(boolean hasDate) {
         onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
@@ -190,11 +189,11 @@ public class FansActivity extends BaseActivity<FansPresenter> implements MyFollo
     public void setEnd(boolean isEnd) {
         this.isEnd = isEnd;
     }
+
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
         this.mPaginate = null;
     }
-
 }

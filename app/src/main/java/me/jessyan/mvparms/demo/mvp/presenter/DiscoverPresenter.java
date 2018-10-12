@@ -163,7 +163,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             diaryList.addAll(response.getDiaryList());
                             preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = diaryList.size() / 10;
+                            lastPageIndex = diaryList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {

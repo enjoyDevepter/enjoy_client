@@ -65,6 +65,8 @@ public class HospitalPresenter extends BasePresenter<HospitalContract.Model, Hos
         request.setCityId(String.valueOf(cache.get("city")));
         request.setCountyId(String.valueOf(cache.get("county")));
         request.setProvinceId(String.valueOf(cache.get("province")));
+        request.setLon(String.valueOf(cache.get("lon")));
+        request.setLat(String.valueOf(cache.get("lat")));
 
         if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
@@ -104,7 +106,7 @@ public class HospitalPresenter extends BasePresenter<HospitalContract.Model, Hos
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             hospitalList.addAll(response.getHospitalList());
                             preEndIndex = hospitalList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = hospitalList.size() / 10;
+                            lastPageIndex = hospitalList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {

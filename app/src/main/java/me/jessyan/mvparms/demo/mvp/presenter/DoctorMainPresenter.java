@@ -99,8 +99,6 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                         public void onNext(DoctorInfoResponse response) {
                             if (response.isSuccess()) {
                                 mRootView.updateDoctorInfo(response.getDoctor());
-                            } else {
-                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     });
@@ -119,8 +117,6 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                         public void onNext(LoginUserDoctorInfoResponse response) {
                             if (response.isSuccess()) {
                                 mRootView.updateDoctorInfo(response.getDoctor());
-                            } else {
-                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     });
@@ -145,8 +141,6 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                     public void onNext(LikeDoctorResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateLikeImage(true);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -170,8 +164,6 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                     public void onNext(UnLikeDoctorResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateLikeImage(false);
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -199,8 +191,6 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                         if (response.isSuccess()) {
                             requestDoctorHotComment();
                             mRootView.commentOk();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
@@ -255,8 +245,6 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                                 mAdapter.notifyDataSetChanged();
                                 mRootView.updateRecyclerViewHeight();
                                 mRootView.hideLoading();
-                            } else {
-                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     });
@@ -297,8 +285,6 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                                 mAdapter.notifyDataSetChanged();
                                 mRootView.updateRecyclerViewHeight();
                                 mRootView.hideLoading();
-                            } else {
-                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     });

@@ -164,7 +164,7 @@ public class UserIntegralPresenter extends BasePresenter<UserIntegralContract.Mo
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             orderBeanList.addAll(response.getPointList());
                             preEndIndex = orderBeanList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = orderBeanList.size() / 10;
+                            lastPageIndex = orderBeanList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {

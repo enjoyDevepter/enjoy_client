@@ -117,7 +117,7 @@ public class MyMealPresenter extends BasePresenter<MyMealContract.Model, MyMealC
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             appointments.addAll(response.getOrderList());
                             preEndIndex = appointments.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = appointments.size() / 10;
+                            lastPageIndex = appointments.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {

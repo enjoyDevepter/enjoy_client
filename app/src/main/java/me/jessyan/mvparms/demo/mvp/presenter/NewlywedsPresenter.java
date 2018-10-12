@@ -104,7 +104,7 @@ public class NewlywedsPresenter extends BasePresenter<NewlywedsContract.Model, N
                             mRootView.updateUI(response.getCarouselList());
                             mGoods.addAll(response.getGoodsList());
                             preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = mGoods.size() / 10;
+                            lastPageIndex = mGoods.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {

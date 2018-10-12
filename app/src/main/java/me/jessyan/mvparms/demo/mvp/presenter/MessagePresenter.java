@@ -115,7 +115,7 @@ public class MessagePresenter extends BasePresenter<MessageContract.Model, Messa
                                 MessagePresenter.this.messageList.addAll(messageList);
                             }
                             preEndIndex = MessagePresenter.this.messageList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = MessagePresenter.this.messageList.size() / 10;
+                            lastPageIndex = MessagePresenter.this.messageList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
