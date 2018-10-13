@@ -44,6 +44,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CartListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CategoryResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryCommentListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryImagesResponse;
@@ -161,7 +162,7 @@ public interface MainService {
     Observable<DiaryListResponse> getDiaryList(@Body DiaryListRequest request);
 
     @POST("gateway")
-    Observable<BaseResponse> apply(@Body DiaryRequest request);
+    Observable<DiaryApplyResponse> apply(@Body DiaryRequest request);
 
     @POST("gateway")
     Observable<DiaryListResponse> getDiaryForGoodsIdList(@Body DiaryForGoodsRequest request);

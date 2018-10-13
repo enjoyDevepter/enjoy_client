@@ -86,6 +86,7 @@ public class ImageShowActivity extends BaseActivity<ImageShowPresenter> implemen
                 container.removeView((View) object);
             }
         });
+        viewPager.setCurrentItem(getIntent().getIntExtra("index", 0));
     }
 
 

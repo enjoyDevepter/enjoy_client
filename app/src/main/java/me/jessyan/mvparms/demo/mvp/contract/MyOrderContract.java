@@ -8,8 +8,10 @@ import com.jess.arms.mvp.IView;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderResponse;
 
 
@@ -35,5 +37,6 @@ public interface MyOrderContract {
 
         Observable<BaseResponse> cancelOrder(OrderOperationRequest request);
 
+        Observable<DiaryApplyResponse> apply(DiaryRequest request);
     }
 }

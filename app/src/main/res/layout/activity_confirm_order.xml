@@ -265,8 +265,8 @@
 
                     <EditText
                         android:id="@+id/money"
-                        android:layout_width="50dp"
-                        android:layout_height="20dp"
+                        android:layout_width="80dp"
+                        android:layout_height="24dp"
                         android:layout_marginRight="15dp"
                         android:background="@drawable/order_input_bg"
                         android:gravity="center"

@@ -26,7 +26,6 @@ import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMyComponent;
 import me.jessyan.mvparms.demo.di.module.MyModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
-import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Member;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.MemberAccount;
 import me.jessyan.mvparms.demo.mvp.presenter.MyPresenter;
@@ -43,7 +42,6 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.MyFollowActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyMealActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyOrderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MyStoreActivity;
-import me.jessyan.mvparms.demo.mvp.ui.activity.RecommenderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SettingActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.UserInfoActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.UserIntegralActivity;
@@ -249,11 +247,11 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 ArmsUtils.startActivity(MyStoreActivity.class);
                 break;
             case R.id.recommender:
-                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-                Member member = (Member) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_INFO);
-                Intent recommenderIntent = new Intent(getContext(), RecommenderActivity.class);
-                recommenderIntent.putExtra("recommender", member.getRecomMember());
-                ArmsUtils.startActivity(recommenderIntent);
+//                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+//                Member member = (Member) cache.get(KEY_KEEP + MyModel.KEY_FOR_USER_INFO);
+//                Intent recommenderIntent = new Intent(getContext(), RecommenderActivity.class);
+//                recommenderIntent.putExtra("recommender", member.getRecomMember());
+//                ArmsUtils.startActivity(recommenderIntent);
                 break;
             case R.id.bouns_parent:
                 Intent bonusIntent = new Intent(getContext(), UserIntegralActivity.class);

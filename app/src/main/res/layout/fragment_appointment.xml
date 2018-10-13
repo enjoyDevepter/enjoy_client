@@ -72,7 +72,8 @@
             android:layout_weight="1"
             android:background="@drawable/appointment_type_item_bg"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <View
                 android:layout_width="28dp"

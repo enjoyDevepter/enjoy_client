@@ -13,13 +13,13 @@ import me.jessyan.mvparms.demo.mvp.model.entity.doctor.request.DoctorListRequest
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.response.DoctorListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.ActivityInfo;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalInfoBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.ActivityInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.LoginUserHospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.ActivityInfoListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
@@ -68,7 +68,7 @@ public interface HospitalInfoContract {
 
         Observable<BaseResponse> follow(FollowRequest request);
 
-        Observable<ActivityInfoListResponse> getActivityList(SimpleRequest request);
+        Observable<ActivityInfoListResponse> getActivityList(ActivityInfoRequest request);
 
     }
 }

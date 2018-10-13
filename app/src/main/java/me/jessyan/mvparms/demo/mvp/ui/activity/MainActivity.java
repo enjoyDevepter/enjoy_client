@@ -10,9 +10,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +27,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.chaychan.library.BottomBarLayout;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -70,9 +71,12 @@ import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, ViewPager.OnPageChangeListener, LocationListener, View.OnClickListener {
+public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, ViewPager.OnPageChangeListener, View.OnClickListener, AMapLocationListener {
 
     private static boolean isExit = false;
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient = null;
+    public AMapLocationClientOption mLocationOption = null;
     @BindView(R.id.ll_home)
     View homeV;
     @BindView(R.id.ll_mall)
@@ -85,6 +89,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     View myV;
     @BindView(R.id.bbl)
     BottomBarLayout bottomBarLayout;
+    @BindView(R.id.sign)
+    View signV;
     @BindView(R.id.viewpager)
     ViewPager viewPager;
     @Inject
@@ -148,6 +154,19 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        mLocationClient.setLocationListener(this);
+        mLocationOption = new AMapLocationClientOption();
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        if (null != mLocationClient) {
+            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            mLocationClient.setLocationOption(mLocationOption);
+            mLocationOption.setOnceLocation(true);
+            mLocationOption.setOnceLocationLatest(true);
+            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+            mLocationClient.stopLocation();
+            mLocationClient.startLocation();
+        }
         initFragment();
         viewPager.setAdapter(new FragmentStatePagerAdapter((getSupportFragmentManager())) {
             @Override
@@ -176,7 +195,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         appointmentV.setOnClickListener(this);
         myV.setOnClickListener(this);
         viewPager.setCurrentItem(0, false);
-
+        signV.setOnClickListener(this);
         downloadManager = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
     }
 
@@ -242,30 +261,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationManager.removeUpdates(this);
-        provideCache().put("lon", String.valueOf(location.getLongitude()));
-        provideCache().put("lat", String.valueOf(location.getLatitude()));
-        mPresenter.getAreaForLoaction();
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
     public Activity getActivity() {
         return this;
     }
@@ -273,6 +268,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public Cache getCache() {
         return provideCache();
+    }
+
+    @Override
+    public void showSign(boolean show) {
+        signV.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -376,6 +376,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                     return;
                 }
                 viewPager.setCurrentItem(4, false);
+                break;
+            case R.id.sign:
+                ArmsUtils.startActivity(UserIntegralActivity.class);
                 break;
         }
     }
@@ -512,13 +515,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     }
 
 
-    @Override
-    protected void onDestroy() {
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.removeUpdates(this);
-        super.onDestroy();
-    }
-
     /**
      * 获取保存的apk文件的地址
      *
@@ -597,6 +593,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        provideCache().put("lon", String.valueOf(aMapLocation.getLongitude()));
+        provideCache().put("lat", String.valueOf(aMapLocation.getLatitude()));
+        mPresenter.getAreaForLoaction();
     }
 
     private class DownLoadBroadCastReceiver extends BroadcastReceiver {

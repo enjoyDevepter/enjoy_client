@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.Intent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -22,9 +23,12 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MyOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.Order;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.PlatformActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyOrderAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -288,6 +292,37 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                 }
             }
         });
+    }
+
+    /**
+     * 查看奖励规则
+     */
+    public void apply() {
+
+        DiaryRequest request = new DiaryRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(825);
+        mModel.apply(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<DiaryApplyResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(DiaryApplyResponse response) {
+                        if (response.isSuccess()) {
+                            Intent applyIntent = new Intent(mRootView.getActivity(), PlatformActivity.class);
+                            applyIntent.putExtra("url", response.getUrl());
+                            applyIntent.putExtra("orderId", (String) mRootView.getCache().get("orderId"));
+                            applyIntent.putExtra("apply", "apply");
+                            applyIntent.putExtra("merchId", (String) mRootView.getCache().get("merchId"));
+                            applyIntent.putExtra("goodsId", (String) mRootView.getCache().get("goodsId"));
+                            ArmsUtils.startActivity(applyIntent);
+                        }
+                    }
+                });
     }
 
     /**

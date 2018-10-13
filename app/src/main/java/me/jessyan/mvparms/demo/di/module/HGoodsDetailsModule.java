@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,12 @@ public class HGoodsDetailsModule {
     @Provides
     HGoodsDetailsContract.Model provideHGoodsDetailsModel(HGoodsDetailsModel model) {
         return model;
+    }
+
+    @ActivityScope
+    @Provides
+    RxPermissions provideRxPermissions() {
+        return new RxPermissions(view.getActivity());
     }
 
     @ActivityScope

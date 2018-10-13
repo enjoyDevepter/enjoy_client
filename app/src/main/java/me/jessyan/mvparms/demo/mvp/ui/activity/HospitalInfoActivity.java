@@ -70,6 +70,8 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     View followLayout;
     @BindView(R.id.follow)
     View followV;
+    @BindView(R.id.ad)
+    View adV;
     @BindView(R.id.infos)
     CarouselView carouselView;
     @Inject
@@ -355,17 +357,24 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     @Override
     public void updateActivityInfo(List<ActivityInfo> activityInfoList) {
-        carouselView.addView(R.layout.carouse_view);
-        carouselView.upDataListAndView(activityInfoList, 2000);
-        carouselView.setOnClickListener(new CarouselView.OnClickItemListener() {
-            @Override
-            public void onClick(int position) {
-                Intent intent = new Intent(getApplication(), ActivityInfoActivity.class);
-                intent.putExtra("activityId", activityInfoList.get(position).getActivityId());
-                intent.putExtra("title", activityInfoList.get(position).getTitle());
-                ArmsUtils.startActivity(intent);
-            }
-        });
+        if (null == activityInfoList || (activityInfoList != null && activityInfoList.size() <= 0)) {
+            adV.setVisibility(View.GONE);
+        } else {
+            carouselView.removeAllViews();
+            carouselView.addView(R.layout.carouse_view);
+            carouselView.upDataListAndView(activityInfoList, 2000);
+            carouselView.startLooping();
+            carouselView.setOnClickListener(new CarouselView.OnClickItemListener() {
+                @Override
+                public void onClick(int position) {
+                    Intent intent = new Intent(getApplication(), ActivityInfoActivity.class);
+                    intent.putExtra("activityId", activityInfoList.get(position).getActivityId());
+                    intent.putExtra("title", activityInfoList.get(position).getTitle());
+                    intent.putExtra("hospitalId", getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
+                    ArmsUtils.startActivity(intent);
+                }
+            });
+        }
     }
 
     public void updateHosptialInfo(HospitalInfoBean hospital) {
@@ -382,6 +391,12 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
                         .imageView(hot_img)
                         .build());
         followV.setSelected("1".equals(hospital.getIsFollow()) ? true : false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        carouselView.stopLooping();
     }
 
     @Override

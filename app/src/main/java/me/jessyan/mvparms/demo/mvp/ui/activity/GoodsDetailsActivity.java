@@ -148,6 +148,8 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     View newlyV;
     @BindView(R.id.secKillPrice)
     MoneyView secKillPriceTV;
+    @BindView(R.id.tel)
+    View telV;
     @Inject
     ImageLoader mImageLoader;
     @Inject
@@ -247,6 +249,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         collectLayoutV.setOnClickListener(this);
         spceCloseV.setOnClickListener(this);
         promotionCloseV.setOnClickListener(this);
+        telV.setOnClickListener(this);
 
         ArmsUtils.configRecyclerView(promotionCV, mLayoutManager);
         promotionCV.setAdapter(promotionAdapter);
@@ -454,7 +457,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         shareV.setVisibility(ArmsUtils.isEmpty(goods.getShareUrl()) ? View.INVISIBLE : View.VISIBLE);
 
         imageCount.setText("1/" + response.getImages().size());
-        nameTV.setText(goods.getName());
+        nameTV.setText(goods.getName() + " " + goods.getTitle());
         saleCountTV.setText(String.valueOf(goods.getSales()));
         goodSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
 
@@ -530,6 +533,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
             layoutParams.topMargin = ArmsUtils.getDimens(this, R.dimen.space_5);
             specV.setLayoutParams(layoutParams);
+            showSpec();
         }
 
     }
@@ -581,6 +585,9 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 break;
             case R.id.collect_layout:
                 mPresenter.collectGoods(!collectV.isSelected());
+                break;
+            case R.id.tel:
+                mPresenter.tel(response.getTellphone());
                 break;
         }
     }

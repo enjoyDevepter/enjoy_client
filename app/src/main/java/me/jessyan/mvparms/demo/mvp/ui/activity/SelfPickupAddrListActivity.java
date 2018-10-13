@@ -1,18 +1,24 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
-import org.simple.eventbus.Subscriber;
+import org.simple.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +31,17 @@ import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerSelfPickupAddrListComponent;
 import me.jessyan.mvparms.demo.di.module.SelfPickupAddrListModule;
 import me.jessyan.mvparms.demo.mvp.contract.SelfPickupAddrListContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.Address;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
 import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.SelfPickupAddrListPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListPresenter> implements SelfPickupAddrListContract.View, View.OnClickListener {
+public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListPresenter> implements SelfPickupAddrListContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     // 要启动这个页面，必须使用这个Key，将ListType作为参数通过intent传递进来
     public static final String KEY_FOR_ACTIVITY_LIST_TYPE = "key_for_activity_list_type";
@@ -46,16 +53,25 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
     TextView districtV;
     @BindView(R.id.district_layout)
     View districtLayoutV;
-    @BindView(R.id.store)
-    TextView storeV;
-    @BindView(R.id.store_title)
-    TextView storeTitleTV;
-    @BindView(R.id.store_layout)
-    View storeLayoutV;
     @BindView(R.id.confirm)
     View confirmV;
+    @BindView(R.id.stores)
+    RecyclerView storesRV;
+    @BindView(R.id.no_date)
+    View noDataV;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+    @Inject
+    StoresListAdapter mAdapter;
     @Inject
     List<AreaAddress> addressList;
+
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
+
     private ListType listType;
     private List<AreaAddress> options1Items = new ArrayList<>();
     private List<List<AreaAddress>> options2Items = new ArrayList<>();
@@ -82,44 +98,24 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
         if (listType == null) {
             throw new RuntimeException("listType is not null.you need send listType use key  \"KEY_FOR_ACTIVITY_LIST_TYPE\"");
         }
-        storeTitleTV.setText(listType.getTitle());
         titleTV.setText(listType.getSecendListTitle());
         backV.setOnClickListener(this);
         confirmV.setOnClickListener(this);
-        storeLayoutV.setOnClickListener(this);
         districtLayoutV.setOnClickListener(this);
-
         districtV.setText(listType.getDistrict());
-        storeV.setText(listType.getStoreName());
 
         provideCache().put("province", listType.getProvince());
         provideCache().put("city", listType.getCity());
         provideCache().put("county", listType.getCity());
         provideCache().put("goodsId", listType.getGoodsId());
         provideCache().put("merchId", listType.getMerchId());
-    }
 
-    @Subscriber(tag = EventBusTags.HOSPITAL_CHANGE_EVENT)
-    private void updateHospitalInfo(HospitalBaseInfoBean hospitalBaseInfoBean) {
-        storeV.setText(hospitalBaseInfoBean.getName());
-    }
-
-    @Subscriber(tag = EventBusTags.STORE_CHANGE_EVENT)
-    private void updateStoreInfo(Store store) {
-        storeV.setText(store.getName());
-    }
-
-    @Subscriber(tag = EventBusTags.ADDRESS_CHANGE_EVENT)
-    private void updateAddressInfo(Address address) {
-        storeV.setText(address.getAddress());
-    }
-
-    @Override
-    public void showLoading() {
-    }
-
-    @Override
-    public void hideLoading() {
+        ArmsUtils.configRecyclerView(storesRV, mLayoutManager);
+        storesRV.setAdapter(mAdapter);
+        storesRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
+        mAdapter.setOnItemClickListener(this);
+        initPaginate();
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -148,35 +144,42 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
             case R.id.district_layout:
                 showPickerView();
                 break;
-            case R.id.store_layout:
-                Intent intent = new Intent(this, ChoiceStoreActivity.class);
-                intent.putExtra("province", (String) provideCache().get("province"));
-                intent.putExtra("city", (String) provideCache().get("city"));
-                intent.putExtra("county", (String) provideCache().get("county"));
-                intent.putExtra("goodsId", (String) provideCache().get("goodsId"));
-                intent.putExtra("merchId", (String) provideCache().get("merchId"));
-                intent.putExtra("specValueId", getIntent().getStringExtra("specValueId"));
-                intent.putExtra(KEY_FOR_ACTIVITY_LIST_TYPE, listType);
-                ArmsUtils.startActivity(intent);
-                break;
+//            case R.id.store_layout:
+//                Intent intent = new Intent(this, ChoiceStoreActivity.class);
+//                intent.putExtra("province", (String) provideCache().get("province"));
+//                intent.putExtra("city", (String) provideCache().get("city"));
+//                intent.putExtra("county", (String) provideCache().get("county"));
+//                intent.putExtra("goodsId", (String) provideCache().get("goodsId"));
+//                intent.putExtra("merchId", (String) provideCache().get("merchId"));
+//                intent.putExtra("specValueId", getIntent().getStringExtra("specValueId"));
+//                intent.putExtra(KEY_FOR_ACTIVITY_LIST_TYPE, listType);
+//                ArmsUtils.startActivity(intent);
+//                break;
             case R.id.confirm:
                 SelfPickupAddrListActivity.ListType listType = (SelfPickupAddrListActivity.ListType) this.getIntent().getSerializableExtra(KEY_FOR_ACTIVITY_LIST_TYPE);
-                switch (listType) {
-                    case HOP:
-                        if (ArmsUtils.isEmpty(storeV.getText().toString())) {
+                if (null != provideCache().get("choiceItem")) {
+                    int index = (int) provideCache().get("choiceItem");
+                    switch (listType) {
+                        case HOP:
+                            EventBus.getDefault().post((HospitalBaseInfoBean) mAdapter.getInfos().get(index), EventBusTags.HOSPITAL_CHANGE_EVENT);
+                            break;
+                        case STORE:
+                            EventBus.getDefault().post((Store) mAdapter.getInfos().get(index), EventBusTags.STORE_CHANGE_EVENT);
+                            break;
+                        case ADDR:
+                            break;
+                    }
+                } else {
+                    switch (listType) {
+                        case HOP:
                             showMessage("请选择医院！");
                             return;
-                        }
-                    case STORE:
-                        if (ArmsUtils.isEmpty(storeV.getText().toString())) {
-                            showMessage("请选择店铺！");
+                        case STORE:
+                            showMessage("请选择店铺信息！");
                             return;
-                        }
-                    case ADDR:
-                        if (ArmsUtils.isEmpty(storeV.getText().toString())) {
-                            showMessage("请选择地址！");
+                        case ADDR:
                             return;
-                        }
+                    }
                 }
                 killMyself();
                 break;
@@ -239,11 +242,109 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
         pvOptions.show();
     }
 
+    @Override
+    public void showLoading() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    /**
+     * 开始加载更多
+     */
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    @Override
+    public void setLoadedAllItems(boolean has) {
+        this.hasLoadedAllItems = has;
+    }
+
+    @Override
+    public void showConent(boolean hasData) {
+        storesRV.setVisibility(hasData ? View.VISIBLE : View.GONE);
+        noDataV.setVisibility(hasData ? View.GONE : View.VISIBLE);
+    }
+
+    /**
+     * 初始化Paginate,用于加载更多
+     */
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.getData(false);
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return hasLoadedAllItems;
+                }
+            };
+
+            mPaginate = Paginate.with(storesRV, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
+    }
+
+
+    @Override
+    public void onRefresh() {
+        mPresenter.getData(true);
+    }
+
+
+    @Override
+    public void onItemClick(View view, int viewType, Object data, int position) {
+        for (int i = 0; i < mAdapter.getInfos().size(); i++) {
+            mAdapter.getInfos().get(i).setCheck(i == position ? true : false);
+        }
+        mAdapter.notifyDataSetChanged();
+        provideCache().put("choiceItem", position);
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DefaultAdapter.releaseAllHolder(storesRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
+    }
+
     /**
      * 这个页面可以进行复用。使用这个
      */
     public enum ListType {
-        HOP("选择医院", "选择医院: ", "请选择为您服务的医院", "choose_hosptial_info"),  // 选择医院
+        HOP("选择机构", "选择机构: ", "请选择为您服务的机构", "choose_hosptial_info"),  // 选择医院
         STORE("选择店铺", "选择店铺: ", "请选择为您服务的店铺", "choose_store_info"),  //选择店铺
         ADDR("自提地址", "选择店铺: ", "请选择为您服务的店铺", "choose_addr_info"); // 自提地址
 

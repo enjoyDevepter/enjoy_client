@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
+import android.net.Uri;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -11,7 +12,9 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.PermissionUtil;
 import com.jess.arms.utils.RxLifecycleUtils;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,7 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
+import static com.jess.arms.utils.ArmsUtils.startActivity;
 
 
 @ActivityScope
@@ -59,6 +63,8 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
     DiaryListAdapter mAdapter;
     @Inject
     List<Diary> diaryList;
+    @Inject
+    RxPermissions mRxPermissions;
 
     private int preEndIndex;
     private int lastPageIndex = 1;
@@ -298,6 +304,29 @@ public class GoodsDetailsPresenter extends BasePresenter<GoodsDetailsContract.Mo
                         }
                     }
                 });
+    }
+
+    public void tel(String phoneNum) {
+        //请求外部存储权限用于适配android6.0的权限管理机制
+        PermissionUtil.callPhone(new PermissionUtil.RequestPermission() {
+            @Override
+            public void onRequestPermissionSuccess() {
+                //request permission success, do something.
+            }
+
+            @Override
+            public void onRequestPermissionFailure(List<String> permissions) {
+            }
+
+            @Override
+            public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+            }
+        }, mRxPermissions, mErrorHandler);
+
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        startActivity(intent);
     }
 
     public void goOrderConfirm() {

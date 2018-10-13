@@ -13,8 +13,10 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.MyOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.request.OrderOperationRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderResponse;
 
 
@@ -47,5 +49,11 @@ public class MyOrderModel extends BaseModel implements MyOrderContract.Model {
     public Observable<BaseResponse> cancelOrder(OrderOperationRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .cancelOrder(request);
+    }
+
+    @Override
+    public Observable<DiaryApplyResponse> apply(DiaryRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .apply(request);
     }
 }

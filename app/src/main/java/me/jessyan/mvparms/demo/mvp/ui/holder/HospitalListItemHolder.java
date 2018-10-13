@@ -66,7 +66,7 @@ public class HospitalListItemHolder extends BaseHolder<Hospital> {
     @Override
     public void setData(Hospital hospital, int position) {
 
-        Observable.just(hospital.getProvinceName() + "" + hospital.getCityName() + "" + hospital.getCountyName() + "" + hospital.getName())
+        Observable.just(hospital.getName())
                 .subscribe(s -> nameTV.setText(s));
         if (ArmsUtils.isEmpty(hospital.getDistanceDesc())) {
             distanceTagV.setVisibility(View.INVISIBLE);
@@ -75,7 +75,7 @@ public class HospitalListItemHolder extends BaseHolder<Hospital> {
             Observable.just(hospital.getDistanceDesc())
                     .subscribe(s -> distanceTV.setText(String.valueOf(s)));
         }
-        Observable.just(hospital.getAddress())
+        Observable.just(hospital.getProvinceName() + "" + hospital.getCityName() + "" + hospital.getCountyName() + "" + hospital.getAddress())
                 .subscribe(s -> addressTV.setText(String.valueOf(s)));
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),

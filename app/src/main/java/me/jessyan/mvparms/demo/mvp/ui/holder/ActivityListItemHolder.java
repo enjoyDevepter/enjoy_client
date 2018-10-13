@@ -21,12 +21,11 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
-import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.ActivityInfo;
 
 /**
  * ================================================
@@ -37,38 +36,19 @@ import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class StoresListItemHolder extends BaseHolder<CommonStoreDateType> {
+public class ActivityListItemHolder extends BaseHolder<ActivityInfo> {
 
     @BindView(R.id.name)
     TextView nameTV;
-    @BindView(R.id.distance_tag)
-    View distanceTagV;
-    @BindView(R.id.distance)
-    TextView distanceTV;
-    @BindView(R.id.address)
-    TextView addressTV;
-    @BindView(R.id.check)
-    View checkV;
 
-    public StoresListItemHolder(View itemView) {
+    public ActivityListItemHolder(View itemView) {
         super(itemView);
     }
 
     @Override
-    public void setData(CommonStoreDateType store, int position) {
-        Observable.just(store.getName())
+    public void setData(ActivityInfo info, int position) {
+        Observable.just(info.getTitle())
                 .subscribe(s -> nameTV.setText(s));
-        if (ArmsUtils.isEmpty(store.getDistanceDesc())) {
-            distanceTagV.setVisibility(View.INVISIBLE);
-            distanceTV.setVisibility(View.INVISIBLE);
-        } else {
-            Observable.just(store.getDistanceDesc())
-                    .subscribe(s -> distanceTV.setText(String.valueOf(s)));
-        }
-        Observable.just(store.getProvinceName() + "" + store.getCityName() + "" + store.getCountyName() + "" + store.getAddress())
-                .subscribe(s -> addressTV.setText(String.valueOf(s)));
-        Observable.just(store.isCheck())
-                .subscribe(s -> checkV.setSelected(s));
     }
 
     /**
@@ -78,9 +58,5 @@ public class StoresListItemHolder extends BaseHolder<CommonStoreDateType> {
     @Override
     protected void onRelease() {
         this.nameTV = null;
-        this.distanceTV = null;
-        this.distanceTagV = null;
-        this.addressTV = null;
-        this.checkV = null;
     }
 }

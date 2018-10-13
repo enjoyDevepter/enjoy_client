@@ -1,11 +1,19 @@
 package me.jessyan.mvparms.demo.di.module;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
 import com.jess.arms.di.scope.ActivityScope;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.ActivityInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.ActivityInfoModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.ActivityInfo;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.ActivityListAdapter;
 
 
 @Module
@@ -31,5 +39,24 @@ public class ActivityInfoModule {
     @Provides
     ActivityInfoContract.Model provideActivityInfoModel(ActivityInfoModel model) {
         return model;
+    }
+
+
+    @ActivityScope
+    @Provides
+    RecyclerView.LayoutManager provideLayoutManager() {
+        return new LinearLayoutManager(view.getActivity(), LinearLayoutManager.VERTICAL, false);
+    }
+
+    @ActivityScope
+    @Provides
+    List<ActivityInfo> provideActivityList() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    ActivityListAdapter provideActivityListAdapter(List<ActivityInfo> goods) {
+        return new ActivityListAdapter(goods);
     }
 }

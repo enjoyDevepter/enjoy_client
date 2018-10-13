@@ -7,11 +7,8 @@ package me.jessyan.mvparms.demo.mvp.model.entity;
 public class Store extends CommonStoreDateType {
 
     private String province;
-    private String provinceName;
     private String city;
-    private String cityName;
     private String county;
-    private String countyName;
     private String storeId;
 
     public String getProvince() {
@@ -22,14 +19,6 @@ public class Store extends CommonStoreDateType {
         this.province = province;
     }
 
-    public String getProvinceName() {
-        return provinceName;
-    }
-
-    public void setProvinceName(String provinceName) {
-        this.provinceName = provinceName;
-    }
-
     public String getCity() {
         return city;
     }
@@ -38,13 +27,6 @@ public class Store extends CommonStoreDateType {
         this.city = city;
     }
 
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
 
     public String getCounty() {
         return county;
@@ -54,13 +36,6 @@ public class Store extends CommonStoreDateType {
         this.county = county;
     }
 
-    public String getCountyName() {
-        return countyName;
-    }
-
-    public void setCountyName(String countyName) {
-        this.countyName = countyName;
-    }
 
     public String getStoreId() {
         return storeId;
@@ -74,11 +49,8 @@ public class Store extends CommonStoreDateType {
     public String toString() {
         return "Store{" +
                 "province='" + province + '\'' +
-                ", provinceName='" + provinceName + '\'' +
                 ", city='" + city + '\'' +
-                ", cityName='" + cityName + '\'' +
                 ", county='" + county + '\'' +
-                ", countyName='" + countyName + '\'' +
                 ", storeId='" + storeId + '\'' +
                 '}';
     }

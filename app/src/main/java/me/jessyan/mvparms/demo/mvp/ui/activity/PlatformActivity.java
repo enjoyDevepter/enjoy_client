@@ -1,5 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,6 +31,8 @@ public class PlatformActivity extends BaseActivity<PlatformPresenter> implements
     TextView titleTV;
     @BindView(R.id.webview)
     WebView webView;
+    @BindView(R.id.confirm)
+    View confirmV;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -50,6 +53,10 @@ public class PlatformActivity extends BaseActivity<PlatformPresenter> implements
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
         titleTV.setText("");
+        if (!ArmsUtils.isEmpty(getIntent().getStringExtra("apply"))) {
+            confirmV.setVisibility(View.VISIBLE);
+            confirmV.setOnClickListener(this);
+        }
         webView.loadUrl(getIntent().getStringExtra("url"));
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
@@ -100,6 +107,15 @@ public class PlatformActivity extends BaseActivity<PlatformPresenter> implements
             case R.id.back:
                 killMyself();
                 return;
+            case R.id.confirm:
+                // 申请奖励
+                mPresenter.apply();
+                break;
         }
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 }

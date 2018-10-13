@@ -72,7 +72,7 @@ public class GoodsNewlyListItemHolder extends BaseHolder<Goods> {
 
     @Override
     public void setData(Goods goods, int position) {
-        Observable.just(goods.getName())
+        Observable.just(goods.getName() + " " + goods.getTitle())
                 .subscribe(s -> nameTV.setText(s));
         Observable.just(goods.getSales())
                 .subscribe(s -> saleTV.setText(String.valueOf(s)));

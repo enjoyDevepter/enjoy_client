@@ -15,7 +15,9 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeAdResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 
 
 public interface MainContract {
@@ -24,6 +26,8 @@ public interface MainContract {
         Activity getActivity();
 
         Cache getCache();
+
+        void showSign(boolean show);
 
         void showAD(HomeAd ad);
 
@@ -42,5 +46,7 @@ public interface MainContract {
         Observable<CityResponse> getAreaForLoaction(LocationRequest request);
 
         Observable<HomeAdResponse> getOrCancelAD(HomeADRequest request);
+
+        Observable<UserInfoResponse> getSignStatus(UserInfoRequest request);
     }
 }

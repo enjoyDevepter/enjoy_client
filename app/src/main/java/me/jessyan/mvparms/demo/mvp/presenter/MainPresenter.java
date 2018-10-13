@@ -5,10 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 
 import com.jess.arms.di.scope.ActivityScope;
@@ -38,7 +35,9 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.CityResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeAdResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.LocationRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UpdateRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UpdateResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.UserInfoResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -68,6 +67,45 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
         requestLocation();//打开 App 时自动加载列表
         checkUpdate();
         getOrCancelAd(false);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    void onResume() {
+        getSignStatus();
+    }
+
+    private void getSignStatus() {
+        UserInfoRequest request = new UserInfoRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+        request.setCmd(104);
+        String token = (String) cache.get(KEY_KEEP + "token");
+        if (ArmsUtils.isEmpty(token)) {
+            return;
+        }
+        request.setToken(token);
+        mModel.getSignStatus(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<UserInfoResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(UserInfoResponse response) {
+                        if (response.isNeedLogin()) {
+                            cache.remove(KEY_KEEP + "token");
+                            return;
+                        }
+                        if (response.isSuccess()) {
+                            mRootView.showSign("0".equals(response.getMember().getIsSignin()) ? true : false);
+                        }
+                    }
+                });
     }
 
     public void getOrCancelAd(boolean cancel) {
@@ -216,7 +254,6 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     }
 
     private void requestLocation() {
-        LocationManager locationManager = (LocationManager) mRootView.getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(mRootView.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mRootView.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             PermissionUtil.locaiton(new PermissionUtil.RequestPermission() {
                 @SuppressLint("MissingPermission")
@@ -235,7 +272,6 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
             }, mRootView.getRxPermissions(), mErrorHandler);
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000l, 0, (LocationListener) mRootView.getActivity());
     }
 
 

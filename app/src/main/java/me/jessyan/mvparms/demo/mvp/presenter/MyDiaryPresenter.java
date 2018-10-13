@@ -22,7 +22,7 @@ import me.jessyan.mvparms.demo.mvp.contract.MyDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -127,14 +127,12 @@ public class MyDiaryPresenter extends BasePresenter<MyDiaryContract.Model, MyDia
 
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<DiaryApplyResponse>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseResponse response) {
+                    public void onNext(DiaryApplyResponse response) {
                         if (response.isSuccess()) {
                             if (apply) {
                                 mRootView.showApply(response.getContent());
-                            } else {
-                                mRootView.showMessage(response.getRetDesc());
                             }
                         }
                     }

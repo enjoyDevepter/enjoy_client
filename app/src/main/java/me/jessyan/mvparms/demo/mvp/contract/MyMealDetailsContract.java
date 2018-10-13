@@ -13,6 +13,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.MyMealDetailRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ShareRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 
@@ -44,6 +45,6 @@ public interface MyMealDetailsContract {
 
         Observable<ShareResponse> share(ShareRequest request);
 
-        Observable<BaseResponse> apply(DiaryRequest request);
+        Observable<DiaryApplyResponse> apply(DiaryRequest request);
     }
 }

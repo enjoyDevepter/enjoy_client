@@ -9,7 +9,7 @@ import com.jess.arms.mvp.IView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 
 
@@ -35,7 +35,7 @@ public interface MyDiaryContract {
     interface Model extends IModel {
         Observable<DiaryListResponse> getMyDiaryList(DiaryListRequest request);
 
-        Observable<BaseResponse> apply(DiaryRequest request);
+        Observable<DiaryApplyResponse> apply(DiaryRequest request);
 
     }
 }

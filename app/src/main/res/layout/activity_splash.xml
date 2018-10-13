@@ -37,4 +37,13 @@
         android:text="跳过 1"
         android:textColor="@color/white"
         android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="100dp"
+        android:text="创造美 分享美"
+        android:textColor="#FF828282"
+        android:textSize="13sp" />
 </FrameLayout>

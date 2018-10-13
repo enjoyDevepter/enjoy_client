@@ -51,7 +51,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-
 //        prerelease {
 //            buildConfigField "boolean", "LOG_DEBUG", "false"
 //            buildConfigField "boolean", "USE_CANARY", "false"
@@ -99,6 +98,7 @@ dependencies {
     implementation rootProject.ext.dependencies['multidex']
     implementation rootProject.ext.dependencies['photoview']
     implementation rootProject.ext.dependencies['wechat']
+    implementation rootProject.ext.dependencies['location']
 
     //tools
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]

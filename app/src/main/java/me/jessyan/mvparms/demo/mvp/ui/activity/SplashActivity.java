@@ -52,7 +52,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     public int initView(Bundle savedInstanceState) {
-//        this.getWindow().getDecorView().setBackground(null);
         return R.layout.activity_splash; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 

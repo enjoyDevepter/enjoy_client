@@ -168,6 +168,8 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     View newlyInfoV;
     @BindView(R.id.priceInfo)
     View priceInfoV;
+    @BindView(R.id.tel)
+    View telV;
     @Inject
     GoodsPromotionAdapter promotionAdapter;
     @Inject
@@ -259,6 +261,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         promotionCloseV.setOnClickListener(this);
         spceCloseV.setOnClickListener(this);
         collectLayoutV.setOnClickListener(this);
+        telV.setOnClickListener(this);
 
         ArmsUtils.configRecyclerView(promotionCV, mLayoutManager);
         promotionCV.setAdapter(promotionAdapter);
@@ -473,7 +476,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
         }
 
         imageCountTV.setText("1/" + response.getImages().size());
-        nameTV.setText(goods.getName());
+        nameTV.setText(goods.getName() + " " + goods.getTitle());
 
         collectV.setSelected("1".equals(goods.getIsFavorite()) ? true : false);
         saleCountTV.setText(String.valueOf(goods.getSales()));
@@ -551,6 +554,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                 tailMoneyTV.setMoneyText(String.valueOf(goods.getSalePrice()));
                 depositTV.setMoneyText(String.valueOf(goods.getDeposit()));
             }
+            showSpec();
         }
     }
 
@@ -602,6 +606,9 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                 break;
             case R.id.buy:
                 mPresenter.goOrderConfirm();
+                break;
+            case R.id.tel:
+                mPresenter.tel(response.getTellphone());
                 break;
         }
     }

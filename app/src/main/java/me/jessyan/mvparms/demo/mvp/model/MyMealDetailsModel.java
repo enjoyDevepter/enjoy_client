@@ -19,6 +19,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.MyMealDetailRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ShareRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.ShareResponse;
 
 
@@ -60,7 +61,7 @@ public class MyMealDetailsModel extends BaseModel implements MyMealDetailsContra
     }
 
     @Override
-    public Observable<BaseResponse> apply(DiaryRequest request) {
+    public Observable<DiaryApplyResponse> apply(DiaryRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .apply(request);
     }

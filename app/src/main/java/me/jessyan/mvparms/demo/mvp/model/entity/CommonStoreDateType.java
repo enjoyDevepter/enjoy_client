@@ -9,6 +9,9 @@ public class CommonStoreDateType {
     private String address;
     private String distance;
     private String distanceDesc;
+    private String cityName;
+    private String provinceName;
+    private String countyName;
     private boolean check;
 
     public String getName() {
@@ -35,6 +38,30 @@ public class CommonStoreDateType {
         this.distance = distance;
     }
 
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getCountyName() {
+        return countyName;
+    }
+
+    public void setCountyName(String countyName) {
+        this.countyName = countyName;
+    }
+
     public String getDistanceDesc() {
         return distanceDesc;
     }
@@ -58,6 +85,9 @@ public class CommonStoreDateType {
                 ", address='" + address + '\'' +
                 ", distance='" + distance + '\'' +
                 ", distanceDesc='" + distanceDesc + '\'' +
+                ", cityName='" + cityName + '\'' +
+                ", provinceName='" + provinceName + '\'' +
+                ", countyName='" + countyName + '\'' +
                 ", check=" + check +
                 '}';
     }

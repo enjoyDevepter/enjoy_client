@@ -334,14 +334,22 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
             case LEFT_IMAGE:
                 if (diary.getImageList() != null && diary.getImageList().size() > 0) {
                     Intent intent = new Intent(getActivity(), ImageShowActivity.class);
-                    intent.putExtra("images", new String[]{diary.getImageList().get(0)});
+                    String[] images = new String[diary.getImageList().size()];
+                    for (int i = 0; i < diary.getImageList().size(); i++) {
+                        images[i] = diary.getImageList().get(i);
+                    }
+                    intent.putExtra("images", images);
                     ArmsUtils.startActivity(intent);
                 }
                 break;
             case RIGHT_IMAGE:
                 if (diary.getImageList() != null && diary.getImageList().size() > 1) {
                     Intent intent = new Intent(getActivity(), ImageShowActivity.class);
-                    intent.putExtra("images", new String[]{diary.getImageList().get(1)});
+                    String[] images = new String[diary.getImageList().size()];
+                    for (int i = 0; i < diary.getImageList().size(); i++) {
+                        images[i] = diary.getImageList().get(i);
+                    }
+                    intent.putExtra("images", images);
                     ArmsUtils.startActivity(intent);
                 }
                 break;

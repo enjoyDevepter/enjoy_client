@@ -9,7 +9,11 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.PlatformContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 
 
 @ActivityScope
@@ -31,4 +35,9 @@ public class PlatformModel extends BaseModel implements PlatformContract.Model {
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<DiaryApplyResponse> apply(DiaryRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .apply(request);
+    }
 }

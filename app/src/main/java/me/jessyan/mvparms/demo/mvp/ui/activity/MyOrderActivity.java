@@ -307,6 +307,12 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                         if ("1".equals(order.getOrderStatus())) {
                             // 取消订单
                             mPresenter.cancelOrder();
+                        } else if ("5".equals(order.getOrderStatus())) {
+                            // 申请奖励
+                            provideCache().put("orderId", order.getOrderId());
+                            provideCache().put("merchId", order.getGoodsList().get(0).getMerchId());
+                            provideCache().put("goodsId", order.getGoodsList().get(0).getGoodsId());
+                            mPresenter.apply();
                         }
                         break;
                 }

@@ -72,7 +72,7 @@ public class HGoodsListItemHolder extends BaseHolder<HGoods> {
 
     @Override
     public void setData(HGoods goods, int position) {
-        Observable.just(goods.getName())
+        Observable.just(goods.getName() + " " + goods.getTitle())
                 .subscribe(s -> nameTV.setText(s));
         Observable.just(goods.getGoodsSpecValue().getSpecValueName())
                 .subscribe(s -> doctorT.setText(s));

@@ -13,6 +13,7 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.ActivityInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.HospitalService;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.ActivityInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.ActivityInfoListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.ActivityInfoResponse;
 
 
@@ -39,5 +40,11 @@ public class ActivityInfoModel extends BaseModel implements ActivityInfoContract
     public Observable<ActivityInfoResponse> getActivityInfo(ActivityInfoRequest request) {
         return mRepositoryManager.obtainRetrofitService(HospitalService.class)
                 .getActivityInfo(request);
+    }
+
+    @Override
+    public Observable<ActivityInfoListResponse> getActivityList(ActivityInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(HospitalService.class)
+                .getActivityList(request);
     }
 }

@@ -17,6 +17,8 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -24,6 +26,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerDiaryImageComponent;
 import me.jessyan.mvparms.demo.di.module.DiaryImageModule;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryImageContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.DiaryAlbum;
 import me.jessyan.mvparms.demo.mvp.presenter.DiaryImagePresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryImageAdapter;
 
@@ -186,7 +189,15 @@ public class DiaryImageActivity extends BaseActivity<DiaryImagePresenter> implem
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
-
+        List<DiaryAlbum> diaryAlbumList = mAdapter.getInfos();
+        String[] images = new String[diaryAlbumList.size()];
+        for (int i = 0; i < diaryAlbumList.size(); i++) {
+            images[i] = diaryAlbumList.get(i).getImage();
+        }
+        Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+        intent.putExtra("images", images);
+        intent.putExtra("index", position);
+        ArmsUtils.startActivity(intent);
     }
 
     @Override

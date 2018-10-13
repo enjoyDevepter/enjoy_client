@@ -150,7 +150,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 statusTV.setText("已完成");
                 rightTV.setText("写日记");
                 rightTV.setVisibility(View.VISIBLE);
-                leftTV.setVisibility(View.GONE);
+                leftTV.setText("申请奖励");
+                leftTV.setVisibility(View.VISIBLE);
             }
 
         } else if ("7".equals(order.getOrderType())) { // 医美定金预售
@@ -182,7 +183,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 statusTV.setText("已完成");
                 rightTV.setText("写日记");
                 rightTV.setVisibility(View.VISIBLE);
-                leftTV.setVisibility(View.GONE);
+                leftTV.setText("申请奖励");
+                leftTV.setVisibility(View.VISIBLE);
             }
 
         } else {
@@ -214,7 +216,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 statusTV.setText("已完成");
                 rightTV.setText("写日记");
                 rightTV.setVisibility(View.VISIBLE);
-                leftTV.setVisibility(View.GONE);
+                leftTV.setText("申请奖励");
+                leftTV.setVisibility(View.VISIBLE);
             }
         }
 

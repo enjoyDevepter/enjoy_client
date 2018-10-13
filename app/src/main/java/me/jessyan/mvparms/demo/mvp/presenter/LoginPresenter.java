@@ -88,6 +88,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                     public void onNext(RegisterResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
+                            mRootView.showMessage("登录成功");
                             cacheUserInfo(response.getToken(), response.getSignkey());
                             mRootView.killMyself();
                             mAppManager.getTopActivity().recreate();
@@ -115,6 +116,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                     public void onNext(RegisterResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
+                            mRootView.showMessage("登录成功");
                             cacheUserInfo(response.getToken(), response.getSignkey());
                             mRootView.killMyself();
                         } else {
