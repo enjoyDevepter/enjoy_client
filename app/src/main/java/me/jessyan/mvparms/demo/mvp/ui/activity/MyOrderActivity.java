@@ -19,10 +19,13 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.EventBus;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMyOrderComponent;
 import me.jessyan.mvparms.demo.di.module.MyOrderModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyOrderContract;
@@ -353,11 +356,8 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                             ArmsUtils.startActivity(intent);
                         } else if ("31".equals(order.getOrderStatus())) {
                             // 预约
-                            Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
-                            makeIntent.putExtra("orderId", order.getOrderId());
-                            makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
-                            makeIntent.putExtra("desc", order.getGoodsList().get(0).getDesc());
-                            ArmsUtils.startActivity(makeIntent);
+                            EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
+                            killMyself();
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记
                             Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
