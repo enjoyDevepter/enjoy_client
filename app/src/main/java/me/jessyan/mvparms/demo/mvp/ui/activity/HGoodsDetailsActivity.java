@@ -53,6 +53,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerHGoodsDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.HGoodsDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.HGoodsDetailsContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
@@ -71,7 +72,7 @@ import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> implements HGoodsDetailsContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, LabelsView.OnLabelSelectChangeListener {
+public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> implements HGoodsDetailsContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, LabelsView.OnLabelSelectChangeListener, DiaryListAdapter.OnChildItemClickLinstener {
 
     @BindView(R.id.back)
     View backV;
@@ -554,7 +555,6 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                 tailMoneyTV.setMoneyText(String.valueOf(goods.getSalePrice()));
                 depositTV.setMoneyText(String.valueOf(goods.getDeposit()));
             }
-            showSpec();
         }
     }
 
@@ -565,6 +565,7 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             diraySRL = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview, null);
             dirayRV = diraySRL.findViewById(R.id.list);
             dirayRV.setAdapter(mAdapter);
+            mAdapter.setOnChildItemClickLinstener(this);
             dirayRV.setNestedScrollingEnabled(false);
             ArmsUtils.configRecyclerView(dirayRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             initPaginate();
@@ -599,16 +600,21 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
             case R.id.mask_spec:
             case R.id.spec:
             case R.id.spec_close:
-                showSpec();
+                showSpec(true);
                 break;
             case R.id.collect_layout:
                 mPresenter.collectGoods(!collectV.isSelected());
                 break;
             case R.id.buy:
-                mPresenter.goOrderConfirm();
+                String where = getIntent().getStringExtra("where");
+                if (maskSpecV.isShown() || "timelimitdetail".equals(where) || "newpeople".equals(where)) {
+                    mPresenter.goOrderConfirm();
+                } else {
+                    showSpec(false);
+                }
                 break;
             case R.id.tel:
-                mPresenter.tel(response.getTellphone());
+                mPresenter.getTel();
                 break;
         }
     }
@@ -664,19 +670,21 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     }
 
 
-    private void showSpec() {
-        String where = getIntent().getStringExtra("where");
-        if ("timelimitdetail".equals(where)) {
-            showMessage("限时秒杀商品不可选择规格");
-            return;
-        } else if ("newpeople".equals(where)) {
-            showMessage("新人专享商品不可选择规格");
-            return;
-        }
-        if (null == speceLabelsView.getLabels()
-                || (null != speceLabelsView.getLabels() && speceLabelsView.getLabels().size() <= 0)
-                || !ArmsUtils.isEmpty(where)) {
-            return;
+    private void showSpec(boolean check) {
+        if (check) {
+            String where = getIntent().getStringExtra("where");
+            if ("timelimitdetail".equals(where)) {
+                showMessage("限时秒杀商品不可选择规格");
+                return;
+            } else if ("newpeople".equals(where)) {
+                showMessage("新人专享商品不可选择规格");
+                return;
+            }
+            if (null == speceLabelsView.getLabels()
+                    || (null != speceLabelsView.getLabels() && speceLabelsView.getLabels().size() <= 0)
+                    || !ArmsUtils.isEmpty(where)) {
+                return;
+            }
         }
         if (!maskSpecV.isShown()) {
             speceLabelsView.setOnLabelSelectChangeListener(this);
@@ -748,13 +756,64 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
     @Override
     public void onBackPressed() {
         if (maskProV.isShown() || maskSpecV.isShown()) {
-            showSpec();
+            showSpec(false);
             showPro();
             return;
         }
         super.onBackPressed();
     }
 
+    @Override
+    public void onChildItemClick(View v, DiaryListAdapter.ViewName viewname, int position) {
+        Diary diary = mAdapter.getInfos().get(position);
+        switch (viewname) {
+            case FLLOW:
+                provideCache().put("memberId", diary.getMember().getMemberId());
+                mPresenter.follow("1".equals(diary.getMember().getIsFollow()) ? false : true, position);
+                break;
+            case VOTE:
+                provideCache().put("diaryId", diary.getDiaryId());
+                mPresenter.vote("1".equals(diary.getIsPraise()) ? false : true, position);
+                break;
+            case LEFT_IMAGE:
+            case RIGHT_IMAGE:
+            case ITEM:
+                Intent intent = new Intent(getActivity().getApplication(), DiaryForGoodsActivity.class);
+                intent.putExtra("diaryId", diary.getDiaryId());
+                intent.putExtra("goodsId", diary.getGoods().getGoodsId());
+                intent.putExtra("merchId", diary.getGoods().getMerchId());
+                intent.putExtra("memberId", diary.getMember().getMemberId());
+                ArmsUtils.startActivity(intent);
+                break;
+            case COMMENT:
+                Intent diaryIntent = new Intent(getActivity().getApplication(), DiaryDetailsActivity.class);
+                diaryIntent.putExtra("diaryId", diary.getDiaryId());
+                ArmsUtils.startActivity(diaryIntent);
+                break;
+            case SHARE:
+                showWX(diary);
+                break;
+        }
+    }
+
+    private void showWX(Diary diary) {
+        if (null != diary) {
+            Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+            if (cache.get(KEY_KEEP + "token") == null) {
+                ArmsUtils.startActivity(LoginActivity.class);
+                return;
+            }
+            UMWeb web = new UMWeb(diary.getShareUrl());
+            web.setTitle(diary.getShareTitle());//标题
+            web.setDescription(diary.getShareDesc());
+            new ShareAction(getActivity())
+                    .withMedia(web)
+                    .setCallback(shareListener)
+                    .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                    .open();
+
+        }
+    }
 
     private class Mobile {
         @JavascriptInterface

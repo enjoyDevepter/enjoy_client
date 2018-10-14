@@ -186,7 +186,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             }
 
         });
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(1);
         viewPager.addOnPageChangeListener(this);
         bottomBarLayout.setViewPager(viewPager);
         homeV.setOnClickListener(this);
@@ -246,14 +246,22 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
-        if (position == 2 && positionOffset > 0 && ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
-            viewPager.setCurrentItem(2, false);
-        }
+//        Cache<String, Object> appCache = ArmsUtils.obtainAppComponentFromContext(getApplication()).extras();
+//        if (position == 2 && positionOffset > 0 && ArmsUtils.isEmpty((String) appCache.get(KEY_KEEP + "token"))) {
+//            viewPager.setCurrentItem(2, true);
+//        }
     }
 
     @Override
     public void onPageSelected(int position) {
+        switch (position) {
+            case 3:
+                EventBus.getDefault().post(position, EventBusTags.ONREFRESH_CONTENT);
+                break;
+            case 4:
+                EventBus.getDefault().post(position, EventBusTags.ONREFRESH_CONTENT);
+                break;
+        }
     }
 
     @Override

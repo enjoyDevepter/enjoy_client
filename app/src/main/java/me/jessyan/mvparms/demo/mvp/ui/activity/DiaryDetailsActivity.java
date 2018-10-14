@@ -38,6 +38,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerDiaryDetailsComponent;
 import me.jessyan.mvparms.demo.di.module.DiaryDetailsModule;
 import me.jessyan.mvparms.demo.mvp.contract.DiaryDetailsContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.DiaryDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
@@ -90,7 +91,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     @BindView(R.id.intro)
     TextView introTV;
 
-
+    @BindView(R.id.browse_layout)
+    View shareNewV;
     @BindView(R.id.browse)
     TextView browseTV;
     @BindView(R.id.comment_layout)
@@ -251,6 +253,9 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
             case R.id.share:
                 showWX();
                 break;
+            case R.id.browse_layout:
+                showNewWX();
+                break;
             case R.id.follow:
                 provideCache().put("memberId", response.getMember().getMemberId());
                 mPresenter.follow(!followV.isSelected());
@@ -269,6 +274,26 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 provideCache().put("diaryId", response.getDiary().getDiaryId());
                 mPresenter.vote(voteV.isSelected() ? false : true);
                 break;
+        }
+    }
+
+    private void showNewWX() {
+        if (null != response && null != response.getDiary()) {
+            Diary diary = response.getDiary();
+            Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+            if (cache.get(KEY_KEEP + "token") == null) {
+                ArmsUtils.startActivity(LoginActivity.class);
+                return;
+            }
+            UMWeb web = new UMWeb(diary.getShareUrl());
+            web.setTitle(diary.getShareTitle());//标题
+            web.setDescription(diary.getShareDesc());
+            new ShareAction(this)
+                    .withMedia(web)
+                    .setCallback(shareListener)
+                    .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                    .open();
+
         }
     }
 
@@ -335,6 +360,13 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         isPraiseTV.setSelected("1".equals(response.getDiary().getIsPraise()) ? true : false);
         voteV.setSelected("1".equals(response.getDiary().getIsPraise()) ? true : false);
         praiseTV.setText(String.valueOf(response.getDiary().getPraise()));
+
+        if ("1".equals(response.getDiary().getIsShare())) {
+            shareNewV.setOnClickListener(this);
+        } else {
+            shareNewV.setVisibility(View.GONE);
+        }
+
 
         mImageLoader.loadImage(this,
                 ImageConfigImpl

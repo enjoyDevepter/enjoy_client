@@ -71,6 +71,8 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
     TextView praiseTV;
     @BindView(R.id.praise_layout)
     View praiseLayoutV;
+    @BindView(R.id.browse_layout)
+    View shareV;
 
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
@@ -86,6 +88,7 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
         fllowV.setOnClickListener(this);
         praiseLayoutV.setOnClickListener(this);
         commentV.setOnClickListener(this);
+        shareV.setOnClickListener(this);
         leftIV.setOnClickListener(this);
         rightIV.setOnClickListener(this);
         this.onChildItemClickLinstener = onChildItemClickLinstener;
@@ -109,6 +112,9 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
                     return;
                 case R.id.comment_layout:
                     onChildItemClickLinstener.onChildItemClick(view, DiaryListAdapter.ViewName.COMMENT, getAdapterPosition());
+                    return;
+                case R.id.browse_layout:
+                    onChildItemClickLinstener.onChildItemClick(view, DiaryListAdapter.ViewName.SHARE, getAdapterPosition());
                     return;
             }
         }
@@ -134,6 +140,12 @@ public class DiaryListItemHolder extends BaseHolder<Diary> {
                 .subscribe(s -> isPraiseTV.setSelected("1".equals(s) ? true : false));
         Observable.just(diary.getPraise())
                 .subscribe(s -> praiseTV.setText(String.valueOf(s)));
+
+        if ("1".equals(diary.getIsShare())) {
+            shareV.setVisibility(View.VISIBLE);
+        } else {
+            shareV.setVisibility(View.GONE);
+        }
 
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl

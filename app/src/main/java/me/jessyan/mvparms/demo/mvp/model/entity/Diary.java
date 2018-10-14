@@ -19,6 +19,11 @@ public class Diary {
     private int browse;
     private String intro;
     private String content;
+    private String isShare;
+    private String shareTitle;
+    private String shareDesc;
+    private String shareUrl;
+    private String shareImageUrl;
 
     public int getBrowse() {
         return browse;
@@ -116,6 +121,46 @@ public class Diary {
         this.content = content;
     }
 
+    public String getIsShare() {
+        return isShare;
+    }
+
+    public void setIsShare(String isShare) {
+        this.isShare = isShare;
+    }
+
+    public String getShareTitle() {
+        return shareTitle;
+    }
+
+    public void setShareTitle(String shareTitle) {
+        this.shareTitle = shareTitle;
+    }
+
+    public String getShareDesc() {
+        return shareDesc;
+    }
+
+    public void setShareDesc(String shareDesc) {
+        this.shareDesc = shareDesc;
+    }
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
+
+    public String getShareImageUrl() {
+        return shareImageUrl;
+    }
+
+    public void setShareImageUrl(String shareImageUrl) {
+        this.shareImageUrl = shareImageUrl;
+    }
+
     @Override
     public String toString() {
         return "Diary{" +
@@ -131,6 +176,11 @@ public class Diary {
                 ", browse=" + browse +
                 ", intro='" + intro + '\'' +
                 ", content='" + content + '\'' +
+                ", isShare='" + isShare + '\'' +
+                ", shareTitle='" + shareTitle + '\'' +
+                ", shareDesc='" + shareDesc + '\'' +
+                ", shareUrl='" + shareUrl + '\'' +
+                ", shareImageUrl='" + shareImageUrl + '\'' +
                 '}';
     }
 }

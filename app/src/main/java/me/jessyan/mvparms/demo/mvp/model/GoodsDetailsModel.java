@@ -16,6 +16,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
@@ -62,5 +63,11 @@ public class GoodsDetailsModel extends BaseModel implements GoodsDetailsContract
     public Observable<DiaryListResponse> getDiaryForGoodsIdList(DiaryForGoodsRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getDiaryForGoodsIdList(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> getTel(SimpleRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .getTel(request);
     }
 }

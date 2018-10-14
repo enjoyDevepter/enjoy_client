@@ -95,7 +95,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void init() {
         initHospital();
-        nextDoctorPage();
+        requestDoctor(true);
         getHGoodsList(true);
         getActivityList();
     }
@@ -197,31 +197,24 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         }
     }
 
-    public void requestDoctor() {
-        requestDoctor(1, true);
-    }
-
-    public void nextDoctorPage() {
-        requestDoctor(doctorNextPageIndex, false);
-    }
-
-    private void requestDoctor(int pageIndex, final boolean clear) {
+    public void requestDoctor(final boolean pullToRefresh) {
         DoctorListRequest request = new DoctorListRequest();
-        request.setPageIndex(pageIndex);
-        request.setPageSize(10);
         String hospitalId = mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID);
         request.setHospitalId(hospitalId);
+
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
         mModel.requestDoctorPage(request)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
-                    if (clear) {
+                    if (pullToRefresh) {
                     } else
                         mRootView.startLoadDoctorMore();//显示上拉加载更多的进度条
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
-                    if (clear)
+                    if (pullToRefresh)
                         mRootView.hideDoctorLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadDoctorMore();//隐藏上拉加载更多的进度条
@@ -233,7 +226,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                     @Override
                     public void onNext(DoctorListResponse response) {
                         if (response.isSuccess()) {
-                            if (clear) {
+                            if (pullToRefresh) {
                                 doctorBeans.clear();
                             }
                             doctorNextPageIndex = response.getNextPageIndex();
@@ -259,6 +252,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         orderBy.setField("sales");
         request.setOrderBy(orderBy);
 
+        if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
         mModel.getHGoodsList(request)

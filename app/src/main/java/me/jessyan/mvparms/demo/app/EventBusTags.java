@@ -109,6 +109,8 @@ public interface EventBusTags {
      * 评论日记
      */
     String DIARY_COMMENT_SUCCESS = "change_main_item";
-
-
+    /**
+     * 刷新界面内容
+     */
+    String ONREFRESH_CONTENT = "onRefresh_content";
 }

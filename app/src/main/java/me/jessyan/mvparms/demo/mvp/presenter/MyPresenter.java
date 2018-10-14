@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.app.EventBusTags;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.mvp.contract.MyContract;
 import me.jessyan.mvparms.demo.mvp.model.MyModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
@@ -88,12 +89,17 @@ public class MyPresenter extends BasePresenter<MyContract.Model, MyContract.View
                 .subscribe(new ErrorHandleSubscriber<UserInfoResponse>(mErrorHandler) {
                     @Override
                     public void onNext(UserInfoResponse response) {
+                        if (response.isNeedLogin()) {
+                            if (SPUtils.get("token", "token").equals(cache.get(KEY_KEEP + "token"))) {
+                                cache.remove(KEY_KEEP + "token");
+                                return;
+                            }
+                        }
                         if (response.isSuccess()) {
                             cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_INFO, response.getMember());
                             cache.put(KEY_KEEP + MyModel.KEY_FOR_USER_ACCOUNT, response.getMemberAccount());
                             EventBus.getDefault().post(response.getMember(), EventBusTags.USER_INFO_CHANGE);
                             EventBus.getDefault().post(response.getMemberAccount(), EventBusTags.USER_ACCOUNT_CHANGE);
-                        } else {
                         }
                     }
                 });

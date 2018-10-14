@@ -161,7 +161,7 @@ public class DoctorMainActivity extends BaseActivity<DoctorMainPresenter> implem
     public void updateRecyclerViewHeight() {
         RecyclerView.Adapter adapter = contentList.getAdapter();
         if (adapter.getItemCount() == 0) {
-
+            all_comment.setVisibility(View.GONE);
             return;
         }
         ViewGroup.LayoutParams layoutParams = swipeRefreshLayout.getLayoutParams();

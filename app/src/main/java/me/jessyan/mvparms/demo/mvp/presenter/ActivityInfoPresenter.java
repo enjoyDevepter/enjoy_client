@@ -60,7 +60,7 @@ public class ActivityInfoPresenter extends BasePresenter<ActivityInfoContract.Mo
         ActivityInfoRequest request = new ActivityInfoRequest();
         request.setCmd(924);
         request.setActivityId((String) mRootView.getCache().get("activityId"));
-        request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra("hospitalId"));
+        request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
         mModel.getActivityInfo(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

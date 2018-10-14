@@ -9,7 +9,10 @@ import com.jess.arms.mvp.IView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsDetailsResponse;
@@ -43,6 +46,12 @@ public interface HGoodsDetailsContract {
         Observable<DiaryListResponse> getDiaryForGoodsIdList(DiaryForGoodsRequest request);
 
         Observable<BaseResponse> collectGoods(CollectGoodsRequest request);
+
+        Observable<BaseResponse> getTel(SimpleRequest request);
+
+        Observable<BaseResponse> diaryVote(DiaryVoteRequest request);
+
+        Observable<BaseResponse> follow(FollowMemberRequest request);
 
     }
 }

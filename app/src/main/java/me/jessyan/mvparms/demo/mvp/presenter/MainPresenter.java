@@ -17,8 +17,6 @@ import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.PermissionUtil;
 import com.jess.arms.utils.RxLifecycleUtils;
 
-import org.simple.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +24,6 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.app.EventBusTags;
-import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Area;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeADRequest;
@@ -98,7 +94,7 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                     @Override
                     public void onNext(UserInfoResponse response) {
                         if (response.isNeedLogin()) {
-                            cache.remove(KEY_KEEP + "token");
+                            getSignStatus();
                             return;
                         }
                         if (response.isSuccess()) {
@@ -136,7 +132,6 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                     @Override
                     public void onNext(HomeAdResponse response) {
                         if (response.isNeedLogin()) {
-                            cache.remove(KEY_KEEP + "token");
                             getOrCancelAd(cancel);
                             return;
                         }
@@ -223,22 +218,22 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                                                     countyId = county.getId();
                                                     cache.put("county", countyId);
                                                     globalCache.put("current_location_info", provice.getName() + "-" + city.getName() + "-" + county.getName());
-                                                    if (!ArmsUtils.isEmpty((String) globalCache.get("province"))) {
-                                                        if (!provinceId.equals(globalCache.get("province"))
-                                                                || !cityId.equals(globalCache.get("city"))
-                                                                || !countyId.equals(globalCache.get("county"))) {
-                                                            mRootView.showLocationChange(county);
-                                                        }
-                                                    } else {
-                                                        globalCache.put("province", provinceId);
-                                                        SPUtils.put("province", provinceId);
-                                                        globalCache.put("city", cityId);
-                                                        SPUtils.put("city", cityId);
-                                                        globalCache.put("county", countyId);
-                                                        SPUtils.put("county", countyId);
-                                                        SPUtils.put("countyName", county.getName());
-                                                        EventBus.getDefault().post(county, EventBusTags.CITY_CHANGE_EVENT);
+//                                                    if (!ArmsUtils.isEmpty((String) globalCache.get("province"))) {
+                                                    if (!provinceId.equals(globalCache.get("province"))
+                                                            || !cityId.equals(globalCache.get("city"))
+                                                            || !countyId.equals(globalCache.get("county"))) {
+                                                        mRootView.showLocationChange(county);
                                                     }
+//                                                    } else {
+//                                                        globalCache.put("province", provinceId);
+//                                                        SPUtils.put("province", provinceId);
+//                                                        globalCache.put("city", cityId);
+//                                                        SPUtils.put("city", cityId);
+//                                                        globalCache.put("county", countyId);
+//                                                        SPUtils.put("county", countyId);
+//                                                        SPUtils.put("countyName", county.getName());
+//                                                        EventBus.getDefault().post(county, EventBusTags.CITY_CHANGE_EVENT);
+//                                                    }
                                                     break;
                                                 }
                                             }

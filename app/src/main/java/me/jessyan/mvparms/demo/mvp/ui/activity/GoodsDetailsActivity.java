@@ -533,7 +533,6 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) specV.getLayoutParams();
             layoutParams.topMargin = ArmsUtils.getDimens(this, R.dimen.space_5);
             specV.setLayoutParams(layoutParams);
-            showSpec();
         }
 
     }
@@ -571,7 +570,12 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 mPresenter.addGoodsToCart();
                 break;
             case R.id.buy:
-                mPresenter.goOrderConfirm();
+                String where = getIntent().getStringExtra("where");
+                if (maskSpecV.isShown() || "timelimitdetail".equals(where) || "newpeople".equals(where)) {
+                    mPresenter.goOrderConfirm();
+                } else {
+                    showSpec(false);
+                }
                 break;
             case R.id.mask_pro:
             case R.id.promotion:
@@ -581,13 +585,13 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             case R.id.spec:
             case R.id.mask_spec:
             case R.id.spec_close:
-                showSpec();
+                showSpec(true);
                 break;
             case R.id.collect_layout:
                 mPresenter.collectGoods(!collectV.isSelected());
                 break;
             case R.id.tel:
-                mPresenter.tel(response.getTellphone());
+                mPresenter.getTel();
                 break;
         }
     }
@@ -616,14 +620,16 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
-    private void showSpec() {
-        String where = getIntent().getStringExtra("where");
-        if ("timelimitdetail".equals(where)) {
-            showMessage("限时秒杀商品不可选择规格");
-            return;
-        } else if ("newpeople".equals(where)) {
-            showMessage("新人专享商品不可选择规格");
-            return;
+    private void showSpec(boolean check) {
+        if (check) {
+            String where = getIntent().getStringExtra("where");
+            if ("timelimitdetail".equals(where)) {
+                showMessage("限时秒杀商品不可选择规格");
+                return;
+            } else if ("newpeople".equals(where)) {
+                showMessage("新人专享商品不可选择规格");
+                return;
+            }
         }
 
         if (null == speceLabelsView.getLabels()
@@ -671,6 +677,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 || !ArmsUtils.isEmpty(where)) {
             return;
         }
+
         if (!maskProV.isShown()) {
             maskProV.setVisibility(View.VISIBLE);
             maskProV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
@@ -725,8 +732,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     @Override
     public void onBackPressed() {
         if (maskProV.isShown() || maskSpecV.isShown()) {
-
-            showSpec();
+            showSpec(false);
             showPro();
             return;
         }

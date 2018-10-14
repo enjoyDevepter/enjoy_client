@@ -77,12 +77,13 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            android:visibility="gone">
 
             <View
                 android:layout_width="10dp"
-                android:layout_height="8dp"
-                android:background="@mipmap/look" />
+                android:layout_height="10dp"
+                android:background="@mipmap/diary_share" />
 
             <TextView
                 android:id="@+id/browse"
@@ -90,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:textColor="#FFB3B3B3"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:visibility="invisible" />
 
         </LinearLayout>
 

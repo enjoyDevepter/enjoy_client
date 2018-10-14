@@ -24,6 +24,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.AppointmentAndMealReques
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ModifyAppointmentRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AppointmentResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -58,14 +59,15 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void initAppointment() {
-        getAppointment(true);
+        getAppointment(true, false);
     }
 
-    public void getAppointment(boolean pullToRefresh) {
+
+    public void getAppointment(boolean pullToRefresh, boolean notify) {
         AppointmentAndMealRequest request = new AppointmentAndMealRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
-        if (ArmsUtils.isEmpty(request.getToken())) {
+        if (!notify && ArmsUtils.isEmpty(request.getToken())) {
             return;
         }
         int type = 0;
@@ -120,7 +122,9 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                     public void onNext(AppointmentResponse response) {
                         if (response.isNeedLogin()) {
                             cache.remove(KEY_KEEP + "token");
-                            getAppointment(pullToRefresh);
+                            if (notify) {
+                                ArmsUtils.startActivity(LoginActivity.class);
+                            }
                             return;
                         }
                         if (response.isSuccess()) {
@@ -166,7 +170,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
             @Override
             public void onNext(BaseResponse response) {
                 if (response.isSuccess()) {
-                    getAppointment(true);
+                    getAppointment(true, false);
                 } else {
                     mRootView.showMessage(response.getRetDesc());
                 }

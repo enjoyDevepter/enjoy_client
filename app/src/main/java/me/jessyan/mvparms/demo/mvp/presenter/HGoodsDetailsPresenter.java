@@ -29,7 +29,10 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsDetailsResponse;
@@ -311,6 +314,25 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
                 });
     }
 
+    public void getTel() {
+        SimpleRequest request = new SimpleRequest();
+        request.setCmd(906);
+        mModel.getTel(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            tel(response.getTellphone());
+                        }
+                    }
+                });
+    }
+
+
     public void tel(String phoneNum) {
         //请求外部存储权限用于适配android6.0的权限管理机制
         PermissionUtil.callPhone(new PermissionUtil.RequestPermission() {
@@ -332,6 +354,67 @@ public class HGoodsDetailsPresenter extends BasePresenter<HGoodsDetailsContract.
         Uri data = Uri.parse("tel:" + phoneNum);
         intent.setData(data);
         startActivity(intent);
+    }
+
+
+    public void vote(boolean vote, int position) {
+        if (checkLoginStatus()) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+        DiaryVoteRequest request = new DiaryVoteRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(vote ? 811 : 812);
+        request.setDiaryId((String) mRootView.getCache().get("diaryId"));
+        mModel.diaryVote(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            diaryList.get(position).setIsPraise(vote ? "1" : "0");
+                            int num = diaryList.get(position).getPraise();
+                            diaryList.get(position).setPraise(vote ? num + 1 : num <= 0 ? 0 : num - 1);
+                            mAdapter.notifyItemChanged(position);
+                        }
+                    }
+                });
+    }
+
+    public void follow(boolean follow, int position) {
+        if (checkLoginStatus()) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+        FollowMemberRequest request = new FollowMemberRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(follow ? 210 : 211);
+        request.setMemberId((String) mRootView.getCache().get("memberId"));
+        mModel.follow(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            diaryList.get(position).getMember().setIsFollow(follow ? "1" : "0");
+                            mAdapter.notifyItemChanged(position);
+                        }
+                    }
+                });
+    }
+
+    private boolean checkLoginStatus() {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) (cache.get(KEY_KEEP + "token"));
+        return ArmsUtils.isEmpty(token);
     }
 
     @Override

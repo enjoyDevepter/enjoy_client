@@ -170,6 +170,13 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     }
 
+    @Subscriber(tag = EventBusTags.ONREFRESH_CONTENT)
+    public void refreshContent(int index) {
+        if (index == 4) {
+            mPresenter.getUserInfo();
+        }
+    }
+
     @Subscriber(tag = EventBusTags.USER_BASE_INFO_CHANGE)
     private void updateUserInfo(int cmd) {
         mPresenter.getUserInfo();
@@ -323,7 +330,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         }
         level_icon.setBackground(getResources().getDrawable(levelIcon));
 
-        recommenderV.setVisibility(null == member.getRecomMember() ? View.INVISIBLE : View.VISIBLE);
+//        recommenderV.setVisibility(null == member.getRecomMember() ? View.INVISIBLE : View.VISIBLE);
         if (null != member.getDistributionRank()) {
             chenghao.setText(member.getDistributionRank().getDistributionLevelName());
         }

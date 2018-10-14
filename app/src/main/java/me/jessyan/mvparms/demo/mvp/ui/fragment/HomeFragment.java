@@ -24,6 +24,10 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
@@ -120,6 +124,40 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     DiaryListAdapter mAdapter;
     private List<NaviInfo> firstNavList;
     private boolean hasLoadedAllItems;
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+        }
+    };
 
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
@@ -475,6 +513,29 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 diaryIntent.putExtra("diaryId", diary.getDiaryId());
                 ArmsUtils.startActivity(diaryIntent);
                 break;
+            case SHARE:
+                showWX(diary);
+                break;
+        }
+    }
+
+
+    private void showWX(Diary diary) {
+        if (null != diary) {
+            Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getContext()).extras();
+            if (cache.get(KEY_KEEP + "token") == null) {
+                ArmsUtils.startActivity(LoginActivity.class);
+                return;
+            }
+            UMWeb web = new UMWeb(diary.getShareUrl());
+            web.setTitle(diary.getShareTitle());//标题
+            web.setDescription(diary.getShareDesc());
+            new ShareAction(getActivity())
+                    .withMedia(web)
+                    .setCallback(shareListener)
+                    .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                    .open();
+
         }
     }
 

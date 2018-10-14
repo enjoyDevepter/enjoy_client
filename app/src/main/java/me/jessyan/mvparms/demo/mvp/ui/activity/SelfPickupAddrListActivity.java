@@ -144,17 +144,6 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
             case R.id.district_layout:
                 showPickerView();
                 break;
-//            case R.id.store_layout:
-//                Intent intent = new Intent(this, ChoiceStoreActivity.class);
-//                intent.putExtra("province", (String) provideCache().get("province"));
-//                intent.putExtra("city", (String) provideCache().get("city"));
-//                intent.putExtra("county", (String) provideCache().get("county"));
-//                intent.putExtra("goodsId", (String) provideCache().get("goodsId"));
-//                intent.putExtra("merchId", (String) provideCache().get("merchId"));
-//                intent.putExtra("specValueId", getIntent().getStringExtra("specValueId"));
-//                intent.putExtra(KEY_FOR_ACTIVITY_LIST_TYPE, listType);
-//                ArmsUtils.startActivity(intent);
-//                break;
             case R.id.confirm:
                 SelfPickupAddrListActivity.ListType listType = (SelfPickupAddrListActivity.ListType) this.getIntent().getSerializableExtra(KEY_FOR_ACTIVITY_LIST_TYPE);
                 if (null != provideCache().get("choiceItem")) {
@@ -204,7 +193,9 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
             for (AreaAddress city : areaAddress.getAreaList()) {
                 cities.add(city);
                 List<AreaAddress> counties = new ArrayList<>();//该城市的所有地区列表
-
+                AreaAddress countyCity = new AreaAddress();
+                countyCity.setName("全部");
+                counties.add(countyCity);
                 for (AreaAddress county : city.getAreaList()) {
                     counties.add(county);
                 }
@@ -227,9 +218,9 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                 provideCache().put("province", options1Items.get(options1).getAreaId());
                 provideCache().put("city", options2Items.get(options1).get(options2).getAreaId());
                 provideCache().put("county", options3Items.get(options1).get(options2).get(options3).getAreaId());
+                mPresenter.getData(true);
             }
         })
-
                 .setTitleText("城市选择")
                 .setDividerColor(Color.BLACK)
                 .setTextColorCenter(Color.BLACK) //设置选中项文字颜色

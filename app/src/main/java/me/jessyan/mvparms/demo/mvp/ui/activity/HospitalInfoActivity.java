@@ -167,7 +167,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         Paginate.Callbacks doctorPaginateCallback = new Paginate.Callbacks() {
             @Override
             public void onLoadMore() {
-                mPresenter.nextDoctorPage();
+                mPresenter.requestDoctor(false);
             }
 
             @Override
@@ -188,7 +188,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         doctorSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.requestDoctor();
+                mPresenter.requestDoctor(true);
             }
         });
 
@@ -370,7 +370,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
                     Intent intent = new Intent(getApplication(), ActivityInfoActivity.class);
                     intent.putExtra("activityId", activityInfoList.get(position).getActivityId());
                     intent.putExtra("title", activityInfoList.get(position).getTitle());
-                    intent.putExtra("hospitalId", getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
+                    intent.putExtra(KEY_FOR_HOSPITAL_ID, getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
                     ArmsUtils.startActivity(intent);
                 }
             });

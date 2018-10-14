@@ -224,4 +224,7 @@ public interface MainService {
     @POST("gateway")
     Observable<ShareResponse> share(@Body ShareRequest request);
 
+    @POST("gateway")
+    Observable<BaseResponse> getTel(@Body SimpleRequest request);
+
 }

@@ -106,13 +106,12 @@ public class SelfPickupAddrListPresenter extends BasePresenter<SelfPickupAddrLis
 
     private void getStores(boolean pullToRefresh) {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-
         StoresListRequest request = new StoresListRequest();
-        request.setCountyId(mRootView.getActivity().getIntent().getStringExtra("county"));
-        request.setCityId(mRootView.getActivity().getIntent().getStringExtra("city"));
-        request.setProvinceId(mRootView.getActivity().getIntent().getStringExtra("province"));
-        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
-        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        request.setCountyId((String) mRootView.getCache().get("county"));
+        request.setCityId((String) mRootView.getCache().get("city"));
+        request.setProvinceId((String) mRootView.getCache().get("province"));
+        request.setGoodsId((String) mRootView.getCache().get("goodsId"));
+        request.setMerchId((String) mRootView.getCache().get("merchId"));
         request.setLon(String.valueOf(cache.get("lon")));
         request.setLat(String.valueOf(cache.get("lat")));
         if (pullToRefresh) lastPageIndex = 1;
@@ -124,8 +123,6 @@ public class SelfPickupAddrListPresenter extends BasePresenter<SelfPickupAddrLis
         orderBy.setAsc(false);
         orderByList.add(orderBy);
         request.setOrderBys(orderByList);
-        request.setLon(String.valueOf(cache.get("lon")));
-        request.setLat(String.valueOf(cache.get("lat")));
         mModel.getStores(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -168,12 +165,11 @@ public class SelfPickupAddrListPresenter extends BasePresenter<SelfPickupAddrLis
     private void getHospital(boolean pullToRefresh) {
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         HospitalListRequest request = new HospitalListRequest();
-        request.setCountyId(mRootView.getActivity().getIntent().getStringExtra("county"));
-        request.setCityId(mRootView.getActivity().getIntent().getStringExtra("city"));
-        request.setProvinceId(mRootView.getActivity().getIntent().getStringExtra("province"));
-        request.setSpecValueId(mRootView.getActivity().getIntent().getStringExtra("specValueId"));
-        request.setGoodsId(mRootView.getActivity().getIntent().getStringExtra("goodsId"));
-        request.setMerchId(mRootView.getActivity().getIntent().getStringExtra("merchId"));
+        request.setCountyId((String) mRootView.getCache().get("county"));
+        request.setCityId((String) mRootView.getCache().get("city"));
+        request.setProvinceId((String) mRootView.getCache().get("province"));
+        request.setGoodsId((String) mRootView.getCache().get("goodsId"));
+        request.setMerchId((String) mRootView.getCache().get("merchId"));
         request.setLon(String.valueOf(cache.get("lon")));
         request.setLat(String.valueOf(cache.get("lat")));
         if (pullToRefresh) lastPageIndex = 1;

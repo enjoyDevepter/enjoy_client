@@ -105,7 +105,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
         provideCache().put("type", 1);
         provideCache().put("status", 0);
         initPaginate();
-        mPresenter.getAppointment(true);
+        mPresenter.getAppointment(true, false);
     }
 
 
@@ -181,7 +181,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.getAppointment(false);
+                    mPresenter.getAppointment(true, false);
                 }
 
                 @Override
@@ -207,6 +207,14 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
         checkNotNull(message);
         ArmsUtils.snackbarText(message);
     }
+
+    @Subscriber(tag = EventBusTags.ONREFRESH_CONTENT)
+    public void refreshContent(int index) {
+        if (index == 3) {
+            mPresenter.getAppointment(true, true);
+        }
+    }
+
 
     @Override
     public void launchActivity(@NonNull Intent intent) {
@@ -242,12 +250,12 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 yimei2V.setSelected(true);
                 break;
         }
-        mPresenter.getAppointment(true);
+        mPresenter.getAppointment(true, false);
     }
 
     @Override
     public void onRefresh() {
-        mPresenter.getAppointment(true);
+        mPresenter.getAppointment(true, false);
     }
 
     @Override
@@ -288,7 +296,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         provideCache().put("status", tab.getPosition());
-        mPresenter.getAppointment(true);
+        mPresenter.getAppointment(true, false);
     }
 
     @Override

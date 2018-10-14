@@ -11,6 +11,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsDetailsResponse;
@@ -46,6 +47,10 @@ public interface GoodsDetailsContract {
 
         Observable<BaseResponse> collectGoods(CollectGoodsRequest request);
 
+        Observable<BaseResponse> getTel(SimpleRequest request);
+
         Observable<DiaryListResponse> getDiaryForGoodsIdList(DiaryForGoodsRequest request);
+
+
     }
 }

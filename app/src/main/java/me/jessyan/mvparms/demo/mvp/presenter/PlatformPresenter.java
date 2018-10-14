@@ -64,6 +64,8 @@ public class PlatformPresenter extends BasePresenter<PlatformContract.Model, Pla
                         if (response.isSuccess()) {
                             mRootView.showMessage("奖励申请成功");
                             mRootView.killMyself();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

@@ -122,14 +122,18 @@ public class ActivityInfoActivity extends BaseActivity<ActivityInfoPresenter> im
     @Override
     public void updateUI(ActivityInfo activityInfo) {
         contentTV.setText(Html.fromHtml(activityInfo.getContent()));
-        mImageLoader.loadImage(imageIV.getContext(),
-                ImageConfigImpl
-                        .builder()
-                        .placeholder(R.drawable.place_holder_img)
-                        .url(activityInfo.getImage())
-                        .isCenterCrop(true)
-                        .imageView(imageIV)
-                        .build());
+        if (ArmsUtils.isEmpty(activityInfo.getImage())) {
+            imageIV.setVisibility(View.GONE);
+        } else {
+            mImageLoader.loadImage(imageIV.getContext(),
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.drawable.place_holder_img)
+                            .url(activityInfo.getImage())
+                            .isCenterCrop(true)
+                            .imageView(imageIV)
+                            .build());
+        }
     }
 
     @Override
