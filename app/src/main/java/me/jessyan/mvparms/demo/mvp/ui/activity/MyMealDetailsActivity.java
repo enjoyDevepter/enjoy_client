@@ -32,6 +32,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Share;
 import me.jessyan.mvparms.demo.mvp.presenter.MyMealDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyMealDetailListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static android.view.View.INVISIBLE;
@@ -61,11 +62,10 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     MyMealDetailListAdapter mAdapter;
-
+    CustomDialog dialog = null;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
-
     private UMShareListener shareListener = new UMShareListener() {
         /**
          * @descrption 分享开始的回调
@@ -135,7 +135,6 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
         }
     }
 
-
     @Override
     public void showLoading() {
         swipeRefreshLayout.setRefreshing(true);
@@ -145,7 +144,6 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
     public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
     }
-
 
     @Override
     public Activity getActivity() {
@@ -196,7 +194,6 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
         this.hasLoadedAllItems = has;
     }
 
-
     /**
      * 初始化Paginate,用于加载更多
      */
@@ -226,7 +223,6 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
         }
     }
 
-
     @Override
     public void onRefresh() {
         mPresenter.getAppointment(true);
@@ -236,7 +232,6 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
     public void killMyself() {
         finish();
     }
-
 
     @Override
     public void onClick(View v) {
@@ -293,7 +288,7 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
                 } else if (appointment.getStatus().equals("2")) {
                     // 取消预约
                     provideCache().put("reservationId", appointment.getReservationId());
-                    mPresenter.cancelAppointment();
+                    showDailog("是否取消预约?");
                 } else if (appointment.getStatus().equals("4")) {
                     // 申请奖励
                     provideCache().put("merchId", appointment.getGoods().getMerchId());
@@ -326,7 +321,7 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
                 } else if (appointment.getStatus().equals("3")) {
                     provideCache().put("reservationId", appointment.getReservationId());
                     // 取消预约
-                    mPresenter.cancelAppointment();
+                    showDailog("是否取消预约?");
                 } else if (appointment.getStatus().equals("4")) {
                     // 写日记
                     Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
@@ -338,5 +333,34 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
             case ITEM:
                 break;
         }
+    }
+
+    private void showDailog(String text) {
+        dialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        ((TextView) view.findViewById(R.id.content)).setText(text);
+                        view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mPresenter.cancelAppointment();
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.dialog_remove_good_for_cart)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setWidth(ArmsUtils.getDimens(getActivity(), R.dimen.dialog_width))
+                .setHeight(ArmsUtils.getDimens(getActivity(), R.dimen.dialog_height))
+                .show();
     }
 }

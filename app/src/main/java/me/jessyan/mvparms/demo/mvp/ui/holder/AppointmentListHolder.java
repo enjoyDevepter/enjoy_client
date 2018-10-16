@@ -174,6 +174,9 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
         this.timeTV = null;
         this.tiemV = null;
         this.deductTimeV = null;
+        this.deductTimeTV = null;
         this.confirmTimeV = null;
+        this.confirmTimeTV = null;
+
     }
 }

@@ -63,14 +63,22 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
     MoneyView priceTV;
     @BindView(R.id.project)
     TextView projectTV;
-    @BindView(R.id.reservation_type)
-    View reservationV;
-    @BindView(R.id.reservation)
-    TextView reservationTV;
-    @BindView(R.id.confirmTime_tag)
-    View confirmTimeV;
+    @BindView(R.id.hospital_type)
+    View hospitalV;
+    @BindView(R.id.hospital)
+    TextView hospitalTV;
+    @BindView(R.id.time_type)
+    View tiemV;
+    @BindView(R.id.dtime)
+    TextView dTimeTV;
     @BindView(R.id.confirmTime)
     TextView confirmTimeTV;
+    @BindView(R.id.confirmTime_tag)
+    View confirmTimeV;
+    @BindView(R.id.deductTime)
+    TextView deductTimeTV;
+    @BindView(R.id.deductTime_tag)
+    View deductTimeV;
     private MyMealDetailListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
@@ -117,32 +125,48 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
         nameTV.setText(mealGoods.getName());
         if ("0".equals(appointment.getIsExperience())) {
             projectTV.setVisibility(View.VISIBLE);
-            projectTV.setText("项目号:" + appointment.getProjectId());
+            projectTV.setText("项目号: " + appointment.getProjectId());
         } else {
             projectTV.setVisibility(View.INVISIBLE);
         }
 
         if (null != appointment.getHospital()) {
-            reservationTV.setVisibility(View.VISIBLE);
-            reservationTV.setText(appointment.getHospital().getName());
-            reservationV.setVisibility(View.VISIBLE);
+            hospitalTV.setVisibility(View.VISIBLE);
+            hospitalTV.setText(appointment.getHospital().getName());
+            hospitalV.setVisibility(View.VISIBLE);
         } else {
-            reservationTV.setVisibility(View.INVISIBLE);
-            reservationV.setVisibility(View.INVISIBLE);
+            hospitalTV.setVisibility(View.INVISIBLE);
+            hospitalV.setVisibility(View.INVISIBLE);
         }
 
-        if (!ArmsUtils.isEmpty(appointment.getReservationDate())) {
-            priceTV.setVisibility(View.GONE);
-            confirmTimeTV.setVisibility(View.VISIBLE);
-            confirmTimeV.setVisibility(View.VISIBLE);
-            confirmTimeTV.setText(appointment.getReservationDate() + " " + appointment.getReservationTime());
-        } else {
-            confirmTimeTV.setVisibility(View.GONE);
-            confirmTimeV.setVisibility(View.GONE);
+        if (ArmsUtils.isEmpty(appointment.getReservationDate()) || ArmsUtils.isEmpty(appointment.getReservationTime())) {
             priceTV.setVisibility(View.VISIBLE);
             priceTV.setMoneyText(String.valueOf(mealGoods.getSalePrice()));
+            dTimeTV.setVisibility(View.INVISIBLE);
+            tiemV.setVisibility(View.INVISIBLE);
+        } else {
+            priceTV.setVisibility(View.GONE);
+            tiemV.setVisibility(View.VISIBLE);
+            dTimeTV.setVisibility(View.VISIBLE);
+            dTimeTV.setText(appointment.getReservationDate() + "" + appointment.getReservationTime());
         }
 
+        if (!ArmsUtils.isEmpty(appointment.getConfirmTime())) {
+            confirmTimeTV.setVisibility(View.VISIBLE);
+            confirmTimeTV.setText(appointment.getConfirmTime());
+            confirmTimeV.setVisibility(View.VISIBLE);
+        } else {
+            confirmTimeV.setVisibility(View.GONE);
+            confirmTimeTV.setVisibility(View.GONE);
+        }
+        if (!ArmsUtils.isEmpty(appointment.getDeductTime())) {
+            deductTimeTV.setVisibility(View.VISIBLE);
+            deductTimeTV.setText(appointment.getDeductTime());
+            deductTimeV.setVisibility(View.VISIBLE);
+        } else {
+            deductTimeTV.setVisibility(View.GONE);
+            deductTimeV.setVisibility(View.GONE);
+        }
 
         if (appointment.getStatus().equals("1")) {
             statusTV.setText("可预约");
@@ -197,8 +221,12 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
         this.nameTV = null;
         this.priceTV = null;
         this.projectTV = null;
-        this.confirmTimeTV = null;
-        this.reservationV = null;
+        this.timeTV = null;
+        this.dTimeTV = null;
+        this.tiemV = null;
+        this.deductTimeV = null;
+        this.deductTimeTV = null;
         this.confirmTimeV = null;
+        this.confirmTimeTV = null;
     }
 }

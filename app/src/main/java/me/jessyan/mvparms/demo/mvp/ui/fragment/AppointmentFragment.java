@@ -32,6 +32,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.presenter.AppointmentPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ChoiceTimeActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -60,7 +61,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     AppointmentListAdapter mAdapter;
-
+    CustomDialog dialog = null;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
@@ -266,7 +267,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 if (appointment.getStatus().equals("2")) {
                     // 取消预约
                     provideCache().put("reservationId", appointment.getReservationId());
-                    mPresenter.cancelAppointment();
+                    showDailog("是否取消预约?");
                 }
                 break;
             case RIGHT:
@@ -291,6 +292,35 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
             case ITEM:
                 break;
         }
+    }
+
+    private void showDailog(String text) {
+        dialog = CustomDialog.create(getFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        ((TextView) view.findViewById(R.id.content)).setText(text);
+                        view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mPresenter.cancelAppointment();
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.dialog_remove_good_for_cart)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setWidth(ArmsUtils.getDimens(getContext(), R.dimen.dialog_width))
+                .setHeight(ArmsUtils.getDimens(getContext(), R.dimen.dialog_height))
+                .show();
     }
 
     @Override
