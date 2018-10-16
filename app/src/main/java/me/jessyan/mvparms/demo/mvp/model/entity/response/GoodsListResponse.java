@@ -4,6 +4,7 @@ import java.util.List;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.Ad;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 
 /**
  * Created by guomin on 2018/7/28.
@@ -12,7 +13,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 public class GoodsListResponse extends BaseResponse {
 
     private List<Goods> goodsList;
-    private List<Goods> setMealGoodsList;
+    private List<MealGoods> setMealGoodsList;
     private List<Ad> carouselList;
     private int nextPageIndex;
 
@@ -40,11 +41,11 @@ public class GoodsListResponse extends BaseResponse {
         this.nextPageIndex = nextPageIndex;
     }
 
-    public List<Goods> getSetMealGoodsList() {
+    public List<MealGoods> getSetMealGoodsList() {
         return setMealGoodsList;
     }
 
-    public void setSetMealGoodsList(List<Goods> setMealGoodsList) {
+    public void setSetMealGoodsList(List<MealGoods> setMealGoodsList) {
         this.setMealGoodsList = setMealGoodsList;
     }
 

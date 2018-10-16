@@ -42,7 +42,7 @@
                 android:layout_marginLeft="18dp"
                 android:drawablePadding="8dp"
                 android:drawableRight="@mipmap/search_arrow_down"
-                android:text="商美"
+                android:text="商城"
                 android:textColor="#FF666666"
                 android:textSize="13sp" />
 

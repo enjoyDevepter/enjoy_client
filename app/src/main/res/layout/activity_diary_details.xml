@@ -359,7 +359,7 @@
                 android:background="@color/white">
 
                 <LinearLayout
-                    android:id="@+id/vote_layout"
+                    android:id="@+id/emoji_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
@@ -367,11 +367,28 @@
                     android:gravity="center">
 
                     <View
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@mipmap/emoji" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/vote_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/emoji_layout"
+                    android:gravity="center">
+
+                    <View
                         android:id="@+id/vote"
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="8dp"
                         android:background="@drawable/vote_bg" />
 
                 </LinearLayout>

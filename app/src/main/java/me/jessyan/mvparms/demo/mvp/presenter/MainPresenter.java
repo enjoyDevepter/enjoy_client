@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Area;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HomeADRequest;
@@ -209,14 +210,18 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                                 if ("0".equals(provice.getParentId())) {
                                     provinceId = provice.getId();
                                     cache.put("province", provinceId);
+                                    globalCache.put("c_province", provinceId);
                                     for (Area city : areas) {
                                         if (city.getParentId().equals(provice.getId())) {
                                             cityId = provice.getId();
                                             cache.put("city", cityId);
+                                            globalCache.put("c_city", cityId);
                                             for (Area county : areas) {
                                                 if (county.getParentId().equals(city.getId())) {
                                                     countyId = county.getId();
                                                     cache.put("county", countyId);
+                                                    globalCache.put("c_county", countyId);
+                                                    SPUtils.put("c_countyName", county.getName());
                                                     globalCache.put("current_location_info", provice.getName() + "-" + city.getName() + "-" + county.getName());
 //                                                    if (!ArmsUtils.isEmpty((String) globalCache.get("province"))) {
                                                     if (!provinceId.equals(globalCache.get("province"))

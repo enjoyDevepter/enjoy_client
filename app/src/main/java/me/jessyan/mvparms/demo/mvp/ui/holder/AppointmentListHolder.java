@@ -31,7 +31,6 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
-import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 /**
  * ================================================
@@ -59,10 +58,14 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
     View tiemV;
     @BindView(R.id.time)
     TextView timeTV;
-    @BindView(R.id.count)
-    TextView countTV;
-    @BindView(R.id.price)
-    MoneyView priceTV;
+    @BindView(R.id.confirmTime)
+    TextView confirmTimeTV;
+    @BindView(R.id.confirmTime_tag)
+    View confirmTimeV;
+    @BindView(R.id.deductTime)
+    TextView deductTimeTV;
+    @BindView(R.id.deductTime_tag)
+    View deductTimeV;
 
 
     private AppointmentListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
@@ -131,8 +134,23 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
         }
         statusTV.setText(appointment.getStatusDesc());
         nameTV.setText(appointment.getGoods().getName());
-        priceTV.setMoneyText(String.valueOf(appointment.getGoods().getSalePrice()));
-        countTV.setText(String.valueOf(appointment.getSurplusNum()));
+
+        if (!ArmsUtils.isEmpty(appointment.getConfirmTime())) {
+            confirmTimeTV.setVisibility(View.VISIBLE);
+            confirmTimeTV.setText(appointment.getConfirmTime());
+            confirmTimeV.setVisibility(View.VISIBLE);
+        } else {
+            confirmTimeV.setVisibility(View.GONE);
+            confirmTimeTV.setVisibility(View.GONE);
+        }
+        if (!ArmsUtils.isEmpty(appointment.getDeductTime())) {
+            deductTimeTV.setVisibility(View.VISIBLE);
+            deductTimeTV.setText(appointment.getDeductTime());
+            deductTimeV.setVisibility(View.VISIBLE);
+        } else {
+            deductTimeTV.setVisibility(View.GONE);
+            deductTimeV.setVisibility(View.GONE);
+        }
 
     }
 
@@ -153,9 +171,9 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
         this.statusTV = null;
         this.imageIV = null;
         this.nameTV = null;
-        this.priceTV = null;
-        this.countTV = null;
         this.timeTV = null;
         this.tiemV = null;
+        this.deductTimeV = null;
+        this.confirmTimeV = null;
     }
 }

@@ -30,7 +30,7 @@ import com.jess.arms.utils.ArmsUtils;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 /**
@@ -42,19 +42,18 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class MyFarvirateGoodsListItemHolder extends BaseHolder<Goods> {
+public class FarvirateMealGoodsListItemHolder extends BaseHolder<MealGoods> {
+
     @BindView(R.id.image)
     ImageView imageIV;
     @BindView(R.id.name)
     TextView nameTV;
     @BindView(R.id.price)
-    MoneyView priceTV;
-    @BindView(R.id.count)
-    TextView countTV;
+    MoneyView priceMV;
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
 
-    public MyFarvirateGoodsListItemHolder(View itemView) {
+    public FarvirateMealGoodsListItemHolder(View itemView) {
         super(itemView);
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
@@ -62,23 +61,20 @@ public class MyFarvirateGoodsListItemHolder extends BaseHolder<Goods> {
     }
 
     @Override
-    public void setData(Goods data, int position) {
-        priceTV.setMoneyText(String.valueOf(data.getMarketPrice()));
-        Observable.just(data.getName())
-                .subscribe(s -> nameTV.setText(String.valueOf(s)));
-        Observable.just(data.getSales())
-                .subscribe(s -> countTV.setText(String.valueOf(s)));
-
+    public void setData(MealGoods goods, int position) {
+        Observable.just(goods.getName())
+                .subscribe(s -> nameTV.setText(s));
+        Observable.just(goods.getSalePrice())
+                .subscribe(s -> priceMV.setMoneyText(String.valueOf(s)));
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
                         .placeholder(R.drawable.place_holder_img)
-                        .url(data.getImage())
-                        .imageView(imageIV)
+                        .url(goods.getImage())
                         .isCenterCrop(true)
+                        .imageView(imageIV)
                         .build());
-
     }
 
     /**
@@ -94,7 +90,8 @@ public class MyFarvirateGoodsListItemHolder extends BaseHolder<Goods> {
                 .build());
         this.imageIV = null;
         this.nameTV = null;
-        this.priceTV = null;
-        this.countTV = null;
+        this.priceMV = null;
+        this.mAppComponent = null;
+        this.mImageLoader = null;
     }
 }

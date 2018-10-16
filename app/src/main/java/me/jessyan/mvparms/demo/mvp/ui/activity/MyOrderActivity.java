@@ -86,9 +86,9 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
         ordersRV.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.address_list_item_space)));
         mAdapter.setOnChildItemClickLinstener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
-        TabLayout.Tab tab1 = typeTabLayout.newTab().setText("商美");
-        TabLayout.Tab tab2 = typeTabLayout.newTab().setText("生美/科美");
-        TabLayout.Tab tab3 = typeTabLayout.newTab().setText("医美");
+        TabLayout.Tab tab1 = typeTabLayout.newTab().setText("医美");
+        TabLayout.Tab tab2 = typeTabLayout.newTab().setText("美肤");
+        TabLayout.Tab tab3 = typeTabLayout.newTab().setText("商城");
         typeTabLayout.addTab(tab1);
         typeTabLayout.addTab(tab2);
         typeTabLayout.addTab(tab3);
@@ -99,8 +99,8 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
             case 0:
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
-                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待发货"));
-                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待收货"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("二次付款"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待预约"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                 tab1.select();
                 break;
@@ -114,8 +114,8 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
             case 2:
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
-                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("二次付款"));
-                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待预约"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待发货"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待收货"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                 tab3.select();
                 break;
@@ -175,8 +175,8 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                 case 0:
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
-                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待发货"));
-                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待收货"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("二次付款"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待预约"));
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                     break;
                 case 1:
@@ -188,8 +188,8 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                 case 2:
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
-                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("二次付款"));
-                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待预约"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待发货"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待收货"));
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                     break;
             }
@@ -297,11 +297,12 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                         if ("1".equals(order.getOrderStatus())) {
                             // 取消订单
                             mPresenter.cancelOrder();
-                        } else if ("4".equals(order.getOrderStatus())) {
-                            // 查看物流
-                            Intent intent = new Intent(getActivity(), LogisticsActivity.class);
-                            intent.putExtra("orderId", order.getOrderId());
-                            ArmsUtils.startActivity(intent);
+                        } else if ("5".equals(order.getOrderStatus())) {
+                            // 申请奖励
+                            provideCache().put("orderId", order.getOrderId());
+                            provideCache().put("merchId", order.getGoodsList().get(0).getMerchId());
+                            provideCache().put("goodsId", order.getGoodsList().get(0).getGoodsId());
+                            mPresenter.apply();
                         }
                         break;
                     case 1:
@@ -310,12 +311,11 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                         if ("1".equals(order.getOrderStatus())) {
                             // 取消订单
                             mPresenter.cancelOrder();
-                        } else if ("5".equals(order.getOrderStatus())) {
-                            // 申请奖励
-                            provideCache().put("orderId", order.getOrderId());
-                            provideCache().put("merchId", order.getGoodsList().get(0).getMerchId());
-                            provideCache().put("goodsId", order.getGoodsList().get(0).getGoodsId());
-                            mPresenter.apply();
+                        } else if ("4".equals(order.getOrderStatus())) {
+                            // 查看物流
+                            Intent intent = new Intent(getActivity(), LogisticsActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
                         }
                         break;
                 }
@@ -328,12 +328,15 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                             Intent intent = new Intent(this, PayActivity.class);
                             intent.putExtra("orderId", order.getOrderId());
                             ArmsUtils.startActivity(intent);
-                        } else if ("3".equals(order.getOrderStatus())) {
-                            // 提醒发货
-                            mPresenter.reminding();
-                        } else if ("4".equals(order.getOrderStatus())) {
-                            // 确认收货
-                            mPresenter.confirmReceipt();
+                        } else if ("2".equals(order.getOrderStatus())) {
+                            // 付尾款
+                            Intent intent = new Intent(this, PayActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
+                        } else if ("31".equals(order.getOrderStatus())) {
+                            // 预约
+                            EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
+                            killMyself();
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记
                             Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
@@ -349,15 +352,12 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                             Intent intent = new Intent(this, PayActivity.class);
                             intent.putExtra("orderId", order.getOrderId());
                             ArmsUtils.startActivity(intent);
-                        } else if ("2".equals(order.getOrderStatus())) {
-                            // 付尾款
-                            Intent intent = new Intent(this, PayActivity.class);
-                            intent.putExtra("orderId", order.getOrderId());
-                            ArmsUtils.startActivity(intent);
-                        } else if ("31".equals(order.getOrderStatus())) {
-                            // 预约
-                            EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
-                            killMyself();
+                        } else if ("3".equals(order.getOrderStatus())) {
+                            // 提醒发货
+                            mPresenter.reminding();
+                        } else if ("4".equals(order.getOrderStatus())) {
+                            // 确认收货
+                            mPresenter.confirmReceipt();
                         } else if ("5".equals(order.getOrderStatus())) {
                             // 写日记
                             Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);

@@ -72,13 +72,13 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
         }
         switch (type) {
             case 0:
-                getSOrder(pullToRefresh);
+                getHOrder(pullToRefresh);
                 break;
             case 1:
                 mRootView.showConent(false);
                 break;
             case 2:
-                getHOrder(pullToRefresh);
+                getSOrder(pullToRefresh);
                 break;
         }
     }

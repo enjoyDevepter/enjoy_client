@@ -32,8 +32,6 @@ import me.jessyan.mvparms.demo.di.component.DaggerSelfPickupAddrListComponent;
 import me.jessyan.mvparms.demo.di.module.SelfPickupAddrListModule;
 import me.jessyan.mvparms.demo.mvp.contract.SelfPickupAddrListContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
-import me.jessyan.mvparms.demo.mvp.model.entity.Store;
-import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.SelfPickupAddrListPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -150,10 +148,10 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                     int index = (int) provideCache().get("choiceItem");
                     switch (listType) {
                         case HOP:
-                            EventBus.getDefault().post((HospitalBaseInfoBean) mAdapter.getInfos().get(index), EventBusTags.HOSPITAL_CHANGE_EVENT);
+                            EventBus.getDefault().post(mAdapter.getInfos().get(index), EventBusTags.HOSPITAL_CHANGE_EVENT);
                             break;
                         case STORE:
-                            EventBus.getDefault().post((Store) mAdapter.getInfos().get(index), EventBusTags.STORE_CHANGE_EVENT);
+                            EventBus.getDefault().post(mAdapter.getInfos().get(index), EventBusTags.STORE_CHANGE_EVENT);
                             break;
                         case ADDR:
                             break;

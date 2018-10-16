@@ -13,6 +13,8 @@ import dagger.Provides;
 import me.jessyan.mvparms.demo.mvp.contract.MyFarvirateContract;
 import me.jessyan.mvparms.demo.mvp.model.MyFarvirateModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.FarvirateTaoCanListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFarvirateGoodsListAdapter;
 
 
@@ -57,5 +59,17 @@ public class MyFarvirateModule {
     @Provides
     MyFarvirateGoodsListAdapter provideGoodsListAdapter(List<Goods> goods) {
         return new MyFarvirateGoodsListAdapter(goods);
+    }
+
+    @ActivityScope
+    @Provides
+    List<MealGoods> provideMealGoodsList() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    FarvirateTaoCanListAdapter provideMealGoodsListAdapter(List<MealGoods> goods) {
+        return new FarvirateTaoCanListAdapter(goods);
     }
 }

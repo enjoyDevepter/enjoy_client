@@ -27,7 +27,9 @@ import me.jessyan.mvparms.demo.di.component.DaggerMyFarvirateComponent;
 import me.jessyan.mvparms.demo.di.module.MyFarvirateModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyFarvirateContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.presenter.MyFarviratePresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.FarvirateTaoCanListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFarvirateGoodsListAdapter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -50,6 +52,8 @@ public class MyFarvirateActivity extends BaseActivity<MyFarviratePresenter> impl
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     MyFarvirateGoodsListAdapter mAdapter;
+    @Inject
+    FarvirateTaoCanListAdapter tMAdapter;
 
     private Paginate mPaginate;
     private boolean isLoadingMore;
@@ -75,11 +79,11 @@ public class MyFarvirateActivity extends BaseActivity<MyFarviratePresenter> impl
         titleTV.setText("我的收藏");
         backV.setOnClickListener(this);
         backV.setOnClickListener(this);
-        provideCache().put("status", "1");
+        provideCache().put("status", "3");
         swipeRefreshLayout.setOnRefreshListener(this);
-        tabLayout.addTab(tabLayout.newTab().setText("商美"));
-        tabLayout.addTab(tabLayout.newTab().setText("生美"));
         tabLayout.addTab(tabLayout.newTab().setText("医美"));
+        tabLayout.addTab(tabLayout.newTab().setText("美肤"));
+        tabLayout.addTab(tabLayout.newTab().setText("商城"));
         tabLayout.addTab(tabLayout.newTab().setText("套餐"));
         tabLayout.addOnTabSelectedListener(this);
         LinearLayout linearLayout = (LinearLayout) tabLayout.getChildAt(0);
@@ -88,8 +92,8 @@ public class MyFarvirateActivity extends BaseActivity<MyFarviratePresenter> impl
                 R.drawable.tablayout_divider_vertical));
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        initPaginate();
         mAdapter.setOnItemClickListener(this);
+        tMAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -200,7 +204,27 @@ public class MyFarvirateActivity extends BaseActivity<MyFarviratePresenter> impl
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        provideCache().put("status", tab.getPosition() + 1 + "");
+        String type = "3";
+        switch (tab.getPosition()) {
+            case 0:
+                mRecyclerView.setAdapter(mAdapter);
+                type = "3";
+                break;
+            case 1:
+                mRecyclerView.setAdapter(mAdapter);
+                type = "2";
+                break;
+            case 2:
+                mRecyclerView.setAdapter(mAdapter);
+                type = "1";
+                break;
+            case 3:
+                mRecyclerView.setAdapter(tMAdapter);
+                type = "4";
+                break;
+        }
+        initPaginate();
+        provideCache().put("status", type);
         mPresenter.getMyFarvirate(true);
     }
 
@@ -221,6 +245,28 @@ public class MyFarvirateActivity extends BaseActivity<MyFarviratePresenter> impl
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
-        Goods goods = mAdapter.getInfos().get(position);
+        if ("1".equals(provideCache().get("status"))) {
+            Goods goods = mAdapter.getInfos().get(position);
+            Intent intent = new Intent(getActivity().getApplication(), GoodsDetailsActivity.class);
+            intent.putExtra("type", "1");
+            intent.putExtra("goodsId", goods.getGoodsId());
+            intent.putExtra("merchId", goods.getMerchId());
+            ArmsUtils.startActivity(intent);
+        } else if ("2".equals(provideCache().get("status"))) {
+
+        } else if ("3".equals(provideCache().get("status"))) {
+            Goods goods = mAdapter.getInfos().get(position);
+            Intent hGoodsintent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
+            hGoodsintent.putExtra("type", "3");
+            hGoodsintent.putExtra("goodsId", goods.getGoodsId());
+            hGoodsintent.putExtra("merchId", goods.getMerchId());
+            hGoodsintent.putExtra("advanceDepositId", goods.getAdvanceDepositId());
+            ArmsUtils.startActivity(hGoodsintent);
+        } else if ("4".equals(provideCache().get("status"))) {
+            MealGoods mealGoods = tMAdapter.getInfos().get(position);
+            Intent intent = new Intent(getActivity(), TaoCanDetailsActivity.class);
+            intent.putExtra("setMealId", mealGoods.getSetMealId());
+            ArmsUtils.startActivity(intent);
+        }
     }
 }

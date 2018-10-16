@@ -104,6 +104,12 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     TextView chenghao;
     @BindView(R.id.growth)
     TextView growthTV;
+    @BindView(R.id.qr)
+    View qrV;
+    @BindView(R.id.qr_layout)
+    View qrlayoutV;
+    @BindView(R.id.qr_image)
+    ImageView qrImageIV;
 
 
     @Inject
@@ -151,6 +157,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         growthTV.setOnClickListener(this);
         image.setOnClickListener(this);
         fans.setOnClickListener(this);
+        qrV.setOnClickListener(this);
+        qrlayoutV.setOnClickListener(this);
     }
 
     /**
@@ -218,7 +226,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 break;
             case R.id.goods_order:
                 Intent intent0 = new Intent(getContext(), MyOrderActivity.class);
-                intent0.putExtra("type", 0);
+                intent0.putExtra("type", 2);
                 ArmsUtils.startActivity(intent0);
                 break;
             case R.id.kgoods_order:
@@ -228,7 +236,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
                 break;
             case R.id.hgoods_order:
                 Intent intent2 = new Intent(getContext(), MyOrderActivity.class);
-                intent2.putExtra("type", 2);
+                intent2.putExtra("type", 0);
                 ArmsUtils.startActivity(intent2);
                 break;
             case R.id.friend:
@@ -287,6 +295,12 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
             case R.id.fans:
                 ArmsUtils.startActivity(FansActivity.class);
                 break;
+            case R.id.qr:
+                qrlayoutV.setVisibility(View.VISIBLE);
+                break;
+            case R.id.qr_layout:
+                qrlayoutV.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -334,5 +348,12 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         if (null != member.getDistributionRank()) {
             chenghao.setText(member.getDistributionRank().getDistributionLevelName());
         }
+
+        mImageLoader.loadImage(getContext(),
+                ImageConfigImpl
+                        .builder()
+                        .url(member.getQrCodeUrl())
+                        .imageView(qrImageIV)
+                        .build());
     }
 }

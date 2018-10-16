@@ -16,7 +16,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.holder;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,6 +46,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
  * ================================================
  */
 public class MyMealDetailListHolder extends BaseHolder<Appointment> {
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @BindView(R.id.time)
     TextView timeTV;
     @BindView(R.id.status)
@@ -63,15 +63,14 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
     MoneyView priceTV;
     @BindView(R.id.project)
     TextView projectTV;
-    @BindView(R.id.date)
-    TextView dateTV;
+    @BindView(R.id.reservation_type)
+    View reservationV;
+    @BindView(R.id.reservation)
+    TextView reservationTV;
+    @BindView(R.id.confirmTime_tag)
+    View confirmTimeV;
     @BindView(R.id.confirmTime)
     TextView confirmTimeTV;
-    @BindView(R.id.deductTime)
-    TextView deductTimeTV;
-
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
     private MyMealDetailListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
@@ -116,34 +115,34 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
         timeTV.setText(sdf.format(appointment.getCreateDate()));
         statusTV.setText(appointment.getStatusDesc());
         nameTV.setText(mealGoods.getName());
-        priceTV.setMoneyText(String.valueOf(mealGoods.getSalePrice()));
         if ("0".equals(appointment.getIsExperience())) {
             projectTV.setVisibility(View.VISIBLE);
-            projectTV.setText("项目号：" + appointment.getProjectId());
+            projectTV.setText("项目号:" + appointment.getProjectId());
         } else {
             projectTV.setVisibility(View.INVISIBLE);
         }
-        if (!ArmsUtils.isEmpty(appointment.getReservationDate())) {
-            priceTV.setVisibility(View.GONE);
-            dateTV.setVisibility(View.VISIBLE);
-            dateTV.setText(Html.fromHtml("<font color='#666666'>预约时间：</font><font color='#333333'>" + appointment.getReservationDate() + " " + appointment.getReservationTime() + "</font>"));
+
+        if (null != appointment.getHospital()) {
+            reservationTV.setVisibility(View.VISIBLE);
+            reservationTV.setText(appointment.getHospital().getName());
+            reservationV.setVisibility(View.VISIBLE);
         } else {
-            dateTV.setVisibility(View.GONE);
-            priceTV.setVisibility(View.VISIBLE);
+            reservationTV.setVisibility(View.INVISIBLE);
+            reservationV.setVisibility(View.INVISIBLE);
         }
 
-        if (!ArmsUtils.isEmpty(appointment.getConfirmTime())) {
+        if (!ArmsUtils.isEmpty(appointment.getReservationDate())) {
+            priceTV.setVisibility(View.GONE);
             confirmTimeTV.setVisibility(View.VISIBLE);
-            confirmTimeTV.setText(Html.fromHtml("<font color='#666666'>确认时间：</font><font color='#333333'>" + appointment.getConfirmTime() + "</font>"));
+            confirmTimeV.setVisibility(View.VISIBLE);
+            confirmTimeTV.setText(appointment.getReservationDate() + " " + appointment.getReservationTime());
         } else {
             confirmTimeTV.setVisibility(View.GONE);
+            confirmTimeV.setVisibility(View.GONE);
+            priceTV.setVisibility(View.VISIBLE);
+            priceTV.setMoneyText(String.valueOf(mealGoods.getSalePrice()));
         }
-        if (!ArmsUtils.isEmpty(appointment.getDeductTime())) {
-            deductTimeTV.setVisibility(View.VISIBLE);
-            deductTimeTV.setText(Html.fromHtml("<font color='#666666'>划扣时间：</font><font color='#333333'>" + appointment.getDeductTime() + "</font>"));
-        } else {
-            deductTimeTV.setVisibility(View.GONE);
-        }
+
 
         if (appointment.getStatus().equals("1")) {
             statusTV.setText("可预约");
@@ -198,8 +197,8 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
         this.nameTV = null;
         this.priceTV = null;
         this.projectTV = null;
-        this.dateTV = null;
-        this.deductTimeTV = null;
         this.confirmTimeTV = null;
+        this.reservationV = null;
+        this.confirmTimeV = null;
     }
 }

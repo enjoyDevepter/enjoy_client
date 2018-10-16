@@ -20,8 +20,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MyFarvirateContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
+import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.FarvirateTaoCanListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFarvirateGoodsListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -43,7 +45,11 @@ public class MyFarviratePresenter extends BasePresenter<MyFarvirateContract.Mode
     @Inject
     List<Goods> goodsList;
     @Inject
+    List<MealGoods> mealGoodsList;
+    @Inject
     MyFarvirateGoodsListAdapter mAdapter;
+    @Inject
+    FarvirateTaoCanListAdapter tMAdapter;
 
     private int preEndIndex;
     private int lastPageIndex = 1;
@@ -94,25 +100,33 @@ public class MyFarviratePresenter extends BasePresenter<MyFarvirateContract.Mode
                     @Override
                     public void onNext(GoodsListResponse response) {
                         if (response.isSuccess()) {
-                            if (response.getCmd() == 1160) {
-                                mRootView.showConent(response.getGoodsList().size() > 0);
-                            } else {
-                                mRootView.showConent(response.getSetMealGoodsList().size() > 0);
-                            }
                             if (pullToRefresh) {
                                 goodsList.clear();
+                                mealGoodsList.clear();
                             }
-                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                            goodsList.addAll(response.getCmd() == 1160 ? response.getGoodsList() : response.getSetMealGoodsList());
-                            preEndIndex = goodsList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = goodsList.size() / 10;
-                            if (pullToRefresh) {
-                                mAdapter.notifyDataSetChanged();
+                            if (response.getCmd() == 1160) {
+                                mRootView.showConent(response.getGoodsList().size() > 0);
+                                goodsList.addAll(response.getGoodsList());
+                                mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                                preEndIndex = goodsList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                                lastPageIndex = goodsList.size() / 10 + 1;
+                                if (pullToRefresh) {
+                                    mAdapter.notifyDataSetChanged();
+                                } else {
+                                    mAdapter.notifyItemRangeInserted(preEndIndex, goodsList.size());
+                                }
                             } else {
-                                mAdapter.notifyItemRangeInserted(preEndIndex, goodsList.size());
+                                mRootView.showConent(response.getSetMealGoodsList().size() > 0);
+                                mealGoodsList.addAll(response.getSetMealGoodsList());
+                                mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                                preEndIndex = mealGoodsList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                                lastPageIndex = mealGoodsList.size() / 10 + 1;
+                                if (pullToRefresh) {
+                                    tMAdapter.notifyDataSetChanged();
+                                } else {
+                                    tMAdapter.notifyItemRangeInserted(preEndIndex, mealGoodsList.size());
+                                }
                             }
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

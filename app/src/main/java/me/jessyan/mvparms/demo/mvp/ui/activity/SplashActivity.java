@@ -38,7 +38,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
     @BindView(R.id.time)
     TextView timeTV;
     private Timer timer = new Timer();
-    private int time = 3;
+    private int time = 1;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {

@@ -42,6 +42,8 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class CityActivity extends BaseActivity<CityPresenter> implements CityContract.View, View.OnClickListener {
     @BindView(R.id.back)
     View backV;
+    @BindView(R.id.current)
+    View currentV;
     @BindView(R.id.location_info)
     TextView locationInfoTV;
     @BindView(R.id.swipeRefreshLayout)
@@ -67,6 +69,7 @@ public class CityActivity extends BaseActivity<CityPresenter> implements CityCon
     @Override
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
+        currentV.setOnClickListener(this);
         swipeRefreshLayout.setEnabled(false);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
         String location = (String) cache.get("current_location_info");
@@ -110,6 +113,20 @@ public class CityActivity extends BaseActivity<CityPresenter> implements CityCon
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
+                killMyself();
+                break;
+            case R.id.current:
+                Cache<String, Object> globalCache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+                globalCache.put("province", globalCache.get("c_province"));
+                SPUtils.put("province", globalCache.get("c_province"));
+                globalCache.put("city", globalCache.get("c_city"));
+                SPUtils.put("city", globalCache.get("c_city"));
+                globalCache.put("county", globalCache.get("c_county"));
+                SPUtils.put("county", globalCache.get("c_county"));
+                SPUtils.put("countyName", SPUtils.get("c_countyName", "北京"));
+                Area area = new Area();
+                area.setName(SPUtils.get("c_countyName", "北京"));
+                EventBus.getDefault().post(area, EventBusTags.CITY_CHANGE_EVENT);
                 killMyself();
                 break;
         }

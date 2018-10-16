@@ -11,6 +11,7 @@ public class ModifyAppointmentRequest extends BaseRequest {
     private String reservationId;
     private String reservationDate;
     private String reservationTime;
+    private String hospitalId;
 
     public int getCmd() {
         return cmd;
@@ -60,6 +61,14 @@ public class ModifyAppointmentRequest extends BaseRequest {
         this.reservationTime = reservationTime;
     }
 
+    public String getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(String hospitalId) {
+        this.hospitalId = hospitalId;
+    }
+
     @Override
     public String toString() {
         return "ModifyAppointmentRequest{" +
@@ -69,6 +78,7 @@ public class ModifyAppointmentRequest extends BaseRequest {
                 ", reservationId='" + reservationId + '\'' +
                 ", reservationDate='" + reservationDate + '\'' +
                 ", reservationTime='" + reservationTime + '\'' +
+                ", hospitalId='" + hospitalId + '\'' +
                 '}';
     }
 }

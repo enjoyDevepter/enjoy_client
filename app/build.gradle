@@ -36,7 +36,7 @@ android {
             buildConfigField "boolean", "USE_CANARY", "true"
             buildConfigField "String", "API_HOST", "\"http://sj.ehanmy.cn/ehanmy/\""
 //            buildConfigField "String", "API_HOST", "\"http://api.donhonet.net/ehanmy/\""
-            minifyEnabled false
+//            minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

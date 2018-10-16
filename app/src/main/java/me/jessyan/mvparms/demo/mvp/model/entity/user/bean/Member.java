@@ -39,6 +39,7 @@ public class Member implements Serializable {
     private String regDate;
     private String origin;
     private String originDesc;
+    private String qrCodeUrl;
 
     @Override
     public String toString() {
@@ -76,6 +77,7 @@ public class Member implements Serializable {
                 ", regDate='" + regDate + '\'' +
                 ", origin='" + origin + '\'' +
                 ", originDesc='" + originDesc + '\'' +
+                ", qrCodeUrl='" + qrCodeUrl + '\'' +
                 '}';
     }
 
@@ -341,6 +343,14 @@ public class Member implements Serializable {
 
     public void setOriginDesc(String originDesc) {
         this.originDesc = originDesc;
+    }
+
+    public String getQrCodeUrl() {
+        return qrCodeUrl;
+    }
+
+    public void setQrCodeUrl(String qrCodeUrl) {
+        this.qrCodeUrl = qrCodeUrl;
     }
 
     public class GrowthRankBean {

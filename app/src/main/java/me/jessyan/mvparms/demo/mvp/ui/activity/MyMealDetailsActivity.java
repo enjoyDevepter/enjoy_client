@@ -308,13 +308,20 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
                     addappointmentsIntent.putExtra("isMeal", true);
                     addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
                     addappointmentsIntent.putExtra("type", "add_appointment_time");
+                    addappointmentsIntent.putExtra("need_change_hospital", true);
+                    addappointmentsIntent.putExtra("merchId", appointment.getGoods().getMerchId());
+                    addappointmentsIntent.putExtra("goodsId", appointment.getGoods().getGoodsId());
                     ArmsUtils.startActivity(addappointmentsIntent);
                 } else if (appointment.getStatus().equals("2")) {
                     // 改约
+                    //merchId goodsId
                     Intent addappointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
                     addappointmentsIntent.putExtra("isMeal", true);
                     addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
                     addappointmentsIntent.putExtra("type", "modify_appointment_time");
+                    addappointmentsIntent.putExtra("need_change_hospital", true);
+                    addappointmentsIntent.putExtra("merchId", appointment.getGoods().getMerchId());
+                    addappointmentsIntent.putExtra("goodsId", appointment.getGoods().getGoodsId());
                     ArmsUtils.startActivity(addappointmentsIntent);
                 } else if (appointment.getStatus().equals("3")) {
                     provideCache().put("reservationId", appointment.getReservationId());

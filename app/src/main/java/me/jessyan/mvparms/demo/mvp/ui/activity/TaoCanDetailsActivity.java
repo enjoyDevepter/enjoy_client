@@ -215,7 +215,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         imagesB.start();
         imagesB.isAutoPlay(false);
         imageCount.setText("1/" + response.getSetMealGoods().getImages().size());
-        titleTV.setText(String.valueOf(response.getSetMealGoods().getName()));
+        titleTV.setText(String.valueOf(response.getSetMealGoods().getName() + response.getSetMealGoods().getTitle()));
         salesPriceTV.setMoneyText(String.valueOf(response.getSetMealGoods().getSalePrice()));
         totalPriceTV.setMoneyText(String.valueOf(response.getSetMealGoods().getTotalPrice()));
         totalPriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);

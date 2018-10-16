@@ -22,6 +22,7 @@ public class Appointment {
     private long createDate;
     private String code;
     private Goods goods;
+    private Hospital hospital;
 
     public String getProjectId() {
         return projectId;
@@ -143,6 +144,14 @@ public class Appointment {
         this.goods = goods;
     }
 
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
+
     @Override
     public String toString() {
         return "Appointment{" +
@@ -161,6 +170,36 @@ public class Appointment {
                 ", createDate=" + createDate +
                 ", code='" + code + '\'' +
                 ", goods=" + goods +
+                ", hospital=" + hospital +
                 '}';
+    }
+
+    public class Hospital {
+        private String hospitalId;
+        private String name;
+
+        public String getHospitalId() {
+            return hospitalId;
+        }
+
+        public void setHospitalId(String hospitalId) {
+            this.hospitalId = hospitalId;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return "Hospital{" +
+                    "hospitalId='" + hospitalId + '\'' +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
     }
 }

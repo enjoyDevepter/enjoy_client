@@ -88,7 +88,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="15dp"
-                    android:text="发布日志"
+                    android:text="发布日记"
                     android:textColor="#FF333333"
                     android:textSize="13sp" />
 

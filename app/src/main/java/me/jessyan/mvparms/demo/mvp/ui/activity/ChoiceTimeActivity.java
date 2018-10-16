@@ -17,6 +17,7 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.util.List;
 
@@ -30,11 +31,14 @@ import me.jessyan.mvparms.demo.di.module.ChoiceTimeModule;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceTimeContract;
 import me.jessyan.mvparms.demo.mvp.model.HAppointments;
 import me.jessyan.mvparms.demo.mvp.model.entity.HAppointmentsTime;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.ChoiceTimePresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DateAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.TimeAdapter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_NAME;
 
 
 public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implements ChoiceTimeContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener {
@@ -43,6 +47,10 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
     View backV;
     @BindView(R.id.title)
     TextView titleTV;
+    @BindView(R.id.hospital_layout)
+    View hospitalV;
+    @BindView(R.id.hospital)
+    TextView hospitalTV;
     @BindView(R.id.confirm)
     TextView confrimTV;
     @BindView(R.id.swipeRefreshLayout)
@@ -57,6 +65,8 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
     RecyclerView.LayoutManager layoutManager;
     @Inject
     TimeAdapter timeAdapter;
+
+    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.HOP;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -76,6 +86,10 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
     @Override
     public void initData(Bundle savedInstanceState) {
         titleTV.setText("选择时间");
+        if (getIntent().getBooleanExtra("need_change_hospital", false)) {
+            hospitalV.setVisibility(View.VISIBLE);
+            hospitalV.setOnClickListener(this);
+        }
         backV.setOnClickListener(this);
         confrimTV.setOnClickListener(this);
         dateAdapter.setOnItemClickListener(this);
@@ -114,6 +128,12 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
         finish();
     }
 
+    @Subscriber(tag = EventBusTags.HOSPITAL_CHANGE_EVENT)
+    private void updateHospitalInfo(HospitalBaseInfoBean baseInfoBean) {
+        provideCache().put(KEY_FOR_HOSPITAL_NAME, baseInfoBean.getName());
+        provideCache().put(KEY_FOR_HOSPITAL_ID, baseInfoBean.getHospitalId());
+        hospitalTV.setText(baseInfoBean.getName());
+    }
 
     @Override
     public void onClick(View v) {
@@ -121,7 +141,25 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
             case R.id.back:
                 killMyself();
                 break;
+            case R.id.hospital_layout:
+                // 选择医院
+                Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getActivity()).extras();
+                Intent intent2 = new Intent(this, SelfPickupAddrListActivity.class);
+                intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
+                listType.setProvince(String.valueOf(cache.get("province")));
+                listType.setCity(String.valueOf(cache.get("city")));
+                listType.setCounty(String.valueOf(cache.get("county")));
+                listType.setMerchId(String.valueOf(getIntent().getStringExtra("merchId")));
+                listType.setGoodsId(String.valueOf(getIntent().getStringExtra("goodsId")));
+                ArmsUtils.startActivity(intent2);
+                break;
             case R.id.confirm:
+                if (getIntent().getBooleanExtra("need_change_hospital", false)) {
+                    if (ArmsUtils.isEmpty((String) provideCache().get(KEY_FOR_HOSPITAL_NAME))) {
+                        showMessage("请选择预约医院");
+                        return;
+                    }
+                }
                 if (ArmsUtils.isEmpty((String) provideCache().get("appointmentsTime"))) {
                     showMessage("请选择预约时间");
                     return;

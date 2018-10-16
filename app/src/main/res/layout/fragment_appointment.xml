@@ -45,7 +45,6 @@
             android:layout_width="0dp"
             android:layout_height="86dp"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
             android:layout_weight="1"
             android:background="@drawable/appointment_type_item_bg"
             android:gravity="center"
