@@ -14,6 +14,9 @@ import me.jessyan.mvparms.demo.mvp.contract.MyDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 
@@ -47,5 +50,17 @@ public class MyDiaryModel extends BaseModel implements MyDiaryContract.Model {
     public Observable<DiaryApplyResponse> apply(DiaryRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .apply(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> diaryVote(DiaryVoteRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .diaryVote(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> follow(FollowMemberRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .follow(request);
     }
 }

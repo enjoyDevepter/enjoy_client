@@ -776,7 +776,27 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                 mPresenter.vote("1".equals(diary.getIsPraise()) ? false : true, position);
                 break;
             case LEFT_IMAGE:
+                if (diary.getImageList() != null && diary.getImageList().size() > 0) {
+                    Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+                    String[] images = new String[diary.getImageList().size()];
+                    for (int i = 0; i < diary.getImageList().size(); i++) {
+                        images[i] = diary.getImageList().get(i);
+                    }
+                    intent.putExtra("images", images);
+                    ArmsUtils.startActivity(intent);
+                }
+                break;
             case RIGHT_IMAGE:
+                if (diary.getImageList() != null && diary.getImageList().size() > 1) {
+                    Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+                    String[] images = new String[diary.getImageList().size()];
+                    for (int i = 0; i < diary.getImageList().size(); i++) {
+                        images[i] = diary.getImageList().get(i);
+                    }
+                    intent.putExtra("images", images);
+                    ArmsUtils.startActivity(intent);
+                }
+                break;
             case ITEM:
                 Intent intent = new Intent(getActivity().getApplication(), DiaryForGoodsActivity.class);
                 intent.putExtra("diaryId", diary.getDiaryId());

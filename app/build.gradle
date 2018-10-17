@@ -100,6 +100,8 @@ dependencies {
     implementation rootProject.ext.dependencies['photoview']
     implementation rootProject.ext.dependencies['wechat']
     implementation rootProject.ext.dependencies['location']
+    implementation rootProject.ext.dependencies['emoji']
+    implementation rootProject.ext.dependencies['qiniu']
 
     //tools
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
@@ -107,7 +109,6 @@ dependencies {
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
     implementation rootProject.ext.dependencies["lifecyclemodel"]
     implementation rootProject.ext.dependencies["bottomBarLayout"]
-    implementation 'com.qiniu:qiniu-android-sdk:7.3.+'
 
     //view
     annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {

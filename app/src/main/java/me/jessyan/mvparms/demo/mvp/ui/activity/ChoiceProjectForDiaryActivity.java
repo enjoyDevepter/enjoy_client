@@ -26,7 +26,6 @@ import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerChoiceProjectForDiaryComponent;
 import me.jessyan.mvparms.demo.di.module.ChoiceProjectForDiaryModule;
 import me.jessyan.mvparms.demo.mvp.contract.ChoiceProjectForDiaryContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.presenter.ChoiceProjectForDiaryPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
@@ -176,7 +175,7 @@ public class ChoiceProjectForDiaryActivity extends BaseActivity<ChoiceProjectFor
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
-        EventBus.getDefault().post((Goods) data, EventBusTags.CHANGE_DIRAY_PROJECT);
+        EventBus.getDefault().post(data, EventBusTags.CHANGE_DIRAY_PROJECT);
         killMyself();
     }
 

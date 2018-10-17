@@ -352,6 +352,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         mImageLoader.loadImage(getContext(),
                 ImageConfigImpl
                         .builder()
+                        .isCenterCrop(true)
                         .url(member.getQrCodeUrl())
                         .imageView(qrImageIV)
                         .build());

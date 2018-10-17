@@ -64,6 +64,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HospitalActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.ImageShowActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.NewlywedsActivity;
@@ -499,7 +500,27 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 mPresenter.vote("1".equals(diary.getIsPraise()) ? false : true, position);
                 break;
             case LEFT_IMAGE:
+                if (diary.getImageList() != null && diary.getImageList().size() > 0) {
+                    Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+                    String[] images = new String[diary.getImageList().size()];
+                    for (int i = 0; i < diary.getImageList().size(); i++) {
+                        images[i] = diary.getImageList().get(i);
+                    }
+                    intent.putExtra("images", images);
+                    ArmsUtils.startActivity(intent);
+                }
+                break;
             case RIGHT_IMAGE:
+                if (diary.getImageList() != null && diary.getImageList().size() > 1) {
+                    Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+                    String[] images = new String[diary.getImageList().size()];
+                    for (int i = 0; i < diary.getImageList().size(); i++) {
+                        images[i] = diary.getImageList().get(i);
+                    }
+                    intent.putExtra("images", images);
+                    ArmsUtils.startActivity(intent);
+                }
+                break;
             case ITEM:
                 Intent intent = new Intent(getActivity().getApplication(), DiaryForGoodsActivity.class);
                 intent.putExtra("diaryId", diary.getDiaryId());
@@ -631,12 +652,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-
     }
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-
     }
 
     @Override

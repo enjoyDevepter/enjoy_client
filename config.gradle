@@ -60,6 +60,8 @@ ext {
             "barlibrary"               : "com.gyf.barlibrary:barlibrary:2.3.0",
             "photoview"                : "com.bm.photoview:library:1.4.1",
             "wechat"                   : "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+",
+            "emoji"                    : "com.lqr.emoji:library:1.0.2",
+            "qiniu"                    : "com.qiniu:qiniu-android-sdk:7.3.+",
 
             //rx1
             "rxandroid"                : "io.reactivex:rxandroid:1.2.1",

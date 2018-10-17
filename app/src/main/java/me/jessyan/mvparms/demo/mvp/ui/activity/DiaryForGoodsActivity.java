@@ -315,7 +315,11 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                             .imageView(leftIV)
                             .isCenterCrop(true)
                             .build());
-            leftCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(0).getNum()));
+            if (response.getDiaryAlbumList().get(0).getNum() > 0) {
+                leftCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(0).getNum()));
+            } else {
+                leftCountTV.setVisibility(View.GONE);
+            }
         } else {
             mImageLoader.loadImage(this,
                     ImageConfigImpl
@@ -337,7 +341,11 @@ public class DiaryForGoodsActivity extends BaseActivity<DiaryForGoodsPresenter> 
                             .imageView(rightIV)
                             .isCenterCrop(true)
                             .build());
-            rightCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(1).getNum()));
+            if (response.getDiaryAlbumList().get(0).getNum() > 0) {
+                rightCountTV.setText(String.valueOf(response.getDiaryAlbumList().get(1).getNum()));
+            } else {
+                rightCountTV.setVisibility(View.GONE);
+            }
         } else {
             mImageLoader.loadImage(this,
                     ImageConfigImpl

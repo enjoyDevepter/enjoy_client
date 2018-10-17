@@ -22,6 +22,9 @@ import me.jessyan.mvparms.demo.mvp.contract.MyDiaryContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.DiaryListAdapter;
@@ -134,6 +137,52 @@ public class MyDiaryPresenter extends BasePresenter<MyDiaryContract.Model, MyDia
                             if (apply) {
                                 mRootView.showApply(response.getContent());
                             }
+                        }
+                    }
+                });
+    }
+
+    public void vote(boolean vote, int position) {
+        DiaryVoteRequest request = new DiaryVoteRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(vote ? 811 : 812);
+        request.setDiaryId((String) mRootView.getCache().get("diaryId"));
+        mModel.diaryVote(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            diaryList.get(position).setIsPraise(vote ? "1" : "0");
+                            int num = diaryList.get(position).getPraise();
+                            diaryList.get(position).setPraise(vote ? num + 1 : num <= 0 ? 0 : num - 1);
+                            mAdapter.notifyItemChanged(position);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    public void follow(boolean follow, int position) {
+        FollowMemberRequest request = new FollowMemberRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(follow ? 210 : 211);
+        request.setMemberId((String) mRootView.getCache().get("memberId"));
+        mModel.follow(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            diaryList.get(position).getMember().setIsFollow(follow ? "1" : "0");
+                            mAdapter.notifyItemChanged(position);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

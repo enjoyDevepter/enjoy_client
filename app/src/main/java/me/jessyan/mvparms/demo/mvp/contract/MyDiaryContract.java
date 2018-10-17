@@ -9,6 +9,9 @@ import com.jess.arms.mvp.IView;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryApplyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.DiaryListResponse;
 
@@ -36,6 +39,10 @@ public interface MyDiaryContract {
         Observable<DiaryListResponse> getMyDiaryList(DiaryListRequest request);
 
         Observable<DiaryApplyResponse> apply(DiaryRequest request);
+
+        Observable<BaseResponse> diaryVote(DiaryVoteRequest request);
+
+        Observable<BaseResponse> follow(FollowMemberRequest request);
 
     }
 }

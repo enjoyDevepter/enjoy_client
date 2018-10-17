@@ -319,7 +319,6 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
     }
 
     @Override
-    @Subscriber(tag = EventBusTags.CHANGE_DIRAY_PROJECT)
     public void updateProject(DirayProjectListResponse response) {
         if (null != response.getGoodsList() && response.getGoodsList().size() > 0) {
             Goods goods = response.getGoodsList().get(0);
@@ -332,9 +331,23 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
                             .placeholder(R.drawable.place_holder_img)
                             .url(goods.getImage())
                             .imageView(imageIV)
+                            .isCenterCrop(true)
                             .build());
-            nameTV.setText(goods.getName());
-            priceMV.setMoneyText(String.valueOf(goods.getSalePrice()));
+            updateProject(goods);
         }
+    }
+
+    @Subscriber(tag = EventBusTags.CHANGE_DIRAY_PROJECT)
+    public void updateProject(Goods goods) {
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .placeholder(R.drawable.place_holder_img)
+                        .url(goods.getImage())
+                        .imageView(imageIV)
+                        .isCenterCrop(true)
+                        .build());
+        nameTV.setText(goods.getName());
+        priceMV.setMoneyText(String.valueOf(goods.getSalePrice()));
     }
 }
