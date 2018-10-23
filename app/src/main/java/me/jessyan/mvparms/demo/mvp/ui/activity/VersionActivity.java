@@ -12,6 +12,7 @@ import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DeviceUtils;
 
 import butterknife.BindView;
+import me.jessyan.mvparms.demo.BuildConfig;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerVersionComponent;
 import me.jessyan.mvparms.demo.di.module.VersionModule;
@@ -48,7 +49,7 @@ public class VersionActivity extends BaseActivity<VersionPresenter> implements V
     public void initData(Bundle savedInstanceState) {
         titleTV.setText("版本信息");
         backV.setOnClickListener(this);
-        versionTV.setText(DeviceUtils.getVersionName(this));
+        versionTV.setText(DeviceUtils.getVersionName(this) + BuildConfig.TAG);
     }
 
     @Override

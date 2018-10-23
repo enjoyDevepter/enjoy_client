@@ -44,6 +44,9 @@ import me.jessyan.mvparms.demo.mvp.presenter.DiaryDetailsPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
+import me.jessyan.mvparms.demo.mvp.ui.widget.emoji.EmotionKeyboard;
+import me.jessyan.mvparms.demo.mvp.ui.widget.emoji.EmotionLayout;
+import me.jessyan.mvparms.demo.mvp.ui.widget.emoji.IEmotionSelectedListener;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.ArmsUtils.getContext;
@@ -120,16 +123,21 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     View voteLayout;
     @BindView(R.id.vote)
     View voteV;
+
+    @BindView(R.id.elEmotion)
+    EmotionLayout mElEmotion;
+    @BindView(R.id.emoji_layout)
+    View emojiV;
+    @BindView(R.id.content_layout)
+    View contentLayoutV;
     @Inject
     ImageLoader mImageLoader;
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     RecyclerView.Adapter mAdapter;
-
+    EmotionKeyboard mEmotionKeyboard;
     private boolean hasLoadedAllItems;
-
-
     private DiaryDetailsResponse response;
 
     private UMShareListener shareListener = new UMShareListener() {
@@ -191,6 +199,8 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
         goodsInfoV.setOnClickListener(this);
         praiseV.setOnClickListener(this);
         commentV.setOnClickListener(this);
+        leftIV.setOnClickListener(this);
+        rightIV.setOnClickListener(this);
         voteLayout.setOnClickListener(this);
         commentET.setOnEditorActionListener(this);
         ArmsUtils.configRecyclerView(commentRV, mLayoutManager);
@@ -210,6 +220,28 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
             }
         });
         nestedScrollView.setOnScrollChangeListener(this);
+
+        initEmotionKeyboard();
+        mElEmotion.attachEditText(commentET);
+    }
+
+    private void initEmotionKeyboard() {
+        mEmotionKeyboard = EmotionKeyboard.with(this);
+        mEmotionKeyboard.bindToContent(contentLayoutV);
+        mEmotionKeyboard.bindToEmotionButton(emojiV);
+        mEmotionKeyboard.bindToEditText(commentET);
+        mEmotionKeyboard.setEmotionLayout(mElEmotion);
+        mElEmotion.setEmotionSelectedListener(new IEmotionSelectedListener() {
+            @Override
+            public void onEmojiSelected(String key) {
+            }
+
+            @Override
+            public void onSend() {
+                comment();
+            }
+
+        });
     }
 
     @Override
@@ -274,8 +306,21 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
                 provideCache().put("diaryId", response.getDiary().getDiaryId());
                 mPresenter.vote(voteV.isSelected() ? false : true);
                 break;
+            case R.id.left:
+            case R.id.right:
+                if (null != response && response.getDiary().getImageList() != null && response.getDiary().getImageList().size() > 0) {
+                    Intent intentOne = new Intent(getActivity(), ImageShowActivity.class);
+                    String[] images = new String[response.getDiary().getImageList().size()];
+                    for (int i = 0; i < response.getDiary().getImageList().size(); i++) {
+                        images[i] = response.getDiary().getImageList().get(i);
+                    }
+                    intentOne.putExtra("images", images);
+                    ArmsUtils.startActivity(intentOne);
+                }
+                break;
         }
     }
+
 
     private void showNewWX() {
         if (null != response && null != response.getDiary()) {
@@ -447,18 +492,22 @@ public class DiaryDetailsActivity extends BaseActivity<DiaryDetailsPresenter> im
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         switch (actionId) {
             case EditorInfo.IME_ACTION_SEND:
-                String comment = commentET.getText().toString();
-                if (ArmsUtils.isEmpty(comment)) {
-                    showMessage("请输入评论内容");
-                    return true;
-                }
-                hintKeyBoard();
-                provideCache().put("diaryId", response.getDiary().getDiaryId());
-                provideCache().put("content", comment);
-                mPresenter.comment();
+                comment();
                 return true;
         }
         return false;
+    }
+
+    private void comment() {
+        String comment = commentET.getText().toString();
+        if (ArmsUtils.isEmpty(comment)) {
+            showMessage("请输入评论内容");
+            return;
+        }
+        hintKeyBoard();
+        provideCache().put("diaryId", response.getDiary().getDiaryId());
+        provideCache().put("content", comment);
+        mPresenter.comment();
     }
 
     public void hintKeyBoard() {

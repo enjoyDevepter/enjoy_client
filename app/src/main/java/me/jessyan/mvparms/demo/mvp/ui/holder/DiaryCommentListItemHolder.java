@@ -54,7 +54,7 @@ public class DiaryCommentListItemHolder extends BaseHolder<DiaryComment> {
         Observable.just(comment.getCommentDate())
                 .subscribe(s -> publishDateTV.setText(s));
         Observable.just(comment.getContent())
-                .subscribe(s -> contentTV.setText(s));
+                .subscribe(s -> contentTV.getContext());
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()

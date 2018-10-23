@@ -22,6 +22,7 @@
     <dimen name="tab_height">35dp</dimen>
     <dimen name="main_tab_height">35dp</dimen>
     <dimen name="doctor_tab_height">124dp</dimen>
+    <dimen name="diray_input_height">68dp</dimen>
 
     <dimen name="dialog_height">130dp</dimen>
     <dimen name="ad_dialog_height">482dp</dimen>

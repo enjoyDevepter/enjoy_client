@@ -35,7 +35,9 @@ import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-/**用户积分*/
+/**
+ * 用户积分
+ */
 public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> implements UserIntegralContract.View {
 
     @BindView(R.id.score)
@@ -212,10 +214,12 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
 
     @Subscriber(tag = EventBusTags.USER_ACCOUNT_CHANGE)
     public void updateUserAccount(MemberAccount account) {
-        score.setText(account.getPoint() + "");
+        if (null != account) {
+            score.setText(account.getPoint() + "");
+        }
     }
 
-    public void updateQiandaoInfo(boolean isSignin,long point,String url){
+    public void updateQiandaoInfo(boolean isSignin, long point, String url) {
         View.OnClickListener howGetIntegral = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,6 +232,6 @@ public class UserIntegralActivity extends BaseActivity<UserIntegralPresenter> im
         how_to_icon.setOnClickListener(howGetIntegral);
         how_to_icon_title.setOnClickListener(howGetIntegral);
         qianming.setEnabled(!isSignin);
-        score.setText(point+"");
+        score.setText(point + "");
     }
 }

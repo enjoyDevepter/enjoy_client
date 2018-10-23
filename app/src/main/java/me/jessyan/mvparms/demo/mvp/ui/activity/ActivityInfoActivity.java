@@ -121,10 +121,12 @@ public class ActivityInfoActivity extends BaseActivity<ActivityInfoPresenter> im
 
     @Override
     public void updateUI(ActivityInfo activityInfo) {
+        titleTV.setText(activityInfo.getTitle());
         contentTV.setText(Html.fromHtml(activityInfo.getContent()));
         if (ArmsUtils.isEmpty(activityInfo.getImage())) {
             imageIV.setVisibility(View.GONE);
         } else {
+            imageIV.setVisibility(View.VISIBLE);
             mImageLoader.loadImage(imageIV.getContext(),
                     ImageConfigImpl
                             .builder()

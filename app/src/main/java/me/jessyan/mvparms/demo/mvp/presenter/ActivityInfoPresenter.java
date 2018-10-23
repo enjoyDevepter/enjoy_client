@@ -53,7 +53,6 @@ public class ActivityInfoPresenter extends BasePresenter<ActivityInfoContract.Mo
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
         getActivityInfo();
-        getActivityList();
     }
 
     public void getActivityInfo() {
@@ -70,6 +69,7 @@ public class ActivityInfoPresenter extends BasePresenter<ActivityInfoContract.Mo
                     public void onNext(ActivityInfoResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateUI(response.getActivityInfo());
+                            getActivityList();
                         }
                     }
                 });
@@ -88,6 +88,7 @@ public class ActivityInfoPresenter extends BasePresenter<ActivityInfoContract.Mo
                     @Override
                     public void onNext(ActivityInfoListResponse response) {
                         if (response.isSuccess()) {
+                            activityInfoList.clear();
                             activityInfoList.addAll(response.getActivityInfoList());
                             if (activityInfoList.size() > 0) {
                                 String activityId = (String) mRootView.getCache().get("activityId");

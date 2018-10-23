@@ -34,6 +34,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "true"
+            buildConfigField "String", "TAG", "\"(2018101801)\""
             buildConfigField "String", "API_HOST", "\"http://sj.ehanmy.cn/ehanmy/\""
 //            buildConfigField "String", "API_HOST", "\"http://api.donhonet.net/ehanmy/\""
 //            minifyEnabled false
@@ -44,6 +45,7 @@ android {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             buildConfigField "boolean", "USE_CANARY", "false"
+            buildConfigField "String", "TAG", "\"(2018101801)\""
             buildConfigField "String", "API_HOST", "\"http://sj.ehanmy.cn/ehanmy/\""
             signingConfig signingConfigs.release
             minifyEnabled false
@@ -102,6 +104,7 @@ dependencies {
     implementation rootProject.ext.dependencies['location']
     implementation rootProject.ext.dependencies['emoji']
     implementation rootProject.ext.dependencies['qiniu']
+
 
     //tools
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
