@@ -6,7 +6,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
 
 public class VeritfyRequest extends BaseRequest {
     private String mobile;
-    private int cmd = 10158;
+    private int cmd = 105;
     private String token;
 
     public String getMobile() {
