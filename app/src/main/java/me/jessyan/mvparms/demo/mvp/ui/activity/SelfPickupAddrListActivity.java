@@ -32,6 +32,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerSelfPickupAddrListComponent;
 import me.jessyan.mvparms.demo.di.module.SelfPickupAddrListModule;
 import me.jessyan.mvparms.demo.mvp.contract.SelfPickupAddrListContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.SelfPickupAddrListPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -148,7 +149,21 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                     int index = (int) provideCache().get("choiceItem");
                     switch (listType) {
                         case HOP:
-                            EventBus.getDefault().post(mAdapter.getInfos().get(index), EventBusTags.HOSPITAL_CHANGE_EVENT);
+                            if (getIntent().getBooleanExtra("isMeal", false)) {
+                                // 从套餐详情页面进入，进入选择时间界面
+                                // 预约
+                                Intent addappointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
+                                addappointmentsIntent.putExtra("isMeal", true);
+                                addappointmentsIntent.putExtra("projectId", getIntent().getStringExtra("projectId"));
+                                addappointmentsIntent.putExtra("type", getIntent().getStringExtra("type"));
+                                addappointmentsIntent.putExtra("merchId", getIntent().getStringExtra("merchId"));
+                                addappointmentsIntent.putExtra("goodsId", getIntent().getStringExtra("goodsId"));
+                                addappointmentsIntent.putExtra("reservationId", getIntent().getStringExtra("reservationId"));
+                                addappointmentsIntent.putExtra("hospitalId", ((HospitalBaseInfoBean) mAdapter.getInfos().get(index)).getHospitalId());
+                                ArmsUtils.startActivity(addappointmentsIntent);
+                            } else {
+                                EventBus.getDefault().post(mAdapter.getInfos().get(index), EventBusTags.HOSPITAL_CHANGE_EVENT);
+                            }
                             break;
                         case STORE:
                             EventBus.getDefault().post(mAdapter.getInfos().get(index), EventBusTags.STORE_CHANGE_EVENT);

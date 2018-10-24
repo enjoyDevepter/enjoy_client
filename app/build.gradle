@@ -34,7 +34,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "true"
-            buildConfigField "String", "TAG", "\"(2018101801)\""
+            buildConfigField "String", "TAG", "\"(2018102401)\""
             buildConfigField "String", "API_HOST", "\"http://sj.ehanmy.cn/ehanmy/\""
 //            buildConfigField "String", "API_HOST", "\"http://api.donhonet.net/ehanmy/\""
 //            minifyEnabled false

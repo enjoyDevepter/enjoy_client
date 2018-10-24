@@ -35,7 +35,6 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
-import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
 
 
 @ActivityScope
@@ -131,7 +130,7 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
             request.setCmd(isMeal ? 2107 : 2007);
             request.setReservationId(mRootView.getActivity().getIntent().getStringExtra("reservationId"));
         }
-        request.setHospitalId((String) mRootView.getCache().get(KEY_FOR_HOSPITAL_ID));
+        request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra("hospitalId"));
         request.setReservationDate((String) mRootView.getCache().get("appointmentsDate"));
         request.setReservationTime((String) mRootView.getCache().get("appointmentsTime"));
         mModel.modifyAppointmentTime(request)

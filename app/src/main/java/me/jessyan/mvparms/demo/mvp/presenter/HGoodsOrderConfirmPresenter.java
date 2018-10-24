@@ -25,7 +25,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsPayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MainActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
-import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -46,7 +45,6 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
     ImageLoader mImageLoader;
 
     HGoodsOrderConfirmInfoResponse hGoodsOrderConfirmInfoResponse;
-    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.HOP;
 
     @Inject
     public HGoodsOrderConfirmPresenter(HGoodsOrderConfirmContract.Model model, HGoodsOrderConfirmContract.View rootView) {

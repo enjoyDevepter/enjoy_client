@@ -6,42 +6,6 @@
 
     <include layout="@layout/title" />
 
-    <LinearLayout
-        android:id="@+id/hospital_layout"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:background="@drawable/title_bg"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:text="所在机构："
-            android:textColor="#FF000000"
-            android:textSize="13sp" />
-
-
-        <TextView
-            android:id="@+id/hospital"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:textColor="#FF000000"
-            android:textSize="13sp" />
-
-        <View
-            android:layout_width="5dp"
-            android:layout_height="9dp"
-            android:layout_marginRight="15dp"
-            android:background="@mipmap/more_right" />
-
-    </LinearLayout>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
