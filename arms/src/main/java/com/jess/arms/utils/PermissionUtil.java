@@ -135,6 +135,9 @@ public class PermissionUtil {
         requestPermission(requestPermission, rxPermissions, errorHandler, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
+    public static void install(RequestPermission requestPermission, RxPermissions rxPermissions, RxErrorHandler errorHandler) {
+        requestPermission(requestPermission, rxPermissions, errorHandler, Manifest.permission.INSTALL_PACKAGES);
+    }
     /**
      * 请求app运行初始化
      */

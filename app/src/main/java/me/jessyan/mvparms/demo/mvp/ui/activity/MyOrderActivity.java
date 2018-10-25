@@ -193,10 +193,11 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                     break;
             }
+            mPresenter.getOrder(true);
         } else {
+            mPresenter.getOrder(true);
             provideCache().put("status", tab.getPosition());
         }
-        mPresenter.getOrder(true);
     }
 
     @Override

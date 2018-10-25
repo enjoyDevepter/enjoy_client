@@ -34,7 +34,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "true"
-            buildConfigField "String", "TAG", "\"(2018102401)\""
+            buildConfigField "String", "TAG", "\"(2018102501)\""
             buildConfigField "String", "API_HOST", "\"http://sj.ehanmy.cn/ehanmy/\""
 //            buildConfigField "String", "API_HOST", "\"http://api.donhonet.net/ehanmy/\""
 //            minifyEnabled false
@@ -45,7 +45,7 @@ android {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "TAG", "\"(2018101801)\""
+            buildConfigField "String", "TAG", "\"(2018102501)\""
             buildConfigField "String", "API_HOST", "\"http://sj.ehanmy.cn/ehanmy/\""
             signingConfig signingConfigs.release
             minifyEnabled false
@@ -89,6 +89,7 @@ android {
         abortOnError false
     }
 }
+
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

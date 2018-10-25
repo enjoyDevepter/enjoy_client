@@ -308,21 +308,9 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
                     intent2.putExtra("isMeal", true);
                     intent2.putExtra("projectId", appointment.getProjectId());
                     intent2.putExtra("type", "add_appointment_time");
-                    listType.setProvince(String.valueOf(cache.get("province")));
-                    listType.setCity(String.valueOf(cache.get("city")));
-                    listType.setCounty(String.valueOf(cache.get("county")));
                     listType.setMerchId(appointment.getGoods().getMerchId());
                     listType.setGoodsId(appointment.getGoods().getGoodsId());
                     ArmsUtils.startActivity(intent2);
-//                    // 预约
-//                    Intent addappointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
-//                    addappointmentsIntent.putExtra("isMeal", true);
-//                    addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
-//                    addappointmentsIntent.putExtra("type", "add_appointment_time");
-//                    addappointmentsIntent.putExtra("need_change_hospital", true);
-//                    addappointmentsIntent.putExtra("merchId", appointment.getGoods().getMerchId());
-//                    addappointmentsIntent.putExtra("goodsId", appointment.getGoods().getGoodsId());
-//                    ArmsUtils.startActivity(addappointmentsIntent);
                 } else if (appointment.getStatus().equals("2")) {
                     // 选择医院
                     Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getActivity()).extras();
@@ -332,22 +320,9 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
                     intent2.putExtra("projectId", appointment.getProjectId());
                     intent2.putExtra("type", "modify_appointment_time");
                     intent2.putExtra("reservationId", appointment.getReservationId());
-                    listType.setProvince(String.valueOf(cache.get("province")));
-                    listType.setCity(String.valueOf(cache.get("city")));
-                    listType.setCounty(String.valueOf(cache.get("county")));
                     listType.setMerchId(appointment.getGoods().getMerchId());
                     listType.setGoodsId(appointment.getGoods().getGoodsId());
                     ArmsUtils.startActivity(intent2);
-                    // 改约
-//                    //merchId goodsId
-//                    Intent addappointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
-//                    addappointmentsIntent.putExtra("isMeal", true);
-//                    addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
-//                    addappointmentsIntent.putExtra("type", "modify_appointment_time");
-//                    addappointmentsIntent.putExtra("need_change_hospital", true);
-//                    addappointmentsIntent.putExtra("merchId", appointment.getGoods().getMerchId());
-//                    addappointmentsIntent.putExtra("goodsId", appointment.getGoods().getGoodsId());
-//                    ArmsUtils.startActivity(addappointmentsIntent);
                 } else if (appointment.getStatus().equals("3")) {
                     provideCache().put("reservationId", appointment.getReservationId());
                     // 取消预约

@@ -171,7 +171,7 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
 
     private void checkUpdateForApp() {
         UpdateRequest request = new UpdateRequest();
-        request.setType("android");
+        request.setType("1");
         mModel.checkUpdate(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

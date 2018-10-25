@@ -29,7 +29,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MainActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
-import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -53,8 +52,6 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
     List<Goods> goodsBeans;
 
     private OrderConfirmInfoResponse orderConfirmInfoResponse;
-
-    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.STORE;
 
     @Inject
     public ConfirmOrderPresenter(ConfirmOrderContract.Model model, ConfirmOrderContract.View rootView) {

@@ -211,7 +211,7 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             orderList.addAll(response.getOrderList());
                             preEndIndex = orderList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                            lastPageIndex = orderList.size() / 10;
+                            lastPageIndex = orderList.size() / 10 + 1;
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
