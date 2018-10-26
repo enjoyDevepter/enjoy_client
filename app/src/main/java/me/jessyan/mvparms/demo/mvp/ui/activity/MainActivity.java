@@ -46,6 +46,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -431,39 +433,66 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         if (ArmsUtils.isEmpty(url) || ArmsUtils.isEmpty(name)) {
             return;
         }
-        File downloadFile = new File(Environment.getExternalStorageDirectory(), name + ".apk");// 设置路径
-
-        if (downloadFile.exists()) {
-            startPosition = downloadFile.length();
-        }
-        final Request request = new Request.Builder()
-                .addHeader("RANGE", "bytes=" + startPosition + "-")
-                .url(url)
-                .build();
-        OkHttpClient client = new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
+        new Thread(new Runnable() {
             @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                ResponseBody body = response.body();
-                InputStream is = body.byteStream();
-                byte[] bytes = new byte[2048];
-                int len = 0;
-                long totalNum = startPosition;
-                RandomAccessFile raf = new RandomAccessFile(downloadFile, "rw");
-                while ((len = is.read(bytes, 0, bytes.length)) != -1) {
-                    raf.seek(totalNum);
-                    raf.write(bytes, 0, len);
-                    totalNum += len;
+            public void run() {
+                File downloadFile = new File(Environment.getExternalStorageDirectory(), name + ".apk");// 设置路径
+                int length;
+                HttpURLConnection conn = null;
+                try {
+                    URL Url = new URL(url);
+                    conn = (HttpURLConnection) Url.openConnection();
+                    conn.setRequestProperty("Accept-Encoding", "identity");
+                    conn.connect();
+                    if (conn.getResponseCode() == 200) {
+                        conn.getContentLength();
+                        length = conn.getContentLength();
+                        if (downloadFile.exists()) {
+                            if (downloadFile.length() < length) {
+                                startPosition = downloadFile.length();
+                            } else if (downloadFile.length() == length) {
+                                installApk(downloadFile);
+                                return;
+                            } else {
+                                downloadFile.delete();
+                                startPosition = 0;
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                body.close();
-                installApk(downloadFile);
+
+                final Request request = new Request.Builder()
+                        .addHeader("RANGE", "bytes=" + startPosition + "-")
+                        .url(url)
+                        .build();
+                OkHttpClient client = new OkHttpClient();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        ResponseBody body = response.body();
+                        InputStream is = body.byteStream();
+                        byte[] bytes = new byte[2048];
+                        int len = 0;
+                        long totalNum = startPosition;
+                        RandomAccessFile raf = new RandomAccessFile(downloadFile, "rw");
+                        while ((len = is.read(bytes, 0, bytes.length)) != -1) {
+                            raf.seek(totalNum);
+                            raf.write(bytes, 0, len);
+                            totalNum += len;
+                        }
+                        body.close();
+                        installApk(downloadFile);
+                    }
+                });
             }
-        });
+        }).start();
     }
 
 
