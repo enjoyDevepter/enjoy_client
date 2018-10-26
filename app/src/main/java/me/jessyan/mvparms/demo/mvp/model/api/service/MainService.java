@@ -57,6 +57,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeAdResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HomeResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HotResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.KGoodsDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealOrderConfirmResponse;
@@ -102,6 +103,9 @@ public interface MainService {
 
     @POST("gateway")
     Observable<GoodsDetailsResponse> getGoodsDetails(@Body GoodsDetailsRequest request);
+
+    @POST("gateway")
+    Observable<KGoodsDetailsResponse> getKGoodsDetails(@Body GoodsDetailsRequest request);
 
     @POST("gateway")
     Observable<StoresListResponse> getStores(@Body StoresListRequest request);

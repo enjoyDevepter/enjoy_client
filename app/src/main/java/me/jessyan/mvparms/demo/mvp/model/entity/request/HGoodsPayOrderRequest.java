@@ -14,6 +14,7 @@ public class HGoodsPayOrderRequest extends BaseRequest {
     private String reservationDate;
     private String reservationTime;
     private String hospitalId;
+    private String storeId;
     private String couponId;
     private long coupon;
     private long deductionMoney;
@@ -48,6 +49,14 @@ public class HGoodsPayOrderRequest extends BaseRequest {
 
     public void setReservationDate(String reservationDate) {
         this.reservationDate = reservationDate;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     public String getReservationTime() {
@@ -162,6 +171,7 @@ public class HGoodsPayOrderRequest extends BaseRequest {
                 ", reservationDate='" + reservationDate + '\'' +
                 ", reservationTime='" + reservationTime + '\'' +
                 ", hospitalId='" + hospitalId + '\'' +
+                ", storeId='" + storeId + '\'' +
                 ", couponId='" + couponId + '\'' +
                 ", coupon=" + coupon +
                 ", deductionMoney=" + deductionMoney +

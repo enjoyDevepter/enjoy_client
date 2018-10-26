@@ -195,9 +195,13 @@ public class TimelimitActivity extends BaseActivity<TimelimitPresenter> implemen
             intent.putExtra("merchId", goods.getMerchId());
             intent.putExtra("promotionId", goods.getPromotionId());
             ArmsUtils.startActivity(intent);
-
         } else if ("2".equals(goods.getType())) {
-
+            Intent intent = new Intent(getActivity().getApplication(), KGoodsDetailsActivityActivity.class);
+            intent.putExtra("where", "timelimitdetail");
+            intent.putExtra("goodsId", goods.getGoodsId());
+            intent.putExtra("merchId", goods.getMerchId());
+            intent.putExtra("promotionId", goods.getPromotionId());
+            ArmsUtils.startActivity(intent);
         } else if ("3".equals(goods.getType())) {
             Intent intent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
             intent.putExtra("where", "timelimitdetail");

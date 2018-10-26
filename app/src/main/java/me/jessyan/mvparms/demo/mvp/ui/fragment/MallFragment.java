@@ -41,6 +41,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.presenter.MallPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.GoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.KGoodsDetailsActivityActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
@@ -420,7 +421,12 @@ public class MallFragment extends BaseFragment<MallPresenter> implements MallCon
         switch (viewType) {
             case R.layout.goods_list_item:
                 Goods goods = mAdapter.getInfos().get(position);
-                Intent intent = new Intent(getActivity().getApplication(), GoodsDetailsActivity.class);
+                Intent intent;
+                if ("1".equals((String) getCache().get("type"))) {
+                    intent = new Intent(getActivity().getApplication(), GoodsDetailsActivity.class);
+                } else {
+                    intent = new Intent(getActivity().getApplication(), KGoodsDetailsActivityActivity.class);
+                }
                 intent.putExtra("type", goods.getType());
                 intent.putExtra("goodsId", goods.getGoodsId());
                 intent.putExtra("merchId", goods.getMerchId());
