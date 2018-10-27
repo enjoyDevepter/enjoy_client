@@ -113,4 +113,9 @@ public interface EventBusTags {
      * 刷新界面内容
      */
     String ONREFRESH_CONTENT = "onRefresh_content";
+
+    /**
+     * 切换预约列表
+     */
+    String CHANGE_APPOINTMENT_TYPE = "change_appointment_type";
 }

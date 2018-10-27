@@ -161,7 +161,6 @@ public class MallPresenter extends BasePresenter<MallContract.Model, MallContrac
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
-                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<GoodsListResponse>(mErrorHandler) {
                     @Override

@@ -87,6 +87,11 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
 
     private void getAppointmentTime() {
         GetAppointmentTimeRequest request = new GetAppointmentTimeRequest();
+        if (mRootView.getActivity().getIntent().getBooleanExtra("isHgoods", false)) {
+            request.setCmd(2005);
+        } else {
+            request.setCmd(2015);
+        }
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setProjectId(mRootView.getActivity().getIntent().getStringExtra("projectId"));
@@ -123,11 +128,12 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         String type = mRootView.getActivity().getIntent().getStringExtra("type");
         boolean isMeal = mRootView.getActivity().getIntent().getBooleanExtra("isMeal", false);
+        boolean isHgoods = mRootView.getActivity().getIntent().getBooleanExtra("isHgoods", false);
         if ("add_appointment_time".equals(type)) {
-            request.setCmd(isMeal ? 2106 : 2006);
+            request.setCmd(isMeal ? 2106 : isHgoods ? 2006 : 2016);
             request.setProjectId(mRootView.getActivity().getIntent().getStringExtra("projectId"));
         } else if ("modify_appointment_time".equals(type)) {
-            request.setCmd(isMeal ? 2107 : 2007);
+            request.setCmd(isMeal ? 2107 : isHgoods ? 2007 : 2017);
             request.setReservationId(mRootView.getActivity().getIntent().getStringExtra("reservationId"));
         }
         request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra("hospitalId"));

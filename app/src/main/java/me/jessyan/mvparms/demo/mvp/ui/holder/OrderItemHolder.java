@@ -31,6 +31,8 @@ import com.jess.arms.utils.ArmsUtils;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindColor;
 import butterknife.BindView;
 import io.reactivex.Observable;
@@ -90,6 +92,9 @@ public class OrderItemHolder extends BaseHolder<Order> {
     @BindColor(R.color.red)
     int redColor;
 
+    @BindView(R.id.payTag)
+    View payTagV;
+
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     private MyOrderAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
@@ -127,7 +132,11 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 .subscribe(s -> timeTV.setText("时间：" + sdf.format(s)));
         RecyclerView.LayoutParams itemLayoutParams = (RecyclerView.LayoutParams) itemView.getLayoutParams();
 
-        if ("3".equals(order.getOrderType()) || "6".equals(order.getOrderType())) { // 医美套餐
+
+        single_price_infoTV.setText("总金额:");
+        payTagV.setVisibility(View.VISIBLE);  // 生美特殊处理过
+
+        if ("3".equals(order.getOrderType()) || "6".equals(order.getOrderType()) || "10".equals(order.getOrderType()) || "11".equals(order.getOrderType())) { // 医美订单 //  医美套餐订单
             countTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.GONE);
             single_price_infoTV.setVisibility(View.VISIBLE);
@@ -186,9 +195,35 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 leftTV.setText("申请奖励");
                 leftTV.setVisibility(View.VISIBLE);
             }
-
+        } else if ("2".equals(order.getOrderType()) || "5".equals(order.getOrderType()) || "12".equals(order.getOrderType()) || "13".equals(order.getOrderType())) { // 生美订单 //  生美套餐订单
+            countTV.setVisibility(View.VISIBLE);
+            countTV.setText("剩余次数：x" + order.getGoodsList().get(0).getSurplusTimes());
+            payTagV.setVisibility(View.GONE);
+            singleOnePrice.setVisibility(View.INVISIBLE);
+            singleTwoPrice.setVisibility(View.INVISIBLE);
+            payPriceTV.setMoneyText(ArmsUtils.formatLong(order.getTotalPrice()));
+            single_price_infoTV.setText("总次数 x" + order.getGoodsList().get(0).getNums());
+            if (order.getOrderStatus().equals("1")) {
+                statusTV.setText("待付款");
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("取消订单");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("去支付");
+            } else if (order.getOrderStatus().equals("31")) {
+                statusTV.setText("待预约");
+                leftTV.setVisibility(View.GONE);
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("预约");
+            } else if (order.getOrderStatus().equals("5")) {
+                statusTV.setText("已完成");
+                rightTV.setText("写日记");
+                rightTV.setVisibility(View.VISIBLE);
+                leftTV.setText("申请奖励");
+                leftTV.setVisibility(View.VISIBLE);
+            }
         } else {
             countTV.setVisibility(View.VISIBLE);
+            countTV.setText("数量：x" + String.valueOf(order.getNums()));
             single_price_infoTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.GONE);
             singleOnePrice.setVisibility(View.VISIBLE);
@@ -248,7 +283,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
             moreV.setVisibility(View.GONE);
             singleV.setVisibility(View.VISIBLE);
             itemLayoutParams.height = ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_single_item_height);
-            String name = "", image = "";
+            String name = "", image = "", count = "";
             double salePrice = 0;
             if ("6".equals(order.getOrderType())) {
                 image = order.getSetMealGoodsList().get(0).getImage();
@@ -273,8 +308,6 @@ public class OrderItemHolder extends BaseHolder<Order> {
             nameTV.setText(name);
             singleOnePrice.setMoneyText(String.valueOf(salePrice));
             singleTwoPrice.setMoneyText(String.valueOf(salePrice));
-            countTV.setText("数量：x" + String.valueOf(order.getNums()));
-
         }
 
         itemView.setLayoutParams(itemLayoutParams);

@@ -18,6 +18,8 @@ public class OrderGoods {
     private int nums;
     private String type;
     private String desc;
+    private int times;
+    private int surplusTimes;
     private GoodsSpecValue goodsSpecValue;
 
     public String getGoodsId() {
@@ -116,6 +118,22 @@ public class OrderGoods {
         this.desc = desc;
     }
 
+    public int getTimes() {
+        return times;
+    }
+
+    public void setTimes(int times) {
+        this.times = times;
+    }
+
+    public int getSurplusTimes() {
+        return surplusTimes;
+    }
+
+    public void setSurplusTimes(int surplusTimes) {
+        this.surplusTimes = surplusTimes;
+    }
+
     @Override
     public String toString() {
         return "OrderGoods{" +
@@ -130,6 +148,8 @@ public class OrderGoods {
                 ", nums=" + nums +
                 ", type='" + type + '\'' +
                 ", desc='" + desc + '\'' +
+                ", times=" + times +
+                ", surplusTimes=" + surplusTimes +
                 ", goodsSpecValue=" + goodsSpecValue +
                 '}';
     }

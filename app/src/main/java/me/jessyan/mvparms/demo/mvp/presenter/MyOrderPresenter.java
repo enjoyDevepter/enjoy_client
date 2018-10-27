@@ -75,7 +75,7 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
                 getHOrder(pullToRefresh);
                 break;
             case 1:
-                mRootView.showConent(false);
+                getKOrder(pullToRefresh);
                 break;
             case 2:
                 getSOrder(pullToRefresh);
@@ -329,10 +329,69 @@ public class MyOrderPresenter extends BasePresenter<MyOrderContract.Model, MyOrd
      * 生美订单
      */
     private void getKOrder(boolean pullToRefresh) {
+        OrderRequest request = new OrderRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
         int statusInt = 0;
         if (null != mRootView.getCache().get("status")) {
             statusInt = (int) mRootView.getCache().get("status");
         }
+        String status = "";
+//        1,2,3,5
+        switch (statusInt) {
+            case 0:
+                status = "";
+                break;
+            case 1:
+                status = "1";
+                break;
+            case 2:
+                status = "31";
+                break;
+            case 3:
+                status = "5";
+                break;
+        }
+        request.setOrderStatus(status);
+        request.setCmd(498);
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
+        mModel.getMyOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                }).subscribe(new Consumer<OrderResponse>() {
+            @Override
+            public void accept(OrderResponse response) throws Exception {
+                if (response.isSuccess()) {
+                    // 数据转换
+                    mRootView.showConent(response.getOrderList().size() > 0);
+                    if (pullToRefresh) {
+                        orderList.clear();
+                    }
+                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                    orderList.addAll(response.getOrderList());
+                    preEndIndex = orderList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                    lastPageIndex = orderList.size() / 10;
+                    if (pullToRefresh) {
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mAdapter.notifyItemRangeInserted(preEndIndex, orderList.size());
+                    }
+                }
+            }
+        });
     }
 
 

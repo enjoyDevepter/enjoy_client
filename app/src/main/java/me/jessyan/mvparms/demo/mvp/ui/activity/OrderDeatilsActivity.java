@@ -195,7 +195,10 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         ArmsUtils.startActivity(intent);
                     }
                 } else if ("2".equals(orderType)) {
-
+                    if ("1".equals(order.getOrderStatus())) {
+                        // 取消订单
+                        showCancelDailog();
+                    }
                 } else if ("3".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 取消订单
@@ -224,7 +227,24 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         ArmsUtils.startActivity(intent);
                     }
                 } else if ("2".equals(orderType)) {
-
+                    if ("1".equals(order.getOrderStatus())) {
+                        // 去支付
+                        Intent intent = new Intent(this, PayActivity.class);
+                        intent.putExtra("orderId", order.getOrderId());
+                        ArmsUtils.startActivity(intent);
+                    } else if ("31".equals(order.getOrderStatus())) {
+                        // 预约
+                        Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
+                        makeIntent.putExtra("orderId", order.getOrderId());
+                        makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
+                        makeIntent.putExtra("desc", order.getGoodsList().get(0).getDesc());
+                        ArmsUtils.startActivity(makeIntent);
+                    } else if ("5".equals(order.getOrderStatus())) {
+                        // 写日记
+                        Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
+                        intent.putExtra("orderId", order.getOrderId());
+                        ArmsUtils.startActivity(intent);
+                    }
                 } else if ("3".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 去支付

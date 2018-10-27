@@ -140,16 +140,16 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
             confirmTimeTV.setText(appointment.getConfirmTime());
             confirmTimeV.setVisibility(View.VISIBLE);
         } else {
-            confirmTimeV.setVisibility(View.GONE);
-            confirmTimeTV.setVisibility(View.GONE);
+            confirmTimeV.setVisibility(View.INVISIBLE);
+            confirmTimeTV.setVisibility(View.INVISIBLE);
         }
         if (!ArmsUtils.isEmpty(appointment.getDeductTime())) {
             deductTimeTV.setVisibility(View.VISIBLE);
             deductTimeTV.setText(appointment.getDeductTime());
             deductTimeV.setVisibility(View.VISIBLE);
         } else {
-            deductTimeTV.setVisibility(View.GONE);
-            deductTimeV.setVisibility(View.GONE);
+            deductTimeTV.setVisibility(View.INVISIBLE);
+            deductTimeV.setVisibility(View.INVISIBLE);
         }
 
     }

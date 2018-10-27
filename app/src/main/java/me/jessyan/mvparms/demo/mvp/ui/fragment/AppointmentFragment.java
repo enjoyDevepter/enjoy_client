@@ -216,6 +216,35 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
         }
     }
 
+    @Subscriber(tag = EventBusTags.CHANGE_APPOINTMENT_TYPE)
+    public void changeType(int type) {
+        provideCache().put("type", type);
+        provideCache().put("status", 0);
+
+        switch (type) {
+            case 0: // 生美
+                shengmeiV.setSelected(true);
+                yimei1V.setSelected(false);
+                yimei2V.setSelected(false);
+                break;
+            case 1: // 医美
+                shengmeiV.setSelected(false);
+                yimei1V.setSelected(true);
+                yimei2V.setSelected(false);
+                break;
+            case 2: // 引流医美
+                shengmeiV.setSelected(false);
+                yimei1V.setSelected(false);
+                yimei2V.setSelected(true);
+                break;
+        }
+        if (tabLayout.getSelectedTabPosition() == 0) {
+            mPresenter.getAppointment(true, false);
+        } else {
+            tabLayout.getTabAt(0).select();
+        }
+    }
+
 
     @Override
     public void launchActivity(@NonNull Intent intent) {
@@ -251,7 +280,11 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 yimei2V.setSelected(true);
                 break;
         }
-        mPresenter.getAppointment(true, false);
+        if (tabLayout.getSelectedTabPosition() == 0) {
+            mPresenter.getAppointment(true, false);
+        } else {
+            tabLayout.getTabAt(0).select();
+        }
     }
 
     @Override
@@ -271,6 +304,10 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 }
                 break;
             case RIGHT:
+                int type = 0;
+                if (null != getCache().get("type")) {
+                    type = (int) getCache().get("type");
+                }
                 if (appointment.getStatus().equals("1")) {
                     // 预约
                     Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
@@ -278,6 +315,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                     addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
                     addappointmentsIntent.putExtra("type", "add_appointment_time");
                     addappointmentsIntent.putExtra("index", position);
+                    addappointmentsIntent.putExtra("isHgoods", type == 1 ? true : false);
                     ArmsUtils.startActivity(addappointmentsIntent);
                 } else if (appointment.getStatus().equals("2")) {
                     // 改约
@@ -286,6 +324,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                     addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
                     addappointmentsIntent.putExtra("type", "modify_appointment_time");
                     addappointmentsIntent.putExtra("index", position);
+                    addappointmentsIntent.putExtra("isHgoods", type == 1 ? true : false);
                     ArmsUtils.startActivity(addappointmentsIntent);
                 }
                 break;

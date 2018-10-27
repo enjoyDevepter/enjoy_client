@@ -76,8 +76,18 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
         }
         switch (type) {
             case 0:
-                mRootView.showError(false);
-                return;
+                switch (((int) mRootView.getCache().get("status"))) {
+                    case 0:
+                        request.setCmd(2010);
+                        break;
+                    case 1:
+                        request.setCmd(2011);
+                        break;
+                    case 2:
+                        request.setCmd(2012);
+                        break;
+                }
+                break;
             case 1:
                 switch (((int) mRootView.getCache().get("status"))) {
                     case 0:
@@ -141,7 +151,6 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, appointments.size());
                             }
-                        } else {
                         }
                     }
                 });
@@ -152,7 +161,18 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
      */
     public void cancelAppointment() {
         ModifyAppointmentRequest request = new ModifyAppointmentRequest();
-        request.setCmd(2008);
+        int type = 0;
+        if (null != mRootView.getCache().get("type")) {
+            type = (int) mRootView.getCache().get("type");
+        }
+        switch (type) {
+            case 0:
+                request.setCmd(2018);
+                break;
+            case 1:
+                request.setCmd(2008);
+                break;
+        }
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setReservationId((String) mRootView.getCache().get("reservationId"));

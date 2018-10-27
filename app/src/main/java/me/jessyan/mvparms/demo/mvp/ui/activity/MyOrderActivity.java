@@ -195,8 +195,8 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
             }
             mPresenter.getOrder(true);
         } else {
-            mPresenter.getOrder(true);
             provideCache().put("status", tab.getPosition());
+            mPresenter.getOrder(true);
         }
     }
 
@@ -307,6 +307,16 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                         }
                         break;
                     case 1:
+                        if ("1".equals(order.getOrderStatus())) {
+                            // 取消订单
+                            mPresenter.cancelOrder();
+                        } else if ("5".equals(order.getOrderStatus())) {
+                            // 申请奖励
+                            provideCache().put("orderId", order.getOrderId());
+                            provideCache().put("merchId", order.getGoodsList().get(0).getMerchId());
+                            provideCache().put("goodsId", order.getGoodsList().get(0).getGoodsId());
+                            mPresenter.apply();
+                        }
                         break;
                     case 2:
                         if ("1".equals(order.getOrderStatus())) {
@@ -336,6 +346,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                             ArmsUtils.startActivity(intent);
                         } else if ("31".equals(order.getOrderStatus())) {
                             // 预约
+                            EventBus.getDefault().post(1, EventBusTags.CHANGE_APPOINTMENT_TYPE);
                             EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
                             killMyself();
                         } else if ("5".equals(order.getOrderStatus())) {
@@ -346,6 +357,27 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                         }
                         break;
                     case 1:
+                        if ("1".equals(order.getOrderStatus())) {
+                            // 去支付
+                            Intent intent = new Intent(this, PayActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
+                        } else if ("2".equals(order.getOrderStatus())) {
+                            // 付尾款
+                            Intent intent = new Intent(this, PayActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
+                        } else if ("31".equals(order.getOrderStatus())) {
+                            // 预约
+                            EventBus.getDefault().post(0, EventBusTags.CHANGE_APPOINTMENT_TYPE);
+                            EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
+                            killMyself();
+                        } else if ("5".equals(order.getOrderStatus())) {
+                            // 写日记
+                            Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            ArmsUtils.startActivity(intent);
+                        }
                         break;
                     case 2:
                         if ("1".equals(order.getOrderStatus())) {
