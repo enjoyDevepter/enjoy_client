@@ -26,9 +26,9 @@
 
     <dimen name="dialog_height">130dp</dimen>
     <dimen name="ad_dialog_height">482dp</dimen>
-    <dimen name="update_dialog_height">386dp</dimen>
     <dimen name="dialog_width">240dp</dimen>
     <dimen name="ad_dialog_width">294dp</dimen>
+    <dimen name="update_dialog_height">386dp</dimen>
     <dimen name="update_dialog_width">294dp</dimen>
     <dimen name="order_image_height">100dp</dimen>
     <dimen name="diray_apply_width">264dp</dimen>

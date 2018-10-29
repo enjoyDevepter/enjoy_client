@@ -142,9 +142,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
         return 0;
-
     }
 
     @Override

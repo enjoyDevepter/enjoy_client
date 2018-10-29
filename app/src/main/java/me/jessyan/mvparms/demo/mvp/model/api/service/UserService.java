@@ -33,6 +33,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.ContactResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PickCouponListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.RelatedStoreResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.AddBankCardRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.BankListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.CashConvertRequest;
@@ -52,9 +53,11 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoReque
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFansRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyFollowRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyRelatedStoreRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.QiandaoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.RechargeRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.RelatedStoreRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.SetCashPasswordRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.UserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.AddBankCardResponse;
@@ -240,6 +243,13 @@ public interface UserService {
         // 咨询电话
     Observable<ContactResponse> getContact(@Body SimpleRequest request);
 
+    @POST("gateway")
+        // 我的关联店铺
+    Observable<RelatedStoreResponse> getRelateStore(@Body MyRelatedStoreRequest request);
+
+    @POST("gateway")
+        // 关联店铺
+    Observable<BaseResponse> relateStore(@Body RelatedStoreRequest request);
 
     @POST("gateway")
         // 获取充值记录

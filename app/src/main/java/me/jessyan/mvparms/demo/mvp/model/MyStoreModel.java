@@ -11,8 +11,9 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.MyStoreContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MessageRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MessageResponse;
+import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.RelatedStoreResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyRelatedStoreRequest;
 
 
 @ActivityScope
@@ -35,7 +36,8 @@ public class MyStoreModel extends BaseModel implements MyStoreContract.Model {
     }
 
     @Override
-    public Observable<MessageResponse> getStore(MessageRequest request) {
-        return null;
+    public Observable<RelatedStoreResponse> getRelateStore(MyRelatedStoreRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getRelateStore(request);
     }
 }

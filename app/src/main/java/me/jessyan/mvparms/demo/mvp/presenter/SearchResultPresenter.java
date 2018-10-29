@@ -150,7 +150,64 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
 
 
     private void getKGoodsList(final boolean pullToRefresh) {
-        mRootView.showError(false);
+        GoodsListRequest request = new GoodsListRequest();
+        request.setCmd(490);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setProvince(String.valueOf(cache.get("province")));
+        request.setCity(String.valueOf(cache.get("city")));
+        request.setCounty(String.valueOf(cache.get("county")));
+        request.setCategoryId((String) mRootView.getCache().get("categoryId"));
+        request.setSecondCategoryId((String) (mRootView.getCache().get("secondCategoryId")));
+
+        if (!ArmsUtils.isEmpty(String.valueOf(mRootView.getCache().get("orderByField")))) {
+            GoodsListRequest.OrderBy orderBy = new GoodsListRequest.OrderBy();
+            orderBy.setField((String) mRootView.getCache().get("orderByField"));
+            orderBy.setAsc((Boolean) mRootView.getCache().get("orderByAsc"));
+            request.setOrderBy(orderBy);
+        }
+
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
+        mModel.getGoodsList(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<GoodsListResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(GoodsListResponse response) {
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                mGoods.clear();
+                            }
+                            mRootView.showError(response.getGoodsList().size() > 0);
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            mGoods.addAll(response.getGoodsList());
+                            preEndIndex = mGoods.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = mGoods.size() / 10 + 1;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, mGoods.size());
+                            }
+                        }
+                    }
+                });
     }
 
     private void getHGoodsList(final boolean pullToRefresh) {

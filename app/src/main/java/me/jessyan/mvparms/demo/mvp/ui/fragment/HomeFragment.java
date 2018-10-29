@@ -630,6 +630,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             result.putExtra("busType", "3");
             result.putExtra("title", firstNavList.get(tab.getPosition()).getTitle());
             ArmsUtils.startActivity(result);
+        } else if ("sciencecosmetology".equals(tag)) {
+            Intent result = new Intent(getActivity(), SearchResultActivity.class);
+            result.putExtra("busType", "2");
+            result.putExtra("title", firstNavList.get(tab.getPosition()).getTitle());
+            ArmsUtils.startActivity(result);
         } else if ("shop".equals(tag)) {
             Intent result = new Intent(getActivity(), SearchResultActivity.class);
             result.putExtra("busType", "1");
@@ -647,6 +652,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             ArmsUtils.startActivity(getActivity(), HospitalActivity.class);
         } else if ("doctor".equals(tag)) {
             ArmsUtils.startActivity(getActivity(), DoctorActivity.class);
+        } else if ("store".equals(tag)) {
+
         }
     }
 

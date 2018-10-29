@@ -16,10 +16,13 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.Subscriber;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerMyStoreComponent;
 import me.jessyan.mvparms.demo.di.module.MyStoreModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyStoreContract;
@@ -47,9 +50,11 @@ public class MyStoreActivity extends BaseActivity<MyStorePresenter> implements M
     @Inject
     MyStoresListAdapter mAdapter;
 
+    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.RELATEDSTORE;
+
     private Paginate mPaginate;
     private boolean isLoadingMore;
-    private boolean hasLoadedAllItems;
+    private boolean hasLoadedAllItems = true;
 
 
     @Override
@@ -73,7 +78,9 @@ public class MyStoreActivity extends BaseActivity<MyStorePresenter> implements M
         editV.setOnClickListener(this);
         tabLayout.addTab(tabLayout.newTab().setText("已关联店铺"));
         swipeRefreshLayout.setOnRefreshListener(this);
-
+        storeRV.setAdapter(mAdapter);
+        ArmsUtils.configRecyclerView(storeRV, mLayoutManager);
+        initPaginate();
     }
 
     @Override
@@ -88,7 +95,7 @@ public class MyStoreActivity extends BaseActivity<MyStorePresenter> implements M
 
     @Override
     public void showConent(boolean hasData) {
-        swipeRefreshLayout.setVisibility(hasData ? View.VISIBLE : View.GONE);
+        storeRV.setVisibility(hasData ? View.VISIBLE : View.GONE);
         noData.setVisibility(hasData ? View.GONE : View.VISIBLE);
     }
 
@@ -113,6 +120,10 @@ public class MyStoreActivity extends BaseActivity<MyStorePresenter> implements M
         this.hasLoadedAllItems = has;
     }
 
+    @Subscriber(tag = EventBusTags.STORE_CHANGE_EVENT)
+    private void updateStore(int index) {
+        mPresenter.getRelateStore(true);
+    }
 
     /**
      * 初始化Paginate,用于加载更多
@@ -122,7 +133,7 @@ public class MyStoreActivity extends BaseActivity<MyStorePresenter> implements M
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-//                    mPresenter.getMessage(false);
+                    mPresenter.getRelateStore(false);
                 }
 
                 @Override
@@ -177,6 +188,9 @@ public class MyStoreActivity extends BaseActivity<MyStorePresenter> implements M
                 killMyself();
                 break;
             case R.id.edit:
+                Intent intent2 = new Intent(this, SelfPickupAddrListActivity.class);
+                intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
+                ArmsUtils.startActivity(intent2);
                 break;
         }
     }
@@ -192,6 +206,6 @@ public class MyStoreActivity extends BaseActivity<MyStorePresenter> implements M
 
     @Override
     public void onRefresh() {
-//        mPresenter.getMessage(true);
+        mPresenter.getRelateStore(true);
     }
 }

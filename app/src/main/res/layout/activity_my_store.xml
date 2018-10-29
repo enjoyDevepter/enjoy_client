@@ -63,12 +63,14 @@
         app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabTextColor="#FF666666" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -77,30 +79,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+            <LinearLayout
+                android:id="@+id/no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-        <LinearLayout
-            android:id="@+id/no_data"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:visibility="gone">
+                <View
+                    android:layout_width="94dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="80dp"
+                    android:background="@mipmap/nodata" />
 
-            <View
-                android:layout_width="94dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="80dp"
-                android:background="@mipmap/nodata" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="还未关联店铺"
+                    android:textColor="#FF666666"
+                    android:textSize="13sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="还未关联店铺"
-                android:textColor="#FF666666"
-                android:textSize="13sp" />
+            </LinearLayout>
+        </FrameLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-        </LinearLayout>
-    </FrameLayout>
+
 </LinearLayout>

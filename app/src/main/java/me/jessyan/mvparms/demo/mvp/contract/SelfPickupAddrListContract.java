@@ -12,7 +12,9 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListRe
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.RelatedStoreRequest;
 
 
 public interface SelfPickupAddrListContract {
@@ -40,5 +42,7 @@ public interface SelfPickupAddrListContract {
         Observable<StoresListResponse> getStores(StoresListRequest request);
 
         Observable<HospitalListResponse> getHospitals(HospitalListRequest request);
+
+        Observable<BaseResponse> relateStore(RelatedStoreRequest request);
     }
 }

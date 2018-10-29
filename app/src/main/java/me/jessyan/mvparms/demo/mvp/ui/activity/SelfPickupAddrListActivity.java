@@ -32,6 +32,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerSelfPickupAddrListComponent;
 import me.jessyan.mvparms.demo.di.module.SelfPickupAddrListModule;
 import me.jessyan.mvparms.demo.mvp.contract.SelfPickupAddrListContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalBaseInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.SelfPickupAddrListPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
@@ -168,6 +169,10 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                         case STORE:
                             EventBus.getDefault().post(mAdapter.getInfos().get(index), EventBusTags.STORE_CHANGE_EVENT);
                             break;
+                        case RELATEDSTORE:
+                            getCache().put("storeId", ((Store) mAdapter.getInfos().get(index)).getStoreId());
+                            mPresenter.relateStore();
+                            return;
                         case ADDR:
                             break;
                     }
@@ -178,6 +183,9 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                             return;
                         case STORE:
                             showMessage("请选择店铺信息！");
+                            return;
+                        case RELATEDSTORE:
+                            showMessage("请选择关联店铺！");
                             return;
                         case ADDR:
                             return;
@@ -350,6 +358,7 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
     public enum ListType {
         HOP("选择机构", "选择机构: ", "请选择为您服务的机构", "choose_hosptial_info"),  // 选择医院
         STORE("选择店铺", "选择店铺: ", "请选择为您服务的店铺", "choose_store_info"),  //选择店铺
+        RELATEDSTORE("选择店铺", "选择店铺: ", "请选择要关联店铺", "choose_store_info"),  //选择店铺
         ADDR("自提地址", "选择店铺: ", "请选择为您服务的店铺", "choose_addr_info"); // 自提地址
 
         private String title;  // 整个页面的标题

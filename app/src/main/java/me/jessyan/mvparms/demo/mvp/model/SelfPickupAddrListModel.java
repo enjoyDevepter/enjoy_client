@@ -18,7 +18,9 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListRe
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.RelatedStoreRequest;
 
 
 @ActivityScope
@@ -56,5 +58,11 @@ public class SelfPickupAddrListModel extends BaseModel implements SelfPickupAddr
     public Observable<HospitalListResponse> getHospitals(HospitalListRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getHospitals(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> relateStore(RelatedStoreRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .relateStore(request);
     }
 }

@@ -12,6 +12,8 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import org.simple.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.mvp.contract.SelfPickupAddrListContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.AreaAddress;
 import me.jessyan.mvparms.demo.mvp.model.entity.CommonStoreDateType;
@@ -28,13 +31,16 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListRe
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.StoresListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.AllAddressResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.StoresListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.RelatedStoreRequest;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.StoresListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
+import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE;
 
 
@@ -73,7 +79,6 @@ public class SelfPickupAddrListPresenter extends BasePresenter<SelfPickupAddrLis
     private void getAllAddressList() {
         SimpleRequest request = new SimpleRequest();
         request.setCmd(902);
-
         mModel.getAllAddressList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -97,6 +102,7 @@ public class SelfPickupAddrListPresenter extends BasePresenter<SelfPickupAddrLis
                 getHospital(pullToRefresh);
                 break;
             case STORE:
+            case RELATEDSTORE:
                 getStores(pullToRefresh);
                 break;
             case ADDR:
@@ -214,6 +220,30 @@ public class SelfPickupAddrListPresenter extends BasePresenter<SelfPickupAddrLis
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, commonStoreDateTypeList.size());
                             }
+                        }
+                    }
+                });
+    }
+
+
+    public void relateStore() {
+        RelatedStoreRequest request = new RelatedStoreRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setStoreId((String) mRootView.getCache().get("storeId"));
+        mModel.relateStore(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            EventBus.getDefault().post(0, EventBusTags.STORE_CHANGE_EVENT);
+                            mRootView.killMyself();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
