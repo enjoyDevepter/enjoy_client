@@ -23,8 +23,8 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Message;
-import me.jessyan.mvparms.demo.mvp.ui.holder.MessageItemHolder;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.PrivateMessage;
+import me.jessyan.mvparms.demo.mvp.ui.holder.PrivateMessageItemHolder;
 
 /**
  * ================================================
@@ -35,19 +35,19 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.MessageItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class MessageAdapter extends DefaultAdapter<Message> {
+public class PrivateMessageAdapter extends DefaultAdapter<PrivateMessage> {
 
-    public MessageAdapter(List<Message> members) {
+    public PrivateMessageAdapter(List<PrivateMessage> members) {
         super(members);
     }
 
     @Override
-    public BaseHolder<Message> getHolder(View v, int viewType) {
-        return new MessageItemHolder(v);
+    public BaseHolder<PrivateMessage> getHolder(View v, int viewType) {
+        return new PrivateMessageItemHolder(v);
     }
 
     @Override
     public int getLayoutId(int viewType) {
-        return R.layout.my_message_item;
+        return R.layout.private_letter_item;
     }
 }

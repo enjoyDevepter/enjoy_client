@@ -102,8 +102,19 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                 }
                 break;
             case 2:
-                mRootView.showError(false);
-                return;
+                request.setCmd(2050);
+                switch (((int) mRootView.getCache().get("status"))) {
+                    case 0:
+                        request.setStatus("");
+                        break;
+                    case 1:
+                        request.setStatus("0");
+                        break;
+                    case 2:
+                        request.setStatus("2");
+                        break;
+                }
+                break;
         }
 
 

@@ -48,6 +48,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetConsumeInfoPageR
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetMyMemberListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GetRechargeListRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.GrowthInfoRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MessageDetailRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MessageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.ModifyUserInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MyCouponListRequest;
@@ -75,6 +76,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetMyMemberListRes
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GetRechargeListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GrowthInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.GrowthListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MessageDetailResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MessageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyCouponListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyDiaryInfoResponse;
@@ -220,6 +222,13 @@ public interface UserService {
         // 私信
     Observable<MessageResponse> getMessage(@Body MessageRequest request);
 
+    @POST("gateway")
+        // 私信详情
+    Observable<MessageDetailResponse> getNoticeDetail(@Body MessageDetailRequest request);
+
+    @POST("gateway")
+        // 回复私信
+    Observable<BaseResponse> reply(@Body MessageDetailRequest request);
 
     @POST("gateway")
         // 提现密码修改

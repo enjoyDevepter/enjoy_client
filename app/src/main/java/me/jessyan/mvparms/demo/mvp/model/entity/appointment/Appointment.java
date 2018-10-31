@@ -21,8 +21,13 @@ public class Appointment {
     private String statusDesc;
     private long createDate;
     private String code;
+    private String relateStatus;
+    private String relateStatusDesc;
+    private String phone;
+    private String address;
     private Goods goods;
     private Hospital hospital;
+    private Member member;
 
     public String getProjectId() {
         return projectId;
@@ -152,6 +157,46 @@ public class Appointment {
         this.hospital = hospital;
     }
 
+    public String getRelateStatus() {
+        return relateStatus;
+    }
+
+    public void setRelateStatus(String relateStatus) {
+        this.relateStatus = relateStatus;
+    }
+
+    public String getRelateStatusDesc() {
+        return relateStatusDesc;
+    }
+
+    public void setRelateStatusDesc(String relateStatusDesc) {
+        this.relateStatusDesc = relateStatusDesc;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
     @Override
     public String toString() {
         return "Appointment{" +
@@ -169,8 +214,13 @@ public class Appointment {
                 ", statusDesc='" + statusDesc + '\'' +
                 ", createDate=" + createDate +
                 ", code='" + code + '\'' +
+                ", relateStatus='" + relateStatus + '\'' +
+                ", relateStatusDesc='" + relateStatusDesc + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
                 ", goods=" + goods +
                 ", hospital=" + hospital +
+                ", member=" + member +
                 '}';
     }
 
@@ -199,6 +249,35 @@ public class Appointment {
             return "Hospital{" +
                     "hospitalId='" + hospitalId + '\'' +
                     ", name='" + name + '\'' +
+                    '}';
+        }
+    }
+
+    public class Member {
+        private String memberId;
+        private String memberName;
+
+        public String getMemberId() {
+            return memberId;
+        }
+
+        public void setMemberId(String memberId) {
+            this.memberId = memberId;
+        }
+
+        public String getMemberName() {
+            return memberName;
+        }
+
+        public void setMemberName(String memberName) {
+            this.memberName = memberName;
+        }
+
+        @Override
+        public String toString() {
+            return "Member{" +
+                    "memberId='" + memberId + '\'' +
+                    ", memberName='" + memberName + '\'' +
                     '}';
         }
     }

@@ -9,6 +9,7 @@ public class AppointmentAndMealRequest extends BaseRequest {
     private int pageIndex = 1;
     private int pageSize = 10;
     private int cmd = 575;
+    private String status;
     private String orderStatus;
 
     public String getToken() {
@@ -51,6 +52,14 @@ public class AppointmentAndMealRequest extends BaseRequest {
         this.orderStatus = orderStatus;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "AppointmentAndMealRequest{" +
@@ -58,6 +67,7 @@ public class AppointmentAndMealRequest extends BaseRequest {
                 ", pageIndex=" + pageIndex +
                 ", pageSize=" + pageSize +
                 ", cmd=" + cmd +
+                ", status='" + status + '\'' +
                 ", orderStatus='" + orderStatus + '\'' +
                 '}';
     }

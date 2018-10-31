@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@drawable/title_bg"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+    <View
+        android:id="@+id/unRead"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@mipmap/red_circle" />
+
+    <me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView
+        android:id="@+id/headImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/unRead"
+        android:background="@mipmap/place_holder_user" />
+
+    <TextView
+        android:id="@+id/nickName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/headImage"
+        android:textColor="#FF676767"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/nickName"
+        android:layout_below="@id/nickName"
+        android:layout_marginTop="5dp"
+        android:lines="1"
+        android:textColor="#FF676767"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/publishDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/nickName"
+        android:textColor="#FfB3B3B3"
+        android:textSize="10sp" />
+
+</RelativeLayout>
+

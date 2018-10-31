@@ -23,11 +23,13 @@ import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.Message;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.bean.PrivateMessage;
 import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 
 /**
@@ -39,44 +41,47 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class MessageItemHolder extends BaseHolder<Message> {
+public class PrivateMessageItemHolder extends BaseHolder<PrivateMessage> {
 
     @BindView(R.id.headImage)
     ShapeImageView headImageIV;
     @BindView(R.id.nickName)
     TextView nickNameTV;
-    @BindView(R.id.fllow)
-    View fllowV;
+    @BindView(R.id.content)
+    TextView contentTV;
+    @BindView(R.id.unRead)
+    View unReadV;
     @BindView(R.id.publishDate)
     TextView publishDateTV;
 
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
 
-    public MessageItemHolder(View itemView) {
+    public PrivateMessageItemHolder(View itemView) {
         super(itemView);
         //可以在任何可以拿到 Context 的地方,拿到 AppComponent,从而得到用 Dagger 管理的单例对象
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
-        fllowV.setOnClickListener(this);
     }
 
 
     @Override
-    public void setData(Message message, int position) {
-//        Observable.just(member.getNickName())
-//                .subscribe(s -> nickNameTV.setText(s));
-//        fllowV.setSelected(true);
-//        Observable.just(member.getFollowDate())
-//                .subscribe(s -> publishDateTV.setText(s));
-//
-//        mImageLoader.loadImage(itemView.getContext(),
-//                ImageConfigImpl
-//                        .builder()
-//                        .placeholder(R.mipmap.place_holder_user)
-//                        .url(member.getHeadImage())
-//                        .imageView(headImageIV)
-//                        .build());
+    public void setData(PrivateMessage message, int position) {
+        Observable.just(message.getTitle())
+                .subscribe(s -> nickNameTV.setText(s));
+        unReadV.setVisibility("1".equals(message.getStatus()) ? View.VISIBLE : View.INVISIBLE);
+        Observable.just(message.getSendTime())
+                .subscribe(s -> publishDateTV.setText(s));
+        Observable.just(message.getContent())
+                .subscribe(s -> contentTV.setText(s));
+
+        mImageLoader.loadImage(itemView.getContext(),
+                ImageConfigImpl
+                        .builder()
+                        .placeholder(R.mipmap.place_holder_user)
+                        .url(message.getHeadImage())
+                        .imageView(headImageIV)
+                        .build());
     }
 
 
@@ -88,7 +93,8 @@ public class MessageItemHolder extends BaseHolder<Message> {
     protected void onRelease() {
         this.headImageIV = null;
         this.nickNameTV = null;
-        this.fllowV = null;
+        this.unReadV = null;
+        this.contentTV = null;
         this.publishDateTV = null;
     }
 }

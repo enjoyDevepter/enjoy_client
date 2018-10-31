@@ -12,7 +12,10 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.MessageContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MessageDetailRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.MessageRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MessageDetailResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MessageResponse;
 
 
@@ -39,5 +42,17 @@ public class MessageModel extends BaseModel implements MessageContract.Model {
     public Observable<MessageResponse> getMessage(MessageRequest request) {
         return mRepositoryManager.obtainRetrofitService(UserService.class)
                 .getMessage(request);
+    }
+
+    @Override
+    public Observable<MessageDetailResponse> getNoticeDetail(MessageDetailRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .getNoticeDetail(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> reply(MessageDetailRequest request) {
+        return mRepositoryManager.obtainRetrofitService(UserService.class)
+                .reply(request);
     }
 }
