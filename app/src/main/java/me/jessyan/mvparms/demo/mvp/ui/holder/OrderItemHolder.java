@@ -31,8 +31,6 @@ import com.jess.arms.utils.ArmsUtils;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.BindColor;
 import butterknife.BindView;
 import io.reactivex.Observable;
@@ -284,16 +282,13 @@ public class OrderItemHolder extends BaseHolder<Order> {
             singleV.setVisibility(View.VISIBLE);
             itemLayoutParams.height = ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_single_item_height);
             String name = "", image = "", count = "";
-            double salePrice = 0;
             if ("6".equals(order.getOrderType())) {
                 image = order.getSetMealGoodsList().get(0).getImage();
                 name = order.getSetMealGoodsList().get(0).getName();
-                salePrice = order.getSetMealGoodsList().get(0).getSalePrice();
             } else {
                 OrderGoods goods = order.getGoodsList().get(0);
                 name = goods.getName();
                 image = goods.getImage();
-                salePrice = goods.getSalePrice();
             }
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
             mImageLoader.loadImage(itemView.getContext(),
@@ -306,8 +301,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
                             .build());
 
             nameTV.setText(name);
-            singleOnePrice.setMoneyText(String.valueOf(salePrice));
-            singleTwoPrice.setMoneyText(String.valueOf(salePrice));
+            singleOnePrice.setMoneyText(ArmsUtils.formatLong(order.getTotalPrice()));
+            singleTwoPrice.setMoneyText(ArmsUtils.formatLong(order.getTotalPrice()));
         }
 
         itemView.setLayoutParams(itemLayoutParams);
