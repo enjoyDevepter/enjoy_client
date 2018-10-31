@@ -195,8 +195,8 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
             }
             mPresenter.getOrder(true);
         } else {
-            mPresenter.getOrder(true);
             provideCache().put("status", tab.getPosition());
+            mPresenter.getOrder(true);
         }
     }
 

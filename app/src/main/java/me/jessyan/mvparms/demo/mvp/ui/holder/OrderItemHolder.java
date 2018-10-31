@@ -127,7 +127,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 .subscribe(s -> timeTV.setText("时间：" + sdf.format(s)));
         RecyclerView.LayoutParams itemLayoutParams = (RecyclerView.LayoutParams) itemView.getLayoutParams();
 
-        if ("3".equals(order.getOrderType()) || "6".equals(order.getOrderType())) { // 医美套餐
+        if ("3".equals(order.getOrderType()) || "6".equals(order.getOrderType()) || "10".equals(order.getOrderType()) || "11".equals(order.getOrderType())) { // 医美套餐
             countTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.GONE);
             single_price_infoTV.setVisibility(View.VISIBLE);
@@ -249,16 +249,13 @@ public class OrderItemHolder extends BaseHolder<Order> {
             singleV.setVisibility(View.VISIBLE);
             itemLayoutParams.height = ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_single_item_height);
             String name = "", image = "";
-            double salePrice = 0;
             if ("6".equals(order.getOrderType())) {
                 image = order.getSetMealGoodsList().get(0).getImage();
                 name = order.getSetMealGoodsList().get(0).getName();
-                salePrice = order.getSetMealGoodsList().get(0).getSalePrice();
             } else {
                 OrderGoods goods = order.getGoodsList().get(0);
                 name = goods.getName();
                 image = goods.getImage();
-                salePrice = goods.getSalePrice();
             }
             //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定
             mImageLoader.loadImage(itemView.getContext(),
@@ -271,8 +268,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
                             .build());
 
             nameTV.setText(name);
-            singleOnePrice.setMoneyText(String.valueOf(salePrice));
-            singleTwoPrice.setMoneyText(String.valueOf(salePrice));
+            singleOnePrice.setMoneyText(ArmsUtils.formatLong(order.getPrice()));
+            singleTwoPrice.setMoneyText(ArmsUtils.formatLong(order.getPrice()));
             countTV.setText("数量：x" + String.valueOf(order.getNums()));
 
         }
