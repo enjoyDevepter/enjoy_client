@@ -268,8 +268,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
                             .build());
 
             nameTV.setText(name);
-            singleOnePrice.setMoneyText(ArmsUtils.formatLong(order.getPrice()));
-            singleTwoPrice.setMoneyText(ArmsUtils.formatLong(order.getPrice()));
+            singleOnePrice.setMoneyText(ArmsUtils.formatLong(order.getTotalPrice()));
+            singleTwoPrice.setMoneyText(ArmsUtils.formatLong(order.getTotalPrice()));
             countTV.setText("数量：x" + String.valueOf(order.getNums()));
 
         }
