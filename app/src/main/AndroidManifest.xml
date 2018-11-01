@@ -365,6 +365,8 @@
         <activity
             android:name=".mvp.ui.activity.KGoodsOrderConfirmActivity"
             android:screenOrientation="portrait" />
+        <activity android:name="cn.ehanmy.StoreActivity" />
+        <activity android:name=".StoreActivity"></activity>
     </application>
 
 </manifest>
