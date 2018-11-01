@@ -22,7 +22,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.HGoodsOrderConfirmInfoRe
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HGoodsPayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsOrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HGoodsPayOrderResponse;
-import me.jessyan.mvparms.demo.mvp.ui.activity.MainActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsOrderConfirmActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -160,7 +160,6 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
                     public void onNext(HGoodsPayOrderResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
-                            mAppManager.killAllBeforeClass(MainActivity.class);
                             if ("0".equals(response.getPayStatus())) {
                                 Intent intent = new Intent(mRootView.getActivity(), PayActivity.class);
                                 intent.putExtra("orderId", response.getOrderId());
@@ -175,6 +174,9 @@ public class HGoodsOrderConfirmPresenter extends BasePresenter<HGoodsOrderConfir
                                 intent.putExtra("payTypeDesc", response.getPayTypeDesc());
                                 ArmsUtils.startActivity(intent);
                             }
+                            mAppManager.killAllBeforeClass(HGoodsOrderConfirmActivity.class);
+                        } else if (response.getRetCode() == 5030) {
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

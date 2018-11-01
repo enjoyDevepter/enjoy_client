@@ -337,6 +337,14 @@ public class ReleaseDiaryActivity extends BaseActivity<ReleaseDiaryPresenter> im
         }
     }
 
+    @Override
+    public void clean() {
+        titleET.setText("");
+        contentET.setText("");
+        images.clear();
+        mAdapter.notifyDataSetChanged();
+    }
+
     @Subscriber(tag = EventBusTags.CHANGE_DIRAY_PROJECT)
     public void updateProject(Goods goods) {
         mImageLoader.loadImage(this,

@@ -26,7 +26,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.OrderConfirmInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.OrderConfirmInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayOrderResponse;
-import me.jessyan.mvparms.demo.mvp.ui.activity.MainActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.ConfirmOrderActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -178,7 +178,9 @@ public class ConfirmOrderPresenter extends BasePresenter<ConfirmOrderContract.Mo
                                 intent.putExtra("payTypeDesc", response.getPayTypeDesc());
                                 ArmsUtils.startActivity(intent);
                             }
-                            mAppManager.killAllBeforeClass(MainActivity.class);
+                            mAppManager.killAllBeforeClass(ConfirmOrderActivity.class);
+                        } else if (response.getRetCode() == 5030) {
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

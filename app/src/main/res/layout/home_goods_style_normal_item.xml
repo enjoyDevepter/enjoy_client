@@ -16,12 +16,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:maxLines="1"
         android:textColor="#FF555555"
         android:textSize="12sp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
@@ -35,8 +36,11 @@
 
         <TextView
             android:id="@+id/marketPrice"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1"
+            android:gravity="right"
             android:textColor="#FFA0A0A0"
             android:textSize="10sp" />
     </LinearLayout>

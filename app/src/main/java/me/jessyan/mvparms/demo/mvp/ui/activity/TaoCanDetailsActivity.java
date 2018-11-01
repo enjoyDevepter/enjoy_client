@@ -40,6 +40,7 @@ import me.jessyan.mvparms.demo.mvp.contract.TaoCanDetailsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.MealGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.TaoCanDetailsPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MealDetailsListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.GlideImageLoader;
 import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -48,7 +49,7 @@ import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> implements TaoCanDetailsContract.View, View.OnClickListener {
+public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> implements TaoCanDetailsContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener {
 
     @BindView(R.id.back)
     View backV;
@@ -87,7 +88,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     @BindView(R.id.tel)
     View telV;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    MealDetailsListAdapter mAdapter;
     @Inject
     RecyclerView.LayoutManager layoutManager;
     @Inject
@@ -166,6 +167,7 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
         detailRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.getDimens(this, R.dimen.space_10), 0));
         detailRV.setAdapter(mAdapter);
         telV.setOnClickListener(this);
+        mAdapter.setOnItemClickListener(this);
 
         detailWV.getSettings().setUseWideViewPort(true);
         detailWV.getSettings().setLoadWithOverviewMode(true);
@@ -294,6 +296,15 @@ public class TaoCanDetailsActivity extends BaseActivity<TaoCanDetailsPresenter> 
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(detailRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
+    }
+
+    @Override
+    public void onItemClick(View view, int viewType, Object data, int position) {
+        MealGoods.Goods hGoods = mAdapter.getInfos().get(position);
+        Intent hGoodsintent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
+        hGoodsintent.putExtra("goodsId", hGoods.getGoodsId());
+        hGoodsintent.putExtra("merchId", hGoods.getMerchId());
+        ArmsUtils.startActivity(hGoodsintent);
     }
 
     private class Mobile {

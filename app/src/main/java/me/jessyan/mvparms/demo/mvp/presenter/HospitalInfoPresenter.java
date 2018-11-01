@@ -103,7 +103,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
     private void getActivityList() {
         ActivityInfoRequest request = new ActivityInfoRequest();
         request.setCmd(923);
-        request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
+        request.setHospitalId((String) mRootView.getCache().get(KEY_FOR_HOSPITAL_ID));
         mModel.getActivityList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -128,7 +128,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setCmd(follow ? 604 : 605);
-        request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
+        request.setHospitalId((String) mRootView.getCache().get(KEY_FOR_HOSPITAL_ID));
         mModel.follow(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -145,13 +145,12 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
     }
 
     private void initHospital() {
-        String hospitalId = mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         String token = (String) cache.get(KEY_KEEP + "token");
         if (TextUtils.isEmpty(token)) {
             // 未登录用户
             HospitalInfoRequest hospitalInfoRequest = new HospitalInfoRequest();
-            hospitalInfoRequest.setHospitalId(hospitalId);
+            hospitalInfoRequest.setHospitalId((String) mRootView.getCache().get(KEY_FOR_HOSPITAL_ID));
             mModel.requestHospital(hospitalInfoRequest)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -173,7 +172,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         } else {
             // 已登录用户
             LoginUserHospitalInfoRequest loginUserHospitalInfoRequest = new LoginUserHospitalInfoRequest();
-            loginUserHospitalInfoRequest.setHospitalId(hospitalId);
+            loginUserHospitalInfoRequest.setHospitalId((String) mRootView.getCache().get(KEY_FOR_HOSPITAL_ID));
             loginUserHospitalInfoRequest.setToken(token);
 
             mModel.requestHospitalByUser(loginUserHospitalInfoRequest)
@@ -199,8 +198,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
 
     public void requestDoctor(final boolean pullToRefresh) {
         DoctorListRequest request = new DoctorListRequest();
-        String hospitalId = mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID);
-        request.setHospitalId(hospitalId);
+        request.setHospitalId((String) mRootView.getCache().get(KEY_FOR_HOSPITAL_ID));
 
         if (pullToRefresh) lastPageIndex = 1;
         request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
@@ -243,7 +241,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         GoodsListRequest request = new GoodsListRequest();
         request.setCmd(449);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
+        request.setHospitalId((String) mRootView.getCache().get(KEY_FOR_HOSPITAL_ID));
         request.setCity(String.valueOf(cache.get("city")));
         request.setCounty(String.valueOf(cache.get("county")));
         request.setProvince(String.valueOf(cache.get("province")));

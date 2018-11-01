@@ -29,17 +29,21 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerHospitalInfoComponent;
 import me.jessyan.mvparms.demo.di.module.HospitalInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.HospitalInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.HGoods;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.HospitalBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.ActivityInfo;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.HospitalInfoBean;
 import me.jessyan.mvparms.demo.mvp.presenter.HospitalInfoPresenter;
@@ -262,12 +266,21 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        String titleStr1 = getIntent().getStringExtra(KEY_FOR_HOSPITAL_NAME);
-        title.setText(titleStr1);
+        title.setText(getIntent().getStringExtra(KEY_FOR_HOSPITAL_NAME));
         back.setOnClickListener(this);
         followLayout.setOnClickListener(this);
         initViewPager();
         tab.setupWithViewPager(viewpager);
+        provideCache().put(KEY_FOR_HOSPITAL_ID, getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
+        provideCache().put(KEY_FOR_HOSPITAL_NAME, getIntent().getStringExtra(KEY_FOR_HOSPITAL_NAME));
+    }
+
+    @Subscriber(tag = EventBusTags.CHANGE_HOSPITAL)
+    public void init(HospitalBean hospitalBean) {
+        provideCache().put(KEY_FOR_HOSPITAL_ID, hospitalBean.getHospitalId());
+        provideCache().put(KEY_FOR_HOSPITAL_NAME, hospitalBean.getName());
+        title.setText(hospitalBean.getName());
+        mPresenter.init();
     }
 
     @Override

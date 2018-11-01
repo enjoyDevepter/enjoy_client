@@ -13,12 +13,15 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.EventBus;
+
 import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerOrderDeatilsComponent;
 import me.jessyan.mvparms.demo.di.module.OrderDeatilsModule;
 import me.jessyan.mvparms.demo.mvp.contract.OrderDeatilsContract;
@@ -238,11 +241,14 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         ArmsUtils.startActivity(intent);
                     } else if ("31".equals(order.getOrderStatus())) {
                         // 预约
-                        Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
-                        makeIntent.putExtra("orderId", order.getOrderId());
-                        makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
-                        makeIntent.putExtra("desc", order.getGoodsList().get(0).getDesc());
-                        ArmsUtils.startActivity(makeIntent);
+                        EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
+                        killMyself();
+//                        // 预约
+//                        Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
+//                        makeIntent.putExtra("orderId", order.getOrderId());
+//                        makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
+//                        makeIntent.putExtra("desc", order.getGoodsList().get(0).getDesc());
+//                        ArmsUtils.startActivity(makeIntent);
                     } else if ("5".equals(order.getOrderStatus())) {
                         // 写日记
                         Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
@@ -272,7 +278,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
         String orderType = getIntent().getStringExtra("orderType");
         String status = response.getOrder().getOrderStatus();
 
-        if ("1".equals(orderType)) {
+        if ("1".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) {
             if ("1".equals(status)) {
                 leftTV.setVisibility(View.VISIBLE);
                 leftTV.setText("取消订单");
@@ -289,7 +295,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                 rightTV.setText("确认收货");
             } else if ("5".equals(status)) {
                 rightTV.setText("写日记");
-                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setVisibility(View.GONE);
                 leftTV.setVisibility(View.GONE);
             }
             orderV.setVisibility(View.VISIBLE);
@@ -299,9 +305,9 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             mealOrderV.setVisibility(View.GONE);
             payTypeDescTV.setText(orderDetails.getPayTypeDesc());
             deliveryMethodDescTV.setText(orderDetails.getDeliveryMethodDesc());
-        } else if ("2".equals(orderType)) {
+        } else if ("2".equals(orderType) || "5".equals(orderType) || "12".equals(orderType) || "13".equals(orderType)) {
 
-        } else if ("3".equals(orderType)) {
+        } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) {
             if (status.equals("1")) {
                 leftTV.setVisibility(View.VISIBLE);
                 leftTV.setText("取消订单");

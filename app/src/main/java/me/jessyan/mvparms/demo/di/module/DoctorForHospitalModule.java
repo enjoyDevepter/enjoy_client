@@ -43,7 +43,7 @@ public class DoctorForHospitalModule {
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideStoreAdapter(List<HospitalBean> list) {
+    HospitalRelatedListAdapter provideStoreAdapter(List<HospitalBean> list) {
         return new HospitalRelatedListAdapter(list);
     }
 

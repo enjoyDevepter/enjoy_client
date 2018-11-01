@@ -25,7 +25,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.MealOrderConfrimRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.PayMealOrderRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealOrderConfirmResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.PayMealOrderResponse;
-import me.jessyan.mvparms.demo.mvp.ui.activity.MainActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.MealOrderConfirmActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -128,7 +128,6 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                     public void onNext(PayMealOrderResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
-                            mAppManager.killAllBeforeClass(MainActivity.class);
                             if ("0".equals(response.getPayStatus())) {
                                 Intent intent = new Intent(mRootView.getActivity(), PayActivity.class);
                                 intent.putExtra("orderId", response.getOrderId());
@@ -144,6 +143,7 @@ public class MealOrderConfirmPresenter extends BasePresenter<MealOrderConfirmCon
                                 intent.putExtra("payTypeDesc", response.getPayTypeDesc());
                                 ArmsUtils.startActivity(intent);
                             }
+                            mAppManager.killAllBeforeClass(MealOrderConfirmActivity.class);
                         }
                     }
                 });

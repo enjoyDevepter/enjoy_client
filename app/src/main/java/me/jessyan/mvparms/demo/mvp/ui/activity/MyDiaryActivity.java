@@ -156,7 +156,6 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
         }
     }
 
-
     @Override
     public void showLoading() {
         swipeRefreshLayout.setRefreshing(true);

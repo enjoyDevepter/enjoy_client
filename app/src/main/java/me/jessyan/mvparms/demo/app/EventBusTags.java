@@ -113,4 +113,9 @@ public interface EventBusTags {
      * 刷新界面内容
      */
     String ONREFRESH_CONTENT = "onRefresh_content";
+
+    /**
+     * 切换医院
+     */
+    String CHANGE_HOSPITAL = "change_hospital";
 }

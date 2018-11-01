@@ -71,7 +71,7 @@ public class MealGoodsDetailsItemHolder extends BaseHolder<MealGoods.Goods> {
         }
         Observable.just(data.getName())
                 .subscribe(s -> nameTV.setText(String.valueOf(s)));
-        Observable.just(data.getMarketPrice())
+        Observable.just(data.getSalePrice())
                 .subscribe(s -> totalPriceTV.setText("￥" + String.valueOf(s)));
         Observable.just(data.getNum())
                 .subscribe(s -> countTV.setText("x" + String.valueOf(s)));

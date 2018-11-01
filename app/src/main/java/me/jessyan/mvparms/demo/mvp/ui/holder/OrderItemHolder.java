@@ -215,9 +215,9 @@ public class OrderItemHolder extends BaseHolder<Order> {
             } else if (order.getOrderStatus().equals("5")) {
                 statusTV.setText("已完成");
                 rightTV.setText("写日记");
-                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setVisibility(View.GONE);
                 leftTV.setText("申请奖励");
-                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setVisibility(View.GONE);
             }
         }
 
