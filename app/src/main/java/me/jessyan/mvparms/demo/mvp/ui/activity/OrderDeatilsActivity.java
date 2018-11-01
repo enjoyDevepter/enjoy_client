@@ -68,6 +68,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     View orderPayV;
     @BindView(R.id.horder_pay_layout)
     View hOrderPayV;
+    @BindView(R.id.hPayTypeDesc)
+    TextView hPayTypeDescTV;
     @BindView(R.id.deposit)
     TextView depositTV;
     @BindView(R.id.tailMoney)
@@ -330,6 +332,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             orderPayV.setVisibility(View.GONE);
             hospitalAddressTV.setText(orderDetails.getHospital().getName());
             appointmentsTimeTV.setText(orderDetails.getReservationDate() + " " + orderDetails.getReservationTime());
+            hPayTypeDescTV.setText(orderDetails.getPayTypeDesc());
             orderV.setVisibility(View.GONE);
             if ("7".equals(response.getOrder().getOrderType())) {
                 hOrderPayV.setVisibility(View.VISIBLE);
