@@ -148,6 +148,8 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
 
     @BindView(R.id.time_limit_layout)
     View timeLimitLayoutV;
+    @BindView(R.id.timeTag)
+    TextView timeTagTV;
     @BindView(R.id.count_down_view)
     CountdownView countdownView;
     @BindView(R.id.priceTag)
@@ -513,8 +515,11 @@ public class HGoodsDetailsActivity extends BaseActivity<HGoodsDetailsPresenter> 
                         .setSuffix("天");
                 countdownView.dynamicShow(builder.build());
                 countdownView.start(count);
-            } else {
+            } else if (count > 0) {
                 countdownView.start(count);
+            } else if (count <= 0) {
+                countdownView.setVisibility(View.GONE);
+                timeTagTV.setText("已结束");
             }
             timeLimitVipPriceV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
             timeLimitTailMoney.setText(String.valueOf("￥" + goods.getSalePrice()));

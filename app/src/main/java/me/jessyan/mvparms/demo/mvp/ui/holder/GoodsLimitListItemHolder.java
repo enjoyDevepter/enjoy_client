@@ -59,6 +59,8 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
     MoneyView salePriceTV;
     @BindView(R.id.count_down_view)
     CountdownView countdownView;
+    @BindView(R.id.timeTag)
+    TextView timeTagTV;
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
 
@@ -99,8 +101,11 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
                     .setSuffix("天");
             countdownView.dynamicShow(builder.build());
             countdownView.start(count);
-        } else {
+        } else if (count > 0) {
             countdownView.start(count);
+        } else if (count <= 0) {
+            countdownView.setVisibility(View.GONE);
+            timeTagTV.setText("已结束");
         }
 
     }
@@ -125,5 +130,6 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
         this.mImageLoader = null;
         this.countdownView.stop();
         this.countdownView = null;
+        this.timeTagTV = null;
     }
 }
