@@ -25,18 +25,6 @@
         <item name="android:activityCloseExitAnimation">@anim/translate_center_to_right</item>
     </style>
 
-    <style name="splashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash</item>
-        <item name="android:windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.AppStartLoadTranslucent" parent="Theme.AppCompat">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:background">@drawable/splash</item>
-        <item name="android:windowFullscreen">true</item>
-    </style>
-
     <style name="TabLayoutTextStyle">
         <item name="android:textSize">13sp</item>
     </style>
