@@ -138,6 +138,8 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
     TextView priceTagTV;
     @BindView(R.id.time_limit_layout)
     View timeLimitLayoutV;
+    @BindView(R.id.timeTag)
+    TextView timeTagTV;
     @BindView(R.id.count_down_view)
     CountdownView countdownView;
     @BindView(R.id.salePrice)
@@ -505,8 +507,11 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                         .setSuffix("天");
                 countdownView.dynamicShow(builder.build());
                 countdownView.start(count);
-            } else {
+            } else if (count > 0) {
                 countdownView.start(count);
+            } else if (count <= 0) {
+                countdownView.setVisibility(View.GONE);
+                timeTagTV.setText("已结束");
             }
             priceTV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
             salePriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
