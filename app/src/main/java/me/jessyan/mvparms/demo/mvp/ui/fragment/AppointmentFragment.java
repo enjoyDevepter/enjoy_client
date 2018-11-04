@@ -303,14 +303,14 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                         view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                dialog.dismiss();
+                                dialog.dismissAllowingStateLoss();
                             }
                         });
                         view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 mPresenter.cancelAppointment();
-                                dialog.dismiss();
+                                dialog.dismissAllowingStateLoss();
                             }
                         });
                     }

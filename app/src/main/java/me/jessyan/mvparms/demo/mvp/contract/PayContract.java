@@ -28,6 +28,8 @@ public interface PayContract {
 
         Observable<PayInfoResponse> getOrderPayInfo(PayInfoRequest request);
 
+        Observable<PayInfoResponse> getPayStatus(PayInfoRequest request);
+
         Observable<PayResponse> pay(PayRequest request);
     }
 }

@@ -66,13 +66,13 @@ public class DiaryImagePresenter extends BasePresenter<DiaryImageContract.Model,
 
         mModel.getDiaryImages(request)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh)
                         mRootView.showLoading();//显示下拉刷新的进度条
                     else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (pullToRefresh)
                         mRootView.hideLoading();//隐藏下拉刷新的进度条

@@ -180,6 +180,8 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
                                 .url(response.getSetMealGoods().getImage())
                                 .imageView(imageIV)
                                 .build());
+
+        provideCache().put("money", response.getMoney());
     }
 
     @Override
@@ -254,7 +256,7 @@ public class MealOrderConfirmActivity extends BaseActivity<MealOrderConfirmPrese
                 String m = moneyET.getText().toString();
                 if (!ArmsUtils.isEmpty(m)) {
                     moneyET.setText("");
-                    provideCache().put("money", Long.valueOf(m) * 100);
+                    provideCache().put("money", (long) (Double.valueOf(m) * 100));
                 }
                 shouldSubmit = hasFocus;
                 mPresenter.getMealOrderConfirmInfo();

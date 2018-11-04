@@ -54,6 +54,8 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
     ImageView imageIV;
     @BindView(R.id.name)
     TextView nameTV;
+    @BindView(R.id.count)
+    TextView countTV;
     @BindView(R.id.time_type)
     View tiemV;
     @BindView(R.id.time)
@@ -134,7 +136,7 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
         }
         statusTV.setText(appointment.getStatusDesc());
         nameTV.setText(appointment.getGoods().getName());
-
+        countTV.setText("剩余次数：" + appointment.getSurplusNum());
         if (!ArmsUtils.isEmpty(appointment.getConfirmTime())) {
             confirmTimeTV.setVisibility(View.VISIBLE);
             confirmTimeTV.setText(appointment.getConfirmTime());
@@ -166,6 +168,7 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
                 .imageViews(imageIV)
                 .build());
         this.noTV = null;
+        this.countTV = null;
         this.leftTV = null;
         this.rightTV = null;
         this.statusTV = null;

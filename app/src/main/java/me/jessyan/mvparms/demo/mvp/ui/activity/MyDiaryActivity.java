@@ -294,7 +294,7 @@ public class MyDiaryActivity extends BaseActivity<MyDiaryPresenter> implements M
                             @Override
                             public void onClick(View v) {
                                 mPresenter.apply(false);
-                                dialog.dismiss();
+                                dialog.dismissAllowingStateLoss();
                             }
                         });
                     }

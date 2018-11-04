@@ -33,10 +33,7 @@
         android:id="@+id/desc"
         android:layout_width="85dp"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="湘人龙记老长沙米 粉，湘人龙记，一 家隐藏在东三环..."
+        android:padding="10dp"
         android:textColor="#FF6A6A6A"
         android:textSize="9sp" />
 

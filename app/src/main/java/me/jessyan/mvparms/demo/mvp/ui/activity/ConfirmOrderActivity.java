@@ -321,6 +321,8 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
         deductionMoneyTV.setText(ArmsUtils.formatLong(response.getDeductionMoney()));
         moneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
         couponTV.setText(ArmsUtils.formatLong(response.getCoupon()));
+
+        provideCache().put("money", response.getMoney());
     }
 
     @Override
@@ -416,7 +418,7 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
                 String m = moneyET.getText().toString();
                 if (!ArmsUtils.isEmpty(m)) {
                     moneyET.setText("");
-                    provideCache().put("money", Long.valueOf(m) * 100);
+                    provideCache().put("money", (long) (Double.valueOf(m) * 100));
                 }
                 shouldSubmit = hasFocus;
                 mPresenter.getOrderConfirmInfo();

@@ -762,7 +762,8 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#FFEEEEEE" />
+                android:background="#FFEEEEEE"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/tel"
@@ -771,7 +772,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="14dp"

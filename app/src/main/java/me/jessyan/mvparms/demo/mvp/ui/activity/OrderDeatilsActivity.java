@@ -78,6 +78,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     TextView horderCouponV;
     @BindView(R.id.horder_money)
     TextView horderMoneyV;
+    @BindView(R.id.address_info)
+    View addressInfoV;
     @BindView(R.id.address_realName)
     TextView addressRealNameTV;
     @BindView(R.id.address_mobile)
@@ -189,7 +191,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                 ArmsUtils.startActivity(hospitalIntent);
                 break;
             case R.id.left:
-                if ("1".equals(orderType)) {
+                if ("1".equals(orderType) || "4".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 取消订单
                         showCancelDailog();
@@ -199,9 +201,9 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         intent.putExtra("orderId", order.getOrderId());
                         ArmsUtils.startActivity(intent);
                     }
-                } else if ("2".equals(orderType)) {
+                } else if ("2".equals(orderType) || "5".equals(orderType) || "12".equals(orderType) || "13".equals(orderType)) {
 
-                } else if ("3".equals(orderType)) {
+                } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 取消订单
                         showCancelDailog();
@@ -210,7 +212,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                 break;
             case R.id.right:
 
-                if ("1".equals(orderType)) {
+                if ("1".equals(orderType) || "4".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 去支付
                         Intent intent = new Intent(this, PayActivity.class);
@@ -228,9 +230,9 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         intent.putExtra("orderId", order.getOrderId());
                         ArmsUtils.startActivity(intent);
                     }
-                } else if ("2".equals(orderType)) {
+                } else if ("2".equals(orderType) || "5".equals(orderType) || "12".equals(orderType) || "13".equals(orderType)) {
 
-                } else if ("3".equals(orderType)) {
+                } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 去支付
                         Intent intent = new Intent(this, PayActivity.class);
@@ -245,12 +247,6 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         // 预约
                         EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
                         killMyself();
-//                        // 预约
-//                        Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
-//                        makeIntent.putExtra("orderId", order.getOrderId());
-//                        makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
-//                        makeIntent.putExtra("desc", order.getGoodsList().get(0).getDesc());
-//                        ArmsUtils.startActivity(makeIntent);
                     } else if ("5".equals(order.getOrderStatus())) {
                         // 写日记
                         Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
@@ -280,7 +276,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
         String orderType = getIntent().getStringExtra("orderType");
         String status = response.getOrder().getOrderStatus();
 
-        if ("1".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) {
+        if ("1".equals(orderType) || "4".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) {
             if ("1".equals(status)) {
                 leftTV.setVisibility(View.VISIBLE);
                 leftTV.setText("取消订单");
@@ -337,10 +333,12 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             if ("7".equals(response.getOrder().getOrderType())) {
                 hOrderPayV.setVisibility(View.VISIBLE);
                 mealOrderV.setVisibility(View.GONE);
+                tailMoneyTV.setText(String.valueOf(response.getOrder().getGoodsList().get(0).getTailMoney()));
+                depositTV.setText(String.valueOf(response.getOrder().getGoodsList().get(0).getDeposit()));
             } else {
                 hOrderPayV.setVisibility(View.GONE);
                 mealOrderV.setVisibility(View.VISIBLE);
-                mealPriceTV.setText(ArmsUtils.formatLong(response.getOrder().getPayMoney()));
+                mealPriceTV.setText(ArmsUtils.formatLong(response.getOrder().getTotalPrice()));
                 mealMoneyTV.setText(ArmsUtils.formatLong(orderDetails.getMoney()));
             }
         }
@@ -351,9 +349,14 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
 
 
         Address address = orderDetails.getOrderRecipientInfo();
-        addressRealNameTV.setText(address.getRealName());
-        addressMobileTV.setText(address.getMobile());
-        addressTV.setText(address.getAddress());
+        if (null == address) {
+            addressInfoV.setVisibility(View.GONE);
+        } else {
+            addressInfoV.setVisibility(View.VISIBLE);
+            addressRealNameTV.setText(address.getRealName());
+            addressMobileTV.setText(address.getMobile());
+            addressTV.setText(address.getProvinceName() + address.getCityName() + address.getCountyName() + address.getAddress());
+        }
 
         remarkTV.setText(orderDetails.getRemark());
         priceTV.setText(ArmsUtils.formatLong(orderDetails.getPrice()));
@@ -375,7 +378,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                dialog.dismiss();
+                                dialog.dismissAllowingStateLoss();
                             }
                         });
                         view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {

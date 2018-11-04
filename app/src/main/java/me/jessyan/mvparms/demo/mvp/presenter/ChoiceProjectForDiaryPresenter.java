@@ -68,7 +68,6 @@ public class ChoiceProjectForDiaryPresenter extends BasePresenter<ChoiceProjectF
 
         mModel.getProjects(request)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(disposable -> {
@@ -77,6 +76,7 @@ public class ChoiceProjectForDiaryPresenter extends BasePresenter<ChoiceProjectF
                     else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (pullToRefresh)
                         mRootView.hideLoading();//隐藏下拉刷新的进度条

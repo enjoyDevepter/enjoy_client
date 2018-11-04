@@ -190,6 +190,8 @@ public class ModifyUserInfoPresenter extends BasePresenter<ModifyUserInfoContrac
                         if (response.isSuccess()) {
                             EventBus.getDefault().post(response.getCmd(), EventBusTags.USER_BASE_INFO_CHANGE);
                             mRootView.killMyself();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

@@ -90,7 +90,7 @@ public class HGoodsListItemHolder extends BaseHolder<HGoods> {
             tailMoneyOneMV.setVisibility(View.INVISIBLE);
             Observable.just(goods.getDeposit())
                     .subscribe(s -> depositTV.setMoneyText(String.valueOf(s)));
-            Observable.just(goods.getTailMoney())
+            Observable.just(goods.getSalePrice())
                     .subscribe(s -> tailMoneyTwoMV.setMoneyText(String.valueOf(s)));
         }
 

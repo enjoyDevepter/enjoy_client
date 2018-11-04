@@ -20,9 +20,10 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
+                android:layout_weight="1"
                 android:text="物流号:"
                 android:textColor="#FF666666"
                 android:textSize="13sp" />
@@ -31,7 +32,7 @@
                 android:id="@+id/id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
                 android:textColor="#FF333333"
                 android:textSize="13sp" />
 
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_weight="1"
-                android:text="配送时间:"
+                android:text="物流公司:"
                 android:textColor="#FF666666"
                 android:textSize="13sp" />
 
@@ -58,7 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:textColor="#FFB5B5B5"
+                android:layout_marginRight="15dp"
+                android:textColor="#FF333333"
                 android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>

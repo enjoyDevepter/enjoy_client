@@ -45,6 +45,7 @@ public class LogisticsPresenter extends BasePresenter<LogisticsContract.Model, L
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
         OrderOperationRequest request = new OrderOperationRequest();
+        request.setCmd(558);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));
         request.setOrderId(mRootView.getActivity().getIntent().getStringExtra("orderId"));

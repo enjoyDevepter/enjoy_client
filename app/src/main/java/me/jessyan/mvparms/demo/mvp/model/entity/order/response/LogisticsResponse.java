@@ -11,6 +11,7 @@ public class LogisticsResponse extends BaseResponse {
     private String logisticsCode;
     private String deliveryDate;
     private String url;
+    private String company;
 
     public String getLogisticsCode() {
         return logisticsCode;
@@ -34,6 +35,14 @@ public class LogisticsResponse extends BaseResponse {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     @Override

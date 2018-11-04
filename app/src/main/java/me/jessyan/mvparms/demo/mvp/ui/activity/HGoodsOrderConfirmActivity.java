@@ -237,7 +237,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         Goods goods = response.getGoodsList().get(0);
         goodsNameTV.setText(goods.getName());
         numsTV.setText("x" + String.valueOf(goods.getNums()));
-        tailMoneyTV.setMoneyText(String.valueOf(goods.getTailMoney()));
+        tailMoneyTV.setMoneyText(ArmsUtils.formatLong(response.getTotalPrice()));
         goodsSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
 
         balanceTV.setText(ArmsUtils.formatLong(response.getBalance()));
@@ -297,6 +297,7 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
             depositButtomTV.setText(String.valueOf(goods.getDeposit()));
             depositTV.setMoneyText(String.valueOf(goods.getDeposit()));
         }
+        provideCache().put("money", response.getMoney());
     }
 
     @Override
@@ -306,16 +307,6 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                 killMyself();
                 break;
             case R.id.hospital_info:
-                if (provideCache().get(KEY_FOR_HOSPITAL_ID) == null) {
-                    ArmsUtils.makeText(this, "请选择医院");
-                    break;
-                }
-                Intent hospitalIntent = new Intent(HGoodsOrderConfirmActivity.this, HospitalInfoActivity.class);
-                hospitalIntent.putExtra(KEY_FOR_HOSPITAL_NAME, (String) provideCache().get(KEY_FOR_HOSPITAL_NAME));
-                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID, (String) provideCache().get(KEY_FOR_HOSPITAL_ID));
-                ArmsUtils.startActivity(hospitalIntent);
-                break;
-            case R.id.hospital:
                 Intent intent2 = new Intent(this, SelfPickupAddrListActivity.class);
                 intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
                 if (null != hospitalBaseInfoBean) {
@@ -331,6 +322,16 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                 }
                 intent2.putExtra("specValueId", response.getGoodsList().get(0).getGoodsSpecValue().getSpecValueId());
                 ArmsUtils.startActivity(intent2);
+                break;
+            case R.id.hospital:
+                if (provideCache().get(KEY_FOR_HOSPITAL_ID) == null) {
+                    ArmsUtils.makeText(this, "请选择医院");
+                    break;
+                }
+                Intent hospitalIntent = new Intent(HGoodsOrderConfirmActivity.this, HospitalInfoActivity.class);
+                hospitalIntent.putExtra(KEY_FOR_HOSPITAL_NAME, (String) provideCache().get(KEY_FOR_HOSPITAL_NAME));
+                hospitalIntent.putExtra(HospitalInfoActivity.KEY_FOR_HOSPITAL_ID, (String) provideCache().get(KEY_FOR_HOSPITAL_ID));
+                ArmsUtils.startActivity(hospitalIntent);
                 break;
             case R.id.appointments_layout:
                 Intent appointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
@@ -372,7 +373,10 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
             if (shouldSubmit) {
                 String m = moneyET.getText().toString();
                 moneyET.setText("");
-                provideCache().put("money", Long.valueOf(m) * 100);
+                if (!ArmsUtils.isEmpty(m)) {
+                    moneyET.setText("");
+                    provideCache().put("money", (long) (Double.valueOf(m) * 100));
+                }
                 shouldSubmit = hasFocus;
                 mPresenter.getOrderConfirmInfo();
             }

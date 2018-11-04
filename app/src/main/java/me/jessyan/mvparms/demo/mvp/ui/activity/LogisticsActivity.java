@@ -2,7 +2,6 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -20,7 +19,6 @@ import me.jessyan.mvparms.demo.mvp.contract.LogisticsContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.order.response.LogisticsResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.LogisticsPresenter;
 
-import static android.content.Intent.ACTION_VIEW;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -96,9 +94,9 @@ public class LogisticsActivity extends BaseActivity<LogisticsPresenter> implemen
                 killMyself();
                 break;
             case R.id.confirm:
-                Uri uri = Uri.parse(logisticsResponse.getUrl());
-                Intent intent = new Intent(ACTION_VIEW, uri);
-                startActivity(intent);
+                Intent articleIntent = new Intent(this, PlatformActivity.class);
+                articleIntent.putExtra("url", logisticsResponse.getUrl());
+                ArmsUtils.startActivity(articleIntent);
                 break;
         }
     }
@@ -112,6 +110,6 @@ public class LogisticsActivity extends BaseActivity<LogisticsPresenter> implemen
     public void updateUI(LogisticsResponse response) {
         this.logisticsResponse = response;
         idTV.setText(response.getLogisticsCode());
-        nameTV.setText(response.getDeliveryDate());
+        nameTV.setText(response.getCompany());
     }
 }

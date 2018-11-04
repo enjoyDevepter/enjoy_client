@@ -175,7 +175,7 @@ public class CashPasswordActivity extends BaseActivity<CashPasswordPresenter> im
             case R.id.get_code:
                 getVerify();
                 break;
-            case R.id.confirm:
+            case R.id.commit:
                 if (old.getText() == null || TextUtils.isEmpty(old.getText().toString())) {
                     ArmsUtils.makeText(ArmsUtils.getContext(), "请输入密码");
                     return;
