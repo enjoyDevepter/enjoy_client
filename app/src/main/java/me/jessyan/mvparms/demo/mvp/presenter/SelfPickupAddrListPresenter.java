@@ -131,13 +131,13 @@ public class SelfPickupAddrListPresenter extends BasePresenter<SelfPickupAddrLis
         request.setOrderBys(orderByList);
         mModel.getStores(request)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh)
                         mRootView.showLoading();//显示下拉刷新的进度条
                     else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (pullToRefresh)
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
@@ -188,13 +188,13 @@ public class SelfPickupAddrListPresenter extends BasePresenter<SelfPickupAddrLis
         request.setOrderBys(orderByList);
         mModel.getHospitals(request)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh)
                         mRootView.showLoading();//显示下拉刷新的进度条
                     else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (pullToRefresh)
                         mRootView.hideLoading();//隐藏下拉刷新的进度条

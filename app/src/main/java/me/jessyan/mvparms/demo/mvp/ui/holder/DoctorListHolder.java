@@ -2,7 +2,6 @@ package me.jessyan.mvparms.demo.mvp.ui.holder;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
@@ -23,11 +22,12 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorSkill;
 import me.jessyan.mvparms.demo.mvp.ui.widget.RatingBar;
+import me.jessyan.mvparms.demo.mvp.ui.widget.ShapeImageView;
 
 public class DoctorListHolder extends BaseHolder<DoctorBean> {
 
     @BindView(R.id.image)
-    ImageView image;
+    ShapeImageView image;
 
     @BindView(R.id.name)
     TextView name;

@@ -129,12 +129,10 @@ public class OrderItemHolder extends BaseHolder<Order> {
         Observable.just(order.getOrderTime())
                 .subscribe(s -> timeTV.setText("时间：" + sdf.format(s)));
         RecyclerView.LayoutParams itemLayoutParams = (RecyclerView.LayoutParams) itemView.getLayoutParams();
-
-
         single_price_infoTV.setText("总金额:");
         payTagV.setVisibility(View.VISIBLE);  // 生美特殊处理过
 
-        if ("3".equals(order.getOrderType()) || "6".equals(order.getOrderType()) || "10".equals(order.getOrderType()) || "11".equals(order.getOrderType())) { // 医美订单 //  医美套餐订单
+        if ("3".equals(order.getOrderType()) || "6".equals(order.getOrderType()) || "10".equals(order.getOrderType()) || "11".equals(order.getOrderType())) { // 医美套餐
             countTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.GONE);
             single_price_infoTV.setVisibility(View.VISIBLE);
@@ -248,9 +246,9 @@ public class OrderItemHolder extends BaseHolder<Order> {
             } else if (order.getOrderStatus().equals("5")) {
                 statusTV.setText("已完成");
                 rightTV.setText("写日记");
-                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setVisibility(View.GONE);
                 leftTV.setText("申请奖励");
-                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setVisibility(View.GONE);
             }
         }
 
@@ -281,7 +279,7 @@ public class OrderItemHolder extends BaseHolder<Order> {
             moreV.setVisibility(View.GONE);
             singleV.setVisibility(View.VISIBLE);
             itemLayoutParams.height = ArmsUtils.getDimens(itemView.getContext(), R.dimen.order_single_item_height);
-            String name = "", image = "", count = "";
+            String name = "", image = "";
             if ("6".equals(order.getOrderType())) {
                 image = order.getSetMealGoodsList().get(0).getImage();
                 name = order.getSetMealGoodsList().get(0).getName();
@@ -303,6 +301,8 @@ public class OrderItemHolder extends BaseHolder<Order> {
             nameTV.setText(name);
             singleOnePrice.setMoneyText(ArmsUtils.formatLong(order.getTotalPrice()));
             singleTwoPrice.setMoneyText(ArmsUtils.formatLong(order.getTotalPrice()));
+            countTV.setText("数量：x" + String.valueOf(order.getNums()));
+
         }
 
         itemView.setLayoutParams(itemLayoutParams);

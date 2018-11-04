@@ -120,7 +120,10 @@ public class ReleaseDiaryPresenter extends BasePresenter<ReleaseDiaryContract.Mo
                     @Override
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
+                            mRootView.clean();
+                            images.clear();
                             mRootView.showMessage("发表成功");
+                            mRootView.killMyself();
                         }
                     }
                 });

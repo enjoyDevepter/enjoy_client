@@ -334,7 +334,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                         view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                locationDialog.dismiss();
+                                locationDialog.dismissAllowingStateLoss();
                             }
                         });
                         view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
@@ -348,7 +348,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                                 SPUtils.put("county", provideCache().get("county"));
                                 SPUtils.put("countyName", county.getName());
                                 EventBus.getDefault().post(county, EventBusTags.CITY_CHANGE_EVENT);
-                                locationDialog.dismiss();
+                                locationDialog.dismissAllowingStateLoss();
                             }
                         });
                     }
@@ -406,14 +406,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                         view.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                updateDialog.dismiss();
+                                updateDialog.dismissAllowingStateLoss();
                             }
                         });
                         view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 startDownload(updateResponse.getUrl(), updateResponse.getUpgradeVersion());
-                                updateDialog.dismiss();
+                                updateDialog.dismissAllowingStateLoss();
                             }
                         });
                     }
@@ -510,13 +510,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                         view.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                adDialog.dismiss();
+                                adDialog.dismissAllowingStateLoss();
                             }
                         });
                         image.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                adDialog.dismiss();
+                                adDialog.dismissAllowingStateLoss();
                                 if ("coupon".equals(ad.getRedirectType())) {
                                     ArmsUtils.startActivity(PickCouponActivity.class);
                                 } else if ("login".equals(ad.getRedirectType())) {

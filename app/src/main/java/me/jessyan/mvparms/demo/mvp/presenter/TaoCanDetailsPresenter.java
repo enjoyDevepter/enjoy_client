@@ -5,7 +5,6 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -29,6 +28,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MealDetailsResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MealOrderConfirmActivity;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MealDetailsListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -50,7 +50,7 @@ public class TaoCanDetailsPresenter extends BasePresenter<TaoCanDetailsContract.
     @Inject
     List<MealGoods.Goods> goodsList;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    MealDetailsListAdapter mAdapter;
     MealDetailsResponse mealDetailsResponse;
 
     @Inject

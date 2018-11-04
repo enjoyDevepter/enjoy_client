@@ -94,14 +94,13 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
 
         mModel.getMyFollows(request)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(disposable -> {
                     if (pullToRefresh)
                         mRootView.showLoading();//显示下拉刷新的进度条
                     else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     if (pullToRefresh)
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
@@ -189,7 +188,6 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
         mModel.follow(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
                 })

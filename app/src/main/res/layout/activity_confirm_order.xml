@@ -270,7 +270,7 @@
                         android:layout_marginRight="15dp"
                         android:background="@drawable/order_input_bg"
                         android:gravity="center"
-                        android:inputType="number"
+                        android:inputType="number|numberDecimal"
                         android:textColor="#FFB5B5B5"
                         android:textSize="11sp" />
                 </LinearLayout>

@@ -169,13 +169,13 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                         view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                dialog.dismiss();
+                                dialog.dismissAllowingStateLoss();
                             }
                         });
                         view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                dialog.dismiss();
+                                dialog.dismissAllowingStateLoss();
                             }
                         });
                     }

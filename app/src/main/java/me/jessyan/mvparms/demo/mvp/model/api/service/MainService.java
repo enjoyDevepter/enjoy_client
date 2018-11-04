@@ -220,6 +220,9 @@ public interface MainService {
     Observable<PayInfoResponse> getOrderPayInfo(@Body PayInfoRequest request);
 
     @POST("gateway")
+    Observable<PayInfoResponse> getPayStatus(@Body PayInfoRequest request);
+
+    @POST("gateway")
     Observable<PayResponse> pay(@Body PayRequest request);
 
     @POST("gateway")

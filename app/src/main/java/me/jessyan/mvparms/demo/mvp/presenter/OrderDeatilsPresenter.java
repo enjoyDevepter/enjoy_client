@@ -159,7 +159,9 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
                 .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
                     public void onNext(BaseResponse response) {
-                        if (!response.isSuccess()) {
+                        if (response.isSuccess()) {
+                            mRootView.showMessage("提醒发货成功");
+                        } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }

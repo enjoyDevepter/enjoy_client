@@ -118,4 +118,9 @@ public interface EventBusTags {
      * 切换预约列表
      */
     String CHANGE_APPOINTMENT_TYPE = "change_appointment_type";
+
+    /**
+     * 切换医院
+     */
+    String CHANGE_HOSPITAL = "change_hospital";
 }

@@ -38,6 +38,8 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
     View chargeSuccessV;
     @BindView(R.id.order_center)
     View orderCenterV;
+    @BindView(R.id.charge_pay_status)
+    TextView payStatusTV;
 
     @BindView(R.id.order_id)
     TextView orderIdTV;
@@ -78,6 +80,7 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
         chargeSuccessV.setVisibility(wait ? View.VISIBLE : View.GONE);
         orderIdTV.setText(getIntent().getStringExtra("orderId"));
         payTypeTV.setText(getIntent().getStringExtra("payTypeDesc"));
+        payStatusTV.setText(wait ? getIntent().getStringExtra("remind") : "支付成功，等待后台确认");
         moneyTV.setText(ArmsUtils.formatLong(getIntent().getLongExtra("payMoney", 0)));
         timeTV.setText(sdf.format(getIntent().getLongExtra("orderTime", 0)));
     }
@@ -121,11 +124,11 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
                 Intent intent = new Intent(this, MyOrderActivity.class);
                 String orderType = getIntent().getStringExtra("orderType");
                 if ("1".equals(orderType) || "4".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) { // 普通订单
-                    intent.putExtra("type", 0);
+                    intent.putExtra("type", 2);
                 } else if ("2".equals(orderType) || "5".equals(orderType)) { // 生美订单
                     intent.putExtra("type", 1);
                 } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) { // 医美订单
-                    intent.putExtra("type", 2);
+                    intent.putExtra("type", 0);
                 }
                 ArmsUtils.startActivity(intent);
                 break;

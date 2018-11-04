@@ -64,6 +64,7 @@ public class ActivityInfoPresenter extends BasePresenter<ActivityInfoContract.Mo
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+
                 .subscribe(new ErrorHandleSubscriber<ActivityInfoResponse>(mErrorHandler) {
                     @Override
                     public void onNext(ActivityInfoResponse response) {

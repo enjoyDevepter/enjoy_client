@@ -18,6 +18,7 @@ public class PayInfoResponse extends BaseResponse {
     private String payType;
     private String payTypeDesc;
     private String payStatus;
+    private String remind;
     private List<PayEntry> payEntryList;
 
     public String getOrderId() {
@@ -92,9 +93,17 @@ public class PayInfoResponse extends BaseResponse {
         this.orderType = orderType;
     }
 
+    public String getRemind() {
+        return remind;
+    }
+
+    public void setRemind(String remind) {
+        this.remind = remind;
+    }
+
     @Override
     public String toString() {
-        return "HGoodsPayOrderResponse{" +
+        return "PayInfoResponse{" +
                 "orderId='" + orderId + '\'' +
                 ", orderTime=" + orderTime +
                 ", payMoney=" + payMoney +
@@ -103,6 +112,7 @@ public class PayInfoResponse extends BaseResponse {
                 ", payType='" + payType + '\'' +
                 ", payTypeDesc='" + payTypeDesc + '\'' +
                 ", payStatus='" + payStatus + '\'' +
+                ", remind='" + remind + '\'' +
                 ", payEntryList=" + payEntryList +
                 '}';
     }

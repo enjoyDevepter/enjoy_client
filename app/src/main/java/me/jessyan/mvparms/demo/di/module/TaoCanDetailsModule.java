@@ -62,7 +62,7 @@ public class TaoCanDetailsModule {
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideGoodsListAdapter(List<MealGoods.Goods> goods) {
+    MealDetailsListAdapter provideGoodsListAdapter(List<MealGoods.Goods> goods) {
         return new MealDetailsListAdapter(goods);
     }
 }

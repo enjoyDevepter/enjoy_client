@@ -44,6 +44,12 @@ public class PayModel extends BaseModel implements PayContract.Model {
     }
 
     @Override
+    public Observable<PayInfoResponse> getPayStatus(PayInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .getPayStatus(request);
+    }
+
+    @Override
     public Observable<PayResponse> pay(PayRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .pay(request);

@@ -87,8 +87,10 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         confirmV.setOnClickListener(this);
         payOneV.setOnClickListener(this);
         payTwoV.setOnClickListener(this);
+        getCache().put("orderId", getIntent().getStringExtra("orderId"));
         orderIdTV.setText(getIntent().getStringExtra("orderId"));
     }
+
 
 
     @Override
@@ -199,13 +201,31 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
     @Override
     public void onPaySuccess(Map<String, String> rawResult) {
+        titleTV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mPresenter.getPayStatus();
+            }
+        }, 1000);
     }
 
     @Override
     public void onPayError(int error_code, String message) {
+        titleTV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showMessage("支付失败！");
+            }
+        }, 1000);
     }
 
     @Override
     public void onPayCancel() {
+        titleTV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showMessage("支付取消！");
+            }
+        }, 1000);
     }
 }

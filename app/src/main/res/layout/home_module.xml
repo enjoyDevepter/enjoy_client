@@ -18,7 +18,7 @@
         <View
             android:id="@+id/icon"
             android:layout_width="16dp"
-            android:layout_height="15dp"
+            android:layout_height="16dp"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
             android:background="@mipmap/set" />
@@ -37,6 +37,7 @@
             android:id="@+id/moduleinfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
             android:gravity="right"
             android:textColor="#FF939393"
             android:textSize="12sp" />

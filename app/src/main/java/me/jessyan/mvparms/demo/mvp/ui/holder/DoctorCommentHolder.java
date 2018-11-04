@@ -70,7 +70,7 @@ public class DoctorCommentHolder extends BaseHolder<DoctorCommentBean> {
         time.setText(simpleDateFormat.format(new Date(data.getCreateDate())));
         rating.setStar(data.getStar());
         content.setText(data.getContent());
-        view_count.setText(""+data.getViews());
+        view_count.setText("" + data.getViews() + "人已看");
         comment_count.setText(""+data.getComment());
         good_count.setText(""+data.getPraise());
         Drawable drawable = ArmsUtils.getContext().getResources().getDrawable("1".equals(data.getIsPraise()) ? R.mipmap.small_good_icon : R.mipmap.small_no_good_icon);

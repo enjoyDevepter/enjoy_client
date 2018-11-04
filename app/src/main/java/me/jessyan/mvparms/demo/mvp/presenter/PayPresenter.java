@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.Intent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -23,6 +24,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.pay.request.PayInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.pay.request.PayRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.pay.response.PayInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.pay.response.PayResponse;
+import me.jessyan.mvparms.demo.mvp.ui.activity.PayResultActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -95,6 +97,36 @@ public class PayPresenter extends BasePresenter<PayContract.Model, PayContract.V
                         if (response.isSuccess()) {
                             // 正式支付
                             PayManager.getInstace(mRootView.getActivity()).toPay("ALIPAY_APP".equals(request.getPayId()) ? PayManager.PayMode.ALIPAY : PayManager.PayMode.WXPAY, response.getParams(), (PayManager.PayListener) mRootView.getActivity());
+                        }
+                    }
+                });
+    }
+
+    public void getPayStatus() {
+        PayInfoRequest request = new PayInfoRequest();
+        request.setCmd(557);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
+        request.setToken(token);
+        request.setOrderId(mRootView.getActivity().getIntent().getStringExtra("orderId"));
+        mModel.getPayStatus(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<PayInfoResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(PayInfoResponse response) {
+                        if (response.isSuccess()) {
+                            Intent intent = new Intent(mRootView.getActivity(), PayResultActivity.class);
+                            intent.putExtra("wait", "0".equals(response.getPayStatus()));
+                            intent.putExtra("orderId", response.getOrderId());
+                            intent.putExtra("payMoney", response.getTotalPrice());
+                            intent.putExtra("orderTime", response.getOrderTime());
+                            intent.putExtra("orderType", response.getOrderType());
+                            intent.putExtra("payTypeDesc", response.getPayTypeDesc());
+                            intent.putExtra("remind", response.getRemind());
+                            ArmsUtils.startActivity(intent);
                         }
                     }
                 });

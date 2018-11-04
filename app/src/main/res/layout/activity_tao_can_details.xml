@@ -135,6 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
                     android:lines="2"
                     android:textColor="#FF000000"
@@ -330,7 +331,8 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#FFEEEEEE" />
+                android:background="#FFEEEEEE"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/tel"

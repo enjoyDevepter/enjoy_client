@@ -310,7 +310,7 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
                         view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                dialog.dismiss();
+                                dialog.dismissAllowingStateLoss();
                             }
                         });
                         view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
@@ -318,7 +318,7 @@ public class CartActivity extends BaseActivity<CartPresenter> implements CartCon
                             public void onClick(View v) {
                                 provideCache().put("nums", 0);
                                 mPresenter.editCartList(true);
-                                dialog.dismiss();
+                                dialog.dismissAllowingStateLoss();
                             }
                         });
                     }

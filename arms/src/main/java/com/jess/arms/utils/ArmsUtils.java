@@ -472,8 +472,8 @@ public class ArmsUtils {
     }
 
     public static String formatLong(long money) {
-        money = money / 100;
-        BigDecimal bd = new BigDecimal(money);
+        double money_d = ((double) money) / 100;
+        BigDecimal bd = new BigDecimal(money_d);
         bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
         return bd.toString();
     }

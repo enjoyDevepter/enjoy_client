@@ -13,12 +13,15 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
+import org.simple.eventbus.EventBus;
+
 import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.app.EventBusTags;
 import me.jessyan.mvparms.demo.di.component.DaggerOrderDeatilsComponent;
 import me.jessyan.mvparms.demo.di.module.OrderDeatilsModule;
 import me.jessyan.mvparms.demo.mvp.contract.OrderDeatilsContract;
@@ -65,6 +68,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     View orderPayV;
     @BindView(R.id.horder_pay_layout)
     View hOrderPayV;
+    @BindView(R.id.hPayTypeDesc)
+    TextView hPayTypeDescTV;
     @BindView(R.id.deposit)
     TextView depositTV;
     @BindView(R.id.tailMoney)
@@ -73,6 +78,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     TextView horderCouponV;
     @BindView(R.id.horder_money)
     TextView horderMoneyV;
+    @BindView(R.id.address_info)
+    View addressInfoV;
     @BindView(R.id.address_realName)
     TextView addressRealNameTV;
     @BindView(R.id.address_mobile)
@@ -184,7 +191,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                 ArmsUtils.startActivity(hospitalIntent);
                 break;
             case R.id.left:
-                if ("1".equals(orderType)) {
+                if ("1".equals(orderType) || "4".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 取消订单
                         showCancelDailog();
@@ -194,12 +201,12 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         intent.putExtra("orderId", order.getOrderId());
                         ArmsUtils.startActivity(intent);
                     }
-                } else if ("2".equals(orderType)) {
+                } else if ("2".equals(orderType) || "5".equals(orderType) || "12".equals(orderType) || "13".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 取消订单
                         showCancelDailog();
                     }
-                } else if ("3".equals(orderType)) {
+                } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 取消订单
                         showCancelDailog();
@@ -208,7 +215,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                 break;
             case R.id.right:
 
-                if ("1".equals(orderType)) {
+                if ("1".equals(orderType) || "4".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 去支付
                         Intent intent = new Intent(this, PayActivity.class);
@@ -226,7 +233,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         intent.putExtra("orderId", order.getOrderId());
                         ArmsUtils.startActivity(intent);
                     }
-                } else if ("2".equals(orderType)) {
+                } else if ("2".equals(orderType) || "5".equals(orderType) || "12".equals(orderType) || "13".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 去支付
                         Intent intent = new Intent(this, PayActivity.class);
@@ -245,7 +252,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         intent.putExtra("orderId", order.getOrderId());
                         ArmsUtils.startActivity(intent);
                     }
-                } else if ("3".equals(orderType)) {
+                } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) {
                     if ("1".equals(order.getOrderStatus())) {
                         // 去支付
                         Intent intent = new Intent(this, PayActivity.class);
@@ -258,11 +265,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         ArmsUtils.startActivity(intent);
                     } else if ("31".equals(order.getOrderStatus())) {
                         // 预约
-                        Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
-                        makeIntent.putExtra("orderId", order.getOrderId());
-                        makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
-                        makeIntent.putExtra("desc", order.getGoodsList().get(0).getDesc());
-                        ArmsUtils.startActivity(makeIntent);
+                        EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
+                        killMyself();
                     } else if ("5".equals(order.getOrderStatus())) {
                         // 写日记
                         Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
@@ -292,7 +296,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
         String orderType = getIntent().getStringExtra("orderType");
         String status = response.getOrder().getOrderStatus();
 
-        if ("1".equals(orderType)) {
+        if ("1".equals(orderType) || "4".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) {
             if ("1".equals(status)) {
                 leftTV.setVisibility(View.VISIBLE);
                 leftTV.setText("取消订单");
@@ -309,7 +313,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                 rightTV.setText("确认收货");
             } else if ("5".equals(status)) {
                 rightTV.setText("写日记");
-                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setVisibility(View.GONE);
                 leftTV.setVisibility(View.GONE);
             }
             orderV.setVisibility(View.VISIBLE);
@@ -319,9 +323,9 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             mealOrderV.setVisibility(View.GONE);
             payTypeDescTV.setText(orderDetails.getPayTypeDesc());
             deliveryMethodDescTV.setText(orderDetails.getDeliveryMethodDesc());
-        } else if ("2".equals(orderType)) {
+        } else if ("2".equals(orderType) || "5".equals(orderType) || "12".equals(orderType) || "13".equals(orderType)) {
 
-        } else if ("3".equals(orderType)) {
+        } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) {
             if (status.equals("1")) {
                 leftTV.setVisibility(View.VISIBLE);
                 leftTV.setText("取消订单");
@@ -342,16 +346,21 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             }
             hOrderV.setVisibility(View.VISIBLE);
             orderPayV.setVisibility(View.GONE);
-            hospitalAddressTV.setText(orderDetails.getHospital().getName());
+            if (orderDetails.getHospital() != null) {
+                hospitalAddressTV.setText(orderDetails.getHospital().getName());
+            }
             appointmentsTimeTV.setText(orderDetails.getReservationDate() + " " + orderDetails.getReservationTime());
+            hPayTypeDescTV.setText(orderDetails.getPayTypeDesc());
             orderV.setVisibility(View.GONE);
             if ("7".equals(response.getOrder().getOrderType())) {
                 hOrderPayV.setVisibility(View.VISIBLE);
                 mealOrderV.setVisibility(View.GONE);
+                tailMoneyTV.setText(String.valueOf(response.getOrder().getGoodsList().get(0).getTailMoney()));
+                depositTV.setText(String.valueOf(response.getOrder().getGoodsList().get(0).getDeposit()));
             } else {
                 hOrderPayV.setVisibility(View.GONE);
                 mealOrderV.setVisibility(View.VISIBLE);
-                mealPriceTV.setText(ArmsUtils.formatLong(response.getOrder().getPayMoney()));
+                mealPriceTV.setText(ArmsUtils.formatLong(response.getOrder().getTotalPrice()));
                 mealMoneyTV.setText(ArmsUtils.formatLong(orderDetails.getMoney()));
             }
         }
@@ -362,9 +371,14 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
 
 
         Address address = orderDetails.getOrderRecipientInfo();
-        addressRealNameTV.setText(address.getRealName());
-        addressMobileTV.setText(address.getMobile());
-        addressTV.setText(address.getAddress());
+        if (null == address) {
+            addressInfoV.setVisibility(View.GONE);
+        } else {
+            addressInfoV.setVisibility(View.VISIBLE);
+            addressRealNameTV.setText(address.getRealName());
+            addressMobileTV.setText(address.getMobile());
+            addressTV.setText(address.getProvinceName() + address.getCityName() + address.getCountyName() + address.getAddress());
+        }
 
         remarkTV.setText(orderDetails.getRemark());
         priceTV.setText(ArmsUtils.formatLong(orderDetails.getPrice()));
@@ -386,7 +400,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                dialog.dismiss();
+                                dialog.dismissAllowingStateLoss();
                             }
                         });
                         view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {

@@ -82,8 +82,8 @@ public class ImageUploadUtils {
 
 
         mIntent.putExtra("crop", "true");
-        mIntent.putExtra("aspectX", aspectX);
-        mIntent.putExtra("aspectY", aspectY);
+        mIntent.putExtra("aspectX", 1);
+        mIntent.putExtra("aspectY", 1);
         mIntent.putExtra("outputX", outputX);
         mIntent.putExtra("outputY", outputY);
         mIntent.putExtra("scale", true);

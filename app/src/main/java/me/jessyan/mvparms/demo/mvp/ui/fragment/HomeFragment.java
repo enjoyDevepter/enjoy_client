@@ -9,6 +9,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -327,8 +328,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 moduleV.findViewById(R.id.icon).setBackgroundResource(R.mipmap.main_new_peiple_icon);
                 try {
                     if (!ArmsUtils.isEmpty(module.getExtendParam())) {
-                        ((TextView) moduleV.findViewById(R.id.moduleinfo)).setText("距离活动结束还有" + new JSONObject(module.getExtendParam()).optString("remainingDays") + "天");
-
+                        ((TextView) moduleV.findViewById(R.id.moduleinfo)).setText(Html.fromHtml("<font color='#939393'>距离活动结束还有</font><font color='#FF0000'>" + new JSONObject(module.getExtendParam()).optString("remainingDays") + "</font><font color='#939393'>天</font>"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

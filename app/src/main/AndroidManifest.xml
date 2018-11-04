@@ -140,6 +140,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.HospitalInfoActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.HospitalChooseActivity"
