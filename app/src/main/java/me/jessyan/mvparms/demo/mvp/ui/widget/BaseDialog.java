@@ -98,6 +98,8 @@ public abstract class BaseDialog extends DialogFragment {
     }
 
     public void show(FragmentManager fragmentManager) {
-        show(fragmentManager, getFragmentTag());
+        if (!fragmentManager.isStateSaved()) {
+            show(fragmentManager, getFragmentTag());
+        }
     }
 }

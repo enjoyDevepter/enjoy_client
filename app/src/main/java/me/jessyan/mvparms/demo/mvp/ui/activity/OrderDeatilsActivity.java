@@ -326,7 +326,9 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             }
             hOrderV.setVisibility(View.VISIBLE);
             orderPayV.setVisibility(View.GONE);
-            hospitalAddressTV.setText(orderDetails.getHospital().getName());
+            if (orderDetails.getHospital() != null) {
+                hospitalAddressTV.setText(orderDetails.getHospital().getName());
+            }
             appointmentsTimeTV.setText(orderDetails.getReservationDate() + " " + orderDetails.getReservationTime());
             hPayTypeDescTV.setText(orderDetails.getPayTypeDesc());
             orderV.setVisibility(View.GONE);
