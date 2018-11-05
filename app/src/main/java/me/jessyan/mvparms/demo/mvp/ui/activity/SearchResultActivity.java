@@ -327,8 +327,14 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
         // 如何区分
         switch (viewType) {
             case R.layout.goods_list_item:
+                String busType = getIntent().getStringExtra("busType");
+                Intent intent;
+                if ("1".equals(busType)) {
+                    intent = new Intent(getActivity().getApplication(), GoodsDetailsActivity.class);
+                } else {
+                    intent = new Intent(getActivity().getApplication(), KGoodsDetailsActivityActivity.class);
+                }
                 Goods goods = mAdapter.getInfos().get(position);
-                Intent intent = new Intent(getActivity().getApplication(), GoodsDetailsActivity.class);
                 intent.putExtra("type", goods.getType());
                 intent.putExtra("goodsId", goods.getGoodsId());
                 intent.putExtra("merchId", goods.getMerchId());

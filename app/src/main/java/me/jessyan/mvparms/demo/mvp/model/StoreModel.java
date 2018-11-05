@@ -9,7 +9,11 @@ import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.StoreContract;
+import me.jessyan.mvparms.demo.mvp.model.api.service.HospitalService;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalResponse;
 
 
 @ActivityScope
@@ -31,4 +35,9 @@ public class StoreModel extends BaseModel implements StoreContract.Model {
         this.mApplication = null;
     }
 
+    @Override
+    public Observable<HospitalResponse> getStroeList(HospitalListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(HospitalService.class)
+                .getHospitalList(request);
+    }
 }

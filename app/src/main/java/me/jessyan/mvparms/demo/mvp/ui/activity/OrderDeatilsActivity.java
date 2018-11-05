@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
@@ -56,6 +57,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     TextView payTypeDescTV;
     @BindView(R.id.deliveryMethodDesc)
     TextView deliveryMethodDescTV;
+    @BindView(R.id.hospital_tag)
+    TextView hospitalTagTV;
     @BindView(R.id.hospital_address)
     TextView hospitalAddressTV;
     @BindView(R.id.appointments_time)
@@ -116,6 +119,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     RecyclerView.Adapter mAdapter;
+    @Inject
+    AppManager appManager;
     CustomDialog dialog = null;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private OrderDetailsResponse response;
@@ -241,11 +246,9 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         ArmsUtils.startActivity(intent);
                     } else if ("31".equals(order.getOrderStatus())) {
                         // 预约
-                        Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
-                        makeIntent.putExtra("orderId", order.getOrderId());
-                        makeIntent.putExtra("mealName", order.getGoodsList().get(0).getName());
-                        makeIntent.putExtra("desc", order.getGoodsList().get(0).getDesc());
-                        ArmsUtils.startActivity(makeIntent);
+                        EventBus.getDefault().post(0, EventBusTags.CHANGE_APPOINTMENT_TYPE);
+                        EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
+                        appManager.killAllBeforeClass(MainActivity.class);
                     } else if ("5".equals(order.getOrderStatus())) {
                         // 写日记
                         Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
@@ -265,8 +268,9 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         ArmsUtils.startActivity(intent);
                     } else if ("31".equals(order.getOrderStatus())) {
                         // 预约
+                        EventBus.getDefault().post(1, EventBusTags.CHANGE_APPOINTMENT_TYPE);
                         EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
-                        killMyself();
+                        appManager.killAllBeforeClass(MainActivity.class);
                     } else if ("5".equals(order.getOrderStatus())) {
                         // 写日记
                         Intent intent = new Intent(getActivity(), ReleaseDiaryActivity.class);
@@ -324,7 +328,37 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             payTypeDescTV.setText(orderDetails.getPayTypeDesc());
             deliveryMethodDescTV.setText(orderDetails.getDeliveryMethodDesc());
         } else if ("2".equals(orderType) || "5".equals(orderType) || "12".equals(orderType) || "13".equals(orderType)) {
-
+            if (status.equals("1")) {
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("取消订单");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("去支付");
+            } else if (status.equals("2")) {
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("付尾款");
+                leftTV.setVisibility(View.GONE);
+            } else if (status.equals("31")) {
+                leftTV.setVisibility(View.GONE);
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("预约");
+            } else if (status.equals("5")) {
+                rightTV.setText("写日记");
+                rightTV.setVisibility(View.VISIBLE);
+                leftTV.setVisibility(View.GONE);
+            }
+            hOrderV.setVisibility(View.VISIBLE);
+            orderPayV.setVisibility(View.GONE);
+            hospitalTagTV.setText("选择店铺");
+            if (orderDetails.getStore() != null) {
+                hospitalAddressTV.setText(orderDetails.getStore().getName());
+            }
+            appointmentsTimeTV.setText(orderDetails.getReservationDate() + " " + orderDetails.getReservationTime());
+            hPayTypeDescTV.setText(orderDetails.getPayTypeDesc());
+            orderV.setVisibility(View.GONE);
+            hOrderPayV.setVisibility(View.GONE);
+            mealOrderV.setVisibility(View.VISIBLE);
+            mealPriceTV.setText(ArmsUtils.formatLong(response.getOrder().getTotalPrice()));
+            mealMoneyTV.setText(ArmsUtils.formatLong(orderDetails.getMoney()));
         } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) {
             if (status.equals("1")) {
                 leftTV.setVisibility(View.VISIBLE);
@@ -346,6 +380,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             }
             hOrderV.setVisibility(View.VISIBLE);
             orderPayV.setVisibility(View.GONE);
+            hospitalTagTV.setText("选择医院");
             if (orderDetails.getHospital() != null) {
                 hospitalAddressTV.setText(orderDetails.getHospital().getName());
             }

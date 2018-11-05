@@ -226,7 +226,6 @@ public class NewlywedsActivity extends BaseActivity<NewlywedsPresenter> implemen
                     intent.putExtra("merchId", goods.getMerchId());
                     intent.putExtra("promotionId", goods.getPromotionId());
                     ArmsUtils.startActivity(intent);
-
                 } else if ("3".equals(goods.getType())) {
                     Intent intent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
                     intent.putExtra("where", "newpeople");

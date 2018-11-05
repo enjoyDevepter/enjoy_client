@@ -41,6 +41,7 @@ import me.jessyan.mvparms.demo.mvp.presenter.KGoodsOrderConfirmPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
 
 
 public class KGoodsOrderConfirmActivity extends BaseActivity<KGoodsOrderConfirmPresenter> implements KGoodsOrderConfirmContract.View, View.OnClickListener, View.OnFocusChangeListener {
@@ -262,6 +263,8 @@ public class KGoodsOrderConfirmActivity extends BaseActivity<KGoodsOrderConfirmP
             depositButtomTV.setText(String.valueOf(goods.getSalePrice()));
         }
         depositTV.setMoneyText(String.valueOf(ArmsUtils.formatLong(response.getTotalPrice())));
+
+        provideCache().put("money", response.getMoney());
     }
 
     @Override
@@ -271,6 +274,16 @@ public class KGoodsOrderConfirmActivity extends BaseActivity<KGoodsOrderConfirmP
                 killMyself();
                 break;
             case R.id.hospital:
+                if (provideCache().get(KEY_FOR_HOSPITAL_ID) == null) {
+                    ArmsUtils.makeText(this, "请选择店铺");
+                    break;
+                }
+                Intent hospitalIntent = new Intent(this, StoreActivity.class);
+                hospitalIntent.putExtra("store_name", (String) provideCache().get("store_name"));
+                hospitalIntent.putExtra("store_id", (String) provideCache().get("store_id"));
+                ArmsUtils.startActivity(hospitalIntent);
+                break;
+            case R.id.hospital_info:
                 Intent intent2 = new Intent(this, SelfPickupAddrListActivity.class);
                 intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
                 if (null != store) {
@@ -327,7 +340,10 @@ public class KGoodsOrderConfirmActivity extends BaseActivity<KGoodsOrderConfirmP
             if (shouldSubmit) {
                 String m = moneyET.getText().toString();
                 moneyET.setText("");
-                provideCache().put("money", Long.valueOf(m) * 100);
+                if (!ArmsUtils.isEmpty(m)) {
+                    moneyET.setText("");
+                    provideCache().put("money", (long) (Double.valueOf(m) * 100));
+                }
                 shouldSubmit = hasFocus;
                 mPresenter.getOrderConfirmInfo();
             }

@@ -138,6 +138,7 @@ public class HospitalActivity extends BaseActivity<HospitalPresenter> implements
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
+                    mPresenter.getHospitalList(false);
                 }
 
                 @Override

@@ -39,6 +39,8 @@ public class OrderDetails {
     private Hospital hospital;
     private Store store;
     private String desc;
+    private String isWriteDiary;
+    private String isCanApplyAward;
 
     public long getCoupon() {
         return coupon;
@@ -256,6 +258,22 @@ public class OrderDetails {
         this.desc = desc;
     }
 
+    public String getIsWriteDiary() {
+        return isWriteDiary;
+    }
+
+    public void setIsWriteDiary(String isWriteDiary) {
+        this.isWriteDiary = isWriteDiary;
+    }
+
+    public String getIsCanApplyAward() {
+        return isCanApplyAward;
+    }
+
+    public void setIsCanApplyAward(String isCanApplyAward) {
+        this.isCanApplyAward = isCanApplyAward;
+    }
+
     @Override
     public String toString() {
         return "OrderDetails{" +
@@ -286,6 +304,8 @@ public class OrderDetails {
                 ", hospital=" + hospital +
                 ", store=" + store +
                 ", desc='" + desc + '\'' +
+                ", isWriteDiary='" + isWriteDiary + '\'' +
+                ", isCanApplyAward='" + isCanApplyAward + '\'' +
                 '}';
     }
 }

@@ -10,6 +10,7 @@ public class Store extends CommonStoreDateType {
     private String city;
     private String county;
     private String storeId;
+    private String image;
 
     public String getProvince() {
         return province;
@@ -43,6 +44,14 @@ public class Store extends CommonStoreDateType {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override

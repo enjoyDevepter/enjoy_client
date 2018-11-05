@@ -66,6 +66,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.HGoodsDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HospitalActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ImageShowActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.KGoodsDetailsActivityActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.MessageActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.NewlywedsActivity;
@@ -73,6 +74,7 @@ import me.jessyan.mvparms.demo.mvp.ui.activity.PlatformActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.RecommendActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.SearchResultActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.StoreActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.TaoCanActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.TaoCanDetailsActivity;
 import me.jessyan.mvparms.demo.mvp.ui.activity.TimelimitActivity;
@@ -580,7 +582,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                         intent.putExtra("promotionId", good.getPromotionId());
                         ArmsUtils.startActivity(intent);
                     } else if ("2".equals(good.getType())) {
-
+                        Intent intent = new Intent(getActivity().getApplication(), KGoodsDetailsActivityActivity.class);
+                        intent.putExtra("where", "newpeople");
+                        intent.putExtra("goodsId", good.getGoodsId());
+                        intent.putExtra("merchId", good.getMerchId());
+                        intent.putExtra("promotionId", good.getPromotionId());
+                        ArmsUtils.startActivity(intent);
                     } else if ("3".equals(good.getType())) {
                         Intent intent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
                         intent.putExtra("where", "newpeople");
@@ -605,7 +612,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                         ArmsUtils.startActivity(intent);
 
                     } else if ("2".equals(good.getType())) {
-
+                        Intent intent = new Intent(getActivity().getApplication(), KGoodsDetailsActivityActivity.class);
+                        intent.putExtra("where", "timelimitdetail");
+                        intent.putExtra("goodsId", good.getGoodsId());
+                        intent.putExtra("merchId", good.getMerchId());
+                        intent.putExtra("promotionId", good.getPromotionId());
+                        ArmsUtils.startActivity(intent);
                     } else if ("3".equals(good.getType())) {
                         Intent intent = new Intent(getActivity().getApplication(), HGoodsDetailsActivity.class);
                         intent.putExtra("where", "timelimitdetail");
@@ -653,7 +665,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         } else if ("doctor".equals(tag)) {
             ArmsUtils.startActivity(getActivity(), DoctorActivity.class);
         } else if ("store".equals(tag)) {
-
+            ArmsUtils.startActivity(getActivity(), StoreActivity.class);
         }
     }
 

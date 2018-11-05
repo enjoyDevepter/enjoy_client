@@ -1,16 +1,33 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.StoreContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.bean.OrderBy;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.request.HospitalListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalResponse;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.StoreListAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 
 @ActivityScope
@@ -18,15 +35,88 @@ public class StorePresenter extends BasePresenter<StoreContract.Model, StoreCont
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
-    AppManager mAppManager;
-    @Inject
     Application mApplication;
     @Inject
     ImageLoader mImageLoader;
+    @Inject
+    AppManager mAppManager;
+    @Inject
+    List<Store> hospitalList;
+    @Inject
+    StoreListAdapter mAdapter;
+    private int preEndIndex;
+    private int lastPageIndex = 1;
 
     @Inject
     public StorePresenter(StoreContract.Model model, StoreContract.View rootView) {
         super(model, rootView);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    public void onCreate() {
+        getStroeList(true);
+    }
+
+
+    public void getStroeList(boolean pullToRefresh) {
+        HospitalListRequest request = new HospitalListRequest();
+        request.setCmd(701);
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setCityId(String.valueOf(cache.get("city")));
+        request.setCountyId(String.valueOf(cache.get("county")));
+        request.setProvinceId(String.valueOf(cache.get("province")));
+        request.setLon(String.valueOf(cache.get("lon")));
+        request.setLat(String.valueOf(cache.get("lat")));
+
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+        List<OrderBy> orderByList = new ArrayList<>();
+        if (null != mRootView.getCache().get("distance")) {
+            OrderBy orderBy = new OrderBy();
+            orderBy.setField("distance");
+            orderBy.setAsc((Boolean) mRootView.getCache().get("distance"));
+            orderByList.add(orderBy);
+            request.setOrderBys(orderByList);
+        }
+        mModel.getStroeList(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HospitalResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(HospitalResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showContent(response.getStoreList().size() > 0);
+                            if (pullToRefresh) {
+                                hospitalList.clear();
+                            }
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            hospitalList.addAll(response.getStoreList());
+                            preEndIndex = hospitalList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = hospitalList.size() / 10 + 1;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, hospitalList.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
     }
 
     @Override
