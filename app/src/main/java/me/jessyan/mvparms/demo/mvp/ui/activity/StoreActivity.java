@@ -26,6 +26,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerStoreComponent;
 import me.jessyan.mvparms.demo.di.module.StoreModule;
 import me.jessyan.mvparms.demo.mvp.contract.StoreContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.presenter.StorePresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.StoreListAdapter;
 
@@ -214,6 +215,11 @@ public class StoreActivity extends BaseActivity<StorePresenter> implements Store
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
+        Store store = mAdapter.getInfos().get(position);
+        Intent storeIntent = new Intent(this, StoreInfoActivity.class);
+        storeIntent.putExtra("store_name", store.getName());
+        storeIntent.putExtra("store_id", store.getStoreId());
+        ArmsUtils.startActivity(storeIntent);
     }
 
     @Override

@@ -11,7 +11,11 @@ import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalInfoRe
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.HospitalResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.response.LoginUserHospitalInfoResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.StoreInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsListResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.StoreInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -40,4 +44,11 @@ public interface HospitalService {
 
     @POST("gateway")
     Observable<ActivityInfoListResponse> getActivityList(@Body ActivityInfoRequest request);
+
+
+    @POST("gateway")
+    Observable<StoreInfoResponse> getStoreInfo(@Body StoreInfoRequest request);
+
+    @POST("gateway")
+    Observable<GoodsListResponse> getGoodsList(@Body GoodsListRequest request);
 }

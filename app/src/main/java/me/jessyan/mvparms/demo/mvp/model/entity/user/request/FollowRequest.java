@@ -12,6 +12,7 @@ public class FollowRequest extends BaseRequest {
     private String memberId;
     private String hospitalId;
     private String doctorId;
+    private String storeId;
 
     public int getCmd() {
         return cmd;
@@ -53,6 +54,14 @@ public class FollowRequest extends BaseRequest {
         this.doctorId = doctorId;
     }
 
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
     @Override
     public String toString() {
         return "FollowRequest{" +
@@ -61,6 +70,7 @@ public class FollowRequest extends BaseRequest {
                 ", memberId='" + memberId + '\'' +
                 ", hospitalId='" + hospitalId + '\'' +
                 ", doctorId='" + doctorId + '\'' +
+                ", storeId='" + storeId + '\'' +
                 '}';
     }
 }

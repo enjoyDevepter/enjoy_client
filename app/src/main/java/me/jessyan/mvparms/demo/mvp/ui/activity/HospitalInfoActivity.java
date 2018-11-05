@@ -381,6 +381,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
                 @Override
                 public void onClick(int position) {
                     Intent intent = new Intent(getApplication(), ActivityInfoActivity.class);
+                    intent.putExtra("isFromStore", false);
                     intent.putExtra("activityId", activityInfoList.get(position).getActivityId());
                     intent.putExtra("title", activityInfoList.get(position).getTitle());
                     intent.putExtra(KEY_FOR_HOSPITAL_ID, getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));

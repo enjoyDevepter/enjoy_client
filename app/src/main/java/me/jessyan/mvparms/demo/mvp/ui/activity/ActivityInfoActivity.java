@@ -78,6 +78,7 @@ public class ActivityInfoActivity extends BaseActivity<ActivityInfoPresenter> im
         infosRV.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
         provideCache().put("activityId", getIntent().getStringExtra("activityId"));
+        provideCache().put("isFromStore", getIntent().getBooleanExtra("isFromStore", false));
     }
 
 

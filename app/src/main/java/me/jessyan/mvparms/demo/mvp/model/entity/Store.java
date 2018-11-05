@@ -11,6 +11,8 @@ public class Store extends CommonStoreDateType {
     private String county;
     private String storeId;
     private String image;
+    private String intro;
+    private String isFollow;
 
     public String getProvince() {
         return province;
@@ -54,6 +56,22 @@ public class Store extends CommonStoreDateType {
         this.image = image;
     }
 
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public String getIsFollow() {
+        return isFollow;
+    }
+
+    public void setIsFollow(String isFollow) {
+        this.isFollow = isFollow;
+    }
+
     @Override
     public String toString() {
         return "Store{" +
@@ -61,6 +79,9 @@ public class Store extends CommonStoreDateType {
                 ", city='" + city + '\'' +
                 ", county='" + county + '\'' +
                 ", storeId='" + storeId + '\'' +
+                ", image='" + image + '\'' +
+                ", intro='" + intro + '\'' +
+                ", isFollow='" + isFollow + '\'' +
                 '}';
     }
 }

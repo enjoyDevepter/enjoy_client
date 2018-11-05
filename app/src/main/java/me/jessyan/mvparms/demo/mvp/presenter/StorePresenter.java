@@ -60,7 +60,7 @@ public class StorePresenter extends BasePresenter<StoreContract.Model, StoreCont
 
     public void getStroeList(boolean pullToRefresh) {
         HospitalListRequest request = new HospitalListRequest();
-        request.setCmd(701);
+        request.setCmd(709);
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         request.setCityId(String.valueOf(cache.get("city")));
         request.setCountyId(String.valueOf(cache.get("county")));

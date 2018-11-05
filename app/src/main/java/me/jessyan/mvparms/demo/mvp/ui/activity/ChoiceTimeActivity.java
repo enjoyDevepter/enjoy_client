@@ -58,8 +58,6 @@ public class ChoiceTimeActivity extends BaseActivity<ChoiceTimePresenter> implem
     @Inject
     TimeAdapter timeAdapter;
 
-    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.HOP;
-
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerChoiceTimeComponent //如找不到该类,请编译一下项目

@@ -183,6 +183,9 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
             case 1:
                 request.setCmd(2008);
                 break;
+            case 2:
+                request.setCmd(2050);
+                break;
         }
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         request.setToken((String) (cache.get(KEY_KEEP + "token")));

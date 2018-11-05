@@ -53,11 +53,16 @@ public class ActivityInfoPresenter extends BasePresenter<ActivityInfoContract.Mo
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate() {
         getActivityInfo();
+        getActivityList();
     }
 
     public void getActivityInfo() {
         ActivityInfoRequest request = new ActivityInfoRequest();
-        request.setCmd(924);
+        if ((boolean) mRootView.getCache().get("isFromStore")) {
+            request.setCmd(939);
+        } else {
+            request.setCmd(924);
+        }
         request.setActivityId((String) mRootView.getCache().get("activityId"));
         request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
         mModel.getActivityInfo(request)
@@ -70,7 +75,6 @@ public class ActivityInfoPresenter extends BasePresenter<ActivityInfoContract.Mo
                     public void onNext(ActivityInfoResponse response) {
                         if (response.isSuccess()) {
                             mRootView.updateUI(response.getActivityInfo());
-                            getActivityList();
                         }
                     }
                 });
@@ -78,7 +82,11 @@ public class ActivityInfoPresenter extends BasePresenter<ActivityInfoContract.Mo
 
     private void getActivityList() {
         ActivityInfoRequest request = new ActivityInfoRequest();
-        request.setCmd(923);
+        if ((boolean) mRootView.getCache().get("isFromStore")) {
+            request.setCmd(938);
+        } else {
+            request.setCmd(923);
+        }
         request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra(KEY_FOR_HOSPITAL_ID));
         mModel.getActivityList(request)
                 .subscribeOn(Schedulers.io())

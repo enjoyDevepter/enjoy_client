@@ -369,6 +369,9 @@
         <activity
             android:name=".mvp.ui.activity.StoreActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.StoreInfoActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
