@@ -344,90 +344,91 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/commentRV"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/content_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="#00FF0000">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="68dp"
+                            android:layout_gravity="bottom"
+                            android:background="@color/white">
+
+                            <LinearLayout
+                                android:id="@+id/emoji_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:gravity="center">
+
+                                <View
+                                    android:layout_width="14dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginRight="15dp"
+                                    android:background="@mipmap/emoji" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/vote_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@id/emoji_layout"
+                                android:gravity="center">
+
+                                <View
+                                    android:id="@+id/vote"
+                                    android:layout_width="14dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="8dp"
+                                    android:background="@drawable/vote_bg" />
+
+                            </LinearLayout>
+
+
+                            <EditText
+                                android:id="@+id/content"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="15dp"
+                                android:layout_toLeftOf="@id/vote_layout"
+                                android:background="@drawable/search_input_bg"
+                                android:hint="请输入评论内容..."
+                                android:imeOptions="actionSend"
+                                android:paddingLeft="10dp"
+                                android:singleLine="true"
+                                android:textColor="#FF333333"
+                                android:textSize="12sp" />
+
+                        </RelativeLayout>
+                    </FrameLayout>
+                    <!--表情区-->
+                    <me.jessyan.mvparms.demo.mvp.ui.widget.emoji.EmotionLayout
+                        android:id="@+id/elEmotion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:visibility="gone" />
+                </LinearLayout>
             </LinearLayout>
         </me.jessyan.mvparms.demo.mvp.ui.widget.HiNestedScrollView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:id="@+id/content_layout"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="#00FF0000">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="68dp"
-                    android:layout_gravity="bottom"
-                    android:background="@color/white">
-
-                    <LinearLayout
-                        android:id="@+id/emoji_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:gravity="center">
-
-                        <View
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginRight="15dp"
-                            android:background="@mipmap/emoji" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/vote_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@id/emoji_layout"
-                        android:gravity="center">
-
-                        <View
-                            android:id="@+id/vote"
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="8dp"
-                            android:background="@drawable/vote_bg" />
-
-                    </LinearLayout>
-
-
-                    <EditText
-                        android:id="@+id/content"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toLeftOf="@id/vote_layout"
-                        android:background="@drawable/search_input_bg"
-                        android:hint="请输入评论内容..."
-                        android:imeOptions="actionSend"
-                        android:paddingLeft="10dp"
-                        android:singleLine="true"
-                        android:textColor="#FF333333"
-                        android:textSize="12sp" />
-
-                </RelativeLayout>
-            </FrameLayout>
-            <!--表情区-->
-            <me.jessyan.mvparms.demo.mvp.ui.widget.emoji.EmotionLayout
-                android:id="@+id/elEmotion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:visibility="gone" />
-        </LinearLayout>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabFloat"

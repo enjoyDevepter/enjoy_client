@@ -30,6 +30,8 @@ import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -156,7 +158,7 @@ public class KGoodsDetailsActivityPresenter extends BasePresenter<KGoodsDetailsA
                             Cache<String, Object> cache = mRootView.getCache();
                             cache.put("goods", response.getGoods());
                             mRootView.updateUI(response);
-//                            getGoodsForDiary(); // 临时去掉
+                            getGoodsForDiary(); // 临时去掉
                         }
                     }
                 });
@@ -300,8 +302,7 @@ public class KGoodsDetailsActivityPresenter extends BasePresenter<KGoodsDetailsA
                             }
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             diaryList.addAll(response.getDiaryList());
-//                            mRootView.updateDiaryUI(response.getDiaryList().size() > 0);
-                            mRootView.updateDiaryUI(false);
+                            mRootView.updateDiaryUI(response.getDiaryList().size() > 0);
                             preEndIndex = diaryList.size();//更新之前列表总长度,用于确定加载更多的起始位置
                             lastPageIndex = diaryList.size() / 10 == 0 ? 1 : diaryList.size() / 10;
                             if (lastPageIndex == 1) {
@@ -371,5 +372,64 @@ public class KGoodsDetailsActivityPresenter extends BasePresenter<KGoodsDetailsA
         ArmsUtils.startActivity(intent);
     }
 
+    public void vote(boolean vote, int position) {
+        if (checkLoginStatus()) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+        DiaryVoteRequest request = new DiaryVoteRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(vote ? 811 : 812);
+        request.setDiaryId((String) mRootView.getCache().get("diaryId"));
+        mModel.diaryVote(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            diaryList.get(position).setIsPraise(vote ? "1" : "0");
+                            int num = diaryList.get(position).getPraise();
+                            diaryList.get(position).setPraise(vote ? num + 1 : num <= 0 ? 0 : num - 1);
+                            mAdapter.notifyItemChanged(position);
+                        }
+                    }
+                });
+    }
+
+    public void follow(boolean follow, int position) {
+        if (checkLoginStatus()) {
+            ArmsUtils.startActivity(LoginActivity.class);
+            return;
+        }
+        FollowMemberRequest request = new FollowMemberRequest();
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        request.setToken((String) (cache.get(KEY_KEEP + "token")));
+        request.setCmd(follow ? 210 : 211);
+        request.setMemberId((String) mRootView.getCache().get("memberId"));
+        mModel.follow(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            diaryList.get(position).getMember().setIsFollow(follow ? "1" : "0");
+                            mAdapter.notifyItemChanged(position);
+                        }
+                    }
+                });
+    }
+
+    private boolean checkLoginStatus() {
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
+        String token = (String) (cache.get(KEY_KEEP + "token"));
+        return ArmsUtils.isEmpty(token);
+    }
 
 }

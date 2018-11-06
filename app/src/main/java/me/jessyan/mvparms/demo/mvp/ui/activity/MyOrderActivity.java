@@ -107,7 +107,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
             case 1:
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
-                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("可消费"));
+                statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待预约"));
                 statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                 tab2.select();
                 break;
@@ -182,7 +182,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                 case 1:
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("全部"));
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待付款"));
-                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("可消费"));
+                    statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("待预约"));
                     statusTabLayout.addTab(statusTabLayout.newTab().setTag("status").setText("已完成"));
                     break;
                 case 2:

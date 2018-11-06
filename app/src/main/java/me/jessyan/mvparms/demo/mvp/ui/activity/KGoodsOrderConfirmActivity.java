@@ -41,7 +41,6 @@ import me.jessyan.mvparms.demo.mvp.presenter.KGoodsOrderConfirmPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
-import static me.jessyan.mvparms.demo.mvp.ui.activity.HospitalInfoActivity.KEY_FOR_HOSPITAL_ID;
 
 
 public class KGoodsOrderConfirmActivity extends BaseActivity<KGoodsOrderConfirmPresenter> implements KGoodsOrderConfirmContract.View, View.OnClickListener, View.OnFocusChangeListener {
@@ -61,6 +60,8 @@ public class KGoodsOrderConfirmActivity extends BaseActivity<KGoodsOrderConfirmP
     TextView goodsSpecTV;
     @BindView(R.id.hospital)
     TextView hospitalTV;
+    @BindView(R.id.hospital_info)
+    View hospitalInfoV;
     @BindView(R.id.appointments_layout)
     View appointmnetV;
     @BindView(R.id.appointments_time)
@@ -132,6 +133,7 @@ public class KGoodsOrderConfirmActivity extends BaseActivity<KGoodsOrderConfirmP
         couponV.setOnClickListener(this);
         confirmV.setOnClickListener(this);
         hospitalTV.setOnClickListener(this);
+        hospitalInfoV.setOnClickListener(this);
         moneyET.setOnFocusChangeListener(this);
     }
 
@@ -274,11 +276,11 @@ public class KGoodsOrderConfirmActivity extends BaseActivity<KGoodsOrderConfirmP
                 killMyself();
                 break;
             case R.id.hospital:
-                if (provideCache().get(KEY_FOR_HOSPITAL_ID) == null) {
+                if (provideCache().get("store_id") == null) {
                     ArmsUtils.makeText(this, "请选择店铺");
                     break;
                 }
-                Intent hospitalIntent = new Intent(this, StoreActivity.class);
+                Intent hospitalIntent = new Intent(this, StoreInfoActivity.class);
                 hospitalIntent.putExtra("store_name", (String) provideCache().get("store_name"));
                 hospitalIntent.putExtra("store_id", (String) provideCache().get("store_id"));
                 ArmsUtils.startActivity(hospitalIntent);

@@ -110,7 +110,8 @@ public class EmotionKeyboard {
                         showEmotionLayout();
                         unlockContentHeightDelayed();
                     } else {
-                        showEmotionLayout();//两者都没显示，直接显示表情布局
+                        showSoftInput();
+//                        showEmotionLayout();//两者都没显示，直接显示表情布局
                     }
                 }
             }

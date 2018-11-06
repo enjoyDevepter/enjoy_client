@@ -53,6 +53,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerKGoodsDetailsActivityComponent;
 import me.jessyan.mvparms.demo.di.module.KGoodsDetailsActivityModule;
 import me.jessyan.mvparms.demo.mvp.contract.KGoodsDetailsActivityContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Diary;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
 import me.jessyan.mvparms.demo.mvp.model.entity.GoodsSpecValue;
 import me.jessyan.mvparms.demo.mvp.model.entity.Promotion;
@@ -70,7 +71,7 @@ import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class KGoodsDetailsActivityActivity extends BaseActivity<KGoodsDetailsActivityPresenter> implements KGoodsDetailsActivityContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, LabelsView.OnLabelSelectChangeListener {
+public class KGoodsDetailsActivityActivity extends BaseActivity<KGoodsDetailsActivityPresenter> implements KGoodsDetailsActivityContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, LabelsView.OnLabelSelectChangeListener, DiaryListAdapter.OnChildItemClickLinstener {
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.share)
@@ -551,12 +552,29 @@ public class KGoodsDetailsActivityActivity extends BaseActivity<KGoodsDetailsAct
             diraySRL = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview, null);
             dirayRV = diraySRL.findViewById(R.id.list);
             dirayRV.setAdapter(mAdapter);
+            mAdapter.setOnChildItemClickLinstener(this);
             dirayRV.setNestedScrollingEnabled(false);
             ArmsUtils.configRecyclerView(dirayRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             initPaginate();
             views.add(diraySRL);
+
+            LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) viewpager.getLayoutParams();
+            layoutParams1.height = Math.max(layoutParams1.height, mAdapter.getInfos().size() * ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.diray_apply_height));
+            viewpager.setLayoutParams(layoutParams1);
             viewpager.getAdapter().notifyDataSetChanged();
         }
+//
+//        if (hasDate && views.size() < 2) {
+//            tabLayout.addTab(tabLayout.newTab().setText(titles[1]));
+//            diraySRL = (SwipeRefreshLayout) LayoutInflater.from(this).inflate(R.layout.swipe_recyclerview, null);
+//            dirayRV = diraySRL.findViewById(R.id.list);
+//            dirayRV.setAdapter(mAdapter);
+//            dirayRV.setNestedScrollingEnabled(false);
+//            ArmsUtils.configRecyclerView(dirayRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+//            initPaginate();
+//            views.add(diraySRL);
+//            viewpager.getAdapter().notifyDataSetChanged();
+//        }
     }
 
     @Override
@@ -744,6 +762,78 @@ public class KGoodsDetailsActivityActivity extends BaseActivity<KGoodsDetailsAct
             return;
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public void onChildItemClick(View v, DiaryListAdapter.ViewName viewname, int position) {
+        Diary diary = mAdapter.getInfos().get(position);
+        switch (viewname) {
+            case FLLOW:
+                provideCache().put("memberId", diary.getMember().getMemberId());
+                mPresenter.follow("1".equals(diary.getMember().getIsFollow()) ? false : true, position);
+                break;
+            case VOTE:
+                provideCache().put("diaryId", diary.getDiaryId());
+                mPresenter.vote("1".equals(diary.getIsPraise()) ? false : true, position);
+                break;
+            case LEFT_IMAGE:
+                if (diary.getImageList() != null && diary.getImageList().size() > 0) {
+                    Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+                    String[] images = new String[diary.getImageList().size()];
+                    for (int i = 0; i < diary.getImageList().size(); i++) {
+                        images[i] = diary.getImageList().get(i);
+                    }
+                    intent.putExtra("images", images);
+                    ArmsUtils.startActivity(intent);
+                }
+                break;
+            case RIGHT_IMAGE:
+                if (diary.getImageList() != null && diary.getImageList().size() > 1) {
+                    Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+                    String[] images = new String[diary.getImageList().size()];
+                    for (int i = 0; i < diary.getImageList().size(); i++) {
+                        images[i] = diary.getImageList().get(i);
+                    }
+                    intent.putExtra("images", images);
+                    ArmsUtils.startActivity(intent);
+                }
+                break;
+            case ITEM:
+                Intent intent = new Intent(getActivity().getApplication(), DiaryForGoodsActivity.class);
+                intent.putExtra("diaryId", diary.getDiaryId());
+                intent.putExtra("goodsId", diary.getGoods().getGoodsId());
+                intent.putExtra("merchId", diary.getGoods().getMerchId());
+                intent.putExtra("memberId", diary.getMember().getMemberId());
+                ArmsUtils.startActivity(intent);
+                break;
+            case COMMENT:
+                Intent diaryIntent = new Intent(getActivity().getApplication(), DiaryDetailsActivity.class);
+                diaryIntent.putExtra("diaryId", diary.getDiaryId());
+                ArmsUtils.startActivity(diaryIntent);
+                break;
+            case SHARE:
+                showWX(diary);
+                break;
+        }
+    }
+
+    private void showWX(Diary diary) {
+        if (null != diary) {
+            Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(this).extras();
+            if (cache.get(KEY_KEEP + "token") == null) {
+                ArmsUtils.startActivity(LoginActivity.class);
+                return;
+            }
+            UMWeb web = new UMWeb(diary.getShareUrl());
+            web.setTitle(diary.getShareTitle());//标题
+            web.setDescription(diary.getShareDesc());
+            new ShareAction(getActivity())
+                    .withMedia(web)
+                    .setCallback(shareListener)
+                    .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                    .open();
+
+        }
     }
 
     private class Mobile {

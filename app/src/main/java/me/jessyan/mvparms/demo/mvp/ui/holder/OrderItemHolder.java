@@ -192,13 +192,14 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 leftTV.setVisibility(View.VISIBLE);
             }
         } else if ("2".equals(order.getOrderType()) || "5".equals(order.getOrderType()) || "12".equals(order.getOrderType()) || "13".equals(order.getOrderType())) { // 生美订单 //  生美套餐订单
-            countTV.setVisibility(View.VISIBLE);
+            countTV.setVisibility(View.INVISIBLE);
             countTV.setText("剩余次数：x" + order.getGoodsList().get(0).getSurplusTimes());
             payTagV.setVisibility(View.GONE);
             singleOnePrice.setVisibility(View.INVISIBLE);
             singleTwoPrice.setVisibility(View.INVISIBLE);
             payPriceTV.setMoneyText(ArmsUtils.formatLong(order.getTotalPrice()));
             single_price_infoTV.setText("总次数 x" + order.getGoodsList().get(0).getNums());
+            single_price_infoTV.setVisibility(View.INVISIBLE);
             if (order.getOrderStatus().equals("1")) {
                 statusTV.setText("待付款");
                 leftTV.setVisibility(View.VISIBLE);

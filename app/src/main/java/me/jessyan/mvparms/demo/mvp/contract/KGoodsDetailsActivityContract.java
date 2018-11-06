@@ -10,6 +10,8 @@ import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -51,6 +53,9 @@ public interface KGoodsDetailsActivityContract {
 
         Observable<DiaryListResponse> getDiaryForGoodsIdList(DiaryForGoodsRequest request);
 
+        Observable<BaseResponse> diaryVote(DiaryVoteRequest request);
+
+        Observable<BaseResponse> follow(FollowMemberRequest request);
 
     }
 }

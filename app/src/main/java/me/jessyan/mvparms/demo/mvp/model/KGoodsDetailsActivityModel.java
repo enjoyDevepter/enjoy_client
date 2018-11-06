@@ -15,6 +15,8 @@ import me.jessyan.mvparms.demo.mvp.model.api.service.MainService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.AddGoodsToCartRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.CollectGoodsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryForGoodsRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.DiaryVoteRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.FollowMemberRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsDetailsRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.SimpleRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
@@ -69,6 +71,18 @@ public class KGoodsDetailsActivityModel extends BaseModel implements KGoodsDetai
     public Observable<BaseResponse> getTel(SimpleRequest request) {
         return mRepositoryManager.obtainRetrofitService(MainService.class)
                 .getTel(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> diaryVote(DiaryVoteRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .diaryVote(request);
+    }
+
+    @Override
+    public Observable<BaseResponse> follow(FollowMemberRequest request) {
+        return mRepositoryManager.obtainRetrofitService(MainService.class)
+                .follow(request);
     }
 
 }
