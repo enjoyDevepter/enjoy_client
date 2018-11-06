@@ -355,7 +355,6 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                             addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
                             addappointmentsIntent.putExtra("type", "modify_appointment_time");
                             addappointmentsIntent.putExtra("isHgoods", type == 1 ? true : false);
-                            ArmsUtils.startActivity(addappointmentsIntent);
                         }
                         break;
                     case 2:

@@ -27,8 +27,6 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
-import java.text.SimpleDateFormat;
-
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.Goods;
@@ -46,7 +44,6 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView;
  * ================================================
  */
 public class MyMealDetailListHolder extends BaseHolder<Appointment> {
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @BindView(R.id.time)
     TextView timeTV;
     @BindView(R.id.status)
@@ -120,7 +117,7 @@ public class MyMealDetailListHolder extends BaseHolder<Appointment> {
                         .imageView(imageIV)
                         .isCenterCrop(true)
                         .build());
-        timeTV.setText(sdf.format(appointment.getCreateDate()));
+        timeTV.setText(appointment.getCreateDate());
         statusTV.setText(appointment.getStatusDesc());
         nameTV.setText(mealGoods.getName());
         if ("0".equals(appointment.getIsExperience())) {

@@ -19,12 +19,13 @@ public class Appointment {
     private String reservationStatus;
     private String status;
     private String statusDesc;
-    private long createDate;
+    private String createDate;
     private String code;
     private String relateStatus;
     private String relateStatusDesc;
     private String phone;
     private String address;
+    private boolean drainage; //引流
     private Goods goods;
     private Hospital hospital;
     private Member member;
@@ -125,11 +126,11 @@ public class Appointment {
         this.statusDesc = statusDesc;
     }
 
-    public long getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(long createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
@@ -173,6 +174,14 @@ public class Appointment {
         this.relateStatusDesc = relateStatusDesc;
     }
 
+    public boolean isDrainage() {
+        return drainage;
+    }
+
+    public void setDrainage(boolean drainage) {
+        this.drainage = drainage;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -212,12 +221,13 @@ public class Appointment {
                 ", reservationStatus='" + reservationStatus + '\'' +
                 ", status='" + status + '\'' +
                 ", statusDesc='" + statusDesc + '\'' +
-                ", createDate=" + createDate +
+                ", createDate='" + createDate + '\'' +
                 ", code='" + code + '\'' +
                 ", relateStatus='" + relateStatus + '\'' +
                 ", relateStatusDesc='" + relateStatusDesc + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
+                ", drainage=" + drainage +
                 ", goods=" + goods +
                 ", hospital=" + hospital +
                 ", member=" + member +

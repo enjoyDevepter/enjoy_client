@@ -157,6 +157,11 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                             appointments.addAll(response.getOrderProjectDetailList());
                             preEndIndex = appointments.size();//更新之前列表总长度,用于确定加载更多的起始位置
                             lastPageIndex = appointments.size() / 10 + 1;
+                            if (response.getCmd() == 2050) {
+                                for (Appointment appointment : appointments) {
+                                    appointment.setDrainage(true);
+                                }
+                            }
                             if (pullToRefresh) {
                                 mAdapter.notifyDataSetChanged();
                             } else {
@@ -184,7 +189,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                 request.setCmd(2008);
                 break;
             case 2:
-                request.setCmd(2050);
+                request.setCmd(2052);
                 break;
         }
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();

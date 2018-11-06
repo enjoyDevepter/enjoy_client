@@ -112,7 +112,7 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
                         .build());
         noTV.setText(appointment.getProjectId());
         if ("1".equals(appointment.getStatus())) {
-            rightTV.setVisibility(View.VISIBLE);
+            rightTV.setVisibility(appointment.isDrainage() ? View.GONE : View.VISIBLE);
             rightTV.setText("预约");
             timeTV.setVisibility(View.GONE);
             leftTV.setVisibility(View.GONE);
