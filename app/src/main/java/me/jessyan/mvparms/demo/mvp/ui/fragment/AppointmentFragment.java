@@ -269,7 +269,6 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.shengmei:
-                tabLayout.addOnTabSelectedListener(null);
                 tabLayout.removeAllTabs();
                 tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
                 tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
@@ -278,10 +277,8 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 shengmeiV.setSelected(true);
                 yimei1V.setSelected(false);
                 yimei2V.setSelected(false);
-                tabLayout.addOnTabSelectedListener(this);
                 break;
             case R.id.yimei1:
-                tabLayout.addOnTabSelectedListener(null);
                 tabLayout.removeAllTabs();
                 tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
                 tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
@@ -290,10 +287,8 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 shengmeiV.setSelected(false);
                 yimei1V.setSelected(true);
                 yimei2V.setSelected(false);
-                tabLayout.addOnTabSelectedListener(this);
                 break;
             case R.id.yimei2:
-                tabLayout.addOnTabSelectedListener(null);
                 tabLayout.removeAllTabs();
                 tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
                 tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
@@ -302,7 +297,6 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 shengmeiV.setSelected(false);
                 yimei1V.setSelected(false);
                 yimei2V.setSelected(true);
-                tabLayout.addOnTabSelectedListener(this);
                 break;
         }
         if (tabLayout.getSelectedTabPosition() == 0) {
@@ -336,7 +330,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                         }
                         break;
                     case 2:
-                        if (appointment.getStatus().equals("0")) {
+                        if (appointment.getStatus().equals("2")) {
                             // 取消预约
                             provideCache().put("reservationId", appointment.getReservationId());
                             showDailog("是否取消预约?");
@@ -365,7 +359,7 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                         }
                         break;
                     case 2:
-                        if (appointment.getStatus().equals("0")) {
+                        if (appointment.getStatus().equals("2")) {
                             addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
                             addappointmentsIntent.putExtra("type", "modify_appointment_time");
                             addappointmentsIntent.putExtra("isHgoods", true);
