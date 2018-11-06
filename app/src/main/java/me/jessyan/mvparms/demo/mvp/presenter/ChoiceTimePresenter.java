@@ -129,11 +129,12 @@ public class ChoiceTimePresenter extends BasePresenter<ChoiceTimeContract.Model,
         String type = mRootView.getActivity().getIntent().getStringExtra("type");
         boolean isMeal = mRootView.getActivity().getIntent().getBooleanExtra("isMeal", false);
         boolean isHgoods = mRootView.getActivity().getIntent().getBooleanExtra("isHgoods", false);
+        boolean drainage = mRootView.getActivity().getIntent().getBooleanExtra("drainage", false);
         if ("add_appointment_time".equals(type)) {
             request.setCmd(isMeal ? 2106 : isHgoods ? 2006 : 2016);
             request.setProjectId(mRootView.getActivity().getIntent().getStringExtra("projectId"));
         } else if ("modify_appointment_time".equals(type)) {
-            request.setCmd(isMeal ? 2107 : isHgoods ? 2007 : 2017);
+            request.setCmd(isMeal ? 2107 : isHgoods ? 2007 : drainage ? 2051 : 2017);
             request.setReservationId(mRootView.getActivity().getIntent().getStringExtra("reservationId"));
         }
         request.setHospitalId(mRootView.getActivity().getIntent().getStringExtra("hospitalId"));

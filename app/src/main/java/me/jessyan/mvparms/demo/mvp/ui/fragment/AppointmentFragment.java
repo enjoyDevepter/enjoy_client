@@ -228,14 +228,21 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 yimei2V.setSelected(false);
                 break;
             case 1: // 医美
+                tabLayout.addOnTabSelectedListener(null);
+                tabLayout.removeAllTabs();
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("可预约"));
                 shengmeiV.setSelected(false);
                 yimei1V.setSelected(true);
                 yimei2V.setSelected(false);
+                tabLayout.addOnTabSelectedListener(this);
                 break;
             case 2: // 引流医美
                 shengmeiV.setSelected(false);
                 yimei1V.setSelected(false);
                 yimei2V.setSelected(true);
+                tabLayout.addOnTabSelectedListener(this);
                 break;
         }
         if (tabLayout.getSelectedTabPosition() == 0) {
@@ -262,22 +269,40 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.shengmei:
+                tabLayout.addOnTabSelectedListener(null);
+                tabLayout.removeAllTabs();
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("可预约"));
                 provideCache().put("type", 0);
                 shengmeiV.setSelected(true);
                 yimei1V.setSelected(false);
                 yimei2V.setSelected(false);
+                tabLayout.addOnTabSelectedListener(this);
                 break;
             case R.id.yimei1:
+                tabLayout.addOnTabSelectedListener(null);
+                tabLayout.removeAllTabs();
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("可预约"));
                 provideCache().put("type", 1);
                 shengmeiV.setSelected(false);
                 yimei1V.setSelected(true);
                 yimei2V.setSelected(false);
+                tabLayout.addOnTabSelectedListener(this);
                 break;
             case R.id.yimei2:
+                tabLayout.addOnTabSelectedListener(null);
+                tabLayout.removeAllTabs();
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
+                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已完成"));
                 provideCache().put("type", 2);
                 shengmeiV.setSelected(false);
                 yimei1V.setSelected(false);
                 yimei2V.setSelected(true);
+                tabLayout.addOnTabSelectedListener(this);
                 break;
         }
         if (tabLayout.getSelectedTabPosition() == 0) {
@@ -295,38 +320,60 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
     @Override
     public void onChildItemClick(View v, AppointmentListAdapter.ViewName viewname, int position) {
         Appointment appointment = mAdapter.getInfos().get(position);
+        int type = 0;
+        if (null != getCache().get("type")) {
+            type = (int) getCache().get("type");
+        }
         switch (viewname) {
             case LEFT:
-                if (appointment.getStatus().equals("2")) {
-                    // 取消预约
-                    provideCache().put("reservationId", appointment.getReservationId());
-                    showDailog("是否取消预约?");
+                switch (type) {
+                    case 0:
+                    case 1:
+                        if (appointment.getStatus().equals("2")) {
+                            // 取消预约
+                            provideCache().put("reservationId", appointment.getReservationId());
+                            showDailog("是否取消预约?");
+                        }
+                        break;
+                    case 2:
+                        if (appointment.getStatus().equals("0")) {
+                            // 取消预约
+                            provideCache().put("reservationId", appointment.getReservationId());
+                            showDailog("是否取消预约?");
+                        }
+                        break;
                 }
                 break;
             case RIGHT:
-                int type = 0;
-                if (null != getCache().get("type")) {
-                    type = (int) getCache().get("type");
+                Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
+                addappointmentsIntent.putExtra("isMeal", false);
+                addappointmentsIntent.putExtra("index", position);
+                switch (type) {
+                    case 0:
+                    case 1:
+                        if (appointment.getStatus().equals("1")) {
+                            // 预约
+                            addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
+                            addappointmentsIntent.putExtra("type", "add_appointment_time");
+                            addappointmentsIntent.putExtra("isHgoods", type == 1 ? true : false);
+                        } else if (appointment.getStatus().equals("2")) {
+                            // 改约
+                            addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
+                            addappointmentsIntent.putExtra("type", "modify_appointment_time");
+                            addappointmentsIntent.putExtra("isHgoods", type == 1 ? true : false);
+                            ArmsUtils.startActivity(addappointmentsIntent);
+                        }
+                        break;
+                    case 2:
+                        if (appointment.getStatus().equals("0")) {
+                            addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
+                            addappointmentsIntent.putExtra("type", "modify_appointment_time");
+                            addappointmentsIntent.putExtra("isHgoods", true);
+                            addappointmentsIntent.putExtra("drainage", true);
+                        }
+                        break;
                 }
-                if (appointment.getStatus().equals("1")) {
-                    // 预约
-                    Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
-                    addappointmentsIntent.putExtra("isMeal", false);
-                    addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
-                    addappointmentsIntent.putExtra("type", "add_appointment_time");
-                    addappointmentsIntent.putExtra("index", position);
-                    addappointmentsIntent.putExtra("isHgoods", type == 1 ? true : false);
-                    ArmsUtils.startActivity(addappointmentsIntent);
-                } else if (appointment.getStatus().equals("2")) {
-                    // 改约
-                    Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
-                    addappointmentsIntent.putExtra("isMeal", false);
-                    addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
-                    addappointmentsIntent.putExtra("type", "modify_appointment_time");
-                    addappointmentsIntent.putExtra("index", position);
-                    addappointmentsIntent.putExtra("isHgoods", type == 1 ? true : false);
-                    ArmsUtils.startActivity(addappointmentsIntent);
-                }
+                ArmsUtils.startActivity(addappointmentsIntent);
                 break;
             case ITEM:
                 break;
