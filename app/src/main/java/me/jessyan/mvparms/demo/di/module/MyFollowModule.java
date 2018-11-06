@@ -14,10 +14,12 @@ import me.jessyan.mvparms.demo.mvp.contract.MyFollowContract;
 import me.jessyan.mvparms.demo.mvp.model.MyFollowModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
 import me.jessyan.mvparms.demo.mvp.model.entity.Member;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowDoctorAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowHospitalAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowMemberAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowStoreAdapter;
 
 
 @Module
@@ -71,6 +73,12 @@ public class MyFollowModule {
 
     @ActivityScope
     @Provides
+    List<Store> provideStoreList() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
     MyFollowMemberAdapter provideMemberListAdapter(List<Member> members) {
         return new MyFollowMemberAdapter(members);
     }
@@ -85,6 +93,12 @@ public class MyFollowModule {
     @Provides
     MyFollowHospitalAdapter provideHospitalListAdapter(List<Hospital> members) {
         return new MyFollowHospitalAdapter(members);
+    }
+
+    @ActivityScope
+    @Provides
+    MyFollowStoreAdapter provideStoreListAdapter(List<Store> members) {
+        return new MyFollowStoreAdapter(members);
     }
 
 }

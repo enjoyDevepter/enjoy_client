@@ -4,6 +4,7 @@ import java.util.List;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
 import me.jessyan.mvparms.demo.mvp.model.entity.Member;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 
@@ -12,6 +13,7 @@ public class MyFollowListResponse extends BaseResponse {
     private List<Member> memberList;
     private List<Hospital> hospitalList;
     private List<DoctorBean> doctorList;
+    private List<Store> storeList;
 
     public int getNextPageIndex() {
         return nextPageIndex;
@@ -45,6 +47,14 @@ public class MyFollowListResponse extends BaseResponse {
         this.doctorList = doctorList;
     }
 
+    public List<Store> getStoreList() {
+        return storeList;
+    }
+
+    public void setStoreList(List<Store> storeList) {
+        this.storeList = storeList;
+    }
+
     @Override
     public String toString() {
         return "MyFollowListResponse{" +
@@ -52,6 +62,7 @@ public class MyFollowListResponse extends BaseResponse {
                 ", memberList=" + memberList +
                 ", hospitalList=" + hospitalList +
                 ", doctorList=" + doctorList +
+                ", storeList=" + storeList +
                 '}';
     }
 }

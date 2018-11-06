@@ -26,16 +26,18 @@ import me.jessyan.mvparms.demo.di.module.MyFollowModule;
 import me.jessyan.mvparms.demo.mvp.contract.MyFollowContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
 import me.jessyan.mvparms.demo.mvp.model.entity.Member;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.presenter.MyFollowPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowDoctorAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowHospitalAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowMemberAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowStoreAdapter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MyFollowActivity extends BaseActivity<MyFollowPresenter> implements MyFollowContract.View, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, TabLayout.OnTabSelectedListener, MyFollowMemberAdapter.OnChildItemClickLinstener, MyFollowHospitalAdapter.OnChildItemClickLinstener, MyFollowDoctorAdapter.OnChildItemClickLinstener {
+public class MyFollowActivity extends BaseActivity<MyFollowPresenter> implements MyFollowContract.View, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, TabLayout.OnTabSelectedListener, MyFollowMemberAdapter.OnChildItemClickLinstener, MyFollowHospitalAdapter.OnChildItemClickLinstener, MyFollowDoctorAdapter.OnChildItemClickLinstener, MyFollowStoreAdapter.OnChildItemClickLinstener {
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
@@ -56,6 +58,8 @@ public class MyFollowActivity extends BaseActivity<MyFollowPresenter> implements
     MyFollowHospitalAdapter hospitalAdapter;
     @Inject
     MyFollowDoctorAdapter doctorAdapter;
+    @Inject
+    MyFollowStoreAdapter storeAdapter;
 
     private Paginate mPaginate;
     private boolean isLoadingMore;
@@ -86,12 +90,14 @@ public class MyFollowActivity extends BaseActivity<MyFollowPresenter> implements
         tabLayout.addTab(tabLayout.newTab().setText("会员"));
         tabLayout.addTab(tabLayout.newTab().setText("医生"));
         tabLayout.addTab(tabLayout.newTab().setText("医院"));
+        tabLayout.addTab(tabLayout.newTab().setText("店铺"));
         tabLayout.addOnTabSelectedListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(memberAdapter);
         memberAdapter.setOnChildItemClickLinstener(this);
         hospitalAdapter.setOnChildItemClickLinstener(this);
         doctorAdapter.setOnChildItemClickLinstener(this);
+        storeAdapter.setOnChildItemClickLinstener(this);
     }
 
     @Override
@@ -218,6 +224,9 @@ public class MyFollowActivity extends BaseActivity<MyFollowPresenter> implements
             case 2:
                 mRecyclerView.setAdapter(hospitalAdapter);
                 break;
+            case 3:
+                mRecyclerView.setAdapter(storeAdapter);
+                break;
         }
         initPaginate();
         mPresenter.getMyFollow(true);
@@ -273,8 +282,22 @@ public class MyFollowActivity extends BaseActivity<MyFollowPresenter> implements
     }
 
     @Override
+    public void onChildItemClick(View v, MyFollowStoreAdapter.ViewName viewname, int position) {
+        Store store = storeAdapter.getInfos().get(position);
+        switch (viewname) {
+            case FLLOW:
+                provideCache().put("storeId", store.getStoreId());
+                mPresenter.unfollow();
+                break;
+            case ITEM:
+                break;
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         super.onDestroy();
     }
+
 }

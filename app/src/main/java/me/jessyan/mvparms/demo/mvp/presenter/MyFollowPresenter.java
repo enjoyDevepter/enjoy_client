@@ -21,6 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.MyFollowContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Hospital;
 import me.jessyan.mvparms.demo.mvp.model.entity.Member;
+import me.jessyan.mvparms.demo.mvp.model.entity.Store;
 import me.jessyan.mvparms.demo.mvp.model.entity.doctor.bean.DoctorBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.user.request.FollowRequest;
@@ -29,6 +30,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.user.response.MyFollowListRespon
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowDoctorAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowHospitalAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowMemberAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.MyFollowStoreAdapter;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -58,6 +60,10 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
     MyFollowHospitalAdapter hospitalAdapter;
     @Inject
     List<Hospital> hospitalList;
+    @Inject
+    MyFollowStoreAdapter storeAdapter;
+    @Inject
+    List<Store> storeList;
 
     private int preEndIndex;
     private int lastPageIndex = 1;
@@ -87,6 +93,9 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                 break;
             case 2:
                 request.setCmd(1177);
+                break;
+            case 3:
+                request.setCmd(1178);
                 break;
         }
         if (pullToRefresh) lastPageIndex = 1;
@@ -159,6 +168,23 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                                         hospitalAdapter.notifyItemRangeInserted(preEndIndex, hospitalList.size());
                                     }
                                     break;
+                                case 3:
+                                    mRootView.showConent(response.getStoreList() != null && response.getStoreList().size() > 0);
+                                    if (pullToRefresh) {
+                                        storeList.clear();
+                                    }
+                                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                                    if (response.getStoreList() != null) {
+                                        storeList.addAll(response.getStoreList());
+                                    }
+                                    preEndIndex = storeList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                                    lastPageIndex = storeList.size() / 10 + 1;
+                                    if (pullToRefresh) {
+                                        storeAdapter.notifyDataSetChanged();
+                                    } else {
+                                        storeAdapter.notifyItemRangeInserted(preEndIndex, storeList.size());
+                                    }
+                                    break;
                             }
                         }
                     }
@@ -182,6 +208,10 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
             case 2:
                 request.setCmd(605);
                 request.setHospitalId((String) mRootView.getCache().get("hospitalId"));
+                break;
+            case 3:
+                request.setCmd(708);
+                request.setStoreId((String) mRootView.getCache().get("storeId"));
                 break;
         }
 
