@@ -211,6 +211,17 @@ public class OrderItemHolder extends BaseHolder<Order> {
                 leftTV.setVisibility(View.GONE);
                 rightTV.setVisibility(View.VISIBLE);
                 rightTV.setText("预约");
+            } else if (order.getOrderStatus().equals("3")) {
+                statusTV.setText("待发货");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("提醒发货");
+                leftTV.setVisibility(View.GONE);
+            } else if (order.getOrderStatus().equals("4")) {
+                statusTV.setText("待收货");
+                leftTV.setVisibility(View.VISIBLE);
+                leftTV.setText("查看物流");
+                rightTV.setVisibility(View.VISIBLE);
+                rightTV.setText("确认收货");
             } else if (order.getOrderStatus().equals("5")) {
                 statusTV.setText("已完成");
                 rightTV.setText("写日记");
