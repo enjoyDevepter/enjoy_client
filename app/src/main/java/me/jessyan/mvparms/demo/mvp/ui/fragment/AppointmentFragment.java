@@ -228,21 +228,14 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
                 yimei2V.setSelected(false);
                 break;
             case 1: // 医美
-                tabLayout.addOnTabSelectedListener(null);
-                tabLayout.removeAllTabs();
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("可预约"));
                 shengmeiV.setSelected(false);
                 yimei1V.setSelected(true);
                 yimei2V.setSelected(false);
-                tabLayout.addOnTabSelectedListener(this);
                 break;
             case 2: // 引流医美
                 shengmeiV.setSelected(false);
                 yimei1V.setSelected(false);
                 yimei2V.setSelected(true);
-                tabLayout.addOnTabSelectedListener(this);
                 break;
         }
         if (tabLayout.getSelectedTabPosition() == 0) {
@@ -269,30 +262,18 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.shengmei:
-                tabLayout.removeAllTabs();
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("可预约"));
                 provideCache().put("type", 0);
                 shengmeiV.setSelected(true);
                 yimei1V.setSelected(false);
                 yimei2V.setSelected(false);
                 break;
             case R.id.yimei1:
-                tabLayout.removeAllTabs();
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("可预约"));
                 provideCache().put("type", 1);
                 shengmeiV.setSelected(false);
                 yimei1V.setSelected(true);
                 yimei2V.setSelected(false);
                 break;
             case R.id.yimei2:
-                tabLayout.removeAllTabs();
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("全部"));
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已预约"));
-                tabLayout.addTab(tabLayout.newTab().setTag("status").setText("已完成"));
                 provideCache().put("type", 2);
                 shengmeiV.setSelected(false);
                 yimei1V.setSelected(false);

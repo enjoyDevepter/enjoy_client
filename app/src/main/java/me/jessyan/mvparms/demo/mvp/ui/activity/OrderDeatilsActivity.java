@@ -190,10 +190,17 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                 killMyself();
                 break;
             case R.id.hospital_address:
-                Intent hospitalIntent = new Intent(OrderDeatilsActivity.this, HospitalInfoActivity.class);
-                hospitalIntent.putExtra(KEY_FOR_HOSPITAL_NAME, order.getHospital().getName());
-                hospitalIntent.putExtra(KEY_FOR_HOSPITAL_ID, order.getHospital().getHospitalId());
-                ArmsUtils.startActivity(hospitalIntent);
+                if ("2".equals(orderType) || "5".equals(orderType) || "12".equals(orderType) || "13".equals(orderType)) {
+                    Intent storeIntent = new Intent(this, StoreInfoActivity.class);
+                    storeIntent.putExtra("store_name", order.getStore().getName());
+                    storeIntent.putExtra("store_id", order.getStore().getStoreId());
+                    ArmsUtils.startActivity(storeIntent);
+                } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) {
+                    Intent hospitalIntent = new Intent(this, HospitalInfoActivity.class);
+                    hospitalIntent.putExtra(KEY_FOR_HOSPITAL_NAME, order.getHospital().getName());
+                    hospitalIntent.putExtra(KEY_FOR_HOSPITAL_ID, order.getHospital().getHospitalId());
+                    ArmsUtils.startActivity(hospitalIntent);
+                }
                 break;
             case R.id.left:
                 if ("1".equals(orderType) || "4".equals(orderType) || "8".equals(orderType) || "9".equals(orderType)) {
