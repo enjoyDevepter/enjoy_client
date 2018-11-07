@@ -20,8 +20,8 @@ public class BaseRequest implements Serializable {
     private String ip = DeviceUtils.getIPAddress(ArmsUtils.getContext());
     private String timestamp = sdf.format(System.currentTimeMillis()).toString();
     private String channel = "hibeauty";
-    private String childChannel = "android_yybao";
-    private String version = "0.0.1";
+    private String childChannel = DeviceUtils.getAppMetaData(ArmsUtils.getContext(), "UMENG_CHANNEL");
+    private String version = "1.0.0";
     private String clientVersion = DeviceUtils.getVersionName(ArmsUtils.getContext());
     private String deviceNumber = DeviceUtils.getIMEI(ArmsUtils.getContext());
 
