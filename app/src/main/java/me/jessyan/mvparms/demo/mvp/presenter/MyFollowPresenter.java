@@ -95,7 +95,7 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                 request.setCmd(1177);
                 break;
             case 3:
-                request.setCmd(1178);
+                request.setCmd(1179);
                 break;
         }
         if (pullToRefresh) lastPageIndex = 1;
@@ -169,14 +169,12 @@ public class MyFollowPresenter extends BasePresenter<MyFollowContract.Model, MyF
                                     }
                                     break;
                                 case 3:
-                                    mRootView.showConent(response.getStoreList() != null && response.getStoreList().size() > 0);
+                                    mRootView.showConent(response.getStoreList().size() > 0);
                                     if (pullToRefresh) {
                                         storeList.clear();
                                     }
                                     mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                                    if (response.getStoreList() != null) {
-                                        storeList.addAll(response.getStoreList());
-                                    }
+                                    storeList.addAll(response.getStoreList());
                                     preEndIndex = storeList.size();//更新之前列表总长度,用于确定加载更多的起始位置
                                     lastPageIndex = storeList.size() / 10 + 1;
                                     if (pullToRefresh) {
