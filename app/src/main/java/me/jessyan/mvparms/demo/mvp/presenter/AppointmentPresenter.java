@@ -108,10 +108,10 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                         request.setStatus("");
                         break;
                     case 1:
-                        request.setStatus("0");
+                        request.setStatus("2");
                         break;
                     case 2:
-                        request.setStatus("2");
+                        request.setStatus("0");
                         break;
                 }
                 break;
