@@ -141,8 +141,12 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.Mode
                             } else {
                                 mAdapter.notifyItemRangeInserted(preEndIndex, appointments.size());
                             }
-                        } else {
                         }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
                     }
                 });
     }

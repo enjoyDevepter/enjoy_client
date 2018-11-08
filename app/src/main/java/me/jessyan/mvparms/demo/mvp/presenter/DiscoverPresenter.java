@@ -90,7 +90,6 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                             mRootView.updateTab(response.getNavList());
                             mRootView.getCache().put("type", "recom");
                             getDiaryList(true);
-                        } else {
                         }
                     }
                 });
@@ -170,6 +169,11 @@ public class DiscoverPresenter extends BasePresenter<DiscoverContract.Model, Dis
                                 mAdapter.notifyItemRangeInserted(preEndIndex, diaryList.size());
                             }
                         }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
                     }
                 });
     }

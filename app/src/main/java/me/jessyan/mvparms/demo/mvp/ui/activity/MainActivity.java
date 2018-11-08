@@ -196,7 +196,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             }
 
         });
-        viewPager.setOffscreenPageLimit(1);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.addOnPageChangeListener(this);
         bottomBarLayout.setViewPager(viewPager);
         homeV.setOnClickListener(this);

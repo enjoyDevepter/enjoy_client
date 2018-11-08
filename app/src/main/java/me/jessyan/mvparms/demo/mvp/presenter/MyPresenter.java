@@ -102,6 +102,11 @@ public class MyPresenter extends BasePresenter<MyContract.Model, MyContract.View
                             EventBus.getDefault().post(response.getMemberAccount(), EventBusTags.USER_ACCOUNT_CHANGE);
                         }
                     }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                    }
                 });
     }
 

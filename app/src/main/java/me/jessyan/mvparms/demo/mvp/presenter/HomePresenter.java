@@ -96,6 +96,12 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
                             getRecommenDiaryList(true);
                         }
                     }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                        System.out.println("ThrowableThrowableThrowableThrowable");
+                    }
                 });
     }
 
@@ -143,6 +149,7 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
 
                     @Override
                     public void onError(Throwable t) {
+                        super.onError(t);
                     }
                 });
     }
