@@ -34,7 +34,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "true"
-            buildConfigField "String", "TAG", "\"(2018102501)\""
+            buildConfigField "String", "TAG", "\"(2018111301)\""
 //            buildConfigField "String", "API_HOST", "\"http://sj.ehanmy.cn/ehanmy/\""
             buildConfigField "String", "API_HOST", "\"http://api.donhonet.net/ehanmy/\""
 //            minifyEnabled false
@@ -45,7 +45,7 @@ android {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "TAG", "\"(2018102501)\""
+            buildConfigField "String", "TAG", "\"(2018111301)\""
             buildConfigField "String", "API_HOST", "\"http://sj.ehanmy.cn/ehanmy/\""
             signingConfig signingConfigs.release
             minifyEnabled false
@@ -71,6 +71,10 @@ android {
 
     productFlavors {
         android_yybao {}
+        android_vivo {}
+        android_xioami {}
+        android_huawei {}
+        android_oppo {}
     }
 
     productFlavors.all { flavor ->
@@ -79,7 +83,7 @@ android {
     //给apk添加对应的版本号：
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "hibeauty-${buildType.name}-${defaultConfig.versionName}.apk"
+            outputFileName = "app-${name}-${defaultConfig.versionName}.apk"
         }
     }
 
