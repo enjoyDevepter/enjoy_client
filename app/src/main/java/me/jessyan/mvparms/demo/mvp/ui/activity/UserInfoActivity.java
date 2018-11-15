@@ -225,7 +225,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                 nameTV.setText((String) cache.get("label"));
                 break;
         }
-        cache.put("lable", null);
+        cache.put("label", null);
     }
 
     @Override

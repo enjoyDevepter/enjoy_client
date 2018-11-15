@@ -2,6 +2,7 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -214,7 +215,10 @@ public class InviteMainActivity extends BaseActivity<InviteMainPresenter> implem
         UMWeb web = new UMWeb(share.getUrl());
         web.setTitle(share.getTitle());//标题
         web.setDescription(share.getIntro());
-        web.setThumb(new UMImage(this, share.getImage()));
+        UMImage image = new UMImage(this, share.getImage());
+        image.compressStyle = UMImage.CompressStyle.SCALE;//大小压缩，默认为大小压缩，适合普通很大的图
+        image.compressFormat = Bitmap.CompressFormat.PNG;//用户分享透明背景的图片可以设置这种方式，但是qq好友，微信朋友圈，不支持透明背景图片，会变成黑色
+        web.setThumb(image);
         new ShareAction(this)
                 .withMedia(web)
                 .setCallback(shareListener)

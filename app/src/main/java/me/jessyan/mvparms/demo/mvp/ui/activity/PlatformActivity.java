@@ -65,7 +65,7 @@ public class PlatformActivity extends BaseActivity<PlatformPresenter> implements
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 String title = view.getTitle();
-                if (!TextUtils.isEmpty(title)) {
+                if (!TextUtils.isEmpty(title) && null != titleTV) {
                     titleTV.setText(title);
                 }
             }

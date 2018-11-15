@@ -1,5 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -174,5 +175,10 @@ public class ForgetActivity extends BaseActivity<ForgetPresenter> implements For
     @Override
     public void showVerity() {
         time = 0;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 }

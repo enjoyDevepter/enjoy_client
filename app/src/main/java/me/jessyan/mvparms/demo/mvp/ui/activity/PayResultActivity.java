@@ -129,6 +129,10 @@ public class PayResultActivity extends BaseActivity<PayResultPresenter> implemen
                     intent.putExtra("type", 1);
                 } else if ("3".equals(orderType) || "6".equals(orderType) || "7".equals(orderType) || "10".equals(orderType) || "11".equals(orderType)) { // 医美订单
                     intent.putExtra("type", 0);
+                    if ("6".equals(orderType)) {
+                        ArmsUtils.startActivity(MyMealActivity.class);
+                        return;
+                    }
                 }
                 ArmsUtils.startActivity(intent);
                 break;

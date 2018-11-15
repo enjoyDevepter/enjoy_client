@@ -114,12 +114,12 @@ public class UserInfoPresenter extends BasePresenter<UserInfoContract.Model, Use
                 });
     }
 
-    public void uploadImage(){
+    public void uploadImage() {
         final File file = new File((String) mRootView.getCache().get("imagePath"));
 
         QiniuRequest request = new QiniuRequest();
-        Cache<String,Object> cache=ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        String token=(String)cache.get(KEY_KEEP+"token");
+        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
+        String token = (String) cache.get(KEY_KEEP + "token");
         request.setToken(token);
         mModel.getQiniuInfo(request)
                 .subscribeOn(Schedulers.io())
@@ -133,17 +133,16 @@ public class UserInfoPresenter extends BasePresenter<UserInfoContract.Model, Use
                             ImageUploadManager.getInstance().updateImage(file, response.getUploadToken(), response.getUrlPrefix(), new ImageUploadManager.ImageUploadResponse() {
                                 @Override
                                 public void onImageUploadOk(String url) {
-                                    mRootView.getCache().put("headImage", url);
-                                    modifyUserInfo();
+                                    if (null != mRootView) {
+                                        mRootView.getCache().put("headImage", url);
+                                        modifyUserInfo();
+                                    }
                                 }
 
                                 @Override
                                 public void onImageUploadError(String errorInfo) {
-                                    mRootView.showMessage(errorInfo);
                                 }
                             });
-                        }else{
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

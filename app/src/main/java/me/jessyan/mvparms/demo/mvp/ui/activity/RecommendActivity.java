@@ -299,9 +299,9 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
                 priceStautsV.setBackground(descD);
 
                 if ((boolean) provideCache().get("isGoods")) {
-                    mPresenter.getRecommendGoodsList(false);
+                    mPresenter.getRecommendGoodsList(true);
                 } else {
-                    mPresenter.getHGoodsList(false);
+                    mPresenter.getHGoodsList(true);
                 }
                 break;
             case R.id.price_layout:
@@ -318,9 +318,9 @@ public class RecommendActivity extends BaseActivity<RecommendPresenter> implemen
 
                 showFilter(false);
                 if ((boolean) provideCache().get("isGoods")) {
-                    mPresenter.getRecommendGoodsList(false);
+                    mPresenter.getRecommendGoodsList(true);
                 } else {
-                    mPresenter.getHGoodsList(false);
+                    mPresenter.getHGoodsList(true);
                 }
                 break;
         }

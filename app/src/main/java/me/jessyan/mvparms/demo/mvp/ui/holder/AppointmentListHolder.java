@@ -56,6 +56,10 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
     TextView nameTV;
     @BindView(R.id.count)
     TextView countTV;
+    @BindView(R.id.hospital_type)
+    View hospitalV;
+    @BindView(R.id.hospital)
+    TextView hospitalTV;
     @BindView(R.id.time_type)
     View tiemV;
     @BindView(R.id.time)
@@ -126,17 +130,26 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
             rightTV.setVisibility(View.GONE);
             timeTV.setVisibility(View.GONE);
         }
+        statusTV.setText(appointment.getStatusDesc());
+        nameTV.setText(appointment.getGoods().getName());
+        countTV.setText("剩余次数：" + appointment.getSurplusNum());
+
+        if (null == appointment.getHospital()) {
+            hospitalV.setVisibility(View.INVISIBLE);
+            hospitalTV.setVisibility(View.INVISIBLE);
+        } else {
+            hospitalTV.setVisibility(View.VISIBLE);
+            hospitalV.setVisibility(View.VISIBLE);
+            hospitalTV.setText(appointment.getHospital().getName());
+        }
         if (ArmsUtils.isEmpty(appointment.getReservationDate()) || ArmsUtils.isEmpty(appointment.getReservationTime())) {
-            timeTV.setVisibility(View.INVISIBLE);
-            tiemV.setVisibility(View.INVISIBLE);
+            timeTV.setVisibility(View.GONE);
+            tiemV.setVisibility(View.GONE);
         } else {
             tiemV.setVisibility(View.VISIBLE);
             timeTV.setVisibility(View.VISIBLE);
             timeTV.setText(appointment.getReservationDate() + "\n" + appointment.getReservationTime());
         }
-        statusTV.setText(appointment.getStatusDesc());
-        nameTV.setText(appointment.getGoods().getName());
-        countTV.setText("剩余次数：" + appointment.getSurplusNum());
         if (!ArmsUtils.isEmpty(appointment.getConfirmTime())) {
             confirmTimeTV.setVisibility(View.VISIBLE);
             confirmTimeTV.setText(appointment.getConfirmTime());
@@ -174,6 +187,8 @@ public class AppointmentListHolder extends BaseHolder<Appointment> {
         this.statusTV = null;
         this.imageIV = null;
         this.nameTV = null;
+        this.hospitalV = null;
+        this.hospitalTV = null;
         this.timeTV = null;
         this.tiemV = null;
         this.deductTimeV = null;

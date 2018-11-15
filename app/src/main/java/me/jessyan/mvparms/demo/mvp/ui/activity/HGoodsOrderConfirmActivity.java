@@ -309,13 +309,13 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
             case R.id.hospital_info:
                 Intent intent2 = new Intent(this, SelfPickupAddrListActivity.class);
                 intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
-                if (null != hospitalBaseInfoBean) {
-                    listType.setStoreName(hospitalBaseInfoBean.getName());
-                    listType.setCity(hospitalBaseInfoBean.getCity());
-                    listType.setCounty(hospitalBaseInfoBean.getCounty());
-                    listType.setProvince(hospitalBaseInfoBean.getProvince());
-                    listType.setDistrict(hospitalBaseInfoBean.getProvinceName() + " " + hospitalBaseInfoBean.getCityName() + " " + hospitalBaseInfoBean.getCountyName());
-                }
+//                if (null != hospitalBaseInfoBean) {
+//                    listType.setStoreName(hospitalBaseInfoBean.getName());
+//                    listType.setCity(hospitalBaseInfoBean.getCity());
+//                    listType.setCounty(hospitalBaseInfoBean.getCounty());
+//                    listType.setProvince(hospitalBaseInfoBean.getProvince());
+//                    listType.setDistrict(hospitalBaseInfoBean.getProvinceName() + " " + hospitalBaseInfoBean.getCityName() + " " + hospitalBaseInfoBean.getCountyName());
+//                }
                 if (null != response) {
                     listType.setMerchId(response.getGoodsList().get(0).getMerchId());
                     listType.setGoodsId(response.getGoodsList().get(0).getGoodsId());

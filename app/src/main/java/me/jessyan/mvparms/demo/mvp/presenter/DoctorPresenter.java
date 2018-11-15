@@ -58,7 +58,7 @@ public class DoctorPresenter extends BasePresenter<DoctorContract.Model, DoctorC
         super(model, rootView);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onCreate() {
         getCategory();
         getDoctorList(true);

@@ -45,8 +45,9 @@ public class ModifyPasswordPresenter extends BasePresenter<ModifyPasswordContrac
         String old = (String) mRootView.getCache().get("old");
         String newly = (String) mRootView.getCache().get("new");
         String confirm = (String) mRootView.getCache().get("confirm");
+        boolean isForget = (boolean) mRootView.getCache().get("isForget");
 
-        if (ArmsUtils.isEmpty(old)) {
+        if (ArmsUtils.isEmpty(old) && !isForget) {
             mRootView.showMessage("请输入原密码");
             return;
         }
@@ -66,11 +67,17 @@ public class ModifyPasswordPresenter extends BasePresenter<ModifyPasswordContrac
 
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
         ModifyUserInfoRequest request = new ModifyUserInfoRequest();
-        request.setCmd(1103);
-        request.setOldUserPwd(old);
-        request.setNewUserPwd(newly);
-        request.setConfirmUserPwd(confirm);
-        request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
+        request.setCmd(isForget ? 109 : 1103);
+        if (isForget) {
+            request.setToken(mRootView.getActivity().getIntent().getStringExtra("token"));
+            request.setPassword(newly);
+            request.setConfirmPassword(confirm);
+        } else {
+            request.setOldUserPwd(old);
+            request.setNewUserPwd(newly);
+            request.setConfirmUserPwd(confirm);
+            request.setToken(String.valueOf(cache.get(KEY_KEEP + "token")));
+        }
         mModel.modifyPassword(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -83,8 +90,6 @@ public class ModifyPasswordPresenter extends BasePresenter<ModifyPasswordContrac
                             cacheUserInfo(response.getToken(), response.getSignkey());
                             mRootView.showMessage(response.getRetDesc());
                             mRootView.killMyself();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });

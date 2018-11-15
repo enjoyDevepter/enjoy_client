@@ -27,6 +27,8 @@ public class ModifyPasswordActivity extends BaseActivity<ModifyPasswordPresenter
     View backV;
     @BindView(R.id.submit)
     View submitV;
+    @BindView(R.id.old_layout)
+    View oldV;
     @BindView(R.id.old)
     EditText oldET;
     @BindView(R.id.newly)
@@ -53,6 +55,8 @@ public class ModifyPasswordActivity extends BaseActivity<ModifyPasswordPresenter
     public void initData(Bundle savedInstanceState) {
         backV.setOnClickListener(this);
         submitV.setOnClickListener(this);
+        oldV.setVisibility(getIntent().getBooleanExtra("isForget", false) ? View.GONE : View.VISIBLE);
+        provideCache().put("isForget", getIntent().getBooleanExtra("isForget", false));
     }
 
 

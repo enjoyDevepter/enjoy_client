@@ -62,20 +62,46 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/image"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="15dp"
+            android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/image"
-            android:maxLines="2"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="#FF000000"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/hospital_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/name"
+            android:layout_below="@id/name"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:text="预约医院："
+            android:textColor="#FF666666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/hospital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/hospital_type"
+            android:layout_marginRight="15dp"
+            android:layout_toRightOf="@id/hospital_type"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="#FF333333"
             android:textSize="13sp" />
 
         <TextView
             android:id="@+id/time_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/name"
-            android:layout_below="@id/name"
+            android:layout_alignLeft="@id/hospital_type"
+            android:layout_below="@id/hospital_type"
             android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:text="预约时间："

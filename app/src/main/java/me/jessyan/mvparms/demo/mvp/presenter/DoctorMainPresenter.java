@@ -189,6 +189,7 @@ public class DoctorMainPresenter extends BasePresenter<DoctorMainContract.Model,
                     @Override
                     public void onNext(CommentDoctorResponse response) {
                         if (response.isSuccess()) {
+                            initDoctorInfo();
                             requestDoctorHotComment();
                             mRootView.commentOk();
                         }

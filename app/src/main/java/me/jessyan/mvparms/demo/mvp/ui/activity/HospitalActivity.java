@@ -88,7 +88,7 @@ public class HospitalActivity extends BaseActivity<HospitalPresenter> implements
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        titleTV.setText("机构");
+        titleTV.setText("医院");
         backV.setOnClickListener(this);
         distanceV.setOnClickListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);

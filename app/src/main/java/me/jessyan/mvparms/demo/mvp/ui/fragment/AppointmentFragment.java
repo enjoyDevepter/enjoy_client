@@ -31,6 +31,7 @@ import me.jessyan.mvparms.demo.mvp.contract.AppointmentContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.appointment.Appointment;
 import me.jessyan.mvparms.demo.mvp.presenter.AppointmentPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.activity.ChoiceTimeActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.SelfPickupAddrListActivity;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.AppointmentListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -65,6 +66,8 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
+
+    private SelfPickupAddrListActivity.ListType listType = SelfPickupAddrListActivity.ListType.HOP;
 
     public static AppointmentFragment newInstance() {
         AppointmentFragment fragment = new AppointmentFragment();
@@ -273,20 +276,49 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
             case RIGHT:
                 if (appointment.getStatus().equals("1")) {
                     // 预约
-                    Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
-                    addappointmentsIntent.putExtra("isMeal", false);
-                    addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
-                    addappointmentsIntent.putExtra("type", "add_appointment_time");
-                    addappointmentsIntent.putExtra("index", position);
-                    ArmsUtils.startActivity(addappointmentsIntent);
+                    if ("4".equals(appointment.getType())) {  // 体验卡
+                        // 选择医院
+                        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getActivity()).extras();
+                        Intent intent2 = new Intent(getActivity(), SelfPickupAddrListActivity.class);
+                        intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
+                        intent2.putExtra("isMeal", false);
+                        intent2.putExtra("isPresent", true);
+                        intent2.putExtra("projectId", appointment.getProjectId());
+                        intent2.putExtra("type", "add_appointment_time");
+                        listType.setMerchId(appointment.getGoods().getMerchId());
+                        listType.setGoodsId(appointment.getGoods().getGoodsId());
+                        ArmsUtils.startActivity(intent2);
+                    } else {
+                        Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
+                        addappointmentsIntent.putExtra("isMeal", false);
+                        addappointmentsIntent.putExtra("projectId", appointment.getProjectId());
+                        addappointmentsIntent.putExtra("type", "add_appointment_time");
+                        addappointmentsIntent.putExtra("index", position);
+                        ArmsUtils.startActivity(addappointmentsIntent);
+                    }
                 } else if (appointment.getStatus().equals("2")) {
                     // 改约
-                    Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
-                    addappointmentsIntent.putExtra("isMeal", false);
-                    addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
-                    addappointmentsIntent.putExtra("type", "modify_appointment_time");
-                    addappointmentsIntent.putExtra("index", position);
-                    ArmsUtils.startActivity(addappointmentsIntent);
+                    if ("4".equals(appointment.getType())) { // 体验卡
+                        // 选择医院
+                        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(getActivity()).extras();
+                        Intent intent2 = new Intent(getActivity(), SelfPickupAddrListActivity.class);
+                        intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
+                        intent2.putExtra("isMeal", false);
+                        intent2.putExtra("isPresent", true);
+                        intent2.putExtra("projectId", appointment.getProjectId());
+                        intent2.putExtra("type", "modify_appointment_time");
+                        intent2.putExtra("reservationId", appointment.getReservationId());
+                        listType.setMerchId(appointment.getGoods().getMerchId());
+                        listType.setGoodsId(appointment.getGoods().getGoodsId());
+                        ArmsUtils.startActivity(intent2);
+                    } else {
+                        Intent addappointmentsIntent = new Intent(getActivity(), ChoiceTimeActivity.class);
+                        addappointmentsIntent.putExtra("isMeal", false);
+                        addappointmentsIntent.putExtra("reservationId", appointment.getReservationId());
+                        addappointmentsIntent.putExtra("type", "modify_appointment_time");
+                        addappointmentsIntent.putExtra("index", position);
+                        ArmsUtils.startActivity(addappointmentsIntent);
+                    }
                 }
                 break;
             case ITEM:

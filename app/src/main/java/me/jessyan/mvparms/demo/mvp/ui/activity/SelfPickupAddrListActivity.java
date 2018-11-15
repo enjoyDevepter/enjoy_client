@@ -149,11 +149,12 @@ public class SelfPickupAddrListActivity extends BaseActivity<SelfPickupAddrListP
                     int index = (int) provideCache().get("choiceItem");
                     switch (listType) {
                         case HOP:
-                            if (getIntent().getBooleanExtra("isMeal", false)) {
+                            if (getIntent().getBooleanExtra("isMeal", false) || getIntent().getBooleanExtra("isPresent", false)) {
                                 // 从套餐详情页面进入，进入选择时间界面
                                 // 预约
                                 Intent addappointmentsIntent = new Intent(this, ChoiceTimeActivity.class);
                                 addappointmentsIntent.putExtra("isMeal", true);
+                                addappointmentsIntent.putExtra("isPresent", true);
                                 addappointmentsIntent.putExtra("projectId", getIntent().getStringExtra("projectId"));
                                 addappointmentsIntent.putExtra("type", getIntent().getStringExtra("type"));
                                 addappointmentsIntent.putExtra("merchId", getIntent().getStringExtra("merchId"));

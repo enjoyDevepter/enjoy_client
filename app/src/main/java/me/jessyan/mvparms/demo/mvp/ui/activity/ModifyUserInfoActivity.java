@@ -130,7 +130,7 @@ public class ModifyUserInfoActivity extends BaseActivity<ModifyUserInfoPresenter
                     provideCache().put("label", contentET.getText().toString());
                     provideCache().put("value", contentET.getText().toString());
                 } else if ("name".equals(type)) {
-                    provideCache().put("lable", contentET.getText().toString());
+                    provideCache().put("label", contentET.getText().toString());
                     provideCache().put("value", contentET.getText().toString());
                 } else if ("hobby".equals(type)) {
                     List<CommonUserInfo> userInfos = mAdapter.getInfos();

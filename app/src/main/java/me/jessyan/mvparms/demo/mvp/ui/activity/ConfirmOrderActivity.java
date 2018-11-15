@@ -208,6 +208,10 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
             case R.id.self_layout:
                 Intent intent2 = new Intent(this, SelfPickupAddrListActivity.class);
                 intent2.putExtra(SelfPickupAddrListActivity.KEY_FOR_ACTIVITY_LIST_TYPE, listType);
+                if (null != response && null != response.getGoodsList().get(0)) {
+                    listType.setGoodsId(response.getGoodsList().get(0).getGoodsId());
+                    listType.setMerchId(response.getGoodsList().get(0).getMerchId());
+                }
                 ArmsUtils.startActivity(intent2);
                 break;
             case R.id.dispatch:

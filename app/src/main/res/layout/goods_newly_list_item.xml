@@ -35,8 +35,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/name"
-        android:layout_below="@id/name"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="5dp"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
         <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
@@ -54,6 +55,23 @@
             money:prefix_size="12sp"
             money:yuan_size="17sp" />
 
+        <me.jessyan.mvparms.demo.mvp.ui.widget.MoneyView
+            android:id="@+id/salePrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            money:cent_size="12dp"
+            money:money_color="#FFABABAB"
+            money:money_text="0.00"
+            money:point_padding_left="1dp"
+            money:point_padding_right="5dp"
+            money:prefix_color="#FFABABAB"
+            money:prefix_padding="2dp"
+            money:prefix_size="12dp"
+            money:yuan_size="12dp" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -62,7 +80,8 @@
             android:gravity="right"
             android:text="已售:"
             android:textColor="#FF666666"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/sale"
@@ -71,20 +90,9 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="4dp"
             android:textColor="#FF666666"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="invisible" />
     </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/salePrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/price_layout"
-        android:layout_below="@id/price_layout"
-        android:layout_marginTop="2dp"
-        android:textColor="#FFABABAB"
-        android:textSize="12sp" />
-
 
     <TextView
         android:id="@+id/buy"
@@ -97,7 +105,7 @@
         android:text="立即购买"
         android:textColor="#FFFFFF"
         android:textSize="13sp"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
 
 </RelativeLayout>

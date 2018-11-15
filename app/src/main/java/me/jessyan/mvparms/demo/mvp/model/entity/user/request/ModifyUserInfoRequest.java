@@ -19,6 +19,8 @@ public class ModifyUserInfoRequest extends BaseRequest {
     private String oldUserPwd;
     private String newUserPwd;
     private String confirmUserPwd;
+    private String password;
+    private String confirmPassword;
 
     public int getCmd() {
         return cmd;
@@ -146,6 +148,22 @@ public class ModifyUserInfoRequest extends BaseRequest {
 
     public void setConfirmUserPwd(String confirmUserPwd) {
         this.confirmUserPwd = confirmUserPwd;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     @Override

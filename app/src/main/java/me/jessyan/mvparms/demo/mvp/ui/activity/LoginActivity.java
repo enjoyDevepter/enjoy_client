@@ -167,6 +167,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         switch (v.getId()) {
             case R.id.forget:
                 ArmsUtils.startActivity(ForgetActivity.class);
+                killMyself();
                 break;
             case R.id.register:
                 ArmsUtils.startActivity(RegisterActivity.class);

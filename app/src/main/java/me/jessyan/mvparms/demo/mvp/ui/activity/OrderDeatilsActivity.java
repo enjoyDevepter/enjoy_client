@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
@@ -56,8 +57,12 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     TextView payTypeDescTV;
     @BindView(R.id.deliveryMethodDesc)
     TextView deliveryMethodDescTV;
+    @BindView(R.id.hospital_layout)
+    View hospitalV;
     @BindView(R.id.hospital_address)
     TextView hospitalAddressTV;
+    @BindView(R.id.appointments_layout)
+    View appointmentsV;
     @BindView(R.id.appointments_time)
     TextView appointmentsTimeTV;
     @BindView(R.id.sOrder_layout)
@@ -116,6 +121,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     RecyclerView.Adapter mAdapter;
+    @Inject
+    AppManager appManager;
     CustomDialog dialog = null;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private OrderDetailsResponse response;
@@ -245,6 +252,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                         ArmsUtils.startActivity(intent);
                     } else if ("31".equals(order.getOrderStatus())) {
                         // 预约
+                        appManager.killAllBeforeClass(MainActivity.class);
                         EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
                         killMyself();
                     } else if ("5".equals(order.getOrderStatus())) {
@@ -326,6 +334,10 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             }
             hOrderV.setVisibility(View.VISIBLE);
             orderPayV.setVisibility(View.GONE);
+            if ("6".equals(orderType)) {
+                hospitalV.setVisibility(View.GONE);
+                appointmentsV.setVisibility(View.GONE);
+            }
             if (orderDetails.getHospital() != null) {
                 hospitalAddressTV.setText(orderDetails.getHospital().getName());
             }

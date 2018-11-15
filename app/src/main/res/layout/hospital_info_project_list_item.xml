@@ -11,11 +11,11 @@
 
     <ImageView
         android:id="@+id/image"
-        android:background="#ff0000"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:background="#ff0000"
         android:scaleType="fitXY" />
 
 
@@ -32,33 +32,33 @@
         android:textSize="13sp" />
 
     <TextView
-        android:textSize="12sp"
-        android:textColor="#666666"
         android:id="@+id/doctor_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/name"
         android:layout_below="@id/name"
+        android:layout_marginTop="9dp"
         android:maxLines="1"
         android:text="刘聪 北京泰和医疗美容医院"
-        android:layout_alignLeft="@+id/name"
-        android:layout_marginTop="9dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textColor="#666666"
+        android:textSize="12sp" />
 
     <LinearLayout
         android:id="@+id/price_layout"
         android:layout_width="wrap_content"
-        android:layout_below="@id/doctor_info"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/doctor_info"
+        android:layout_below="@id/doctor_info"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:layout_alignLeft="@+id/doctor_info"
         android:orientation="horizontal">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="预付款："
             android:textColor="#666666"
-            android:textSize="13sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/price_tag"
@@ -82,21 +82,21 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="9dp"
-        android:layout_alignBottom="@id/image"
         android:id="@+id/all_price_layout"
-        android:orientation="horizontal"
-        android:layout_alignLeft="@id/price_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/image"
+        android:layout_alignLeft="@id/price_layout"
+        android:layout_marginTop="9dp"
+        android:orientation="horizontal">
 
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="总金额："
             android:textColor="#666666"
-            android:textSize="13sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="13sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -121,11 +121,12 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignBottom="@id/image"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="7dp"
         android:gravity="right|bottom"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="wrap_content"

@@ -1,11 +1,11 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.content.Intent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
-import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
@@ -14,18 +14,15 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.app.utils.SPUtils;
 import me.jessyan.mvparms.demo.mvp.contract.ForgetContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.ForgetRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.VeritfyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.BaseResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.RegisterResponse;
-import me.jessyan.mvparms.demo.mvp.ui.activity.LoginActivity;
+import me.jessyan.mvparms.demo.mvp.ui.activity.ModifyPasswordActivity;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
-
-import static com.jess.arms.integration.cache.IntelligentCache.KEY_KEEP;
 
 
 @ActivityScope
@@ -87,13 +84,10 @@ public class ForgetPresenter extends BasePresenter<ForgetContract.Model, ForgetC
                     @Override
                     public void onNext(RegisterResponse response) {
                         if (response.isSuccess()) {
-                            // 跳转到主页面
-                            Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-                            cache.put(KEY_KEEP + "token", response.getToken());
-                            cache.put(KEY_KEEP + "signkey", response.getSignkey());
-                            SPUtils.put("token", response.getToken());
-                            SPUtils.put("signkey", response.getSignkey());
-                            mAppManager.killActivity(LoginActivity.class);
+                            Intent intent = new Intent(mRootView.getActivity(), ModifyPasswordActivity.class);
+                            intent.putExtra("isForget", true);
+                            intent.putExtra("token", response.getToken());
+                            ArmsUtils.startActivity(intent);
                             mRootView.killMyself();
                         } else {
                             mRootView.showVerity();

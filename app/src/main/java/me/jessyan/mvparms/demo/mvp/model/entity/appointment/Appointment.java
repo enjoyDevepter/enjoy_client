@@ -23,6 +23,7 @@ public class Appointment {
     private String code;
     private Goods goods;
     private Hospital hospital;
+    private String type;
 
     public String getProjectId() {
         return projectId;
@@ -152,6 +153,14 @@ public class Appointment {
         this.hospital = hospital;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Appointment{" +
@@ -171,6 +180,7 @@ public class Appointment {
                 ", code='" + code + '\'' +
                 ", goods=" + goods +
                 ", hospital=" + hospital +
+                ", type='" + type + '\'' +
                 '}';
     }
 
