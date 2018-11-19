@@ -99,7 +99,6 @@
         android:layout_width="86dp"
         android:layout_height="24dp"
         android:layout_alignBottom="@id/image"
-        android:layout_alignLeft="@+id/salePrice"
         android:background="@drawable/order_btn_bg"
         android:gravity="center"
         android:text="立即购买"

@@ -112,6 +112,15 @@ public class AppointmentFragment extends BaseFragment<AppointmentPresenter> impl
         mPresenter.getAppointment(true, false);
     }
 
+    @Subscriber(tag = EventBusTags.CHANGE_MAIN_ITEM)
+    private void updateType(int position) {
+        yimei1V.setSelected(true);
+        shengmeiV.setSelected(false);
+        yimei2V.setSelected(false);
+        provideCache().put("type", 1);
+        provideCache().put("status", 0);
+        mPresenter.getAppointment(true, true);
+    }
 
     @Subscriber(tag = EventBusTags.CHANGE_APPOINTMENT_TIME)
     private void updateTime(int position) {

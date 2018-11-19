@@ -253,7 +253,16 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                     } else if ("31".equals(order.getOrderStatus())) {
                         // 预约
                         appManager.killAllBeforeClass(MainActivity.class);
-                        EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
+                        if ("6".equals(orderType)) {
+                            // 预约
+                            Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
+                            makeIntent.putExtra("orderId", order.getOrderId());
+                            makeIntent.putExtra("mealName", order.getSetMealGoodsList().get(0).getName());
+                            makeIntent.putExtra("desc", order.getDesc());
+                            ArmsUtils.startActivity(makeIntent);
+                        } else {
+                            EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
+                        }
                         killMyself();
                     } else if ("5".equals(order.getOrderStatus())) {
                         // 写日记
@@ -369,7 +378,10 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             addressInfoV.setVisibility(View.VISIBLE);
             addressRealNameTV.setText(address.getRealName());
             addressMobileTV.setText(address.getMobile());
-            addressTV.setText(address.getProvinceName() + address.getCityName() + address.getCountyName() + address.getAddress());
+            String getProvinceName = ArmsUtils.isEmpty(address.getProvinceName()) ? "" : address.getProvinceName();
+            String getCityName = ArmsUtils.isEmpty(address.getCityName()) ? "" : address.getCityName();
+            String getCountyName = ArmsUtils.isEmpty(address.getCountyName()) ? "" : address.getCountyName();
+            addressTV.setText(getProvinceName + getCityName + getCountyName);
         }
 
         remarkTV.setText(orderDetails.getRemark());
