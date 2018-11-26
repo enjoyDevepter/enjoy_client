@@ -266,7 +266,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
             priceTagTV.setText("限时秒杀价");
             speceLabelsView.setSelectType(LabelsView.SelectType.NONE);
             newlyV.setVisibility(View.GONE);
-            salePriceTopTV.setVisibility(View.GONE);
+            salePriceTopTV.setVisibility(View.VISIBLE);
             promotionInfosV.setVisibility(View.GONE);
 
         } else if ("newpeople".equals(where)) {
@@ -498,7 +498,7 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
         String where = getIntent().getStringExtra("where");
         if ("timelimitdetail".equals(where)) {
             long count = goods.getEndDate() - goods.getSysDate();
-            if (count > 86400) {
+            if (count > 86400000) {
                 DynamicConfig.Builder builder = new DynamicConfig.Builder();
                 builder.setShowHour(false)
                         .setShowSecond(false)
@@ -509,11 +509,22 @@ public class GoodsDetailsActivity extends BaseActivity<GoodsDetailsPresenter> im
                 countdownView.dynamicShow(builder.build());
                 countdownView.start(count);
             } else if (count > 0) {
+                DynamicConfig.Builder builder = new DynamicConfig.Builder();
+                builder.setShowHour(true)
+                        .setShowMinute(true)
+                        .setShowSecond(true)
+                        .setShowMillisecond(false)
+                        .setShowDay(false)
+                        .setSuffixHour(":")
+                        .setSuffixMinute(":");
+                countdownView.dynamicShow(builder.build());
                 countdownView.start(count);
             } else if (count <= 0) {
                 countdownView.setVisibility(View.GONE);
                 timeTagTV.setText("已结束");
             }
+            salePriceTopTV.setText("￥" + String.valueOf(goods.getSalePrice()));
+            salePriceTopTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             priceTV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
             salePriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
             salePriceTV.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);

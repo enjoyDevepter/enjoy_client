@@ -23,6 +23,7 @@ public class MealGoods {
     private String content;
     private List<Goods> goodsList;
     private String canSale;
+    private String desc;
 
     @Override
     public String toString() {
@@ -42,9 +43,17 @@ public class MealGoods {
                 ", content='" + content + '\'' +
                 ", goodsList=" + goodsList +
                 ", canSale='" + canSale + '\'' +
+                ", desc='" + desc + '\'' +
                 '}';
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     public String getCanSale() {
         return canSale;

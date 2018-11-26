@@ -91,7 +91,7 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
                         .imageView(imageIV)
                         .build());
         long count = goods.getEndDate() - goods.getSysDate();
-        if (count > 86400) {
+        if (count > 86400000) {
             DynamicConfig.Builder builder = new DynamicConfig.Builder();
             builder.setShowHour(false)
                     .setShowSecond(false)
@@ -102,6 +102,15 @@ public class GoodsLimitListItemHolder extends BaseHolder<Goods> {
             countdownView.dynamicShow(builder.build());
             countdownView.start(count);
         } else if (count > 0) {
+            DynamicConfig.Builder builder = new DynamicConfig.Builder();
+            builder.setShowHour(true)
+                    .setShowMinute(true)
+                    .setShowSecond(true)
+                    .setShowMillisecond(false)
+                    .setShowDay(false)
+                    .setSuffixHour(":")
+                    .setSuffixMinute(":");
+            countdownView.dynamicShow(builder.build());
             countdownView.start(count);
         } else if (count <= 0) {
             countdownView.setVisibility(View.GONE);

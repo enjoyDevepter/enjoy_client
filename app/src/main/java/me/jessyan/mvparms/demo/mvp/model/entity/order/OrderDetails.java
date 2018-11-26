@@ -39,6 +39,51 @@ public class OrderDetails {
     private Hospital hospital;
     private Store store;
     private String desc;
+    private long deposit;
+    private String isWriteDiary;
+    private String isCanApplyAward;
+    private long tailMoney;
+    private long secondMoney;
+
+    public long getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(long deposit) {
+        this.deposit = deposit;
+    }
+
+    public String getIsWriteDiary() {
+        return isWriteDiary;
+    }
+
+    public void setIsWriteDiary(String isWriteDiary) {
+        this.isWriteDiary = isWriteDiary;
+    }
+
+    public String getIsCanApplyAward() {
+        return isCanApplyAward;
+    }
+
+    public void setIsCanApplyAward(String isCanApplyAward) {
+        this.isCanApplyAward = isCanApplyAward;
+    }
+
+    public long getTailMoney() {
+        return tailMoney;
+    }
+
+    public void setTailMoney(long tailMoney) {
+        this.tailMoney = tailMoney;
+    }
+
+    public long getSecondMoney() {
+        return secondMoney;
+    }
+
+    public void setSecondMoney(long secondMoney) {
+        this.secondMoney = secondMoney;
+    }
 
     public long getCoupon() {
         return coupon;

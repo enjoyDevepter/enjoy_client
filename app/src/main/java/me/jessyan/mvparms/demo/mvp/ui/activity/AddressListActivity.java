@@ -93,8 +93,8 @@ public class AddressListActivity extends BaseActivity<AddressListPresenter> impl
 
     @Subscriber(tag = EventBusTags.ADD_ADDRESS_SUCCESS)
     public void updateAddressInfo(Address address) {
+        swtichToEditMode(false);
         mPresenter.getAddressList(true);
-        swtichToEditMode(true);
     }
 
     @Override

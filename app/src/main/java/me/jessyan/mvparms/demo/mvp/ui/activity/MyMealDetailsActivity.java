@@ -57,6 +57,8 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
     TextView nameTV;
     @BindView(R.id.orderId)
     TextView orderIdTV;
+    @BindView(R.id.desc_layout)
+    View descV;
     @BindView(R.id.desc)
     TextView descTV;
     @Inject
@@ -135,7 +137,10 @@ public class MyMealDetailsActivity extends BaseActivity<MyMealDetailsPresenter> 
         orderIdTV.setText(getIntent().getStringExtra("orderId"));
         String desc = getIntent().getStringExtra("desc");
         if (!ArmsUtils.isEmpty(desc)) {
+            descV.setVisibility(View.VISIBLE);
             descTV.setText(desc);
+        } else {
+            descV.setVisibility(View.GONE);
         }
     }
 

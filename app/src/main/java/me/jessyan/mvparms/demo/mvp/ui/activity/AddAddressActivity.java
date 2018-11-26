@@ -1,12 +1,14 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -53,7 +55,7 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
     View confirmV;
     @Inject
     List<AreaAddress> addressList;
-
+    OptionsPickerView pvOptions;
     private List<AreaAddress> options1Items = new ArrayList<>();
     private List<List<AreaAddress>> options2Items = new ArrayList<>();
     private List<List<List<AreaAddress>>> options3Items = new ArrayList<>();
@@ -118,7 +120,6 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
         finish();
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -126,6 +127,8 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
                 killMyself();
                 break;
             case R.id.county_chocie:
+                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 showPickerView();
                 break;
             case R.id.confirm:
@@ -158,7 +161,6 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
         return provideCache();
     }
 
-
     private void showPickerView() {// 弹出选择器
 
         if (addressList.size() <= 0) {
@@ -189,7 +191,7 @@ public class AddAddressActivity extends BaseActivity<AddAddressPresenter> implem
         }
 
 
-        OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+        pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 //返回的分别是三个级别的选中位置

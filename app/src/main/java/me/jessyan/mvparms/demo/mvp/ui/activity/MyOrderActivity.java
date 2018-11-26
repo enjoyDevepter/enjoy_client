@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
@@ -57,6 +58,8 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     MyOrderAdapter mAdapter;
+    @Inject
+    AppManager appManager;
 
     private Paginate mPaginate;
     private boolean isLoadingMore;
@@ -335,6 +338,7 @@ public class MyOrderActivity extends BaseActivity<MyOrderPresenter> implements M
                             intent.putExtra("orderId", order.getOrderId());
                             ArmsUtils.startActivity(intent);
                         } else if ("31".equals(order.getOrderStatus())) {
+                            appManager.killAllBeforeClass(MainActivity.class);
                             // 预约
                             EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
                             killMyself();

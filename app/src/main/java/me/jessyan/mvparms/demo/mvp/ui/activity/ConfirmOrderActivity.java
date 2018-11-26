@@ -93,6 +93,10 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     EditText remarkET;
     @BindView(R.id.order_goods)
     RecyclerView mRecyclerView;
+    @BindView(R.id.deductionMoney_layout)
+    View deductionMoneyLayoutV;
+    @BindView(R.id.coupon_layout_buttom)
+    View couponLayoutButtomV;
     @BindColor(R.color.order_confirm_type_seleted)
     int seletcedColor;
     @BindColor(R.color.order_confirm_type_unseleted)
@@ -252,23 +256,27 @@ public class ConfirmOrderActivity extends BaseActivity<ConfirmOrderPresenter> im
     public void updateUI(OrderConfirmInfoResponse response) {
         this.response = response;
 
-        List<Coupon> couponList = response.getCouponList();
-        if (null == couponList || null != couponList && couponList.size() <= 0) {
-            String where = getActivity().getIntent().getStringExtra("where");
-            if ("timelimitdetail".equals(where)) {
-                couponLayoutV.setVisibility(View.GONE);
-            } else if ("newpeople".equals(where)) {
-                couponLayoutV.setVisibility(View.GONE);
-            } else {
-                couponTextTV.setText("暂无优惠卷");
-            }
+        String where = getActivity().getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            couponLayoutV.setVisibility(View.GONE);
+            deductionMoneyLayoutV.setVisibility(View.GONE);
+            couponLayoutButtomV.setVisibility(View.GONE);
+        } else if ("newpeople".equals(where)) {
+            couponLayoutV.setVisibility(View.GONE);
+            deductionMoneyLayoutV.setVisibility(View.GONE);
+            couponLayoutButtomV.setVisibility(View.GONE);
         } else {
-            couponLayoutV.setOnClickListener(this);
-            for (Coupon coupon : couponList) {
-                if (coupon.getCouponId().equals(response.getCouponId())) {
-                    provideCache().put("couponId", response.getCouponId());
-                    couponTextTV.setText(coupon.getName());
-                    break;
+            List<Coupon> couponList = response.getCouponList();
+            if (null == couponList || null != couponList && couponList.size() <= 0) {
+                couponTextTV.setText("暂无优惠卷");
+            } else {
+                couponLayoutV.setOnClickListener(this);
+                for (Coupon coupon : couponList) {
+                    if (coupon.getCouponId().equals(response.getCouponId())) {
+                        provideCache().put("couponId", response.getCouponId());
+                        couponTextTV.setText(coupon.getName());
+                        break;
+                    }
                 }
             }
         }

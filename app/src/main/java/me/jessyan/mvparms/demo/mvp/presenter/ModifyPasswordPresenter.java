@@ -86,9 +86,9 @@ public class ModifyPasswordPresenter extends BasePresenter<ModifyPasswordContrac
                 .subscribe(new ErrorHandleSubscriber<RegisterResponse>(mErrorHandler) {
                     @Override
                     public void onNext(RegisterResponse response) {
+                        mRootView.showMessage(response.getRetDesc());
                         if (response.isSuccess()) {
                             cacheUserInfo(response.getToken(), response.getSignkey());
-                            mRootView.showMessage(response.getRetDesc());
                             mRootView.killMyself();
                         }
                     }

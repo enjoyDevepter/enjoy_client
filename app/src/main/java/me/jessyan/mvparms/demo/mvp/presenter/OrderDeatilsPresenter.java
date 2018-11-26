@@ -104,10 +104,8 @@ public class OrderDeatilsPresenter extends BasePresenter<OrderDeatilsContract.Mo
                                     orderGoods.add(goods);
                                 }
                             } else {
-                                if ("7".equals(orderType)) {
-                                    for (OrderGoods goods : response.getOrder().getGoodsList()) {
-                                        goods.setType("7");
-                                    }
+                                for (OrderGoods goods : response.getOrder().getGoodsList()) {
+                                    goods.setType(orderType);
                                 }
                                 orderGoods.addAll(response.getOrder().getGoodsList());
                             }

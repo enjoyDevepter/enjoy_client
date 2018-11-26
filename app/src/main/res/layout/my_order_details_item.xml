@@ -24,7 +24,6 @@
         android:layout_marginRight="15dp"
         android:layout_toRightOf="@id/image"
         android:singleLine="true"
-        android:text="[超级水宝宝]拯救沙漠肌 还原水润嫩..."
         android:textColor="#FF000000"
         android:textSize="13sp" />
 
@@ -35,7 +34,6 @@
         android:layout_alignLeft="@id/name"
         android:layout_below="@id/name"
         android:layout_marginTop="8dp"
-        android:text="规格：500ml"
         android:textColor="#FF666666"
         android:textSize="12sp" />
 
@@ -84,6 +82,15 @@
                 android:layout_gravity="bottom"
                 android:textColor="#FFFF0000"
                 android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/priceOld"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="5dp"
+                android:textColor="#FFABABAB"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <TextView

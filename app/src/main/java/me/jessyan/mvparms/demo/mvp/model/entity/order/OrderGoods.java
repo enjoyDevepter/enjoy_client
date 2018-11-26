@@ -14,6 +14,8 @@ public class OrderGoods {
     private double salePrice;
     private double deposit;
     private double tailMoney;
+    private double secKillPrice;
+    private double vipPrice;
     private String title;
     private int nums;
     private String type;
@@ -116,6 +118,22 @@ public class OrderGoods {
         this.desc = desc;
     }
 
+    public double getSecKillPrice() {
+        return secKillPrice;
+    }
+
+    public void setSecKillPrice(double secKillPrice) {
+        this.secKillPrice = secKillPrice;
+    }
+
+    public double getVipPrice() {
+        return vipPrice;
+    }
+
+    public void setVipPrice(double vipPrice) {
+        this.vipPrice = vipPrice;
+    }
+
     @Override
     public String toString() {
         return "OrderGoods{" +
@@ -126,6 +144,8 @@ public class OrderGoods {
                 ", salePrice=" + salePrice +
                 ", deposit=" + deposit +
                 ", tailMoney=" + tailMoney +
+                ", secKillPrice=" + secKillPrice +
+                ", vipPrice=" + vipPrice +
                 ", title='" + title + '\'' +
                 ", nums=" + nums +
                 ", type='" + type + '\'' +

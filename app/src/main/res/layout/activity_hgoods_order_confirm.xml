@@ -553,6 +553,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/coupon_buttom_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"

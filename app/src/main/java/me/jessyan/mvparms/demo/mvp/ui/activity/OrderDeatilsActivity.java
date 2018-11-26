@@ -258,7 +258,7 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
                             Intent makeIntent = new Intent(this, MyMealDetailsActivity.class);
                             makeIntent.putExtra("orderId", order.getOrderId());
                             makeIntent.putExtra("mealName", order.getSetMealGoodsList().get(0).getName());
-                            makeIntent.putExtra("desc", order.getDesc());
+                            makeIntent.putExtra("desc", order.getSetMealGoodsList().get(0).getDesc());
                             ArmsUtils.startActivity(makeIntent);
                         } else {
                             EventBus.getDefault().post(3, EventBusTags.CHANGE_MAIN_ITEM);
@@ -356,8 +356,8 @@ public class OrderDeatilsActivity extends BaseActivity<OrderDeatilsPresenter> im
             if ("7".equals(response.getOrder().getOrderType())) {
                 hOrderPayV.setVisibility(View.VISIBLE);
                 mealOrderV.setVisibility(View.GONE);
-                tailMoneyTV.setText(String.valueOf(response.getOrder().getGoodsList().get(0).getTailMoney()));
-                depositTV.setText(String.valueOf(response.getOrder().getGoodsList().get(0).getDeposit()));
+                tailMoneyTV.setText(ArmsUtils.formatLong(response.getOrder().getTailMoney()));
+                depositTV.setText(ArmsUtils.formatLong(response.getOrder().getDeposit()));
             } else {
                 hOrderPayV.setVisibility(View.GONE);
                 mealOrderV.setVisibility(View.VISIBLE);

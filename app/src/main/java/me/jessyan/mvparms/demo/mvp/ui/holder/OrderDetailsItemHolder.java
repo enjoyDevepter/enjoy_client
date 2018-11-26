@@ -58,6 +58,8 @@ public class OrderDetailsItemHolder extends BaseHolder<OrderGoods> {
     TextView price_tagTV;
     @BindView(R.id.price)
     TextView priceTV;
+    @BindView(R.id.priceOld)
+    TextView priceOldTV;
 
     @BindView(R.id.payPrice_layout)
     View payPriceV;
@@ -82,28 +84,49 @@ public class OrderDetailsItemHolder extends BaseHolder<OrderGoods> {
     @Override
     public void setData(OrderGoods goods, int position) {
 
-        if ("6".equals(goods.getType())) {
+        if ("1".equals(goods.getType()) || "2".equals(goods.getType()) || "3".equals(goods.getType())) { // 普通订单
+            payPriceV.setVisibility(View.GONE);
+            priceOldTV.setVisibility(View.GONE);
+            price_infoTV.setVisibility(View.GONE);
+            specTV.setVisibility(View.VISIBLE);
+            specTV.setText("规格: " + goods.getGoodsSpecValue().getSpecValueName());
+            countTV.setText("数量: x" + String.valueOf(goods.getNums()));
+            priceTV.setText(String.valueOf(goods.getSalePrice()));
+        } else if ("4".equals(goods.getType()) || "5".equals(goods.getType()) || "6".equals(goods.getType())) { // 套餐
             specTV.setVisibility(View.GONE);
+            priceOldTV.setVisibility(View.GONE);
             countTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.GONE);
             price_tagTV.setTextColor(textRedColor);
             priceTV.setTextColor(textRedColor);
             priceTV.setText(String.valueOf(goods.getSalePrice()));
-        } else if ("7".equals(goods.getType())) {
+        } else if ("7".equals(goods.getType())) { // 医美定金预售
             specTV.setVisibility(View.GONE);
+            priceOldTV.setVisibility(View.GONE);
             countTV.setVisibility(View.GONE);
             payPriceV.setVisibility(View.VISIBLE);
             payPriceTV.setText(String.valueOf(goods.getDeposit()));
             priceTV.setText(String.valueOf(goods.getSalePrice()));
             price_tagTV.setTextColor(textColor);
             priceTV.setTextColor(textColor);
-        } else {
+        } else if ("8".equals(goods.getType()) || "10".equals(goods.getType()) || "12".equals(goods.getType())) { // 限时秒杀
             payPriceV.setVisibility(View.GONE);
             price_infoTV.setVisibility(View.GONE);
+            priceOldTV.setVisibility(View.VISIBLE);
             specTV.setVisibility(View.VISIBLE);
             specTV.setText("规格: " + goods.getGoodsSpecValue().getSpecValueName());
             countTV.setText("数量: x" + String.valueOf(goods.getNums()));
-            priceTV.setText(String.valueOf(goods.getSalePrice()));
+            priceTV.setText(String.valueOf(goods.getSecKillPrice()));
+            priceOldTV.setText(String.valueOf("￥" + goods.getSalePrice()));
+        } else if ("9".equals(goods.getType()) || "11".equals(goods.getType()) || "13".equals(goods.getType())) { // 新人专区
+            payPriceV.setVisibility(View.GONE);
+            price_infoTV.setVisibility(View.GONE);
+            specTV.setVisibility(View.VISIBLE);
+            priceOldTV.setVisibility(View.VISIBLE);
+            specTV.setText("规格: " + goods.getGoodsSpecValue().getSpecValueName());
+            countTV.setText("数量: x" + String.valueOf(goods.getNums()));
+            priceTV.setText(String.valueOf(goods.getVipPrice()));
+            priceOldTV.setText(String.valueOf("￥" + goods.getSalePrice()));
         }
 
         //itemView 的 Context 就是 Activity, Glide 会自动处理并和该 Activity 的生命周期绑定

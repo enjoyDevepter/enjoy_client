@@ -116,6 +116,8 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
     TextView deductionMoneyTV;
     @BindView(R.id.deposit_tag)
     TextView depositTagTV;
+    @BindView(R.id.coupon_buttom_layout)
+    View couponButtomLayoutV;
 
     @BindView(R.id.tailMoney_layout)
     View tailMoneyLayoutV;
@@ -247,24 +249,59 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
         couponButtomTV.setText(ArmsUtils.formatLong(response.getCoupon()));
         payMoneyTV.setText(ArmsUtils.formatLong(response.getPayMoney()));
 
-        List<Coupon> couponList = response.getCouponList();
-        if (null == couponList || null != couponList && couponList.size() <= 0) {
-            String where = getActivity().getIntent().getStringExtra("where");
-            if ("timelimitdetail".equals(where)) {
-                couponV.setVisibility(View.GONE);
-            } else if ("newpeople".equals(where)) {
-                couponV.setVisibility(View.GONE);
-            } else {
-                couponTV.setText("暂无优惠卷");
-            }
+        String where = getActivity().getIntent().getStringExtra("where");
+        if ("timelimitdetail".equals(where)) {
+            couponV.setVisibility(View.GONE);
+            deductionMoney_layoutV.setVisibility(View.GONE);
+            couponButtomLayoutV.setVisibility(View.GONE);
+            tailMoney_layout_xxV.setVisibility(View.GONE);
+            tailMoneyLayoutV.setVisibility(View.INVISIBLE);
+            depositTVTV.setText("商品金额");
+            depositTagTV.setText("总金额");
+            depositTV.setMoneyText(String.valueOf(goods.getSecKillPrice()));
+            depositButtomTV.setText(String.valueOf(goods.getSecKillPrice()));
+        } else if ("newpeople".equals(where)) {
+            couponV.setVisibility(View.GONE);
+            deductionMoney_layoutV.setVisibility(View.GONE);
+            couponButtomLayoutV.setVisibility(View.GONE);
+            tailMoney_layout_xxV.setVisibility(View.GONE);
+            tailMoneyLayoutV.setVisibility(View.INVISIBLE);
+            depositTVTV.setText("商品金额");
+            depositTagTV.setText("总金额");
+            depositTV.setMoneyText(String.valueOf(goods.getVipPrice()));
+            depositButtomTV.setText(String.valueOf(goods.getVipPrice()));
         } else {
-            couponV.setOnClickListener(this);
-            for (Coupon coupon : couponList) {
-                if (coupon.getCouponId().equals(response.getCouponId())) {
-                    provideCache().put("couponId", response.getCouponId());
-                    couponTV.setText(coupon.getName());
-                    break;
+            List<Coupon> couponList = response.getCouponList();
+            if (null == couponList || null != couponList && couponList.size() <= 0) {
+                couponTV.setText("暂无优惠卷");
+            } else {
+                couponV.setOnClickListener(this);
+                for (Coupon coupon : couponList) {
+                    if (coupon.getCouponId().equals(response.getCouponId())) {
+                        provideCache().put("couponId", response.getCouponId());
+                        couponTV.setText(coupon.getName());
+                        break;
+                    }
                 }
+            }
+            boolean payAll = getIntent().getBooleanExtra("payAll", false);
+            if (payAll) {
+                tailMoneyLayoutV.setVisibility(View.INVISIBLE);
+                depositTV.setMoneyText(String.valueOf(goods.getSalePrice()));
+                depositTVTV.setText("商品金额");
+                depositTagTV.setText("总金额");
+                tailMoney_layout_xxV.setVisibility(View.GONE);
+                deductionMoney_layoutV.setVisibility(View.VISIBLE);
+                depositButtomTV.setText(String.valueOf(goods.getSalePrice()));
+                deductionMoneyTV.setText(ArmsUtils.formatLong(response.getDeductionMoney()));
+            } else {
+                depositTVTV.setText("预付款");
+                depositTagTV.setText("预付款");
+                deductionMoney_layoutV.setVisibility(View.GONE);
+                tailMoney_layout_xxV.setVisibility(View.VISIBLE);
+                tailMoneyLayoutV.setVisibility(View.VISIBLE);
+                depositButtomTV.setText(String.valueOf(goods.getDeposit()));
+                depositTV.setMoneyText(String.valueOf(goods.getDeposit()));
             }
         }
 
@@ -277,26 +314,6 @@ public class HGoodsOrderConfirmActivity extends BaseActivity<HGoodsOrderConfirmP
                                 .imageView(imageIV)
                                 .build());
 
-        boolean payAll = getIntent().getBooleanExtra("payAll", false);
-        if (payAll) {
-            tailMoneyLayoutV.setVisibility(View.INVISIBLE);
-            depositTV.setMoneyText(String.valueOf(goods.getSalePrice()));
-            depositTVTV.setText("预付款");
-            depositTagTV.setText("总金额");
-            tailMoney_layout_xxV.setVisibility(View.GONE);
-            deductionMoney_layoutV.setVisibility(View.VISIBLE);
-            depositButtomTV.setText(String.valueOf(goods.getSalePrice()));
-            deductionMoneyTV.setText(ArmsUtils.formatLong(response.getDeductionMoney()));
-
-        } else {
-            depositTVTV.setText("预付款");
-            depositTagTV.setText("预付款");
-            deductionMoney_layoutV.setVisibility(View.GONE);
-            tailMoney_layout_xxV.setVisibility(View.VISIBLE);
-            tailMoneyLayoutV.setVisibility(View.VISIBLE);
-            depositButtomTV.setText(String.valueOf(goods.getDeposit()));
-            depositTV.setMoneyText(String.valueOf(goods.getDeposit()));
-        }
         provideCache().put("money", response.getMoney());
     }
 
